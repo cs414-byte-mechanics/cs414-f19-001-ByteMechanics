@@ -74,6 +74,7 @@ send the updated board to the clients so that they can display it so the players
   "updatedBoard": [],
   "successMessage": "The player's move was valid and the board has been updated"
 }
+```
 
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
