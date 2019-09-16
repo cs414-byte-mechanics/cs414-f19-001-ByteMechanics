@@ -8,7 +8,7 @@ public class ZebraPiece extends GamePiece {
         super(row,col,player);
     }
 
-    public boolean ValidateMove(int destRow, int destCol, GameBoard[][] board) {
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
     /* A zebra moves and captures other pieces exactly the same as a knight piece in chess */
 
         /* check for out of bounds moves */
@@ -23,6 +23,7 @@ public class ZebraPiece extends GamePiece {
            1 square vertically followed by 2 laterally.  Total distance moved should be 3 squares.
          */
         int distance = Math.abs(destRow - this.row) + Math.abs(destCol - this.column);
+        System.out.println("distance = " + distance);
         if (distance != 3){
             return false;
         }
