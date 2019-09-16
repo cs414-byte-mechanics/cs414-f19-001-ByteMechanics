@@ -45,6 +45,7 @@ public class GameBoard extends GamePiece {
         board[6][5] = crocodileP2;
         zebraP2 = new ZebraPiece(6, 6, 2);
         board[6][6] = zebraP2;
+
     }
 
 }
