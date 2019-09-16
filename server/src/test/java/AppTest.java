@@ -23,48 +23,57 @@ public class AppTest {
     }
 
     @Test
-    public void checkInit(){
+    public void checkInit() {
+
+        /* check row, column & player number for each piece */
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows - 0,6 */
+            int playr = r / 6 + 1;
+            for (int c = 0; c <= 6; c = c + 1) {
+                assertTrue(congoGame.board[r][c].player == playr);
+                assertTrue(congoGame.board[r][c].row == r);
+                assertTrue(congoGame.board[r][c].column == c);
+            }
+        }
 
         /*check if Giraffe pieces initialized */
-        //GiraffePiece giraffe00 = congoBoard[0][0];
-        //assertTrue((congoGame.board[0][0] instanceof GiraffePiece) == true);
-        //assertTrue(congoGame.board[0][0].player == 1);
-        //assertTrue(congoGame.board[0][0].row == 0);
-        //assertTrue(congoGame.board[0][0].column == 0);
-        //assertTrue((congoBoard[6][0] instanceof GiraffePiece) == true);
-        //assertTrue(congoBoard[6][0].player == 2);
-        //assertTrue(congoBoard[6][0].row == 6);
-        //assertTrue(congoBoard[6][0].column == 0);
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of giraffes - 0,6 */
+            assertTrue((congoGame.board[r][0] instanceof GiraffePiece) == true);
+        }
 
         /* check if Monkeys initialized */
-        assertTrue((congoGame.board[0][1] instanceof MonkeyPiece) == true);
-        assertTrue(congoGame.board[0][1].player == 1);
-        assertTrue(congoGame.board[0][1].row == 0);
-        assertTrue(congoGame.board[0][1].column == 1);
-        assertTrue((congoGame.board[6][1] instanceof MonkeyPiece) == true);
-        assertTrue(congoGame.board[6][1].player == 2);
-        assertTrue(congoGame.board[6][1].row == 6);
-        assertTrue(congoGame.board[6][1].column == 1);
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of monkeys - 0,6 */
+            assertTrue((congoGame.board[r][1] instanceof MonkeyPiece) == true);
+        }
+
+        /* check if Elephants initialized */
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of elephants - 0,6 */
+            for (int c = 2; c <= 4; c = c + 2) {
+                /* check both columns of elephants - 2,4 */
+                assertTrue((congoGame.board[r][c] instanceof ElephantPiece) == true);
+            }
+        }
+
+        /* check if Lions are initialized */
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of lions - 0,6 */
+            assertTrue((congoGame.board[r][3] instanceof LionPiece) == true);
+        }
 
         /* check if Crocodiles initialized */
-        assertTrue((congoGame.board[0][5] instanceof CrocodilePiece) == true);
-        assertTrue(congoGame.board[0][5].player == 1);
-        assertTrue(congoGame.board[0][5].row == 0);
-        assertTrue(congoGame.board[0][5].column == 5);
-        assertTrue((congoGame.board[6][5] instanceof CrocodilePiece) == true);
-        assertTrue(congoGame.board[6][5].player == 2);
-        assertTrue(congoGame.board[6][5].row == 6);
-        assertTrue(congoGame.board[6][5].column == 5);
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of crocodiles - 0,6 */
+            assertTrue((congoGame.board[r][5] instanceof CrocodilePiece) == true);
+        }
 
         /* check if Zebras initialized */
-        assertTrue((congoGame.board[0][6] instanceof ZebraPiece) == true);
-        assertTrue(congoGame.board[0][6].player == 1);
-        assertTrue(congoGame.board[0][6].row == 0);
-        assertTrue(congoGame.board[0][6].column == 6);
-        assertTrue((congoGame.board[6][6] instanceof ZebraPiece) == true);
-        assertTrue(congoGame.board[6][6].player == 2);
-        assertTrue(congoGame.board[6][6].row == 6);
-        assertTrue(congoGame.board[6][6].column == 6);
+        for (int r = 0; r <= 6; r = r + 6) {
+            /* check both rows of crocodiles - 0,6 */
+            assertTrue((congoGame.board[r][6] instanceof ZebraPiece) == true);
+        }
 
 
 
