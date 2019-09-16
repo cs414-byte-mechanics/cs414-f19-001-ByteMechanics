@@ -58,6 +58,6 @@ public class LionPiece extends GamePiece {
             }
         }
 
-        return true; // Not sure
+        return false; // Not sure
     }
 }
