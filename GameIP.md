@@ -11,6 +11,24 @@ the server exchange information a JSON object will be sent with the required inf
 
 This document will be updated throughout the duration of the project as needed. Objects will be removed and added over the course of development.
 
+List of GameIP Ojbects (In order): 
+* requestMove
+* errorInvalidMove
+* updateBoard
+* registerUser
+* errorInvalidRegistration
+* registrationSuccess
+* requestBeginNewMatch
+* beginNewMatch
+* invitation
+* invitationResponse
+* quitMatch
+* endMatch
+* unregisterUser
+* attemptLogin
+* errorInvalidLogin
+* loginSuccess
+
 ## requestMove
 
 This object will primarily be sent by clients when communicating with the server. It will be used to communicate to the server that a player wishes to move a piece to a certain position on the board. It will ultimately be up to the server to decide whether this move is valid or not. 
