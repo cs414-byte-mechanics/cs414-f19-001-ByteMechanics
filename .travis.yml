@@ -12,7 +12,6 @@ node_js:
 
 install:
   - npm install --prefix client
-  - mvn install
 
 script:
   - npm test --prefix client || travis_terminate 1
