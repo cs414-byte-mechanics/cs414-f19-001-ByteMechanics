@@ -1,12 +1,10 @@
 # Game Interchange Protocol (GameIP)
 ## Version 1
 
-This file will specify the standard format for data exchanged and stored between systems of the software. These formats will be used in the 
-following system interactions:
+This file will specify the standard format for data exchanged and stored between systems of the software. These formats will be used in the following system interactions:
 
-* Clients and server
-* Server and Database (if a database is used)
-* Server and files (if files are used)
+* Clients to Server
+* Server to Clients
 
 The format for all data to be exchanged will be that of JSON objects (https://www.json.org/). This means that whenever the client and
 server exchange information or the server stores and reads information from a database or text file, a JSON object will be sent with 
@@ -66,7 +64,7 @@ of the game, etc..
 
 ## updateBoard
 
-This object will primarily be sent by the server when communicating with clients. It will be sent after the server has determined 
+This object will be sent by the server when communicating with clients. It will be sent after the server has determined 
 that a requested move by a client was in fact valid and so the move was made and the state of the board was updated. The server will
 send the updated board to the clients so that they can display it so the players.
 
@@ -96,7 +94,7 @@ send the updated board to the clients so that they can display it so the players
 
 ## registerUser
 
-This object will primarily be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is registering to the site. The server will take the data in this object and use it to create a new entry with the user's informatino in the database.
+This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is registering to the site. The server will take the data in this object and use it to create a new entry with the user's informatino in the database.
 
 ```javascript
 {
@@ -115,7 +113,7 @@ This object will primarily be sent by clients when communicating with the server
 
 ## errorInvalidRegistration
 
-This object will primarily be sent by the server when communicating with a client. It will be sent by the server to a client when the client submits invalid information when trying to register a new account. It is up to the server to determine what information is invalid. Invalid information could be something like a duplicate user name, invalid email address, etc...
+This object will be sent by the server when communicating with a client. It will be sent by the server to a client when the client submits invalid information when trying to register a new account. It is up to the server to determine what information is invalid. Invalid information could be something like a duplicate user name, invalid email address, etc...
 
 ```javascript
 {
@@ -133,13 +131,32 @@ This object will primarily be sent by the server when communicating with a clien
 * `userPassword` is a string and is the password that the person attempting to create the account would like to use.
 * `userEmail` is a string and is the email address of the person attemping to create the account would like to use.
 
-## createNewMatch
+## registrationSuccess
 
-This object will primaily be sent by clients to the server. It will be sent to the server by a client whenever a user is creating a new match. This will tell the server to allocate resources for the match and begin the processes required for the clients to play it.
+This object will be sent by the server when communicating with a client. It will be sent by the server to a client when the client submits valid information when trying to register a new account and so a new account has been created for the user. It is up to the server to determine if the information was valid in the account creation.
+
+```javascript
+{
+  "communicationType": "registrationSuccess",
+  "communicationVersion": 1,
+  "userName": "",
+  "userEmail": "",
+  "message": "User account has been successfully created."
+}
+```
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `userName` is a string and is the new display name of the person who created the account.
+* `userEmail` is a string and is the email address of the person who has created a new account.
+* `message` is a string with a message stating that an account has been successfully created for the user.
+
+## requestBeginNewMatch
+
+This object will be sent by clients to the server. It will be sent to the server by a client whenever a user is creating a new match. This will tell the server to allocate resources for the match and begin the processes required for the clients to play it.
 
 ```javascipt
 {
-  "communicationType": "createNewMatch",
+  "communicationType": "requestBeginNewMatch",
   "communicationVersion": 1,
   "playerOneName": "",
   "playerTwoName": ""
@@ -153,7 +170,7 @@ This object will primaily be sent by clients to the server. It will be sent to t
 
 ## beginNewMatch
 
-This object will primarily be sent by the server to clients. This object will be sent by the server to the two clients who recently began a new match. It represents the beginning of a new match. 
+This object will be sent by the server to clients. This object will be sent by the server to the two clients who recently began a new match. It represents the beginning of a new match. 
 
 ```javascript
 {
@@ -161,7 +178,8 @@ This object will primarily be sent by the server to clients. This object will be
   "communicationVersion": 1,
   "matchID": "",
   "initialBoard": [],
-  "whoseTurn": ""
+  "whoseTurn": "",
+  "matchBeginTime": ""
 }
 ```
 
@@ -170,6 +188,7 @@ This object will primarily be sent by the server to clients. This object will be
 * `matchID` is a string and is the identifier of the new match that has just been created. 
 * `initialBoard` is a 2D array and is the initial state of the board at the start of a new match.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. At the start of the match this will be the player who created the match unless therwise stated in the rules.
+* `matchBeginTime` is a string and contains the time that the match was created. 
 
 ## invitation
 
@@ -191,7 +210,7 @@ This object will both be sent from clients to the server and from the server to 
 
 ## invitationResponse
 
-This object will primarily be sent from clients to the server. It will be sent to notify the server of a client's response to an invitation to a new match. The server will then pass this object on to the client that sent the original invitation.
+This object will be sent from clients to the server. It will be sent to notify the server of a client's response to an invitation to a new match. The server will then pass this object on to the client that sent the original invitation.
 
 ```javascript
 {
@@ -209,6 +228,59 @@ This object will primarily be sent from clients to the server. It will be sent t
 * `invitationTo` is a string and is the name of the player who received the invitation.
 * `invitationAccepted` is a boolean and indicates whether the player specified in `invitationTo` accepted or declined the invitation. `true` indicates that the client accepted the invitation while `false` indicates the client rejected the invitation.
 
+## quitMatch
 
+This object will be sent from clients to the server. It will be sent to notify the server that the client wishes to forfeit the match and leave, thus ending the game. The client who sends this request will automatically lose the match and the opponent will win. 
 
+```javasctipt
+{
+  "communicationType": "quitMatch",
+  "communicationVersion": 1,
+  "matchID": "",
+  "playerQuitting": ""
+}
+```
 
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `matchID` is a string and is the identifier of the match which the client wishes to leave. 
+* `playerQuitting` is the username of the player who is quitting the match.
+
+## endMatch
+
+This object will be sent from the server to the clients. It will be sent when either a client's last move has won the match or a player has quit the match. It will also notify the clients of the results.
+
+```javasctipt
+{
+  "communicationType": "endMatch",
+  "communicationVersion": 1,
+  "matchID": "",
+  "endCondition": ["won", "quit"],
+  "winnerName": "",
+  "loserName": "",
+  "matchEndTime": ""
+}
+```
+
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `matchID` is a string and is the identifier of the match that has ended.
+* `endCondition` can be one of two string values. `won` indicates that a player has won the match by making a final move which won the game. `quit` indicates that the game has ended because one of the players has quit and left the match.
+* `winnerName` is a string and is the name of player who has won the match either be making the winning move or remaining in the game after the other player has quit.
+* `loserName` is a string and is the name of the player who has lost the match either by the other player making the winning move or by quitting the match.
+* `matchEndTime` is a string and contains the time that the match was ended. 
+
+## unregisterUser
+
+This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user would like to unregister from the site. The server will then remove the user's data associated with their account from the database.
+
+```javascript
+{
+  "communicationType": "unregisterUser",
+  "communicationVersion": 1,
+  "userName": ""
+}
+```
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `userName` is a string and is the name of the user who would like to unregister from the site.
