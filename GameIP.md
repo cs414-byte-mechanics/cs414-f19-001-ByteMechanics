@@ -6,11 +6,10 @@ This file will specify the standard format for data exchanged and stored between
 * Clients to Server
 * Server to Clients
 
-The format for all data to be exchanged will be that of JSON objects (https://www.json.org/). This means that whenever the client and
-server exchange information or the server stores and reads information from a database or text file, a JSON object will be sent with 
-the required information. 
+The format for all data to be exchanged will be that of JSON objects (https://www.json.org/). This means that whenever clients and
+the server exchange information a JSON object will be sent with the required information. 
 
-This document will be updated throughout the duration of the project as needed. 
+This document will be updated throughout the duration of the project as needed. Objects will be removed and added over the course of development.
 
 ## requestMove
 
@@ -32,7 +31,7 @@ This object will primarily be sent by clients when communicating with the server
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who is requesting the move to be made.
 * `pieceID` is an int and will be the ID of the piece that the player wishes to move. This is not simply a name because many pieces on the board have a duplicate so a unique identifier is needed for each piece.
-* `desiredPosition` will be a 2D array with the coordinates of the square or position on the board that the player would like to move the piece to.
+* `desiredPosition` will be a 1D array with the coordinates of the square or position on the board that the player would like to move the piece to.
 
 ## errorInvalidMove
 
@@ -56,7 +55,7 @@ This object will primarily be sent by the server when communicating with clients
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who requested the invalid move.
 * `pieceID` is an int and will be the ID of the piece that the player wished to move to an invalid space
-* `desiredPosition` will be a 2D array with the coordinates of the invalid square or position on the board that the player wanted to move the piece to.
+* `desiredPosition` will be a 1D array with the coordinates of the invalid square or position on the board that the player wanted to move the piece to.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. Because the previous move was invalid, the player who made the last move is try and move again.
 * `errorMessage` is a string and will contain a message stating that the requested was was invalid and could not be made. This string
 could also be altered to include the specifics of why the move was invalid such as it being out of bounds, conflicting with the rules
@@ -76,7 +75,7 @@ send the updated board to the clients so that they can display it so the players
   "playerName": "",
   "pieceID": 3,
   "newPosition: [],
-  "updatedBoard": [],
+  "updatedBoard": [][],
   "whoseTurn": "",
   "successMessage": "The player's move was valid and the board has been updated"
 }
@@ -87,7 +86,7 @@ send the updated board to the clients so that they can display it so the players
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who made the valid move that updated the board.
 * `pieceID` is an int and will be the ID of the piece that the player moved.
-* `newPosition` is a 2D array with the coordinates of the the position to which the piece was moved.
+* `newPosition` is a 1D array with the coordinates of the the position to which the piece was moved.
 * `updatedBoard` is a 2D array with the information containing the new state of the game board after the piece was moved.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. In this case it will be the name of the player who did not make the most recent move.
 * `successMessage` is a string containing a message stating that the requested move was valid and the board has been updated.
@@ -177,7 +176,7 @@ This object will be sent by the server to clients. This object will be sent by t
   "communicationType": beginNewMatch",
   "communicationVersion": 1,
   "matchID": "",
-  "initialBoard": [],
+  "initialBoard": [][],
   "whoseTurn": "",
   "matchBeginTime": ""
 }
@@ -199,7 +198,8 @@ This object will both be sent from clients to the server and from the server to 
   "communicationType": "invitation",
   "communicationVersion": 1,
   "invitationFrom": "",
-  "invitationTo": ""
+  "invitationTo": "",
+  "invitationTime": ""
 }
 ```
 
@@ -207,6 +207,7 @@ This object will both be sent from clients to the server and from the server to 
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `invitationFrom` is a string and is the name of the player who is sending the invitation.
 * `invitationTo` is a string and is the name of the player who is receiving the invitation.
+* `invitationTime` is a string containing the time at which the invitation was created.
 
 ## invitationResponse
 
@@ -281,6 +282,70 @@ This object will be sent by clients when communicating with the server. It will 
   "userName": ""
 }
 ```
+
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `userName` is a string and is the name of the user who would like to unregister from the site.
+
+## attemptLogin
+
+This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is attempting to log into their account.
+
+```javascript
+{
+  "communicationType": "attemptLogin",
+  "communicationVersion": 1,
+  "userEmail": "",
+  "userPassword": ""
+}
+```
+
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `userEmail` is a string and is the email address of the user who is attempting to log into their account. This will be the primary identifier of the account.
+* `userPassword` is a string and is the password of the user attempint to log into their account. It is the primary form of authentication for the user.  
+
+## errorInvalidLogin
+
+This object will be sent by the server when communicating with clients. It will be sent by the server to the client whenever the client attempts to login to their account with an incorrect password or the account does not exist.
+
+```javascript
+{
+  "communicationType": "errorInvalidLogin",
+  "communicationVersion": 1,
+  "userEmail": "",
+  "errorMessage": ""
+}
+```
+
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `userEmail` is a string and is the email address that the user has entered when trying to login. 
+* `errorMessage` is a string containing the reason that the login attempt has failed. It could either state that the password was incorrect or that the account does not exist. 
+
+## loginSuccess
+
+This object will be sent by the server when communicating with clients. It will be sent by the server when a user has successfully logged in to their account. It will contain the user's account information so that it may be displayed to the user and interacted with.
+
+```javascript
+{
+  "communicationType": "loginSuccess",
+  "communicationVersion": 1,
+  "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
+  "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
+  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
+}
+```
+
+* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
+* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
+* `invitations` is an array of objects. These objects contain information regarding the open invitations sent to this user.
+* `matchesInProgress` is an array of objects. These objects contain information regarding matches that the player is currently playing.
+* `matchesCompleted` is an array of objects. These objects contain information regarding past matches that have ended. 
+
+# Update History
+## Sprint 1
+* 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
+
+# Notes
+* The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.
