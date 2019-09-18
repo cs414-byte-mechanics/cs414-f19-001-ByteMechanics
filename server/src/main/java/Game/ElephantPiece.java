@@ -1,4 +1,5 @@
 package Game;
+
 public class ElephantPiece extends GamePiece {
 
     /* initial constructor*/
@@ -9,7 +10,7 @@ public class ElephantPiece extends GamePiece {
         super(row, col, player);
     }
 
-    public boolean ValidateMove(int destRow, int destCol, GameBoard[][] board)
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board)
     {
         /* Elephant  can move to the first and second square in a straight direction.
            The move to the second square is a jump and cannot be blocked by interposing pieces of either color. */

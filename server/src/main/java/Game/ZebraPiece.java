@@ -20,22 +20,17 @@ public class ZebraPiece extends GamePiece {
         }
 
         /* zebra moves 2 squares laterally followed by 1 vertically OR
-           1 square vertically followed by 2 laterally.  Total distance moved should be 3 squares.
+           1 square vertically followed by 2 laterally.  Total distance moved should be 3 squares in an 'L' shape.
          */
-        int distance = Math.abs(destRow - this.row) + Math.abs(destCol - this.column);
-        if (distance != 3){
+        int distCol = Math.abs(destCol - this.column);
+        int distRow = Math.abs(destRow - this.row);
+        if (!((distCol == 2 && distRow == 1) || (distCol == 1 && distRow == 2))){
             return false;
         }
 
         /* Destination square must be empty or contain opponents piece.  If it contains
            opponents piece then it will be captured.
          */
-        int activePlayer = this.player;
-        if (board[destRow][destCol] == null || board[destRow][destCol].player != activePlayer){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return squareEmptyOrCapturable(destRow, destCol, board);
     }
 }
