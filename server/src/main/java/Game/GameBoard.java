@@ -16,8 +16,8 @@ public class GameBoard{
 
     /* player2's pieces */
     GiraffePiece giraffeP2;
-    CrocodilePiece crocodileP2;
     MonkeyPiece monkeyP2;
+    CrocodilePiece crocodileP2;
     ZebraPiece zebraP2;
     ElephantPiece elephant1P2;
     ElephantPiece elephant2P2;
