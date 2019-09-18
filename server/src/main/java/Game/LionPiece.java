@@ -9,7 +9,7 @@ public class LionPiece extends GamePiece {
         super(row, col, player);
     }
 
-    public boolean ValidateMove(int destRow, int destCol, GameBoard[][] board) {
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /*The Lion moves like a chess king, but may not leave his castle at his side of the river.
         In addition, lions can capture other lions if they `see' it, i.e.,
         if there is a vertical or diagonal line with no pieces between the two lions, the lion may jump to the other lion and capture it.*/
