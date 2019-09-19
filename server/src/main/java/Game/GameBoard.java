@@ -1,6 +1,10 @@
 package Game;
 
-public class GameBoard extends GamePiece {
+import Game.GamePiece;
+
+public class GameBoard{
+    static int riverRow = 3;  /* river is on row 3 in the board */
+
     /* player1's pieces */
     GiraffePiece giraffeP1;
     MonkeyPiece monkeyP1;
@@ -67,6 +71,15 @@ public class GameBoard extends GamePiece {
         board[6][6] = zebraP2;
         /* need to initialize all pawns */
 
+    }
+
+    public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
+        /* routine does NO error checking but assumes move is legal and updates the piece's info
+           as well as set it's previous square location to NULL */
+        this.board[toRow][toCol] = this.board[fromRow][fromCol];
+        this.board[fromRow][fromCol] = null;
+        this.board[toRow][toCol].row = toRow;
+        this.board[toRow][toCol].column = toCol;
     }
 
 }
