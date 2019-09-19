@@ -80,8 +80,9 @@ public class GamePiece {
             || (destCol == this.column) /* vertical move */
             || (distCol == distRow) /* diagonal move */
         ) {
-            int rowDir = (destRow - this.row)/distRow;  /* -1 for left dir, +1 for right dir, 0 for horizontal path */
-            int colDir = (destCol - this.column)/distCol; /* -1 for down dir, +1 for up dir, 0 for vertical path */
+            int rowDir = (distRow == 0) ? 0 : (destRow - this.row)/distRow;  /* -1 for left dir, +1 for right dir, 0 for horizontal path */
+            int colDir = (distCol == 0) ? 0 : (destCol - this.column)/distCol; /* -1 for down dir, +1 for up dir, 0 for vertical path */
+
             int x = this.column + colDir;
             int y = this.row + rowDir;
             while ((y != destRow) && (x != destCol)){
@@ -97,6 +98,14 @@ public class GamePiece {
             return true;  /* if we get here, path was clear */
         }
         else return false;  /* path is not a straight line */
+    }
+
+    public Boolean moveOneOrTwoStepBackward (int destRow, int destCol){
+        if ( (destRow - this.row == -2 && destCol - this.column == 0 ) || (destRow - this.row == -1 && destCol - this.column == 0 ) )
+            return true;
+        else
+            return false;
+
     }
 
 
