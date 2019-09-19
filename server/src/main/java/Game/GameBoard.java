@@ -38,8 +38,7 @@ public class GameBoard{
 
     public void InitGameBoard(){
         /* Create and setup game pieces for player 1 */
-        giraffeP1 = new GiraffePiece(0, 0, 1);
-        board[0][0] = giraffeP1;
+        board[0][0] = new GiraffePiece(0, 0, 1);
         monkeyP1 = new MonkeyPiece(0,1,1);
         board[0][1] = monkeyP1;
         elephant1P1 = new ElephantPiece(0,2,1);
@@ -52,7 +51,12 @@ public class GameBoard{
         board[0][5] = crocodileP1;
         zebraP1 = new ZebraPiece(0, 6, 1);
         board[0][6] = zebraP1;
+
         /* need to initialize all pawns */
+        for (int i =0; i<=6; i++){
+            board[1][i] = new PawnPiece(1, i, 1 );
+        }
+
 
         /* Create and setup game pieces for player 2 */
         giraffeP2 = new GiraffePiece(6, 0, 2);
@@ -70,6 +74,11 @@ public class GameBoard{
         zebraP2 = new ZebraPiece(6, 6, 2);
         board[6][6] = zebraP2;
         /* need to initialize all pawns */
+
+        for (int i =0; i <=6; i++){
+            board[5][i] = new PawnPiece(5, i, 2 );
+        }
+
 
     }
 
