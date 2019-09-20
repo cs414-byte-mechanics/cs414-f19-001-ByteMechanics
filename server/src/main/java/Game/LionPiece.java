@@ -1,6 +1,6 @@
 package Game;
 
-import Game.GameBoard;
+//import Game.GameBoard;
 
 public class LionPiece extends GamePiece {
     /* initial constructor*/
@@ -17,7 +17,15 @@ public class LionPiece extends GamePiece {
         In addition, lions can capture other lions if they `see' it, i.e.,
         if there is a vertical or diagonal line with no pieces between the two lions, the lion may jump to the other lion and capture it.*/
 
-        // check for out of castle for lion in down side
+        /* check for out of bound moves */
+        if (destRow > 6 || destRow < 0) {
+            return false;
+        }
+        if (destCol > 6 || destCol < 0) {
+            return false;
+        }
+
+         //check for out of castle for lion in down side
         if ((destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4)){
 
             /*Check for chess king move, to any arbitrary direction just by one step */
