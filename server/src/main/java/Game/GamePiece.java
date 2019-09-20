@@ -100,14 +100,15 @@ public class GamePiece {
         else return false;  /* path is not a straight line */
     }
 
-    public Boolean moveOneOrTwoStepBackward (int destRow, int destCol){
-        if ( (destRow - this.row == -2 && destCol - this.column == 0 ) || (destRow - this.row == -1 && destCol - this.column == 0 ) )
-            return true;
+    public Boolean moveOneOrTwoStepBackwardDown (int destRow, int destCol, GamePiece[][] board){
+
+        //check for one/two steps straight down
+        if ((destRow - this.row == -2 && destCol - this.column == 0 ) || (destRow - this.row == -1 && destCol - this.column == 0 ))
+            // if destination is empty not occupied by any pieces
+            return squareEmpty(destRow, destCol, board);
         else
             return false;
-
     }
-
 
 }
 
