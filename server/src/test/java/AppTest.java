@@ -103,12 +103,11 @@ public class AppTest {
         assertTrue(zebra.ValidateMove(2,5,congoGame.board) == true);
     }
 
-    @Test /*Added by Fari -- test for lion valid move */
+    @Test/*Added by Fari -- test for lion valid move */
     public void testLionSimpleMove(){
-        LionPiece lion = (LionPiece) congoGame.board[0][3];
-        GamePiece[][] congoBoard = congoGame.board;
-
-//        assertTrue(lion.validateMove(1,3,congoBoard) == false); // ***Failed
+        LionPiece lion = congoGame.lionP1;
+//        GamePiece[][] congoBoard = congoGame.board;
+        assertTrue(lion.ValidateMove(2,5,congoGame.board) == false); // ***Failed
 
     }
 
@@ -160,7 +159,7 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(1, 0, congoBoard) == true); // if giraffe can move to empty square
 
         congoGame.movePiece(6,1, 2,2); /*move opponent monkey from (6,1) to (2,2)*/
-//        assertTrue(giraffe.validateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
+//        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
     }
 
     @Test
