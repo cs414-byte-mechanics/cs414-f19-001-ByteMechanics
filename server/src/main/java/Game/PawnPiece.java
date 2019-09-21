@@ -22,82 +22,115 @@ public class PawnPiece extends GamePiece {
         When past the river, it can also move (but not capture) one or two steps straight backward (without jumping).*/
 
         // check for out of move bounds
-        if ( destRow < 0 || destRow > 6 )
+        if (destRow < 0 || destRow > 6)
             return false;
 
-        if (destCol < 0 ||  destCol > 6 )
+        if (destCol < 0 || destCol > 6)
             return false;
 
-        // for downside pawns
-        if (this.player == 1 ) {
+        // for pawns belongs to player1
+        if (this.player == 1) {
 
-            // check he crossed the river already or no ?
-            if (this.row > 3)
-                crossedRiver = true;
+            // if s/he is a super pawn ???
+            if (superPawn == true) {
 
-            // check s/he promoted as a superPawn?
-            if (this.row == 6)
-                superPawn = true;
+                // like a normal pawn can move/capture one step straight or diagonally forward
+                if (destRow > this.row) {
 
-            // They can move toward the river ( don't cross the river) by one/two steps straight and diagonally and capture-
-            if (destRow > this.row && destRow >= 0 && destRow <= 3) {
+                    int distRow = Math.abs(destRow - this.row);
+                    int distCol = Math.abs(destCol - this.column);
 
-                // calculate distance to destination
-                int distRow = destRow - this.row;
-                int distCol = destCol - this.column;
+                    return moveOneStepsStraightOrDiagonally(distRow, distCol, board);
+                }
 
-                // move and capture one step forward or diagonally
-                if ((distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1)) {
-                    return squareEmptyOrCapturable(destRow, destCol, board);
+                // like a normal pawn, it can also move (but not capture) one or two steps straight backward (without jumping)
+                if (destRow < this.row){
+
+                    int distRow = Math.abs(destRow - this.row);
+                    int distCol = Math.abs(destCol - this.column);
+
+                    return moveOneOrTwoStepStraightBackward(distRow, distCol, board);
+                }
+
+                // as a superPawn s/he can move/capture one square sideAway
+                if (destRow == this.row) {
+
+                    int distRow = Math.abs(destRow - this.row);
+                    int distCol = Math.abs(destCol - this.column);
+
+                    return moveSideAwayForSuperPawn(distRow, distCol, board);
+                }
+
+                //As a super pawn, it can move (but not capture) one or two steps straight or diagonally backward (without jumping)
+                if (destRow < this.row) {
+
+                    int distRow = Math.abs(destRow - this.row);
+                    int distCol = Math.abs(destCol - this.column);
+
+                    return ( pathClear(destRow, destCol, board) && moveOneOrTwoStepsDiagonallyBackward (distRow, distCol, board));
                 }
             }
 
-            // check to see if pawns pass the river and land in the opponent's area
-            if (destRow > this.row && destRow > GameBoard.riverRow) {
+            // if s/he is not super pawn
+            if (superPawn == false) {
 
-                // because it passed river!
-                crossedRiver = true;
+                // They can move toward the river ( don't cross the river) by one step straight and diagonally and capture-
 
-                // calculate distance to destination
-                int distRow = destRow - this.row;
-                int distCol = destCol - this.column;
+                // if destination does not cross the river - row 0,1,2,3
+                if (destRow > this.row && destRow >= 0 && destRow <= 3) {
 
-                // on the other side of river each pawn can still move one step straight or diagonally forward and capture !
-                if ((distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
-                    return squareEmptyOrCapturable(destRow, destCol, board);
+                    // calculate distance to destination
+                    int distRow = destRow - this.row;
+                    int distCol = destCol - this.column;
 
-                // check s/he promoted as a superPawn
-//                if (this.row == 6)
-//                    superPawn = true;
+                    // move and capture one step forward or diagonally
+                    if ((distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1)) {
+                        return squareEmptyOrCapturable(destRow, destCol, board);
+                    }
+                }
+
+                // if destination cross the river
+                if (destRow > this.row && destRow > GameBoard.riverRow ) {
+
+                    // because it passed river!
+//                    crossedRiver = true;
+
+                    // calculate distance to destination
+                    int distRow = destRow - this.row;
+                    int distCol = destCol - this.column;
+
+                    // on the other side of river each pawn can still move one step straight or diagonally forward and capture !
+                    if ((distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
+                        return squareEmptyOrCapturable(destRow, destCol, board);
+                }
+
+                // after landing across the river , set flag to true
+                if (this.row > GameBoard.riverRow )
+                    crossedRiver = true;
+
+                // check if landing across the river promoted him as a super pawn
+                if (this.row == 6)
+                    superPawn = true;
+
+                //if s/he crossed the river he can move one/steps straight backward -- NO JUMP and NO CAPTURE
+                if (crossedRiver = true && destRow < this.row ) {
+                    // calculate distance to destination
+                    int distRow = Math.abs (destRow - this.row);
+                    int distCol = Math.abs (destCol - this.column);
+
+                    // he can move/not jump backward by one or two steps straight - no capture
+                    return (pathClear(destRow, destCol, board) && moveOneOrTwoStepStraightBackward(distRow, distCol, board));
+                }
+
+                // in backward, maybe he landed in river or down side of river , so crossedRiver flag is false as he is not yet super pawn
+                if (this.row <= GameBoard.riverRow && this.row >= 0)
+                    crossedRiver = false;
             }
-            // S/he even can move backward one/two steps when he already passed the river - NOT AUTHORIZED TO CAPTURE
-            if (destRow < this.row && crossedRiver ) {
 
-                // calculate distance to destination
-                int distRow = destRow - this.row;
-                int distCol = destCol - this.column;
-
-                // he can move backward by one or two steps
-                return moveOneOrTwoStepBackwardDown(distRow, distCol, board);
-            }
-
-            // check s/he promoted as a superPawn
-            if (superPawn == true ){
-
-                // calculate distance to destination
-                int distRow = Math.abs(destRow - this.row);
-                int distCol = Math.abs(destCol - this.column);
-
-                // as a superPawn s/he can move/capture one square sideAway
-                if (distRow == 0 && distCol == 1)
-                    return squareEmptyOrCapturable(destRow, destCol, board);
-
-                if (distRow==2 && distCol ==0 || distRow==2 && distCol ==2)
-                    return squareEmpty(destRow, destCol, board);
-
-            }
         }
-
-        return true; // need to be deleted!
+        return false; // need to be deleted!!
     }
 }
+
+// Add clear path for backward
+// add / delete necessary return at the end
