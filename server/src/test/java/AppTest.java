@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.annotation.processing.SupportedAnnotationTypes;
+
 import static org.junit.Assert.*;
 
 /*
@@ -107,10 +109,8 @@ public class AppTest {
     public void testLionSimpleMove(){
         LionPiece lion = congoGame.lionP1;
 //        GamePiece[][] congoBoard = congoGame.board;
-        assertTrue(lion.ValidateMove(2,5,congoGame.board) == false); // ***Failed
-
+        assertTrue(lion.ValidateMove(2,5,congoGame.board) == false);
     }
-
 
     @Test /* Added By Fari -- Test for elephant piece valid moves */
     public void testElephant1SimpleMove() {
@@ -130,6 +130,42 @@ public class AppTest {
         assertTrue(elephant2P1.ValidateMove(2, 4, congoBoard) == true); /* elephant can move 2 square up*/
 
     }
+    @Test /* Added by Fari- test for pawn pieces belong to player one*/
+    public void testPawnSimpleMove(){
+        /*Start with initial board and test is Player 1 */
+        System.out.println(" Run test");
+        PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][0];
+        PawnPiece Pawn2P1 = (PawnPiece) congoGame.board[1][1];
+
+        GamePiece[][] congoBoard = congoGame.board;
+
+        // pawn1 can move from (1,0) to (2,0) ? yes
+        assertTrue(Pawn1P1.ValidateMove(2, 0, congoBoard) == true);
+
+        // pawn1 can move from (1,0) to (2,1) ? yes
+        assertTrue(Pawn1P1.ValidateMove(2, 1, congoBoard) == true);
+
+        // how about (1,0 ) to (1,1)?? no side away
+        assertTrue(Pawn1P1.ValidateMove(1, 1, congoBoard) == false);
+
+        // let see it can move backward to 00?? no
+        assertTrue(Pawn1P1.ValidateMove(0, 0, congoBoard) == false);
+
+        // let's move pawn piece to across the river and see he can move backward
+        congoGame.movePiece(1,0,4,2); // move first to (4,2)
+        assertTrue(Pawn1P1.ValidateMove(3, 2, congoBoard) == true);
+
+        // move pawn p1 from (4,2) to (5,3)
+        congoGame.movePiece(4,2,5,3);
+        assertTrue(Pawn1P1.ValidateMove(6, 3, congoBoard) == true);
+        assertTrue(Pawn1P1.ValidateMove(5, 4, congoBoard) == false);
+
+        congoGame.movePiece(5,3,6,3);
+        System.out.println("M0ved to 6,3");
+//        assertTrue(Pawn1P1.ValidateMove(6, 4, congoBoard) == true);
+//        assertTrue(Pawn1P1.ValidateMove(2, 3, congoBoard) == false);
+
+    }
 
     /* Added By Fari -- Test for elephant piece valid moves */
 //    @Test
@@ -142,8 +178,7 @@ public class AppTest {
 //        assertTrue(elephant2.ValidateMove(2, 5, congoBoard) == true);
 //    }
 
-    /* Added By Fari -- Test for Giraffe piece valid moves */
-    @Test
+    @Test /* Added By Fari -- Test for Giraffe piece valid moves */
     public void testGiraffeSimpleMove(){
         /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (1,0) */
         System.out.println("run test");
