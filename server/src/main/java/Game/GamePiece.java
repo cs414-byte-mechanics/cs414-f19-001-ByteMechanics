@@ -82,6 +82,7 @@ public class GamePiece {
         ) {
             int rowDir = (distRow == 0) ? 0 : (destRow - this.row)/distRow;  /* -1 for left dir, +1 for right dir, 0 for horizontal path */
             int colDir = (distCol == 0) ? 0 : (destCol - this.column)/distCol; /* -1 for down dir, +1 for up dir, 0 for vertical path */
+
             int x = this.column + colDir;
             int y = this.row + rowDir;
             while ((y != destRow) && (x != destCol)){
@@ -104,6 +105,15 @@ public class GamePiece {
         }
     }
 
+    public Boolean moveOneOrTwoStepBackwardDown (int destRow, int destCol, GamePiece[][] board){
+
+        //check for one/two steps straight down
+        if ((destRow - this.row == -2 && destCol - this.column == 0 ) || (destRow - this.row == -1 && destCol - this.column == 0 ))
+            // if destination is empty not occupied by any pieces
+            return squareEmpty(destRow, destCol, board);
+        else
+            return false;
+    }
 
 }
 
