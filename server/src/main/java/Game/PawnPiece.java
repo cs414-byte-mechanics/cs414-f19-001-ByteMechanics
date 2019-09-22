@@ -105,7 +105,7 @@ public class PawnPiece extends GamePiece {
                 if (crossedRiver = true && destRow < this.row ) {
 
                     // he can move but not jump backward by one or two steps straight - no capture
-                    return (pathClear(destRow, destCol, board) && moveOneOrTwoStepStraightBackward(destRow, destCol, board));
+                    return (moveOneOrTwoStepStraightBackward(destRow, destCol, board)); // changed
                 }
 
                 // in backward, maybe he landed in river or down side of river , so crossedRiver flag is false as he is not yet super pawn
@@ -116,7 +116,7 @@ public class PawnPiece extends GamePiece {
 //            return false;
         }
 
-        if (this.player == 2)  /* for players */ {
+        if (this.player == 2) {
             // if s/he is a super pawn ???
 //            System.out.println("SuperPawn flag"+superPawn);
 
@@ -170,7 +170,7 @@ public class PawnPiece extends GamePiece {
                 //if s/he crossed the river he can move one/steps straight backward -- NO JUMP and NO CAPTURE
                 if (crossedRiver = true && destRow > this.row ) {
                     // he can move but not jump backward by one or two steps straight - no capture
-                    return ( pathClear(destRow, destCol, board) && moveOneOrTwoStepStraightBackward(destRow, destCol, board) );
+                    return ( moveOneOrTwoStepStraightBackward(destRow, destCol, board) );
                 }
 
                 // in backward, maybe he landed in river or down side of river , so crossedRiver flag is false as he is not yet super pawn
