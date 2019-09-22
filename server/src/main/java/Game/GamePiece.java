@@ -110,9 +110,9 @@ public class GamePiece {
         int  distRow = Math.abs(destRow - this.row ) ;
         int distCol = Math.abs(destCol - this.column) ;
 
-        if (( distRow == 2 && distCol - this.column == 0 ) || (distRow == 1 && distCol == 0 ))
+        if (( distRow == 2 && distCol == 0 ) || (distRow == 1 && distCol == 0 ))
             // if destination is empty not occupied by any pieces
-            return squareEmpty(destRow, destCol, board);
+            return (squareEmpty(destRow, destCol, board) && pathClear(destRow, destCol, board));
         else
             return false;
     }
@@ -147,12 +147,11 @@ public class GamePiece {
         int distCol = Math.abs(destCol - this.column);
 
         //check for one/two steps diagonally down
-        if ((distRow - this.row == 1 && distCol - this.column == 1 ) || (distRow - this.row == 2 && distCol - this.column == 2 ))
+        if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
             // if destination is empty not occupied by any pieces
-            return squareEmpty(destRow, destCol, board);
+            return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
         else
             return false;
-
     }
 
 
