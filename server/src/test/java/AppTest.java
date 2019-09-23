@@ -100,10 +100,7 @@ public class AppTest {
                 assertTrue((congoGame.board[r][c] instanceof PawnPiece ) == true);
             }
         }
-//<<<<<<< HEAD
-//=======
     }
-
 
     @Test/*Added by Fari -- test for lion valid move */
     public void testLionSimpleMove(){
@@ -209,10 +206,8 @@ public class AppTest {
 
         congoGame.movePiece(3,4,3,6);
         assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
-
     }
 
-//<<<<<<< HEAD
     /* Added By Fari -- Test for Giraffe piece valid moves */
     @Test
     public void testMonkeyMove() {
@@ -247,7 +242,6 @@ public class AppTest {
         /* now move the crocodile and allow the jump */
         congoGame.movePiece(0,5,1,6);  /* move crocodile from 0,5 to 1,6 so monkey can capture opponent's giraffe */
         assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
-
     }
 
     @Test
@@ -486,7 +480,6 @@ public class AppTest {
 
         congoGame.movePiece(6,1,6,2);
         assertTrue(giraffeP2.ValidateMove(6, 1, congoBoard) == true); // from 4,3 to 6,1?yes
-
     }
 
     @Test
@@ -498,7 +491,6 @@ public class AppTest {
         congoBoard[2][5] = congoGame.crocodileP1;
         assertTrue(zebra.ValidateMove(2,5,congoBoard) == false);
     }
-
 
     @Test
     public void testZebraMove3Fail() {

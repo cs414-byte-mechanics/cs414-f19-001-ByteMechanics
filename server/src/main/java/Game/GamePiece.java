@@ -160,6 +160,5 @@ public class GamePiece {
             return false;
     }
 
-
 }
 
