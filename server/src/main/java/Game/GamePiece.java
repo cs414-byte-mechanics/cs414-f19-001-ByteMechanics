@@ -6,6 +6,8 @@ public class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
+//    public boolean superPawn; // added
+//    public boolean crossedRiver; // added
 
     public GamePiece(){
     }
@@ -14,6 +16,8 @@ public class GamePiece {
         row = r;
         column = c;
         player = p;
+//        superPawn = s;
+//        crossedRiver = cr;
     }
 
     public Boolean inRiver(){
@@ -100,12 +104,52 @@ public class GamePiece {
         else return false;  /* path is not a straight line */
     }
 
-    public Boolean moveOneOrTwoStepBackwardDown (int destRow, int destCol, GamePiece[][] board){
+    public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
 
         //check for one/two steps straight down
-        if ((destRow - this.row == -2 && destCol - this.column == 0 ) || (destRow - this.row == -1 && destCol - this.column == 0 ))
+        int  distRow = Math.abs(destRow - this.row ) ;
+        int distCol = Math.abs(destCol - this.column) ;
+
+        if (( distRow == 2 && distCol == 0 ) || (distRow == 1 && distCol == 0 ))
             // if destination is empty not occupied by any pieces
-            return squareEmpty(destRow, destCol, board);
+            return (squareEmpty(destRow, destCol, board) && pathClear(destRow, destCol, board));
+        else
+            return false;
+    }
+
+    // move/capture side away
+    public Boolean moveSideAwayForSuperPawn (int destRow , int destCol, GamePiece[][] board) {
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        if (distRow == 0 && distCol == 1)
+            return squareEmptyOrCapturable(destRow, destCol, board);
+
+        else
+            return false;
+    }
+
+    // move/capture one step forward
+    public Boolean moveOneStepsStraightOrDiagonally(int destRow, int destCol, GamePiece[][] board){
+
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        if ( (distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
+            return squareEmptyOrCapturable(destRow, destCol, board);
+        else
+            return false;
+    }
+
+    public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
+
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        //check for one/two steps diagonally down
+        if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
+            // if destination is empty not occupied by any pieces
+            return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
         else
             return false;
     }

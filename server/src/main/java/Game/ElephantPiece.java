@@ -23,8 +23,12 @@ public class ElephantPiece extends GamePiece {
             return  false;
         }
 
-        /* check if elephant moved one step straight forward OR two steps straight forward*/
-        if ((destRow - this.row == 1 && destCol - this.column == 0 ) || (destRow - this.row == 2 && destCol - this.column == 0 )) {
+        int distRow = Math.abs(destRow - this.row );
+        int distCol = Math.abs(destCol - this.column);
+
+        /* check if elephant moved one OR two steps straight - can moe and can capture*/
+        if ( (distRow== 1 && distCol == 0 ) || (distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 1) || (distRow== 0 && distCol == 2)) {
+
             return squareEmptyOrCapturable(destRow, destCol, board);
         }
         else

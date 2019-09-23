@@ -25,51 +25,66 @@ public class LionPiece extends GamePiece {
             return false;
         }
 
-         //check for out of castle for lion in down side
-        if ((destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4)){
+         //check for out of castle for lion belongs to player1
+        if (this.player == 1){
 
-            /*Check for chess king move, to any arbitrary direction just by one step */
+            if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4){
 
-            /* calculate distance to destination */
-            int distrow = Math.abs(destRow - this.row);
-            int distcol = Math.abs(destCol - this.column);
+                /*Check for chess king move, to any arbitrary direction just by one step */
 
-            /*move one step to an empty square or capture if there is any opponent's piece  */
-            if ( distrow <= 1 && distcol <=1 ){
-                return squareEmptyOrCapturable(destRow, destCol, board);
+                /* calculate distance to destination */
+                int distRow = Math.abs(destRow - this.row);
+                int distCol = Math.abs(destCol - this.column);
+
+                /*move one step to an empty square or capture if there is any opponent's piece  */
+                if ( distRow <= 1 && distCol <=1 ){
+                    return squareEmptyOrCapturable(destRow, destCol, board); }
             }
-            else if (board[destRow][destCol] instanceof LionPiece){
-                if (pathClear(destRow, destCol, board))
-                {
-                    System.out.println("Game is Over");
-                    return true;
+
+            if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4 ){
+
+                if (board[destRow][destCol] instanceof LionPiece){
+                    if (pathClear(destRow, destCol, board))
+                    {
+                        System.out.println("Game is Over");
+                        return true;
+                    }
+                    else
+                        return false;
                 }
-                else
-                    return false;
             }
         }
 
-        if ((destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4)){
-            int distrow = Math.abs(destRow - this.row);
-            int distcol = Math.abs(destCol - this.column);
+        //check for out of castle for lion belongs to player1
+        if (this.player == 2){
 
-            if ( distrow <= 1 && distcol <=1 ){
-                return squareEmptyOrCapturable(destRow, destCol, board);
+            if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4){
+
+                /*Check for chess king move, to any arbitrary direction just by one step */
+
+                /* calculate distance to destination */
+                int distRow = Math.abs(destRow - this.row);
+                int distCol = Math.abs(destCol - this.column);
+
+                /*move one step to an empty square or capture if there is any opponent's piece  */
+                if ( distRow <= 1 && distCol <=1 ){
+                    return squareEmptyOrCapturable(destRow, destCol, board); }
             }
-            if (board[destRow][destCol] instanceof LionPiece){
-                if (pathClear(destRow, destCol, board))
-                {
-                    System.out.println("Game is Over");
-                    return true;
-                }
-                else
-                    return false;
+
+            if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4 ){
+
+                if (board[destRow][destCol] instanceof LionPiece){
+                    if (pathClear(destRow, destCol, board))
+                    {
+                        System.out.println("Game is Over");
+                        return true;
+                    }
+                    else
+                        return false;
+                } 
             }
-            else
-                return false;
         }
 
-        else
-            return false;
+        return false;
     }
 }
