@@ -1,6 +1,7 @@
 package Game;
 
 import Game.GamePiece;
+import Game.PawnPiece;
 
 public class GameBoard{
     static int riverRow = 3;  /* river is on row 3 in the board */
@@ -57,7 +58,7 @@ public class GameBoard{
 
         /* need to initialize all pawns */
         for (int i =0; i<=6; i++){
-            board[1][i] = new PawnPiece(1, i, 1 );
+            board[1][i] = new PawnPiece(1, i, 1);
         }
 
 
@@ -122,6 +123,7 @@ public class GameBoard{
     }
 
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
+
         /* routine does NO error checking but assumes move is legal and updates the piece's info
            as well as set it's previous square location to NULL */
 
@@ -145,6 +147,14 @@ public class GameBoard{
             /* can call capture() when we implement it */
         }
 
-    }
 
+        // when move a piece, if it is pawn and in land in row 6, we should turn on the super pawn flag
+        if ( (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==1 && this.board[toRow][toCol].row == 6 ) ||
+        (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==2 && this.board[toRow][toCol].row == 0 ) ) {
+
+        PawnPiece pawnPiece = (PawnPiece) this.board[toRow][toCol];
+        pawnPiece.superPawn = true;
+
+        }
+    }
 }
