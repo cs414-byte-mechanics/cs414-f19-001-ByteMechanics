@@ -2,6 +2,7 @@ package Game;
 
 import Game.GamePiece;
 import Game.PawnPiece;
+import Game.LionPiece;
 
 public class GameBoard{
     static int riverRow = 3;  /* river is on row 3 in the board */
@@ -101,4 +102,19 @@ public class GameBoard{
 //            ((PawnPiece) this.board[toRow][toCol]).superPawn = true;
         }
     }
+
+    public void capturePiece(int fromRow, int fromCol, int toRow, int toCol){
+
+        /* routine implement capture, so the current square will be replaced with NULL, current piece will be replaced
+        with destination piece and destination piece will be thrown from the board  */
+//        GamePiece piece =  (GamePiece) this.board[fromRow][fromCol];
+//        System.out.println(piece.getClass() + " CLASS TYPE ") ;
+//        if (piece.ValidateMove()) {
+//            this.board[toRow][toCol] = this.board[fromRow][fromCol];
+//            this.board[fromRow][fromCol] = null;
+//            this.board[toRow][toCol].row = toRow;
+//            this.board[toRow][toCol].column = toCol;
+//        }
+    }
+
 }
