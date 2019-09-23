@@ -1,4 +1,4 @@
-# Game Interchange Protocol (GameIP)
+# Client-Server Communication Formats
 ## Version 1
 
 This file will specify the standard format for data exchanged and stored between systems of the software. These formats will be used in the following system interactions:
@@ -6,32 +6,142 @@ This file will specify the standard format for data exchanged and stored between
 * Clients to Server
 * Server to Clients
 
-The format for all data to be exchanged will be that of JSON objects (https://www.json.org/). This means that whenever clients and
-the server exchange information a JSON object will be sent with the required information. 
+The format for all data to be exchanged will be that of JSON objects (https://www.json.org/). This means that whenever clients and the server exchange information a JSON object will be sent with the required information. 
 
 This document will be updated throughout the duration of the project as needed. Objects will be removed and added over the course of development.
 
-List of GameIP Ojbects (In order): 
-* requestMove
-* errorInvalidMove
-* updateBoard
+There will be four types of objects sent between clients and the server. These will be `Update`, `Action`, `ServerError`, and `ClientError`. Each of the four objects will have different purposes depending on which properties of the object are filled in or what values are filled in for those properties. 
+
+Clients will send `Action` and `ClientError` objects.
+The server will send `Update` and `ServerError` objects.
+
+An `Action` object will be sent by a client whenever a player wants to perform an action such as registering, logging in, inviting another player, moving a piece on the board, etc...
+
+A `ClientError` object will be sent by a client whenever there is an error on the client side.
+
+An `Update` object will be sent by the server whenever the server is responding to a client's action. These are things like updating the game board, sending the client their acount information, etc...
+
+A  `ServerError` object will be sent by the server whenever there is an error on the server side. These are things like the player attempted to perform an invalid set of moves, the login information was incorrect, etc...
+
+Here is the structure for each of the four objects:
+
+## Action
+
+```javascript
+{
+  "objectType": "Action",
+  "communicationType": "requestMove",
+  "communicationVersion": 1,
+  "matchID": "",
+  "playerName": "",
+  "pieceID": 3,
+  "desiredMoves": [][],
+  "userName": "",
+  "userPassword": "",
+  "userEmail": "",
+  "playerOneName": "",
+  "playerTwoName": "",
+  "invitationFrom": "",
+  "invitationTo": "",
+  "invitationTime": "",
+  "playerQuitting": ""
+}
+```
+## ClientError 
+
+```javascript
+{
+  "objectType": "ClientError",
+  "communicationType": "",
+  "communicationVersion": 1
+  "errorMessage": ""
+}
+```
+## Update
+
+```javascript
+{
+  "objectType": "Update",
+  "communicationType": "updateBoard",
+  "communicationVersion": 1,
+  "matchID": "",
+  "playerName": "",
+  "pieceID": 3,
+  "updatedBoard": [][],
+  "whoseTurn": "",
+  "successMessage": "The player's move was valid and the board has been updated",
+  "userName": "",
+  "userEmail": "",
+  "initialBoard": [][],
+  "matchBeginTime": "",
+  "invitationFrom": "",
+  "invitationTo": "",
+  "invitationTime": "",
+  "endCondition": ["won", "quit"],
+  "winnerName": "",
+  "loserName": "",
+  "matchEndTime": "",
+  "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
+  "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
+  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
+}
+```
+## ServerError
+
+```javascript
+{
+  "objectType": "ServerError",
+  "communicationType": "errorInvalidMove",
+  "communicationVersion": 1,
+  "matchID": "",
+  "playerName": "",
+  "pieceID": 3,
+  "desiredMoves": [],
+  "whoseTurn": "",
+  "userName": "",
+  "userPassword": "",
+  "userEmail": "",
+  "errorMessage": ""
+}
+```
+`objectType` is the type of communication object being sent.
+`commucationType` will be a string corresponding to what type of information the object is trying to convey and so which properties of the object should have values. 
+
+List of communication types for `Action`:
+
+* requestMoves
 * registerUser
-* errorInvalidRegistration
-* registrationSuccess
 * requestBeginNewMatch
-* beginNewMatch
 * invitation
 * invitationResponse
 * quitMatch
-* endMatch
 * unregisterUser
 * attemptLogin
-* errorInvalidLogin
+
+List of communication types for `ClientError`:
+
+*
+
+List of communication types for `Update`
+
+* updateBoard
+* registrationSuccess
+* beginNewMatch
+* invitation
+* endMatch
 * loginSuccess
 
-## requestMove
+List of communication types for `ServerError`:
 
-This object will primarily be sent by clients when communicating with the server. It will be used to communicate to the server that a player wishes to move a piece to a certain position on the board. It will ultimately be up to the server to decide whether this move is valid or not. 
+* errorInvalidMove
+* errorInvalidRegistration
+* errorInvalidLogin
+
+The following is a list of properties that should be filled in for each communication type.
+
+## requestMoves
+
+This communication type will be used to communicate to the server that a player wishes to move a piece to a certain position on the board. It will ultimately be up to the server to decide whether this move is valid or not. 
 
 ```javascript
 {
@@ -40,7 +150,7 @@ This object will primarily be sent by clients when communicating with the server
   "matchID": "",
   "playerName": "",
   "pieceID": 3,
-  "desiredPosition: []
+  "desiredMoves": [][]
 }
 ```
 
@@ -49,11 +159,11 @@ This object will primarily be sent by clients when communicating with the server
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who is requesting the move to be made.
 * `pieceID` is an int and will be the ID of the piece that the player wishes to move. This is not simply a name because many pieces on the board have a duplicate so a unique identifier is needed for each piece.
-* `desiredPosition` will be a 1D array with the coordinates of the square or position on the board that the player would like to move the piece to.
+* `desiredMoves` will be a 2D array with the coordinates of the squares or positions on the board that the player would like to move to for their turn. The first array will be the coordinates for the first move, the second array will be the coordinates for the second move, etc...
 
 ## errorInvalidMove
 
-This object will primarily be sent by the server when communicating with clients. It will be sent by the server to a client after the server has determined that a requested move from the client is invalid. This will then indicate that the client must pick a different spot to move to.
+This communication type will be sent by the server to a client after the server has determined that a requested move from the client is invalid. This will then indicate that the client must pick a different spot to move to.
 
 ```javascript
 {
@@ -62,7 +172,7 @@ This object will primarily be sent by the server when communicating with clients
   "matchID": "",
   "playerName": "",
   "pieceID": 3,
-  "desiredPosition": [],
+  "desiredMoves": [],
   "whoseTurn": "",
   "errorMessage": "The move requested by the player cannot be made."
 }
@@ -73,7 +183,7 @@ This object will primarily be sent by the server when communicating with clients
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who requested the invalid move.
 * `pieceID` is an int and will be the ID of the piece that the player wished to move to an invalid space
-* `desiredPosition` will be a 1D array with the coordinates of the invalid square or position on the board that the player wanted to move the piece to.
+* `desiredMoves` will be a 2D array with the coordinates of the invalid squares or positions on the board that the player wanted to move the piece to.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. Because the previous move was invalid, the player who made the last move is try and move again.
 * `errorMessage` is a string and will contain a message stating that the requested was was invalid and could not be made. This string
 could also be altered to include the specifics of why the move was invalid such as it being out of bounds, conflicting with the rules
@@ -81,8 +191,7 @@ of the game, etc..
 
 ## updateBoard
 
-This object will be sent by the server when communicating with clients. It will be sent after the server has determined 
-that a requested move by a client was in fact valid and so the move was made and the state of the board was updated. The server will
+This communication type will be sent after the server has determined that a requested move by a client was in fact valid and so the move was made and the state of the board was updated. The server will
 send the updated board to the clients so that they can display it so the players.
 
 ```javascript
@@ -92,10 +201,8 @@ send the updated board to the clients so that they can display it so the players
   "matchID": "",
   "playerName": "",
   "pieceID": 3,
-  "newPosition: [],
   "updatedBoard": [][],
   "whoseTurn": "",
-  "successMessage": "The player's move was valid and the board has been updated"
 }
 ```
 
@@ -104,14 +211,12 @@ send the updated board to the clients so that they can display it so the players
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who made the valid move that updated the board.
 * `pieceID` is an int and will be the ID of the piece that the player moved.
-* `newPosition` is a 1D array with the coordinates of the the position to which the piece was moved.
 * `updatedBoard` is a 2D array with the information containing the new state of the game board after the piece was moved.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. In this case it will be the name of the player who did not make the most recent move.
-* `successMessage` is a string containing a message stating that the requested move was valid and the board has been updated.
 
 ## registerUser
 
-This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is registering to the site. The server will take the data in this object and use it to create a new entry with the user's informatino in the database.
+This communication type will be sent by a client to the server whenever a user is registering to the site. The server will take the data in this object and use it to create a new entry with the user's informatino in the database.
 
 ```javascript
 {
@@ -125,12 +230,12 @@ This object will be sent by clients when communicating with the server. It will 
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `userName` is a string and is the display name that the person creating the account would like to use.
-* `userPassword` is a string and is the password that the person creating the account would like to use to secure their account.
+* `userPassword` is a string and is the hash of the password that the person creating the account would like to use to secure their account.
 * `userEmail` is a string and is the email address of the person creating the account.
 
 ## errorInvalidRegistration
 
-This object will be sent by the server when communicating with a client. It will be sent by the server to a client when the client submits invalid information when trying to register a new account. It is up to the server to determine what information is invalid. Invalid information could be something like a duplicate user name, invalid email address, etc...
+This communication type will be sent by the server to a client when the client submits invalid information when trying to register a new account. It is up to the server to determine what information is invalid. Invalid information could be something like a duplicate user name, invalid email address, etc...
 
 ```javascript
 {
@@ -150,7 +255,7 @@ This object will be sent by the server when communicating with a client. It will
 
 ## registrationSuccess
 
-This object will be sent by the server when communicating with a client. It will be sent by the server to a client when the client submits valid information when trying to register a new account and so a new account has been created for the user. It is up to the server to determine if the information was valid in the account creation.
+This communication type will be sent by the server to a client when the client submits valid information when trying to register a new account and so a new account has been created for the user. It is up to the server to determine if the information was valid in the account creation.
 
 ```javascript
 {
@@ -158,18 +263,18 @@ This object will be sent by the server when communicating with a client. It will
   "communicationVersion": 1,
   "userName": "",
   "userEmail": "",
-  "message": "User account has been successfully created."
+  "successMessage": "User account has been successfully created."
 }
 ```
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `userName` is a string and is the new display name of the person who created the account.
 * `userEmail` is a string and is the email address of the person who has created a new account.
-* `message` is a string with a message stating that an account has been successfully created for the user.
+* `successMessage` is a string with a message stating that an account has been successfully created for the user.
 
 ## requestBeginNewMatch
 
-This object will be sent by clients to the server. It will be sent to the server by a client whenever a user is creating a new match. This will tell the server to allocate resources for the match and begin the processes required for the clients to play it.
+This communication type will be sent to the server by a client whenever a user is creating a new match. This will tell the server to allocate resources for the match and begin the processes required for the clients to play it.
 
 ```javascipt
 {
@@ -187,7 +292,7 @@ This object will be sent by clients to the server. It will be sent to the server
 
 ## beginNewMatch
 
-This object will be sent by the server to clients. This object will be sent by the server to the two clients who recently began a new match. It represents the beginning of a new match. 
+This communication type will be sent by the server to the two clients who recently began a new match. It represents the beginning of a new match. 
 
 ```javascript
 {
@@ -209,7 +314,7 @@ This object will be sent by the server to clients. This object will be sent by t
 
 ## invitation
 
-This object will both be sent from clients to the server and from the server to the clients. A client who wishes to start a new match with a player will send the the invitation to the server. The server will then pass the invitation on to the addressed client who will then either accept or reject the invitation.
+This communication type will both be sent from clients to the server and from the server to the clients. A client who wishes to start a new match with a player will send the the invitation to the server. The server will then pass the invitation on to the addressed client who will then either accept or reject the invitation.
   
 ```javascript
 {
@@ -229,7 +334,7 @@ This object will both be sent from clients to the server and from the server to 
 
 ## invitationResponse
 
-This object will be sent from clients to the server. It will be sent to notify the server of a client's response to an invitation to a new match. The server will then pass this object on to the client that sent the original invitation.
+This communication type will be sent from clients to the server. It will be sent to notify the server of a client's response to an invitation to a new match. The server will then pass this object on to the client that sent the original invitation.
 
 ```javascript
 {
@@ -249,7 +354,7 @@ This object will be sent from clients to the server. It will be sent to notify t
 
 ## quitMatch
 
-This object will be sent from clients to the server. It will be sent to notify the server that the client wishes to forfeit the match and leave, thus ending the game. The client who sends this request will automatically lose the match and the opponent will win. 
+This communication type will be sent from clients to the server. It will be sent to notify the server that the client wishes to forfeit the match and leave, thus ending the game. The client who sends this request will automatically lose the match and the opponent will win. 
 
 ```javasctipt
 {
@@ -267,7 +372,7 @@ This object will be sent from clients to the server. It will be sent to notify t
 
 ## endMatch
 
-This object will be sent from the server to the clients. It will be sent when either a client's last move has won the match or a player has quit the match. It will also notify the clients of the results.
+This communication type will be sent from the server to the clients. It will be sent when either a client's last move has won the match or a player has quit the match. It will also notify the clients of the results.
 
 ```javasctipt
 {
@@ -291,7 +396,7 @@ This object will be sent from the server to the clients. It will be sent when ei
 
 ## unregisterUser
 
-This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user would like to unregister from the site. The server will then remove the user's data associated with their account from the database.
+This communication type will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user would like to unregister from the site. The server will then remove the user's data associated with their account from the database.
 
 ```javascript
 {
@@ -307,7 +412,7 @@ This object will be sent by clients when communicating with the server. It will 
 
 ## attemptLogin
 
-This object will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is attempting to log into their account.
+This communication type will be sent by clients when communicating with the server. It will be sent by a client to the server whenever a user is attempting to log into their account.
 
 ```javascript
 {
@@ -325,7 +430,7 @@ This object will be sent by clients when communicating with the server. It will 
 
 ## errorInvalidLogin
 
-This object will be sent by the server when communicating with clients. It will be sent by the server to the client whenever the client attempts to login to their account with an incorrect password or the account does not exist.
+This communication type will be sent by the server when communicating with clients. It will be sent by the server to the client whenever the client attempts to login to their account with an incorrect password or the account does not exist.
 
 ```javascript
 {
@@ -343,7 +448,7 @@ This object will be sent by the server when communicating with clients. It will 
 
 ## loginSuccess
 
-This object will be sent by the server when communicating with clients. It will be sent by the server when a user has successfully logged in to their account. It will contain the user's account information so that it may be displayed to the user and interacted with.
+This communication type will be sent by the server when communicating with clients. It will be sent by the server when a user has successfully logged in to their account. It will contain the user's account information so that it may be displayed to the user and interacted with.
 
 ```javascript
 {
@@ -364,6 +469,10 @@ This object will be sent by the server when communicating with clients. It will 
 # Update History
 ## Sprint 1
 * 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
+* 9/22/2019 zachklau renamed GameIP to ClientServerCommFormat.
+* 9/22/2019 zachklau consolidated communication types into four objects to be sent and recieved: Action, Update, ClientError, and ServerError
+* 9/22/2019 zachklau renamed `desiredPosition` to `desiredMoves` and made it into a 2D array in case a piece moves more than one time in a turn.
+* 9/22/2019 zachklau edited the description of `userPassword` to specify that it will be a hash of the password rather than the the password itself
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.
