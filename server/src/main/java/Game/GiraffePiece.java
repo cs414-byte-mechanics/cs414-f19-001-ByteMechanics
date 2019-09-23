@@ -10,7 +10,8 @@ public class GiraffePiece extends GamePiece {
         super(row, col, player);
     }
 
-    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
+
         /* The Giraffe moves and captures by jumping to the second square in a straight or diagonal direction.
         A jump cannot be blocked by interposing pieces of either color.
         In addition it has the king's move, without the right to capture with it.*/

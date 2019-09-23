@@ -1,5 +1,7 @@
 package Game;
 
+import Game.GameBoard;
+
 public class CrocodilePiece extends GamePiece {
     public CrocodilePiece(){
     }
@@ -30,7 +32,7 @@ public class CrocodilePiece extends GamePiece {
         int distCol = Math.abs(destCol - this.column);
         int distRow = Math.abs(destRow - this.row);
         /* Crocodile moves 1 square in any direction.  */
-        if ((distCol <= 1 ) || (distRow <= 1)){
+        if ((distCol <= 1 ) && (distRow <= 1)){
             /* Crocodile is moving a single square in any direction.
             Destination square must be empty or contain opponents piece.  If it contains
             opponents piece then it will be captured. */

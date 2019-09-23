@@ -93,15 +93,20 @@ public class GamePiece {
                 /* travel along path and make sure all squares are NULL */
                 if (board[x][y] != null){
                     /* piece found in path */
+                    System.out.println("Path blocked");
                     return false;
                 }
 
                 x = x + colDir;
                 y = y + rowDir;
             }
+            System.out.println("Path clear");
             return true;  /* if we get here, path was clear */
         }
-        else return false;  /* path is not a straight line */
+        else {
+            System.out.println("Path not straight");
+            return false;  /* path is not a straight line */
+        }
     }
 
     public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
