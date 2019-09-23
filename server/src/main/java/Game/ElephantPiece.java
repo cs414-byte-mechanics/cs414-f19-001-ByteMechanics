@@ -28,6 +28,7 @@ public class ElephantPiece extends GamePiece {
 
         /* check if elephant moved one OR two steps straight - can moe and can capture*/
         if ( (distRow== 1 && distCol == 0 ) || (distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 1) || (distRow== 0 && distCol == 2)) {
+
             return squareEmptyOrCapturable(destRow, destCol, board);
         }
         else

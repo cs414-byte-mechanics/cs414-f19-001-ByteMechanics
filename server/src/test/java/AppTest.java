@@ -107,37 +107,15 @@ public class AppTest {
 
     @Test/*Added by Fari -- test for lion valid move */
     public void testLionSimpleMove(){
+
         LionPiece lionP1 = (LionPiece) congoGame.board[0][3];
         LionPiece lionP2 = (LionPiece) congoGame.board[6][3];
 
         GamePiece[][] congoBoard = congoGame.board;
-//        assertTrue(lionP1.ValidateMove(2,5,congoGame.board) == false); // move out of caste? no
-//        assertTrue(lionP1.ValidateMove(0,4,congoGame.board) == false); // catch elephant of teammate?no
-//        assertTrue(lionP1.ValidateMove(0,5,congoGame.board) == false); // out of castle
-//
-//        congoGame.movePiece(0,4, 1,4); // move elephant
-//        congoGame.movePiece(0,3, 0,4); // move lion1
-//        assertTrue(lionP1.ValidateMove(0,5,congoGame.board) == false);
-//
-//        congoGame.movePiece(5,3, 1,3); // bring opponent's pawn to castle
-//        assertTrue(lionP1.ValidateMove(1,3,congoGame.board) == true);
-//
-//        congoGame.movePiece(1,3, 1,5);
-//        assertTrue(lionP1.ValidateMove(1,5,congoGame.board) == false); // can't capture out of castle
-//
-//        // lion 1 is in 0,4
-//        congoGame.movePiece(0,4, 1,4); // lion1
-//        congoGame.movePiece(5,5, 2,4);
-//        assertTrue(lionP1.ValidateMove(2,4,congoGame.board) == true);
-//
-//        congoGame.movePiece(2,4, 2,5);
-////        congoGame.movePiece(3,4, 3,5);
-////        congoGame.movePiece(6,3, 4,4);
-////        assertTrue(lionP1.ValidateMove(4,4,congoGame.board) == true);
 
         congoGame.movePiece(0,3,2,4); //lion1 2,4
         congoGame.movePiece(6,3, 4,2); // lion2 in 4,2
-//        congoGame.movePiece(3,3, 3,4);
+        //congoGame.movePiece(3,3, 3,4);
         assertTrue(lionP1.ValidateMove(4,2, congoGame.board) == true); // lion could see each other and capture
         assertTrue(lionP1.ValidateMove(4,3, congoGame.board) == false); // could not see, no capture
 
@@ -393,6 +371,7 @@ public class AppTest {
         GamePiece[][] congoBoard = congoGame.board;
 
         /*move giraffe to wrong place*/
+
         assertTrue(giraffe.ValidateMove(2, 0, congoBoard) == true); // 2 steps straight forward
         assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); //2 steps straight diagonally
         assertTrue(giraffe.ValidateMove(2, 1, congoBoard) == false);
@@ -458,16 +437,6 @@ public class AppTest {
         congoBoard[2][5] = congoGame.crocodileP1;
         assertTrue(zebra.ValidateMove(2,5,congoBoard) == false);
     }
-
-    /* Added By Fari -- Test for elephant piece wrong moves */
-//    @Test
-//    public void testElephantBlockedMove() {
-//        /*Start with initial board and test is Player 1 elephant can move from (0,2) to (1,2) and (2,2) but with same player */
-//        ElephantPiece elephant = congoGame.elephantP1;
-//        GamePiece[][] congoBoard = congoGame.board;
-//        congoBoard[1][2] = congoGame.pawnP1;
-//        assertTrue(elephant.ValidateMove(1,2, congoBoard) == false);
-//    }
 
     @Test
     public void testZebraMove3Fail() {

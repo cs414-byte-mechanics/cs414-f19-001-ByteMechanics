@@ -5,7 +5,7 @@ import Game.GameBoard;
 import java.util.concurrent.SynchronousQueue;
 
 public class PawnPiece extends GamePiece {
-    // every pawn can be promoted as a superPawn
+    // every pawn can be promoted as a superPawn / can cross river 
     boolean superPawn , crossedRiver ;
 
     /* initial constructor*/
@@ -36,7 +36,7 @@ public class PawnPiece extends GamePiece {
         if (this.player == 1) {
 
             // if s/he is a super pawn ???
-            System.out.println("****"+superPawn+this.row+this.column);
+            //System.out.println("****"+superPawn+this.row+this.column);
 
             if (superPawn == true) {
                 System.out.println("I am SUPER pawn1 !!!!!");
@@ -179,7 +179,8 @@ public class PawnPiece extends GamePiece {
             }
         }
 
-        return false; // need to be deleted!!
+        return false; 
     }
 }
+
 

@@ -46,7 +46,6 @@ public class LionPiece extends GamePiece {
                 if (board[destRow][destCol] instanceof LionPiece){
                     if (pathClear(destRow, destCol, board))
                     {
-                        System.out.println("Mahdi GooGooL **//**");
                         System.out.println("Game is Over");
                         return true;
                     }
@@ -77,34 +76,14 @@ public class LionPiece extends GamePiece {
                 if (board[destRow][destCol] instanceof LionPiece){
                     if (pathClear(destRow, destCol, board))
                     {
-                        System.out.println("Mahdi GooGooL **//**");
                         System.out.println("Game is Over");
                         return true;
                     }
                     else
                         return false;
-                }
+                } 
             }
         }
-//        if ( (this.player == 2 ) &&  (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4) ){
-//
-//            int distRow = Math.abs(destRow - this.row);
-//            int distCol = Math.abs(destCol - this.column);
-//
-//            if ( distRow <= 1 && distCol <=1 )
-//                return squareEmptyOrCapturable(destRow, destCol, board);
-//
-//            if (board[destRow][destCol] instanceof LionPiece) {
-////                return pathClear(destRow, destCol, board);
-//                if (pathClear(destRow, destCol, board))
-//                {
-//                    System.out.println("Game is Over");
-//                    return true;
-//                }
-//                else
-//                    return false;
-//            }
-//        }
 
         return false;
     }
