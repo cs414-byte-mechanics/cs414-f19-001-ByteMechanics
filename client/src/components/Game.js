@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Container, Col, Row } from 'reactstrap';
 import GameBoard from './GameBoard.js'
+import Registration from './Registration.js'
 
 
 class Game extends Component {
     constructor(props){
         super(props);
         this.state = {
-          loggedOn: true,
+          loggedOn: false,
           player: {
             name: "test",
             email: "test@gmail.com"
@@ -26,6 +28,7 @@ class Game extends Component {
 
         this.connection = null;
         this.sendObject = this.sendObject.bind(this);
+        this.updateScreen = this.updateScreen.bind(this);
     }
 
     componentDidMount() {
@@ -58,14 +61,34 @@ class Game extends Component {
     sendObject(obj){
       this.connection.send(JSON.stringify(obj));
     }
+    
+    updateScreen(){
+        this.setState({
+            loggedOn: true
+        })
+    }
 
     render(){
-        return (
-            <div className="App">
-                <h3>Play Congo!</h3>
-                <GameBoard game={this.state.games[0]} send={this.sendObject}/>
-                {/* <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Congo_gameboard_and_init_config.PNG" alt="Congo (chess variant)"/> */}
-            </div>
+        let registration =
+            <Registration updateScreen={this.updateScreen}/>
+            
+        let game = ''
+        if(this.state.loggedOn){
+            game = 
+                <GameBoard game={this.state.games[0]} send={this.sendObject}/>  
+                registration = ''
+        }
+                
+        return(
+            <Container id="Application">
+                <Row>
+                    <Col className= 'text-center'>
+                        {registration}
+                        <br></br>
+                        {game}
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }
