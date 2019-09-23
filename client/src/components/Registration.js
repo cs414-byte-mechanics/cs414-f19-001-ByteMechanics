@@ -1,5 +1,8 @@
 import React from 'react';
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Card, CardHeader, CardFooter, CardBody, CardTitle, CardText,
+    Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import Game from './Game';
+
 
 class Registration extends React.Component {
     constructor(props){
@@ -19,6 +22,7 @@ class Registration extends React.Component {
     
     handleFormSubmit(){
         //The state is set, now we want to send to server for checking
+        this.props.updateScreen();
     }
     
     updateEmail(event){
@@ -56,6 +60,7 @@ class Registration extends React.Component {
                 </FormGroup>
                 <button onClick={this.handleFormSubmit}> Submit</button>
             </Form>
+
         );
     }
 }
