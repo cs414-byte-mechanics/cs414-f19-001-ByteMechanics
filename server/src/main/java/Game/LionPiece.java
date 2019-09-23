@@ -25,6 +25,7 @@ public class LionPiece extends GamePiece {
             return false;
         }
 
+
          //check for out of castle for lion belongs to player1
         if (this.player == 1){
 
@@ -81,7 +82,7 @@ public class LionPiece extends GamePiece {
                     }
                     else
                         return false;
-                }
+                } 
             }
         }
 
