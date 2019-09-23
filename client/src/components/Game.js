@@ -62,7 +62,7 @@ class Game extends Component {
     render(){
         return (
             <div className="App">
-                <h3>Coming soon!</h3>
+                <h3>Play Congo!</h3>
                 <GameBoard game={this.state.games[0]} send={this.sendObject}/>
                 {/* <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Congo_gameboard_and_init_config.PNG" alt="Congo (chess variant)"/> */}
             </div>
