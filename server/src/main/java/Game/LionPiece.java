@@ -27,7 +27,7 @@ public class LionPiece extends GamePiece {
 
          //check for out of castle for lion belongs to player1
         if (this.player == 1){
-
+            // Is the destination out of castle for lion from player 1 ???
             if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4){
 
                 /*Check for chess king move, to any arbitrary direction just by one step */
@@ -40,7 +40,7 @@ public class LionPiece extends GamePiece {
                 if ( distRow <= 1 && distCol <=1 ){
                     return squareEmptyOrCapturable(destRow, destCol, board); }
             }
-
+            // if destination is in opponent's castle, it must be the other lion with a clear path between
             if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4 ){
 
                 if (board[destRow][destCol] instanceof LionPiece){
@@ -57,7 +57,7 @@ public class LionPiece extends GamePiece {
 
         //check for out of castle for lion belongs to player1
         if (this.player == 2){
-
+            // check if destination is not out of castle for player2
             if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4){
 
                 /*Check for chess king move, to any arbitrary direction just by one step */
@@ -70,7 +70,7 @@ public class LionPiece extends GamePiece {
                 if ( distRow <= 1 && distCol <=1 ){
                     return squareEmptyOrCapturable(destRow, destCol, board); }
             }
-
+            // if destination is in other castle, it must be a lion with a clear path between
             if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4 ){
 
                 if (board[destRow][destCol] instanceof LionPiece){
