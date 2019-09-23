@@ -146,6 +146,7 @@ public class GamePiece {
             return false;
     }
 
+
     public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
 
         int distRow = Math.abs(destRow - this.row);

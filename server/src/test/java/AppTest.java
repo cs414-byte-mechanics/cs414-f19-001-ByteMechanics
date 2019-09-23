@@ -102,7 +102,6 @@ public class AppTest {
         }
     }
 
-
     @Test/*Added by Fari -- test for lion valid move */
     public void testLionSimpleMove(){
 
@@ -207,10 +206,8 @@ public class AppTest {
 
         congoGame.movePiece(3,4,3,6);
         assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
-
     }
 
-//<<<<<<< HEAD
     /* Added By Fari -- Test for Giraffe piece valid moves */
     @Test
     public void testMonkeyMove() {
@@ -245,7 +242,6 @@ public class AppTest {
         /* now move the crocodile and allow the jump */
         congoGame.movePiece(0,5,1,6);  /* move crocodile from 0,5 to 1,6 so monkey can capture opponent's giraffe */
         assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
-
     }
 
     @Test
@@ -430,7 +426,6 @@ public class AppTest {
 
     @Test /* Added By Fari -- Test for Giraffe piece valid moves */
     public void testGiraffeP1SimpleMove(){
-//>>>>>>> master
         /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (1,0) */
 
         GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
@@ -451,7 +446,6 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(1, 0, congoBoard) == false); // can capture ? no, square is occupied
 
         congoGame.movePiece(6,1, 2,2); /*move opponent monkey from (6,1) to (2,2)*/
-//<<<<<<< HEAD
 //        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
 
     }
@@ -463,6 +457,8 @@ public class AppTest {
         ZebraPiece zebra = congoGame.zebraP1;
         assertTrue(zebra.ValidateMove(2,5,congoGame.board) == true);
     }
+
+
 
     @Test /* Added By Fari -- Test for Giraffe piece player2 */
     public void testGiraffeP2SimpleMove(){
@@ -484,7 +480,6 @@ public class AppTest {
 
         congoGame.movePiece(6,1,6,2);
         assertTrue(giraffeP2.ValidateMove(6, 1, congoBoard) == true); // from 4,3 to 6,1?yes
-//>>>>>>> master
     }
 
     @Test
@@ -548,10 +543,10 @@ public class AppTest {
     public void testclearPath() {
         /* Start with initial board */
         CrocodilePiece croc1 = (CrocodilePiece) congoGame.board[0][5];
-
+        /* no pawns yet on the board */
         assertTrue(croc1.pathClear(5, 0, congoGame.board) == false);
         /*so let's just move the elephant forward to block */
-        congoGame.movePiece(1,4,2,4);  /* move pawn forward to unblock crocodile */
+        congoGame.movePiece(1,4,2,4);  /* move elephant forward to unblock zebra */
         assertTrue(croc1.pathClear(5, 0, congoGame.board) == true);
 
 
@@ -621,6 +616,7 @@ public class AppTest {
         assertTrue(croc1.ValidateMove(1,4,congoGame.board) == true);
         congoGame.movePiece(0,5,1,4);  /* move crocodile to (1,4)) */
         assertTrue(croc1.ValidateMove(3,4,congoGame.board) == true);  /* move to river? */
+
         congoGame.movePiece(1,4,3,4);  /* move crocodile to (3,4)) */
         assertTrue(croc1.ValidateMove(4,5,congoGame.board) == true);  /* move to other bank of river? */
 

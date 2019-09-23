@@ -5,6 +5,7 @@ import Game.GameBoard;
 import java.util.concurrent.SynchronousQueue;
 
 public class PawnPiece extends GamePiece {
+
     // every pawn can be promoted as a superPawn / can cross river 
     boolean superPawn , crossedRiver ;
 
@@ -179,8 +180,7 @@ public class PawnPiece extends GamePiece {
             }
         }
 
-        return false; 
+        return false;
     }
 }
-
 
