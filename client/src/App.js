@@ -23,18 +23,6 @@ class App extends React.Component {
     }
     
     render(){
-        
-        let game = ''
-        if(this.displayGame){
-            game = 
-                <Card>
-                    <CardHeader> Start or Resume a Game </CardHeader>
-                        <CardBody>
-                            <Game/>
-                        </CardBody>
-                </Card>
-        }
-        
         let registration =
              <Card>
                     <CardHeader>Welcome to Congo!</CardHeader>
@@ -43,6 +31,17 @@ class App extends React.Component {
                         <Registration updateScreen={this.updateScreen}/>
                     </CardBody>
             </Card>
+            
+        let game = ''
+        if(this.state.displayGame){
+            game = 
+                <Card>
+                    <CardBody>
+                        <Game/>
+                    </CardBody>
+                </Card>
+            registration = ''
+        }
                 
         return(
             <Container id="Application">

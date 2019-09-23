@@ -1,12 +1,7 @@
 import React from 'react';
-<<<<<<< HEAD
 import { Card, CardHeader, CardFooter, CardBody, CardTitle, CardText,
     Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import Game from './Game';
-
-=======
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
->>>>>>> 4bacbe33077331da87a3a24277435a240cb2ba1a
 
 class Registration extends React.Component {
     constructor(props){
@@ -62,7 +57,7 @@ class Registration extends React.Component {
                         <Input type="password" name="password" id="userPassword" onChange={this.updatePassword}/>
                     </Col>
                 </FormGroup>
-                <button onClick={this.handleFormSubmit}> Submit</button>
+                <Button onClick={this.handleFormSubmit}> Submit</Button>
             </Form>
         );
     }
