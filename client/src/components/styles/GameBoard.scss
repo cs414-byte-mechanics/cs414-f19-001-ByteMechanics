@@ -1,0 +1,40 @@
+$boardColor: #58e07a;
+$riverColor: #58b9e0;
+$castleColor: #fffab0;
+
+.board{
+    outline: black 2px solid;
+    display: flex;
+    flex-direction: column;
+    .row{
+        display: flex;
+        justify-content: center;
+        .piece {
+            background: $boardColor;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+            outline: black 1px solid;
+            transition: .2s;
+            cursor: pointer;
+            &.river {
+                background:$riverColor;
+            }
+            &.castle {
+                background: $castleColor;
+            }
+            &.selected {
+                background: yellow;
+            }
+            &.move {
+                background:red;
+            }
+            &:hover {
+                background: yellow;
+            }
+
+        }
+    }
+}
