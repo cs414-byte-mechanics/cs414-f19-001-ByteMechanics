@@ -142,18 +142,9 @@ public class GameBoard{
                 /* crocodile can stay in the water always */
                 startInRiver && endInRiver) {
             /* need to remove the piece since it drowned */
+            /* can call capture() when we implement it */
         }
 
-        if ((this.board[toRow][toCol] instanceof PawnPiece) &&
-                /* the piece moved to the opponent's home row */
-                (((this.board[toRow][toCol].player == 1) && (this.board[toRow][toCol].row == 6))
-                        || ((this.board[toRow][toCol].player == 2) && (this.board[toRow][toCol].row == 0))))
-        {
-            /* check if we're moving a pawn to opponent's home row */
-            //PawnPiece playersPiece = (PawnPiece) this.board[toRow][toCol];
-            //playersPiece.superPawn = true;
-            ((PawnPiece) this.board[toRow][toCol]).superPawn = true;
-        }
     }
 
 }
