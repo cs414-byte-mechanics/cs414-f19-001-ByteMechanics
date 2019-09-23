@@ -1,4 +1,5 @@
 package Game;
+
 public class ElephantPiece extends GamePiece {
 
     /* initial constructor*/
@@ -9,7 +10,7 @@ public class ElephantPiece extends GamePiece {
         super(row, col, player);
     }
 
-    public boolean ValidateMove(int destRow, int destCol, GameBoard[][] board)
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board)
     {
         /* Elephant  can move to the first and second square in a straight direction.
            The move to the second square is a jump and cannot be blocked by interposing pieces of either color. */
@@ -24,19 +25,10 @@ public class ElephantPiece extends GamePiece {
 
         /* check if elephant moved one step straight forward OR two steps straight forward*/
         if ((destRow - this.row == 1 && destCol - this.column == 0 ) || (destRow - this.row == 2 && destCol - this.column == 0 )) {
-            return true;
+            return squareEmptyOrCapturable(destRow, destCol, board);
         }
-
-        /* Destination square must be empty or contain opponents piece.  If it contains
-           opponents piece then it will be captured.*/
-        int activePlayer = this.player;
-        if ((board[destRow][destCol] == null) || (board[destRow][destCol].player != activePlayer)) {
-            return true;
-        }
-        else {
+        else
             return false;
-        }
 
     }
-
 }
