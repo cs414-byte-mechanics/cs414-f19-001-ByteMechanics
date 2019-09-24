@@ -1,6 +1,9 @@
 package Game;
 
 import Game.GameBoard;
+import Game.Player;
+
+import java.util.Arrays;
 
 public class GamePiece {
     public int row;
@@ -160,4 +163,22 @@ public class GamePiece {
             return false;
     }
 
+    public void capturePiece(GamePiece pieceToBeCaptured, GamePiece[] playerPiecesArray){
+
+        System.out.println("Before any capture the piece's array is like "+playerPiecesArray);
+
+        // extract the piece's column which is equal to index of piece in array
+        int index = pieceToBeCaptured.column;
+
+        // if it is not pawn, column number is equal to indexes
+        if (!(pieceToBeCaptured instanceof PawnPiece))
+            playerPiecesArray[index] = null ;
+
+        else
+            // if piece is pawn, index need to be added with 6
+            playerPiecesArray[index + 7] = null;
+
+        System.out.println("After capturing" + pieceToBeCaptured + "The array is like "+playerPiecesArray);
+
+    }
 }
