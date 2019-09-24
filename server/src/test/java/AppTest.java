@@ -436,7 +436,10 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(2, 0, congoBoard) == true); // 2 steps straight forward
         assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); //2 steps straight diagonally
         assertTrue(giraffe.ValidateMove(2, 1, congoBoard) == false);
-//        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == true); // can move one step diagonally
+        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == false); // can't move one step diagonally cause pawn p1 is there
+
+        congoGame.movePiece(1,1,2,1);
+        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == true); //move pawn one step forward so it can move to empty square
 
 
         congoGame.movePiece(1,0,2,0); /*move pawn first from (1,0) to (2,0)*/
@@ -446,7 +449,7 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(1, 0, congoBoard) == false); // can capture ? no, square is occupied
 
         congoGame.movePiece(6,1, 2,2); /*move opponent monkey from (6,1) to (2,2)*/
-//        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
+        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe move and capture opponent's ?
 
     }
 
