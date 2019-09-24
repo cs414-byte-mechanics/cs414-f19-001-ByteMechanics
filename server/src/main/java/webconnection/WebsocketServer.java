@@ -8,6 +8,8 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.WebSocket;
 import org.java_websocket.server.WebSocketServer;
 
+import com.google.gson.*;
+
 public class WebsocketServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
@@ -32,6 +34,8 @@ public class WebsocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from client: " + message);
+        Action clientAction = parseMessage(message);
+        System.out.println(clientAction);
     }
 
     @Override
@@ -43,4 +47,20 @@ public class WebsocketServer extends WebSocketServer {
         }
         else System.out.println("ERROR: Connection does not exist");
     }
+
+    public Action parseMessage(String message) {
+
+        Action action = new Action();
+
+        try {
+            Gson gson = new GsonBuilder().create();
+            action =  gson.fromJson(message, Action.class);
+        }catch(Exception e) {
+            System.err.println("Unable to parse client action into object!\nReason: " + e);
+        }
+
+        return action;
+
+    }
+
 }
