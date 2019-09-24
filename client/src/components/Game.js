@@ -70,7 +70,7 @@ class Game extends Component {
 
     render(){
         let registration =
-            <Registration updateScreen={this.updateScreen}/>
+            <Registration updateScreen={this.updateScreen} sendToServer={this.sendObject}/>
             
         let game = ''
         if(this.state.loggedOn){

@@ -8,9 +8,13 @@ class Registration extends React.Component {
         super(props);
         
         this.state = {
-            email: '',
-            username: '',
-            password: ''
+            registerUser: {
+                "communicationType": "registerUser",
+                "communicationVersion": 1,
+                "userName": "",
+                "userPassword": "",
+                "userEmail": ""
+            }
         }
         
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -22,18 +26,19 @@ class Registration extends React.Component {
     handleFormSubmit(){
         //The state is set, now we want to send to server for checking
         this.props.updateScreen();
+        this.props.sendToServer(this.state.registerUser);
     }
     
     updateEmail(event){
-        this.setState({ email: event.target.value });
+        this.state.registerUser.userEmail = event.target.value;
     }
     
     updateUsername(event){
-        this.setState({ username: event.target.value });
+        this.state.registerUser.userName = event.target.value;
     }
     
     updatePassword(event){
-        this.setState({ password: event.target.value });
+        this.state.registerUser.userPassword = event.target.value;
     }
     
     render () {
