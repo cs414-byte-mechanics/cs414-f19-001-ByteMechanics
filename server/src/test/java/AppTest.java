@@ -210,7 +210,6 @@ public class AppTest {
 
     }
 
-//<<<<<<< HEAD
     /* Added By Fari -- Test for Giraffe piece valid moves */
     @Test
     public void testMonkeyMove() {
@@ -430,7 +429,6 @@ public class AppTest {
 
     @Test /* Added By Fari -- Test for Giraffe piece valid moves */
     public void testGiraffeP1SimpleMove(){
-//>>>>>>> master
         /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (1,0) */
 
         GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
@@ -451,7 +449,6 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(1, 0, congoBoard) == false); // can capture ? no, square is occupied
 
         congoGame.movePiece(6,1, 2,2); /*move opponent monkey from (6,1) to (2,2)*/
-//<<<<<<< HEAD
 //        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
 
     }
@@ -484,7 +481,6 @@ public class AppTest {
 
         congoGame.movePiece(6,1,6,2);
         assertTrue(giraffeP2.ValidateMove(6, 1, congoBoard) == true); // from 4,3 to 6,1?yes
-//>>>>>>> master
     }
 
     @Test
