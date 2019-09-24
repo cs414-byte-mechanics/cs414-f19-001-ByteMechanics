@@ -179,6 +179,5 @@ public class GamePiece {
             playerPiecesArray[index + 7] = null;
 
         System.out.println("After capturing" + pieceToBeCaptured + "The array is like "+playerPiecesArray);
-
     }
 }
