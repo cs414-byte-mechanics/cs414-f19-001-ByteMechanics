@@ -10,14 +10,12 @@ The format for all data to be exchanged will be that of JSON objects (https://ww
 
 This document will be updated throughout the duration of the project as needed. Objects will be removed and added over the course of development.
 
-There will be four types of objects sent between clients and the server. These will be `Update`, `Action`, `ServerError`, and `ClientError`. Each of the four objects will have different purposes depending on which properties of the object are filled in or what values are filled in for those properties. 
+There will be three types of objects sent between clients and the server. These will be `Update`, `Action`, and `ServerError`. Each of the four objects will have different purposes depending on which properties of the object are filled in or what values are filled in for those properties. 
 
-Clients will send `Action` and `ClientError` objects.
+Clients will send `Action` objects.
 The server will send `Update` and `ServerError` objects.
 
 An `Action` object will be sent by a client whenever a player wants to perform an action such as registering, logging in, inviting another player, moving a piece on the board, etc...
-
-A `ClientError` object will be sent by a client whenever there is an error on the client side.
 
 An `Update` object will be sent by the server whenever the server is responding to a client's action. These are things like updating the game board, sending the client their acount information, etc...
 
@@ -47,16 +45,7 @@ Here is the structure for each of the four objects:
   "playerQuitting": ""
 }
 ```
-## ClientError 
 
-```javascript
-{
-  "objectType": "ClientError",
-  "communicationType": "",
-  "communicationVersion": 1
-  "errorMessage": ""
-}
-```
 ## Update
 
 ```javascript
@@ -117,10 +106,6 @@ List of communication types for `Action`:
 * quitMatch
 * unregisterUser
 * attemptLogin
-
-List of communication types for `ClientError`:
-
-*
 
 List of communication types for `Update`
 
@@ -473,6 +458,7 @@ This communication type will be sent by the server when communicating with clien
 * 9/22/2019 zachklau consolidated communication types into four objects to be sent and recieved: Action, Update, ClientError, and ServerError
 * 9/22/2019 zachklau renamed `desiredPosition` to `desiredMoves` and made it into a 2D array in case a piece moves more than one time in a turn.
 * 9/22/2019 zachklau edited the description of `userPassword` to specify that it will be a hash of the password rather than the the password itself
+* 9/23/2019 zachklau removed ClientError object as there is no forseen use for it yet.
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.
