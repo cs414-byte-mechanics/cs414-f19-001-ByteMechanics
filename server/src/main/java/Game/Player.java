@@ -5,13 +5,13 @@ import Game.GamePiece;
 public class Player {
 
     // every team has 14 single pieces, including 7 animals and 7 pawns
-    static int numberOfPlayer = 14;
+    public static int numberOfPieces= 14;
 
     // to identify which player it is? one or two?
     int playerID;
 
     // An array to store every player's pieces (totally 14) - every single piece is a game piece class like Pawn piece
-    GamePiece playerPieces[] = new GamePiece[numberOfPlayer];
+    GamePiece playerPieces[] = new GamePiece[numberOfPieces];
 
     public void initPlayerPieces(){
 
