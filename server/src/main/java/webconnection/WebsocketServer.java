@@ -9,15 +9,18 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.server.WebSocketServer;
 
 import com.google.gson.*;
+import database.*;
 
 public class WebsocketServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
     private Set<WebSocket> conns;
+    private DatabaseHandler db;
 
     public WebsocketServer() {
         super(new InetSocketAddress(TCP_PORT));
         conns = new HashSet<>();
+        db = new DatabaseHandler();
     }
 
     @Override
@@ -33,9 +36,13 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("Message from client: " + message);
         Action clientAction = parseMessage(message);
-        System.out.println(clientAction);
+        
+        try {
+            db.performDBSearch(clientAction);
+        } catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     @Override
