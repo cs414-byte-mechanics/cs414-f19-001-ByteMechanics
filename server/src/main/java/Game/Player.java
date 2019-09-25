@@ -15,8 +15,8 @@ public class Player {
 
     public Player (int id ){
 
-        Player player1 = new Player(1);
-        Player player2 = new Player(2);
+        playerID = id;
+        initPlayerPieces();
     }
 
     public void initPlayerPieces(){
