@@ -13,15 +13,12 @@ public class Player {
     // An array to store every player's pieces (totally 14) - every single piece is a game piece class like Pawn piece
     GamePiece playerPieces[] = new GamePiece[numberOfPieces];
 
-<<<<<<< HEAD
     public Player (int id ){
 
         playerID = id;
         initPlayerPieces();
     }
 
-=======
->>>>>>> master
     public void initPlayerPieces(){
 
         // Initialize every single piece of each player
