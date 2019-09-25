@@ -1,6 +1,6 @@
 package Game ;
 
-import jdk.jfr.StackTrace;
+// import jdk.jfr.StackTrace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +11,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
 import Game.GamePiece;
 import Game.GameBoard;
+import Game.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -529,4 +530,22 @@ public class AppTest {
         assertTrue(croc1.ValidateMove(3,3,congoGame.board) == false);  /* move diagonally back to river? */
     }
 
+//    @Test // Added by Fari -- test to check capture function
+//
+//    public void testCaptureFunction(){
+//
+//        GamePiece[][] congoBoard = congoGame.board;
+//
+//        // identify some pieces and assign them to the pieces' array
+//        GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
+////        (GamePiece) playerPieces[0] = (GamePiece) giraffe;
+//
+//        MonkeyPiece monkey = (MonkeyPiece) congoGame.board[0][1] ;
+////        playerPieces[1] = (GamePiece) monkey;
+////
+//        ElephantPiece elephant = (ElephantPiece) congoGame.board[0][2];
+////        playerPieces[2] = (GamePiece) elephant;
+////
+//        congoGame.capturePiece( (GamePiece) giraffe, new GamePiece[] { (GiraffePiece) giraffe, (MonkeyPiece) monkey, (ElephantPiece) elephant} );
+//    }
 }

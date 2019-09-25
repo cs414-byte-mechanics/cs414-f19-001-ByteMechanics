@@ -1,6 +1,9 @@
 package Game;
 
 import Game.GameBoard;
+import Game.Player;
+
+import java.util.Arrays;
 
 public class GamePiece {
     public int row;
@@ -157,5 +160,4 @@ public class GamePiece {
         else
             return false;
     }
-
 }
