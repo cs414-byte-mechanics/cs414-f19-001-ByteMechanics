@@ -102,7 +102,6 @@ public class AppTest {
         }
     }
 
-
     @Test/*Added by Fari -- test for lion valid move */
     public void testLionSimpleMove(){
 
@@ -207,7 +206,6 @@ public class AppTest {
 
         congoGame.movePiece(3,4,3,6);
         assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
-
     }
 
     /* Added By Fari -- Test for Giraffe piece valid moves */
@@ -244,7 +242,6 @@ public class AppTest {
         /* now move the crocodile and allow the jump */
         congoGame.movePiece(0,5,1,6);  /* move crocodile from 0,5 to 1,6 so monkey can capture opponent's giraffe */
         assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
-
     }
 
     @Test
@@ -439,7 +436,10 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(2, 0, congoBoard) == true); // 2 steps straight forward
         assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); //2 steps straight diagonally
         assertTrue(giraffe.ValidateMove(2, 1, congoBoard) == false);
-//        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == true); // can move one step diagonally
+        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == false); // can't move one step diagonally cause pawn p1 is there
+
+        congoGame.movePiece(1,1,2,1);
+        assertTrue(giraffe.ValidateMove(1, 1, congoBoard) == true); //move pawn one step forward so it can move to empty square
 
 
         congoGame.movePiece(1,0,2,0); /*move pawn first from (1,0) to (2,0)*/
@@ -449,7 +449,7 @@ public class AppTest {
         assertTrue(giraffe.ValidateMove(1, 0, congoBoard) == false); // can capture ? no, square is occupied
 
         congoGame.movePiece(6,1, 2,2); /*move opponent monkey from (6,1) to (2,2)*/
-//        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe capture it ? ***Failed
+        assertTrue(giraffe.ValidateMove(2, 2, congoBoard) == true); // can giraffe move and capture opponent's ?
 
     }
 
@@ -457,9 +457,11 @@ public class AppTest {
     @Test
     public void testZebraSimpleMove() {
         /*Start with initial board and test if Player 1 zebra can move from (0,6) to (2,5) */
-        ZebraPiece zebra = congoGame.zebraP1;
+        ZebraPiece zebra = (ZebraPiece) congoGame.board[0][6];
         assertTrue(zebra.ValidateMove(2,5,congoGame.board) == true);
     }
+
+
 
     @Test /* Added By Fari -- Test for Giraffe piece player2 */
     public void testGiraffeP2SimpleMove(){
@@ -487,9 +489,9 @@ public class AppTest {
     public void testZebraBlockedMove() {
         /* Start with initial board and put Crocodile at row 2, col 3 to block move */
         /* Test if Player 1 zebra move from (0,6) to (2,5) is blocked */
-        ZebraPiece zebra = congoGame.zebraP1;
         GamePiece[][] congoBoard = congoGame.board;
-        congoBoard[2][5] = congoGame.crocodileP1;
+        ZebraPiece zebra = (ZebraPiece) congoBoard[0][6];
+        congoBoard[2][5] = congoBoard[0][5];
         assertTrue(zebra.ValidateMove(2,5,congoBoard) == false);
     }
 
@@ -497,108 +499,8 @@ public class AppTest {
     public void testZebraMove3Fail() {
         /* Start with initial board and test is Player 1 zebra can move from (0,6) to (3,6) */
         /* This move is illegal for Zebra */
-        ZebraPiece zebra = congoGame.zebraP1;
+        ZebraPiece zebra = (ZebraPiece) congoGame.board[0][6];
         assertTrue(zebra.ValidateMove(3,6,congoGame.board) == false);
-    }
-
-
-    @Test
-    public void testCrocInRiver(){
-        /* Start with initial board and test if crocodile is in river */
-        GamePiece[][] congoBoard = congoGame.board;
-        CrocodilePiece croc1 = congoGame.crocodileP1;
-        CrocodilePiece croc2 = congoGame.crocodileP2;
-        assertTrue(croc1.inRiver() == false);
-        assertTrue(croc2.inRiver() == false);
-        congoGame.movePiece(0,5,3,5);
-        assertTrue(croc1.inRiver() == true);
-        assertTrue(croc2.inRiver() == false);
-    }
-
-    @Test
-    public void testMoveTowardRiver(){
-        /* Start with initial */
-        GamePiece[][] congoBoard = congoGame.board;
-        CrocodilePiece croc1 = (CrocodilePiece) congoGame.board[0][5];
-        CrocodilePiece croc2 = (CrocodilePiece) congoGame.board[6][5];
-        assertTrue(croc1.moveTowardRiver(2,5) == true);  /* move to but not in river */
-        assertTrue(croc1.moveTowardRiver(3,5) == true);  /* move into river */
-        assertTrue(croc1.moveTowardRiver(4,5) == false);  /* move across river */
-        assertTrue(croc1.moveTowardRiver(2,3) == false);  /* move diagonally towards river */
-
-        assertTrue(croc2.moveTowardRiver(4,5) == true);  /* move to but not in river */
-        assertTrue(croc2.moveTowardRiver(3,5) == true);  /* move into river */
-        assertTrue(croc2.moveTowardRiver(2,5) == false);  /* move across river */
-        assertTrue(croc2.moveTowardRiver(4,3) == false);  /* move diagonally towards river */
-
-        /* move croc1 across the river */
-        congoGame.movePiece(0,5,5,5);
-        assertTrue(croc1.moveTowardRiver(3,5) == true);
-        /* move croc back to south side of river */
-        congoGame.movePiece(5,5,2,5);
-        /* move him further south */
-        assertTrue(croc1.moveTowardRiver(0,5) == false);
-    }
-
-    @Test
-    public void testclearPath() {
-        /* Start with initial board */
-        CrocodilePiece croc1 = (CrocodilePiece) congoGame.board[0][5];
-
-        assertTrue(croc1.pathClear(5, 0, congoGame.board) == false);
-        /*so let's just move the elephant forward to block */
-        congoGame.movePiece(1,4,2,4);  /* move pawn forward to unblock crocodile */
-        assertTrue(croc1.pathClear(5, 0, congoGame.board) == true);
-
-
-        /* Once we have pawns let's turn on the following tests */
-        congoGame.movePiece(2,4,3,4);  /* move pawn forward again to unblock crocodile */
-        assertTrue(croc1.pathClear(5, 0, congoGame.board) == true);
-        congoGame.movePiece(1,3,2,3);  /* move another pawn forward to block croc1 */
-        assertTrue(croc1.pathClear(5, 0, congoGame.board) == false);
-        congoGame.movePiece(2,3,3,3);  /* move same pawn forward and unblock croc1 */
-        assertTrue(croc1.pathClear(5, 0, congoGame.board) == true);
-        /*check zebra all the way to opposite corner 0,6 to 6,0 */
-        ZebraPiece zebra1 = (ZebraPiece) congoGame.board[0][6];
-        assertTrue(zebra1.pathClear(6, 0, congoGame.board) == false);
-        congoGame.movePiece(1,5,2,5);  /* move pawn in front of croc forward - doesn't unblock everything*/
-        assertTrue(zebra1.pathClear(6, 0, congoGame.board) == false); /* blocked at 3,3 and 5,1 */
-        congoGame.movePiece(3,3,4,3);  /* move column 3 pawn forward but still blocked by pawn at 5,1 */
-        assertTrue(zebra1.pathClear(6, 0, congoGame.board) == false);
-        congoGame.movePiece(5,1,4,1);  /* move opponent's pawn to unblock zebra */
-        assertTrue(zebra1.pathClear(6, 0, congoGame.board) == true);
-        /* and how about 6,0 to 0,6 */
-        GiraffePiece giraffe2 = (GiraffePiece) congoGame.board[6][0];
-        assertTrue(giraffe2.pathClear(0, 6, congoGame.board) == true);
-
-
-        /* test diagonally across board from 0,0 to 6,6 */
-        GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
-        assertTrue(giraffe.pathClear(6, 6, congoGame.board) == false);
-        congoGame.movePiece(1,1,2,1);  /* move pawn forward again to partially unblock giraffe */
-        assertTrue(giraffe.pathClear(6, 6, congoGame.board) == false);
-        congoGame.movePiece(5,5,5,4);  /* move opponent's pawn forward again to totally unblock giraffe */
-        assertTrue(giraffe.pathClear(6, 6, congoGame.board) == true);
-
-        /* now diagonally in opposite direction 6,6 to 0,0 */
-        ZebraPiece zebra = (ZebraPiece) congoGame.board[6][6];
-        assertTrue(zebra.pathClear(0, 0, congoGame.board) == true);
-
-
-        /* test vertical move upward */
-        congoGame.board[1][0] = null; /* remove pawn */
-        assertTrue(giraffe.pathClear(5, 0, congoGame.board) == true); /* should be clear all the way to opponent's pawn */
-        /* test vertical move downward */
-        GiraffePiece giraffe1 = (GiraffePiece) congoGame.board[6][0];
-        congoGame.board[5][0] = null; /* remove pawn */
-        assertTrue(giraffe.pathClear(0, 0, congoGame.board) == true);
-
-        /* test horizontal */
-        congoGame.movePiece(6,6,3,6);  /* move player 1's zebra to river */
-        congoGame.movePiece(0,0,3,0);  /* move player 2's giraffe to river */
-        System.out.println(congoGame.board.toString());
-        assertTrue(giraffe.pathClear(3, 6, congoGame.board) == true);
-        assertTrue(zebra.pathClear(3, 0, congoGame.board) == true);
     }
 
     @Test

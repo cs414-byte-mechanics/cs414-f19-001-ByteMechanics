@@ -93,14 +93,12 @@ public class GamePiece {
                 /* travel along path and make sure all squares are NULL */
                 if (board[x][y] != null){
                     /* piece found in path */
-                    System.out.println("Path blocked");
                     return false;
                 }
 
                 x = x + colDir;
                 y = y + rowDir;
             }
-            System.out.println("Path clear");
             return true;  /* if we get here, path was clear */
         }
         else {
@@ -146,6 +144,7 @@ public class GamePiece {
             return false;
     }
 
+
     public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
 
         int distRow = Math.abs(destRow - this.row);
@@ -160,4 +159,3 @@ public class GamePiece {
     }
 
 }
-

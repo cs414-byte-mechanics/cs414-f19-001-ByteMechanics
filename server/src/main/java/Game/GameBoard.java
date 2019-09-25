@@ -2,30 +2,12 @@ package Game;
 
 import Game.GamePiece;
 import Game.PawnPiece;
+import Game.Player;
 
 public class GameBoard{
     static int riverRow = 3;  /* river is on row 3 in the board */
     static int boardNumRows = 7;
     static int boardNumCols = 7;
-
-    /* player1's pieces */
-    GiraffePiece giraffeP1;
-    MonkeyPiece monkeyP1;
-    CrocodilePiece crocodileP1;
-    ZebraPiece zebraP1;
-    ElephantPiece elephant1P1;
-    ElephantPiece elephant2P1;
-    LionPiece lionP1;
-
-    /* player2's pieces */
-    GiraffePiece giraffeP2;
-    MonkeyPiece monkeyP2;
-    CrocodilePiece crocodileP2;
-    ZebraPiece zebraP2;
-    ElephantPiece elephant1P2;
-    ElephantPiece elephant2P2;
-    LionPiece lionP2;
-
 
     /* playing board with 49 squares */
     GamePiece board[][] = new GamePiece[boardNumRows][boardNumCols];
@@ -37,48 +19,34 @@ public class GameBoard{
                 board[i][j] = null;
             }
         }
+        /* this assumes the players have already set up the pieces that we're placing on the board */
     }
 
     public void InitGameBoard(){
         /* Create and setup game pieces for player 1 */
-        giraffeP1 = new GiraffePiece(0, 0, 1);
-        board[0][0] = giraffeP1 ;
-        monkeyP1 = new MonkeyPiece(0,1,1);
-        board[0][1] = monkeyP1;
-        elephant1P1 = new ElephantPiece(0,2,1);
-        board[0][2] = elephant1P1;
-        lionP1 = new LionPiece(0,3,1);
-        board[0][3] = lionP1;
-        elephant2P1 = new ElephantPiece(0,4,1);
-        board[0][4] = elephant2P1;
-        crocodileP1 = new CrocodilePiece(0,5, 1);
-        board[0][5] = crocodileP1;
-        zebraP1 = new ZebraPiece(0, 6, 1);
-        board[0][6] = zebraP1;
+        board[0][0] = new GiraffePiece(0, 0, 1);
+        board[0][1] = new MonkeyPiece(0,1,1);
+        board[0][2] = new ElephantPiece(0,2,1);
+        board[0][3] = new LionPiece(0,3,1);
+        board[0][4] = new ElephantPiece(0,4,1);
+        board[0][5] = new CrocodilePiece(0,5, 1);
+        board[0][6] = new ZebraPiece(0, 6, 1);
 
         /* need to initialize all pawns */
         for (int i =0; i<=6; i++){
             board[1][i] = new PawnPiece(1, i, 1);
         }
 
-
         /* Create and setup game pieces for player 2 */
-        giraffeP2 = new GiraffePiece(6, 0, 2);
-        board[6][0] = giraffeP2;
-        monkeyP2 = new MonkeyPiece(6, 1, 2);
-        board[6][1] = monkeyP2;
-        elephant1P2 = new ElephantPiece(6,2,2);
-        board[6][2] = elephant1P2;
-        lionP2 = new LionPiece(6,3,2);
-        board[6][3] = lionP2;
-        elephant2P2 = new ElephantPiece(6,4,2);
-        board[6][4] = elephant2P2;
-        crocodileP2 = new CrocodilePiece(6, 5, 2);
-        board[6][5] = crocodileP2;
-        zebraP2 = new ZebraPiece(6, 6, 2);
-        board[6][6] = zebraP2;
-        /* need to initialize all pawns */
+        board[6][0] = new GiraffePiece(6, 0, 2);
+        board[6][1] = new MonkeyPiece(6, 1, 2);
+        board[6][2] = new ElephantPiece(6,2,2);
+        board[6][3] = new LionPiece(6,3,2);
+        board[6][4] = new ElephantPiece(6,4,2);
+        board[6][5] = new CrocodilePiece(6, 5, 2);
+        board[6][6] = new ZebraPiece(6, 6, 2);
 
+        /* need to initialize all pawns */
         for (int i =0; i <=6; i++){
             board[5][i] = new PawnPiece(5, i, 2 );
         }
