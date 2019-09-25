@@ -37,10 +37,18 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        Action clientAction = parseMessage(message);
+        Action clientAction = handleClientAction(message);
         
         try {
-            db.performDBSearch(clientAction);
+        
+            boolean result = db.performDBSearch(clientAction);
+            
+            if(result){
+                //if successful, create update message and send to client
+                Update update = createUpdateMessage(clientAction, result);
+                sendUpdateToClient(conn, update);
+            }
+        
         } catch (Exception e){
             System.out.println(e);
         }
@@ -83,6 +91,24 @@ public class WebsocketServer extends WebSocketServer {
 
         return updateJSON;
 
+    }
+    
+    public Update createUpdateMessage(Action action, boolean result){
+        Update update = new Update();
+    
+        if(action.communicationType.equals("registerUser")){
+            if(result){
+                //registration was successful
+                update.communicationType = "registrationSuccess";
+                update.userEmail = action.userEmail;
+                update.userName = action.userName;
+                update.successMessage = "User account has been successfully created.";
+            }
+        
+        }
+        
+        return null;
+        
     }
 
 }
