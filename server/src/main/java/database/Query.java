@@ -7,6 +7,10 @@ public class Query {
     public static String createCheckEmailQuery(Action action){
         return "SELECT * FROM users WHERE email = \"" + action.userEmail + "\";";
     }
+    
+    public static String createCheckUsernameQuery(Action action){
+        return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
+    }
 
     public static String createRegisterUserQuery(Action action){
         //Still need to check to make sure it doesn't exist first

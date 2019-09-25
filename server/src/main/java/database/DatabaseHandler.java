@@ -4,8 +4,6 @@ import java.sql.*;
 import webconnection.*;
 
 public class DatabaseHandler {
-    private String query;
-    private String counterQuery;
 
     public boolean performDBSearch(Action action) throws SQLException{
    
@@ -30,18 +28,17 @@ public class DatabaseHandler {
     * @return: true if user is registered correctly, false otherwise
     */
     public boolean registerUser(Action action){
-    
-        query = Query.createCheckEmailQuery(action);
-        counterQuery = Query.createRegisterUserQuery(action);
         
         try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
         {
             Statement stmt = con.createStatement();
             Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(Query.createCheckEmailQuery(action));
+            ResultSet rs2 = stmt2.executeQuery(Query.createCheckUsernameQuery(action));
             
-            if(!rs.next()){
-                ResultSet rs2 = stmt.executeQuery(counterQuery);
+            if(!rs.next() && !rs2.next()){
+                Statement stmt3 = con.createStatement();
+                ResultSet rs3 = stmt.executeQuery(Query.createRegisterUserQuery(action));
                 return true;
             } else {
                 return false;
@@ -58,13 +55,11 @@ public class DatabaseHandler {
     */
     public boolean unregisterUser(Action action){
     
-        query = Query.createUnregisterUser(action);
-    
         try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
         {
             Statement stmt = con.createStatement();
             Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(Query.createUnregisterUser(action));
             return true;
             
         } catch(Exception e){
@@ -77,17 +72,15 @@ public class DatabaseHandler {
     * @return: true if user email exists and password matches, false otherwise
     */
     public boolean attemptLogin(Action action){
-        query = Query.createCheckEmailQuery(action);
-        counterQuery = Query.createValidatePasswordQuery(action);
         
         try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
         {
             Statement stmt = con.createStatement();
             Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(Query.createCheckEmailQuery(action));
             
             if(rs.next()){
-                ResultSet rs2 = stmt.executeQuery(counterQuery);
+                ResultSet rs2 = stmt.executeQuery(Query.createValidatePasswordQuery(action));
                 
                 if(rs2.next()){
                     return true;

@@ -44,6 +44,7 @@ public class WebsocketServer extends WebSocketServer {
             boolean result = db.performDBSearch(clientAction);
             
             if(result){
+                System.out.println("humoring abby");
                 //if successful, create update message and send to client
                 Update update = createUpdateMessage(clientAction, result);
                 sendUpdateToClient(conn, update);
@@ -97,14 +98,12 @@ public class WebsocketServer extends WebSocketServer {
         Update update = new Update();
     
         if(action.communicationType.equals("registerUser")){
-            if(result){
-                //registration was successful
-                update.communicationType = "registrationSuccess";
-                update.userEmail = action.userEmail;
-                update.userName = action.userName;
-                update.successMessage = "User account has been successfully created.";
-            }
-        
+            //registration was successful
+            update.communicationType = "registrationSuccess";
+            update.userEmail = action.userEmail;
+            update.userName = action.userName;
+            update.successMessage = "User account has been successfully created.";
+            return update;
         }
         
         return null;
