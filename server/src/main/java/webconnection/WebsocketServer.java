@@ -9,16 +9,19 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.server.WebSocketServer;
 
 import com.google.gson.*;
+import database.*;
 
 public class WebsocketServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
     private Set<WebSocket> conns;
     private static Gson gson = new GsonBuilder().serializeNulls().create();
+    private DatabaseHandler db;
 
     public WebsocketServer() {
         super(new InetSocketAddress(TCP_PORT));
         conns = new HashSet<>();
+        db = new DatabaseHandler();
     }
 
     @Override
@@ -34,9 +37,22 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("Message from client: " + message);
         Action clientAction = handleClientAction(message);
-        System.out.println(clientAction);
+        
+        try {
+        
+            boolean result = db.performDBSearch(clientAction);
+            
+            if(result){
+                System.out.println("humoring abby");
+                //if successful, create update message and send to client
+                Update update = createUpdateMessage(clientAction, result);
+                sendUpdateToClient(conn, update);
+            }
+        
+        } catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -76,6 +92,22 @@ public class WebsocketServer extends WebSocketServer {
 
         return updateJSON;
 
+    }
+    
+    public Update createUpdateMessage(Action action, boolean result){
+        Update update = new Update();
+    
+        if(action.communicationType.equals("registerUser")){
+            //registration was successful
+            update.communicationType = "registrationSuccess";
+            update.userEmail = action.userEmail;
+            update.userName = action.userName;
+            update.successMessage = "User account has been successfully created.";
+            return update;
+        }
+        
+        return null;
+        
     }
 
 }
