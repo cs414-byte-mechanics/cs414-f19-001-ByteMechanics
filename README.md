@@ -1,7 +1,7 @@
 # Development Manual
 
 ## Dependencies
-This project requires [Maven]([https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)) and [npm](https://nodejs.org/en/) in order to build and run correctly. If they are not available on the machine you are using, please install them from the links provided. Maven requires a Java Development Kit (JDK) (1.7 or above) to be used. This project was developed using JDK 8, which is available for download [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+This project requires [Maven](https://maven.apache.org/download.cgi) and [npm](https://nodejs.org/en/) in order to build and run correctly. If they are not available on the machine you are using, please install them from the links provided. Maven requires a Java Development Kit (JDK) (1.7 or above) to be used. This project was developed using JDK 8, which is available for download [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 
 ## Setup
 Clone this repository using the terminal command `git clone https://github.com/cs414-byte-mechanics/cs414-f19-001-ByteMechanics.git`. After initial clone, or after any update which has altered dependencies in either *package.json* file (*/package.json* or */client/package.json*), run `npm run update` from the root directory or run `npm install` in the same directory as the altered *package.json* file.
