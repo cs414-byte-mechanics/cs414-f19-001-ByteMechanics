@@ -11,9 +11,11 @@ public class Game {
 
     public Game(){
         activePlayer = 1;
-        //player1 = new Player(1);
-        //player2 = new Player(2);
-        GameBoard gameboard = new GameBoard();
+        player1 = new Player(1);
+        player2 = new Player(2);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.initGameBoardForPlayer(player1);
+        gameBoard.initGameBoardForPlayer(player2);
     }
 
     public void alternatePlayers(){

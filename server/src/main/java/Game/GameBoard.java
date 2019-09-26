@@ -53,6 +53,20 @@ public class GameBoard{
 
     }
 
+    public void initGameBoardForPlayer(Player player) {
+        /* Create and setup game pieces for player */
+        int row = (player.playerID == 1) ? 0 : 6;
+        int increment = (player.playerID == 1) ? 1 : -1;
+        /* need to initialize all animal pieces */
+        for (int i =0; i<=6; i++){
+            board[row][i] = player.playerPieces[i];
+        }
+        row = row + increment;
+        /* need to initialize all pawns */
+        for (int i =0; i<=6; i++){
+            board[row][i] = player.playerPieces[i + boardNumCols];
+        }
+    }
 
     public String toString(){
         String row = "";
@@ -60,7 +74,7 @@ public class GameBoard{
         String playPiece;
         for (int i = boardNumRows - 1; i >= 0; i--){
             row = "|";
-            for (int j = boardNumCols - 1; j >= 0; j--){
+            for (int j = 0; j < boardNumCols; j++){
                 GamePiece piece = board[i][j];
                 if (piece instanceof CrocodilePiece)
                         playPiece = (piece.player == 1) ? "c" : "C";
@@ -74,9 +88,8 @@ public class GameBoard{
                         playPiece = (piece.player == 1) ? "m" : "M";
                 else if (piece instanceof ZebraPiece)
                         playPiece = (piece.player == 1) ? "z" : "Z";
-
-                    //case PawnPiece: playPiece = (piece.player == 1) ? "p" : "P";
-                    //  break;
+                else if (piece instanceof PawnPiece)
+                        playPiece = (piece.player == 1) ? "p" : "P";
                 else
                     playPiece = " ";
 
@@ -90,20 +103,27 @@ public class GameBoard{
         return boardStr;
     }
 
+    public GamePiece getGamePiece(int row, int col){
+        return this.board[row][col];
+    }
+
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
 
         /* routine does NO error checking but assumes move is legal and updates the piece's info
            as well as set it's previous square location to NULL */
 
-        GamePiece playerPiece = this.board[fromRow][fromCol];
-        boolean startInRiver = playerPiece.inRiver();
+        //GamePiece boardPiece = getGamePiece(fromRow, fromCol);
+        GamePiece boardPiece = this.board[fromRow][fromCol];
+        boolean startInRiver = boardPiece.inRiver();
 
         this.board[toRow][toCol] = this.board[fromRow][fromCol];
         this.board[fromRow][fromCol] = null;
+        /* update the info in GamePiece */
+        /* since Player.playerPiece[] is point at this same object it is updated as well */
         this.board[toRow][toCol].row = toRow;
         this.board[toRow][toCol].column = toCol;
 
-        boolean endInRiver = playerPiece.inRiver();
+        boolean endInRiver = boardPiece.inRiver();
 
         if (!(this.board[toRow][toCol] instanceof MonkeyPiece) &&
                 !(this.board[toRow][toCol] instanceof CrocodilePiece) &&
@@ -126,7 +146,7 @@ public class GameBoard{
         }
     }
 
-    public void capturePiece(GamePiece pieceToBeCaptured, GamePiece[] playerPiecesArray, GameBoard[][] board){
+    public void capturePiece(GamePiece pieceToBeCaptured, GamePiece[] playerPiecesArray){
         // Capture is supposed to remove a piece from board, as well as piece's array
         System.out.println("Before any capture the piece's array is like "+playerPiecesArray);
 

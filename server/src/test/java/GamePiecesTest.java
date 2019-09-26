@@ -117,13 +117,20 @@ public class GamePiecesTest {
         congoGame.board[5][0] = null; /* remove pawn */
         assertTrue(giraffe.pathClear(0, 0, congoGame.board) == true);
 
+    }
+
+    @Test
+    public void testclearPathHorizontal() {
+        /* Start with initial board */
         /* test horizontal */
-        congoGame.movePiece(6,6,3,6);  /* move player 1's zebra to river */
-        congoGame.movePiece(0,0,3,0);  /* move player 2's giraffe to river */
-        System.out.println(congoGame.board.toString());
+        GiraffePiece giraffe = (GiraffePiece) congoGame.board[6][0];  /* player 2's giraffe */
+        ZebraPiece zebra = (ZebraPiece) congoGame.board[0][6];  /* player 1's zebra */
+
+        congoGame.movePiece(0,6,3,6);  /* move player 1's zebra to river */
+        congoGame.movePiece(6,0,3,0);  /* move player 2's giraffe to river */
+        System.out.println(congoGame.toString());
         assertTrue(giraffe.pathClear(3, 6, congoGame.board) == true);
         assertTrue(zebra.pathClear(3, 0, congoGame.board) == true);
     }
-
 
 }

@@ -5,12 +5,10 @@ import Game.Player;
 
 import java.util.Arrays;
 
-public class GamePiece {
+public abstract class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
-//    public boolean superPawn; // added
-//    public boolean crossedRiver; // added
 
     public GamePiece(){
     }
@@ -19,16 +17,15 @@ public class GamePiece {
         row = r;
         column = c;
         player = p;
-//        superPawn = s;
-//        crossedRiver = cr;
+    }
+
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
+        return false;
     }
 
     public Boolean inRiver(){
         /* determines if playing piece is currently in the river */
-        if (this.row == GameBoard.riverRow)
-            return true;
-        else
-            return false;
+        return inRiver(this.row);
     }
 
     public Boolean inRiver(int r){
@@ -92,9 +89,10 @@ public class GamePiece {
 
             int x = this.column + colDir;
             int y = this.row + rowDir;
-            while ((y != destRow) && (x != destCol)){
+            while ((y != destRow) || (x != destCol)){
+                /* Until we've reached the destination square, */
                 /* travel along path and make sure all squares are NULL */
-                if (board[x][y] != null){
+                if (!(squareEmpty(y, x, board))){
                     /* piece found in path */
                     return false;
                 }
@@ -108,6 +106,23 @@ public class GamePiece {
             System.out.println("Path not straight");
             return false;  /* path is not a straight line */
         }
+    }
+
+    /* This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
+    moves.  If there is another piece in the destination square of the move, then it is captured and removed from
+    the board.
+    NOTE - Monkey should use performMoveSeq()
+     */
+    public boolean performMove(int destRow, int destCol, GameBoard congoBoard, Player activePlayer, Player opponent) {
+        if (ValidateMove(destRow, destCol, congoBoard.board)){
+            if (!(squareEmpty(destRow, destCol, congoBoard.board))){
+                congoBoard.capturePiece(congoBoard.board[destRow][destCol], opponent.playerPieces);
+            }
+
+            congoBoard.movePiece(this.row, this.column, destRow, destCol);
+            return true;
+        }
+        else return false;
     }
 
     public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
