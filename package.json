@@ -1,0 +1,26 @@
+{
+  "name": "cs414-f19-001-bytemechanics",
+  "version": "1.0.0",
+  "description": "A web application to play the chess variant Congo.",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "update": "npm install && cd client && npm install",
+    "client": "cd client && npm start",
+    "server": "mvn install",
+    "test": "mvn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs414-byte-mechanics/cs414-f19-001-ByteMechanics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs414-byte-mechanics/cs414-f19-001-ByteMechanics/issues"
+  },
+  "homepage": "https://github.com/cs414-byte-mechanics/cs414-f19-001-ByteMechanics#readme",
+  "dependencies": {
+    "concurrently": "^4.1.2"
+  }
+}
