@@ -5,7 +5,7 @@ import Game.Player;
 
 import java.util.Arrays;
 
-public abstract class GamePiece {
+public class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
@@ -20,6 +20,10 @@ public abstract class GamePiece {
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
+        /* ValidateMove should always be called on a specific GamePiece - monkey, lion, etc
+        Therefore, this routine is returning false so it never validates and incorrect move.
+        This needs to be here so the use of ValidateMove() in performMove() will compile.
+         */
         return false;
     }
 
