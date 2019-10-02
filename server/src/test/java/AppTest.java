@@ -142,7 +142,7 @@ public class AppTest {
         assertTrue(lionP2.ValidateMove(5,3, congoGame.board) == false);
     }
 
-    @Test /* Added By Fari -- Test for elephant piece player1 moves */
+    @Test /* Added By Fari -- Test for elephant piece player1 moves  -- READY TO BE DELETED */
     public void testElephantP1SimpleMove() {
         /*Start with initial board and test is Player 1 elephant can move from (0,2) to (1,2), (2,2) */
 
@@ -176,38 +176,6 @@ public class AppTest {
         assertTrue(elephant1P1.ValidateMove(3, 2, congoBoard) == true);
     }
 
-
-    @Test /* Added By Fari -- Test for elephant piece player2 moves */
-    public void testElephantPlayer2SimpleMove() {
-
-        /*Start with initial board for player2 */
-//        System.out.println("run test");
-        ElephantPiece elephant1P2 = (ElephantPiece) congoGame.board[6][2];
-        ElephantPiece elephant2P2 = (ElephantPiece) congoGame.board[6][4];
-
-        GamePiece[][] congoBoard = congoGame.board;
-
-        assertTrue(elephant1P2.ValidateMove(4, 2, congoBoard) == true); // jump two step down from 6,2 to 4,2
-
-        congoGame.movePiece(6,4,5,4);
-        assertTrue(elephant1P2.ValidateMove(6, 4, congoBoard) == true); // jump two step right
-
-        //pawn5p1 move to 6,4
-        congoGame.movePiece(1,6,6,4);
-        assertTrue(elephant1P2.ValidateMove(6, 4, congoBoard) == true); // jump right two steps capture opponents
-
-        congoGame.movePiece(6,0,5,2);
-        assertTrue(elephant1P2.ValidateMove(6, 0, congoBoard) == true); // jump left
-
-        // opponents piece to 3,5
-        congoGame.movePiece(0,0,3,5);
-        // move elephant from 6,2 to 3,4
-        congoGame.movePiece(6,2,3,4);
-        assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
-
-        congoGame.movePiece(3,4,3,6);
-        assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
-    }
 
     /* Added By Fari -- Test for Giraffe piece valid moves */
     @Test
@@ -275,7 +243,7 @@ public class AppTest {
     }
 
 
-    @Test /* Added by Fari- test for pawn pieces belong to player one*/
+    @Test /* Added by Fari- test for pawn pieces belong to player one -- READY TO BE DELETED */
     public void testPawnPlayer1SimpleMove(){
         /*Start with initial board and test is Player 1 */
         PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][0];
@@ -348,82 +316,6 @@ public class AppTest {
         assertTrue(Pawn4P1.ValidateMove(2, 3, congoBoard) == false); // can't move 2 steps back diagonally, cause is not super pawn
         assertTrue(Pawn4P1.ValidateMove(3, 4, congoBoard) == false); // same as above
     }
-
-    @Test /* Added by Fari- test for pawn pieces belong to player two*/
-    public void testPawnPlayer2SimpleMove(){
-        /*Start with initial board and test is Player2 */
-        PawnPiece Pawn1P2 = (PawnPiece) congoGame.board[5][0];
-        PawnPiece Pawn2P2 = (PawnPiece) congoGame.board[5][1];
-        PawnPiece Pawn3P2 = (PawnPiece) congoGame.board[5][3];
-        PawnPiece Pawn7P2 = (PawnPiece) congoGame.board[5][6];
-        GamePiece[][] congoBoard = congoGame.board;
-
-        // pawn2 can move from (5,0) to (4,0) ? yes
-        assertTrue(Pawn1P2.ValidateMove(4, 0, congoBoard) == true);
-        assertTrue(Pawn1P2.ValidateMove(6, 0, congoBoard) == false); // not backward
-
-        //pawn2p2 move from (5,1) to 4,1 when pawn3p1 is in 4,1
-        congoGame.movePiece(1,2, 4,1);
-        assertTrue(Pawn2P2.ValidateMove(4, 1, congoBoard) == true);
-
-        //Pawn2P2 move from 5,1 to 1,1
-        congoGame.movePiece(5,1, 1,1);
-        assertTrue(Pawn2P2.ValidateMove(1, 2, congoBoard) == false); // can move side? no it's not a super pawn
-        assertTrue(Pawn2P2.ValidateMove(3, 1, congoBoard) == true); // other side of river can move backward two step straight
-        assertTrue(Pawn2P2.ValidateMove(0, 2, congoBoard) == true); // it moves forward one step diagonally
-        assertTrue(Pawn2P2.ValidateMove(2, 0, congoBoard) == false); // how about diagonally backward? no cause it is not super pawn yet
-
-        //Pawn2P2 move from 1,1 to 0,4 . Now it is a super pawn
-        congoGame.movePiece(1,1,0,4);
-        assertTrue(Pawn2P2.ValidateMove(0, 5, congoBoard) == true); // can move side by one square
-        assertTrue(Pawn2P2.ValidateMove(0, 3, congoBoard) == true);
-//        assertTrue(Pawn2P2.ValidateMove(1, 5, congoBoard) == true); // failed. maybe occupied
-
-        assertTrue(Pawn2P2.ValidateMove(2, 6, congoBoard) == true); // Diagonally 2 step backward works!!
-        assertTrue(Pawn2P2.ValidateMove(2, 2, congoBoard) == true); // Diagonally 2 step backward works!!
-
-        // move super pawn player2 to 2,6
-        congoGame.movePiece(0,4,2,6);
-        assertTrue(Pawn2P2.ValidateMove(3, 5, congoBoard) == true); // can move backward one square diagonally ? yes
-//        assertTrue(Pawn2P2.ValidateMove(4, 4, congoBoard) == true);
-
-        congoGame.movePiece(2,6, 2,5);
-        assertTrue(Pawn2P2.ValidateMove(3, 4, congoBoard) == true); // Diagonally one step backward Works!!!?yes
-        assertTrue(Pawn2P2.ValidateMove(1, 4, congoBoard) == true); // Diagonally one step forward? yes
-        assertTrue(Pawn2P2.ValidateMove(3, 6, congoBoard) == true); // Diagonally one step backward Works!!!?yes
-
-        ////Pawn2P2 move from 2,5 to 3,3
-        congoGame.movePiece(2,5,3,3);
-        assertTrue(Pawn2P2.ValidateMove(2 , 4 , congoBoard) == true); // one step diagonally forward ? yes
-        assertTrue(Pawn2P2.ValidateMove(4 , 2 , congoBoard) == true); // one step diagonally ?
-        assertTrue(Pawn2P2.ValidateMove(4 , 4 , congoBoard) == true); // 2 steps backward diagonally works ?
-
-        congoGame.movePiece(3,3,1,4);
-        assertTrue(Pawn2P2.ValidateMove(3 , 2 , congoBoard) == true);
-//        assertTrue(Pawn2P2.ValidateMove(3 , 6 , congoBoard) == true);
-
-        congoGame.movePiece(1,4,2,4);
-        assertTrue(Pawn2P2.ValidateMove(0, 6 , congoBoard) == false); //2 steps diagonally forward ? no
-        assertTrue(Pawn2P2.ValidateMove(0, 2 , congoBoard) == false); // 2 steps diagonally forward ? no
-        assertTrue(Pawn2P2.ValidateMove(1, 3 , congoBoard) == true); // one step diagonally forward? yes
-        assertTrue(Pawn2P2.ValidateMove(1, 4 , congoBoard) == true); // one step straight forward
-        assertTrue(Pawn2P2.ValidateMove(3, 4 , congoBoard) == true);
-
-        assertTrue(Pawn2P2.ValidateMove(4, 2 , congoBoard) == true); // move backward diagonally 2 steps? yes
-//        assertTrue(Pawn2P2.ValidateMove(4, 6 , congoBoard) == true); // failed maybe something between as obstacle
-
-        congoGame.movePiece(2,4, 2,3);
-        assertTrue(Pawn2P2.ValidateMove(4, 5 , congoBoard) == true); // but change position and try again? 2 step back diagonally works
-
-        congoGame.movePiece(5,3, 0,3);
-        assertTrue(Pawn3P2.ValidateMove(0, 2 , congoBoard) == true); // super pawn
-
-        assertTrue(Pawn3P2.ValidateMove(1, 2, congoBoard) == true);
-        assertTrue(Pawn3P2.ValidateMove(1, 4, congoBoard) == true);
-        assertTrue(Pawn3P2.ValidateMove(2, 1, congoBoard) == true);
-
-    }
-
 
     @Test /* Added By Fari -- Test for Giraffe piece valid moves */
     public void testGiraffeP1SimpleMove(){
