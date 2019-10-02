@@ -33,4 +33,16 @@ public class ZebraPiece extends GamePiece {
          */
         return squareEmptyOrCapturable(destRow, destCol, board);
     }
+
+//    public boolean performMove(int destRow, int destCol, GameBoard congoBoard, Player player) {
+//        if (ValidateMove(destRow, destCol, congoBoard.board)){
+//            if (!(squareEmpty(destRow, destCol, congoBoard.board))){
+//                congoBoard.capturePiece(congoBoard.board[destRow][destCol], player.playerPieces);
+//            }
+//
+//            congoBoard.movePiece(this.row, this.column, destRow, destCol);
+//            return true;
+//        }
+//        else return false;
+//    }
 }
