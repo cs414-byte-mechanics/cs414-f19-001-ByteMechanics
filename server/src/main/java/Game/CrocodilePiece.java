@@ -56,8 +56,6 @@ public class CrocodilePiece extends GamePiece {
         }
 
         /* Check if this is a longer move DIRECTLY toward the river */
-        System.out.println("destRow, destCol " + destRow + "," +  destCol);
-        System.out.println("toward River " + moveTowardRiver(destRow, destCol));
         if (moveTowardRiver(destRow, destCol)){
             /* check for blocking pieces along the river */
             if (!(pathClear(destRow, destCol, board)))

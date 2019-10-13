@@ -27,10 +27,12 @@ public class ZebraTest {
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
-        congoPlayer1 = new Player(1);
-        congoPlayer2 = new Player(2);
         congoGame = new GameBoard();
         congoGame.InitGameBoard();
+        congoPlayer1 = new Player(1);
+        congoPlayer1.initPlayerPieces(congoGame);
+        congoPlayer2 = new Player(2);
+        congoPlayer2.initPlayerPieces(congoGame);
     }
 
     @Test
@@ -61,13 +63,13 @@ public class ZebraTest {
     @Test
     public void testZebraPerformSimpleMoveNoCapture() {
         /* Start with initial board and test if Player 2 zebra can move from (6,6) to (4,5) */
-
         ZebraPiece zebra = (ZebraPiece) congoGame.board[6][6];
-        assertTrue(zebra.performMove(4, 5, congoGame, congoPlayer2, congoPlayer1) == true);
-        /* check that source location is empty */
+        assertTrue(zebra.performMove(4, 5, congoGame) == true);
+        /* check that source location is now empty */
         assertTrue(congoGame.board[6][6] == null);
-        /* check that player array of pieces has zebra */
+        /* check that player array of pieces has zebra and it's not captured */
         assertTrue(congoPlayer2.playerPieces[6] != null);
+        assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
@@ -80,15 +82,15 @@ public class ZebraTest {
         ZebraPiece zebra = (ZebraPiece) congoGame.board[6][6];
         /* move opponent's crocodile from 0,5 to 4,5 */
         congoGame.movePiece(0,5,4,5);
-        /* Now move zebra from 6,6 to 4,5 to see if it can capture elephant */
+        /* Now move zebra from 6,6 to 4,5 to see if it can capture crocodile */
         assertTrue(zebra.ValidateMove(4, 5, congoGame.board) == true);
-        assertTrue(zebra.performMove(4, 5, congoGame, congoPlayer2, congoPlayer1) == true);
+        assertTrue(zebra.performMove(4, 5, congoGame) == true);
         /* check that source location is empty */
         assertTrue(congoGame.board[6][6] == null);
         /* check that player array of pieces has zebra */
         assertTrue(congoPlayer2.playerPieces[6] != null);
-        /* check that player array of pieces has crocodile removed */
-        assertTrue(congoPlayer1.playerPieces[5] == null);
+        /* check that player array of pieces has crocodile marked as captured */
+        assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);

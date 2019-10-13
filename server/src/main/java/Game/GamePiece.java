@@ -9,6 +9,7 @@ public class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
+    public boolean captured;
 
     public GamePiece(){
     }
@@ -17,6 +18,22 @@ public class GamePiece {
         row = r;
         column = c;
         player = p;
+        captured = false;
+    }
+
+    @Override
+    public String toString() {
+        return ("row: "+row+"\ncolumn: "+column+"\nplayer: "+player+"\ncaptured: "+captured+"\n");
+    }
+
+    public void setCaptured(){
+        /* indicates that piece is captured and no longer in play on the board */
+        captured = true;
+    }
+
+    public boolean checkCaptured(){
+        /* returns a value indicating if piece is captured */
+        return captured;
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
@@ -107,7 +124,6 @@ public class GamePiece {
             return true;  /* if we get here, path was clear */
         }
         else {
-            System.out.println("Path not straight");
             return false;  /* path is not a straight line */
         }
     }
@@ -117,10 +133,10 @@ public class GamePiece {
     the board.
     NOTE - Monkey should use performMoveSeq()
      */
-    public boolean performMove(int destRow, int destCol, GameBoard congoBoard, Player activePlayer, Player opponent) {
+    public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
         if (ValidateMove(destRow, destCol, congoBoard.board)){
             if (!(squareEmpty(destRow, destCol, congoBoard.board))){
-                congoBoard.capturePiece(congoBoard.board[destRow][destCol], opponent.playerPieces);
+                congoBoard.capturePiece(congoBoard.board[destRow][destCol]);
             }
 
             congoBoard.movePiece(this.row, this.column, destRow, destCol);

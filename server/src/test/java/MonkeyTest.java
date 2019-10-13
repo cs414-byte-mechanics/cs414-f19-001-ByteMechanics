@@ -75,7 +75,6 @@ public class MonkeyTest {
         congoGame.movePiece(6,2,3,2);  /* initialize opponent's elephant to 3,2 */
         congoGame.movePiece(6,4,2,4);  /* initialize opponent's elephant to 2,4 */
         congoGame.movePiece(6,1,4,2);  /* initialize opponent's monkey to 4,2 */
-        System.out.println("board \n"+ congoGame.toString());
 
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();

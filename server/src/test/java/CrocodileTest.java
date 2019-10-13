@@ -27,16 +27,18 @@ public class CrocodileTest {
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
-        congoPlayer1 = new Player(1);
-        congoPlayer2 = new Player(2);
         congoGame = new GameBoard();
         congoGame.InitGameBoard();
+        congoPlayer1 = new Player(1);
+        congoPlayer1.initPlayerPieces(congoGame);
+        congoPlayer2 = new Player(2);
+        congoPlayer2.initPlayerPieces(congoGame);
     }
 
     @Test
     public void testCrocSimpleMoveValidate() {
         /*Start with initial board and test if Player 1 crocodile can move from (0,5) to (1,4) */
-        CrocodilePiece croc1 = (CrocodilePiece) congoGame.board[0][5];
+        CrocodilePiece croc1 = (CrocodilePiece) congoGame.getGamePiece(0,5);
 
         /* test a blocked move - pawn is blocking croc */
         assertTrue(croc1.ValidateMove(1,4,congoGame.board) == false);
@@ -63,9 +65,8 @@ public class CrocodileTest {
     public void testCrocPerformBlockedMove() {
         /* Start with initial board and test if Player 2 crocodile can move from (6,5) to (4,5) */
         /* Crocodile is blocked by pawn piece. */
-        CrocodilePiece croc = (CrocodilePiece) congoGame.board[6][5];
-        System.out.println(congoGame.toString());
-        assertTrue(croc.performMove(4, 5, congoGame, congoPlayer2, congoPlayer1) == false);
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(6,5);
+        assertTrue(croc.performMove(4, 5, congoGame) == false);
     }
 
     @Test
@@ -73,13 +74,13 @@ public class CrocodileTest {
         /* Start with initial board and test if Player 2 crocodile can move from (6,6) to (5,5) */
         /* after pawn has been moved out of the way */
 
-        CrocodilePiece croc = (CrocodilePiece) congoGame.board[0][5];
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0,5);
         /* capture player 1's pawn at (1,4) forward to (2,4) so crocodile can make a 1 square diagonal move.
          */
         congoGame.movePiece(1,4,2,4);
-        assertTrue(croc.performMove(1, 4, congoGame, congoPlayer2, congoPlayer1) == true);
+        assertTrue(croc.performMove(1, 4, congoGame) == true);
         /* check that source location is empty */
-        assertTrue(congoGame.board[0][5] == null);
+        assertTrue(congoGame.getGamePiece(0,5) == null);
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 1);
         assertTrue(croc.column == 4);
@@ -90,22 +91,23 @@ public class CrocodileTest {
         /* Start with initial board and test if Player 2 crocodile can move from (6,5) to (3,5) */
         /* and Captures pawn at (3,5) */
 
-        CrocodilePiece croc = (CrocodilePiece) congoGame.board[6][5];
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(6,5);
         /* remove player 2's pawn at (5,5) and then move player 1's pawn from (1,5) to (3,5) to
         setup this test
          */
-        congoGame.capturePiece(congoGame.board[5][5], congoPlayer2.playerPieces); /* remove player 2's pawn */
+        congoGame.capturePiece(congoGame.getGamePiece(5,5)); /* remove player 2's pawn */
         congoGame.movePiece(1,5,3,5);  /* move player 1's pawn to the river */
 
-        assertTrue(croc.performMove(3, 5, congoGame, congoPlayer2, congoPlayer1) == true);
+        assertTrue(croc.performMove(3, 5, congoGame) == true);
         /* check that source location of crocodile is now empty */
-        assertTrue(congoGame.board[6][5] == null);
+        assertTrue(congoGame.getGamePiece(6,5) == null);
         /* check that player array of pieces has crocodile */
         assertTrue(congoPlayer2.playerPieces[5] != null);
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 3);
         assertTrue(croc.column == 5);
-        assertTrue(congoPlayer1.playerPieces[12] == null);
+        assertTrue(croc.checkCaptured() == false);
+        assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
     }
 
 }
