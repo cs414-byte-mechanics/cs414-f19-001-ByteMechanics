@@ -1,0 +1,59 @@
+@import "./variables";
+
+#Application {
+  height:100vh;
+  width:100vw;
+  background-color: $backgroundColor;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  #header {
+    flex-shrink: 1;
+    align-content: stretch;
+    display:flex;
+    align-items: baseline;
+    width: 80%;
+    max-width: 1000px;
+    margin-bottom: 10px;
+    #title {
+      font-size: 30px;
+      font-weight: 800;
+      display:flex;
+      flex-shrink: 1;
+      align-items: baseline;
+      #icon {
+        font-size:40px;
+        margin: auto 5px;
+      }
+    }
+    #menu {
+      flex-grow:1;
+      flex-shrink:1;
+      display: flex;
+      justify-content: flex-end;
+      .nav-link {
+        flex-shrink: 1;
+        color: black;
+        font-weight: 600;
+        text-decoration: none;
+        margin: 0px 15px;
+        transition: .2s ease-in-out;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+  #page_container {
+    background: $foregroundColor;
+    height: 85%;
+    width: 80%;
+    max-width: 1000px;
+    border-radius: 15px;
+    box-shadow: 10px 10px darken($backgroundColor, 25%);
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
