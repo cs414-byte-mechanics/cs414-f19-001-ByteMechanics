@@ -14,7 +14,6 @@ install:
   - npm install --prefix client
 
 script:
-  - npm test --prefix client || travis_terminate 1
   - mvn test -q || travis_terminate 2
 
 after_script:
