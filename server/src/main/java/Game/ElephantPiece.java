@@ -10,6 +10,10 @@ public class ElephantPiece extends GamePiece {
         super(row, col, player);
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "e" : "E";
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board)
     {
         /* Elephant  can move to the first and second square in a straight direction.

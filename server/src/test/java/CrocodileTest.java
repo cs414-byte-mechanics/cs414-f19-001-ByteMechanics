@@ -110,4 +110,89 @@ public class CrocodileTest {
         assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
     }
 
+    @Test
+    public void testCrocMovesTowardRiver() {
+        /* Start with initial board and test if Player 2 crocodile can move from (6,5) to other squares along that file */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(6,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(5,5);  /* pawn in front of crocodile */
+        /* move pawn out of the way across the river */
+        assertTrue(pawn.performMove(4, 4, congoGame));
+        assertTrue(pawn.performMove(3, 4, congoGame));
+        assertTrue(pawn.performMove(2, 4, congoGame));
+        /* move crocodile diagonally out of its home row */
+        assertTrue(croc.performMove(5, 5, congoGame));
+        assertTrue(congoGame.getGamePiece(6,5) == null); /* check that original board square of croc is empty now */
+        /* make sure that crocodile can't move multiple squares beyond the river */
+        assertTrue(croc.performMove(2, 5, congoGame) == false);
+        /* but it can move into the river if path is clear */
+        assertTrue(croc.performMove(3, 5, congoGame));
+        assertTrue(croc.inRiver());
+    }
+
+    @Test
+    public void testCrocDrowning() {
+        /* Start with initial board and test if Player 1 crocodile can move from (0,5) to (3,5) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,5);  /* pawn in front of crocodile */
+        /* attempt to move croc to river but it will fail since pawn is blocking the move */
+        assertTrue(croc.performMove(3, 5, congoGame) == false);
+        /* now move pawn out of the way across the river */
+        assertTrue(pawn.performMove(2, 5, congoGame));
+        assertTrue(pawn.performMove(3, 5, congoGame));
+        assertTrue(pawn.performMove(4, 5, congoGame));
+        assertTrue(pawn.performMove(5, 5, congoGame));  /* this will actually be a capture of opponent's pawn */
+        /* then move croc to river */
+        assertTrue(croc.performMove(3, 5, congoGame));
+        assertTrue(croc.inRiver());
+
+        /* now move another pawn piece and make sure crocodile doesn't drown */
+        PawnPiece pawn2 = (PawnPiece) congoGame.getGamePiece(1,0);
+        assertTrue(pawn2.performMove(2, 0, congoGame));
+        assertTrue(croc.inRiver());
+        assertTrue(croc.checkCaptured() == false);
+    }
+
+    @Test
+    public void testCrocMoveInRiver() {
+        /* Start with initial board and test if Player 1 crocodile can move from (0,5) to (3,5) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,4);
+        /* first try to capture player's own pawn on diagonal path */
+        assertTrue(croc.performMove(1, 4, congoGame) == false);
+        /* move pawn out of the way (across the river) so it is not blocking */
+        assertTrue(pawn.performMove(2, 4, congoGame));
+        assertTrue(pawn.performMove(3, 4, congoGame));
+        assertTrue(pawn.performMove(4, 4, congoGame));
+        /* now attempt to move crocodile diagonally again */
+        assertTrue(croc.performMove(1, 4, congoGame));
+        /* now move to river */
+        assertTrue(croc.performMove(3, 4, congoGame));
+        /* then move along river */
+        assertTrue(croc.performMove(3, 0, congoGame));
+        assertTrue(croc.inRiver());
+        assertTrue(croc.checkCaptured() == false);
+        /* now move to other end of river */
+        assertTrue(croc.performMove(3, 6, congoGame));
+        assertTrue(croc.inRiver());
+        assertTrue(croc.checkCaptured() == false);
+        /* check to make sure we have a crocodile piece on the board in (3,6) at end of river */
+        assertTrue(congoGame.getGamePiece(3,6) instanceof CrocodilePiece);
+    }
+
+    @Test
+    public void testCrocMoveDiagToRiver() {
+        /* Start with initial board and test if Player 1 crocodile can't move from (0,5) to (3,2) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,4);
+        /* first move pawn out of the way - across the river*/
+        assertTrue(pawn.performMove(2, 4, congoGame));
+        assertTrue(pawn.performMove(3, 4, congoGame));
+        assertTrue(pawn.performMove(4, 4, congoGame));
+        /* now crocodile out of home row with a diagonal move */
+        assertTrue(croc.performMove(1, 4, congoGame));
+        /* now try moving to river along a diagonal path */
+        assertTrue(croc.performMove(3, 2, congoGame) == false);
+
+    }
+
 }

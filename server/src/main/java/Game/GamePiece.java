@@ -3,6 +3,7 @@ package Game;
 import Game.GameBoard;
 import Game.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GamePiece {
@@ -26,6 +27,10 @@ public class GamePiece {
         return ("row: "+row+"\ncolumn: "+column+"\nplayer: "+player+"\ncaptured: "+captured+"\n");
     }
 
+    public String pieceIDString(){
+        return " ";
+    }
+
     public void setCaptured(){
         /* indicates that piece is captured and no longer in play on the board */
         captured = true;
@@ -42,6 +47,35 @@ public class GamePiece {
         This needs to be here so the use of ValidateMove() in performMove() will compile.
          */
         return false;
+    }
+
+    private GamePiece moveCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
+        /* Returns the object of a Gamepiece that was captured by jumping over it.
+        Monkey is the only piece that captures by jumping.  All other pieces capture by landing on the square.
+        So, this method returns NULL for any pieces that don't capture with a jump move.
+         */
+        return null;
+    }
+
+    public boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
+        /* Returns true if this is an orthogonal move, false if not */
+        if ((fromRow == toRow) || (fromCol == toCol)){
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
+        /* Returns true if this is a diagonal (45 degree) move, false if not */
+        if (Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol)){
+            return true;
+        }
+        else return false;
+    }
+
+    public int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
+        /* Returns the manhattan distance associated with a moves coordinates */
+        return (Math.abs(fromRow - toRow) + Math.abs(fromCol - toCol));
     }
 
     public Boolean inRiver(){
@@ -134,12 +168,27 @@ public class GamePiece {
     NOTE - Monkey should use performMoveSeq()
      */
     public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
+    /* Method determines if the move to (destRow, destCol) is a legal move for this piece */
+        /* It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
+        If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
+        they will drown and be captured.
+         */
+        int activePlayer = this.player;
+        ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
+        riverDwellers = congoBoard.getRiverDwellers(activePlayer);
+
         if (ValidateMove(destRow, destCol, congoBoard.board)){
             if (!(squareEmpty(destRow, destCol, congoBoard.board))){
-                congoBoard.capturePiece(congoBoard.board[destRow][destCol]);
+                congoBoard.capturePiece(congoBoard.getGamePiece(destRow,destCol));
             }
-
+            /* move is valid for this piece and opponent's piece, if any, has been captures
+            - so update board by moving the piece
+             */
             congoBoard.movePiece(this.row, this.column, destRow, destCol);
+            /* check if we jumped a piece that needs to be captured */
+            GamePiece jumpedPiece = moveCapturesPiece(this.row, this.column, destRow, destCol, congoBoard);
+            /* now check if any river dwelling pieces are still in the river and need to drown and be captured */
+            congoBoard.drownRiverDwellers(riverDwellers);
             return true;
         }
         else return false;

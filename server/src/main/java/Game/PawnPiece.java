@@ -22,6 +22,10 @@ public class PawnPiece extends GamePiece {
         this.crossedRiver = false;
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "p" : "P";
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /* A pawn moves and captures one step straight or diagonally forward.
         When past the river, it can also move (but not capture) one or two steps straight backward (without jumping).*/

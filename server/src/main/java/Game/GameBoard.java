@@ -4,6 +4,9 @@ import Game.GamePiece;
 import Game.PawnPiece;
 import Game.Player;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 public class GameBoard{
     static int riverRow = 3;  /* river is on row 3 in the board */
     static int boardNumRows = 7;
@@ -30,7 +33,7 @@ public class GameBoard{
         else return null;
     }
 
-    private void placePieces(int player){
+    private void placeInitialPieces(int player){
         /* places all pieces on one side of the board for a specific player */
         int homeRow = (player == 1) ? 0 : 6;
         int pawnRow = (player == 1) ? 1 : 5;
@@ -52,10 +55,10 @@ public class GameBoard{
 
     public void InitGameBoard(){
         /* Create and setup game pieces for player 1 */
-        placePieces(1);
+        placeInitialPieces(1);
 
         /* Create and setup game pieces for player 2 */
-        placePieces(2);
+        placeInitialPieces(2);
 
     }
 
@@ -64,25 +67,12 @@ public class GameBoard{
         String boardStr = "--------------\n";
         String playPiece;
         for (int i = boardNumRows - 1; i >= 0; i--){
+            /* traverse each row one at a time */
             row = "|";
             for (int j = 0; j < boardNumCols; j++){
-                GamePiece piece = board[i][j];
-                if (piece instanceof CrocodilePiece)
-                        playPiece = (piece.player == 1) ? "c" : "C";
-                else if (piece instanceof ElephantPiece)
-                        playPiece = (piece.player == 1) ? "e" : "E";
-                else if (piece instanceof GiraffePiece)
-                        playPiece = (piece.player == 1) ? "g" : "G";
-                else if (piece instanceof LionPiece)
-                        playPiece = (piece.player == 1) ? "l" : "L";
-                else if (piece instanceof MonkeyPiece)
-                        playPiece = (piece.player == 1) ? "m" : "M";
-                else if (piece instanceof ZebraPiece)
-                        playPiece = (piece.player == 1) ? "z" : "Z";
-                else if (piece instanceof PawnPiece)
-                        playPiece = (piece.player == 1) ? "p" : "P";
-                else
-                    playPiece = " ";
+                /* traverse all columns in this row to see what pieces are on the board */
+                GamePiece piece = getGamePiece(i,j);
+                playPiece = (piece == null) ? " " : piece.pieceIDString();
 
                 row = row + playPiece + "|";
             }
@@ -94,70 +84,71 @@ public class GameBoard{
         return boardStr;
     }
 
-    public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
+    public ArrayList<GamePiece> getRiverDwellers(int activePlayer){
+        /* find all of the pieces this player has in the river - with the exception of the crocodile */
+        ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
+        for (int i = 0; i < boardNumCols; i++){
+            GamePiece piece = getGamePiece(riverRow,i);
+            if ((piece != null ) && (piece.player == activePlayer) && !(piece instanceof CrocodilePiece)){
+                /* add to list if it's active player's piece and not a crocodile */
+                riverDwellers.add(piece);
+            }
+        }
+        return riverDwellers;
+    }
 
+    public void drownRiverDwellers(ArrayList<GamePiece> listRiverDwellers){
+        // Create the ListIterator
+        ListIterator listIter = listRiverDwellers.listIterator();
+
+        // Iterating through the list of river dwellers to see if they are still in the river
+        while(listIter.hasNext()){
+            GamePiece dweller = (GamePiece) listIter.next();
+            if (dweller.inRiver()){
+                /* if piece is still in the river, it will be drowned */
+                capturePiece(dweller);
+            }
+        }
+    }
+
+    public void placePiece(GamePiece piece, int row, int col) {
+        /* places a piece in a specific square on the board and update it's row, column fields */
+        piece.row = row;
+        piece.column = col;
+        board[row][col] = piece;
+    }
+
+    public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
         /* routine does NO error checking but assumes move is legal and updates the piece's info
            as well as set it's previous square location to NULL */
 
-        //GamePiece boardPiece = getGamePiece(fromRow, fromCol);
-        GamePiece boardPiece = this.board[fromRow][fromCol];
-        boolean startInRiver = boardPiece.inRiver();
+        GamePiece movingPiece = getGamePiece(fromRow,fromCol);
+        GamePiece destPiece = getGamePiece(toRow,toCol);
 
         /* capture piece that is in the destination square */
-        if (this.board[toRow][toCol] != null) {
-            /* This piece will remain in the player's list of pieces so we need to mark it as captured */
-            this.board[toRow][toCol].setCaptured();
+        if (destPiece != null) {
+            /* This piece will remain in the player's list (Player.playerPiece[]) of pieces so we
+            need to mark it as captured */
+            destPiece.setCaptured();
         }
         /* now move conquering piece onto the square */
-        this.board[toRow][toCol] = this.board[fromRow][fromCol];
+        placePiece(movingPiece,toRow,toCol);
         this.board[fromRow][fromCol] = null;
-        /* update the info in GamePiece */
-        /* since Player.playerPiece[] is pointing at this same object it is updated as well */
-        /* update the row,column variables in the GamePiece object to reflect new location */
-        this.board[toRow][toCol].row = toRow;
-        this.board[toRow][toCol].column = toCol;
-
-        /* check if the piece ended its turn in the river to determine if it drowned */
-        boolean endInRiver = boardPiece.inRiver();
-
-        if (!(this.board[toRow][toCol] instanceof CrocodilePiece) &&
-                /* if a game piece other than a crocodile started and ended in the river */
-                startInRiver && endInRiver) {
-            /* need to remove the piece since it drowned */
-            /* can call capture() when we implement it */
-            capturePiece(boardPiece);
-        }
-
 
         // when move a piece, if it is pawn and in land in row 6, we should turn on the super pawn flag
         if ( (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==1 && this.board[toRow][toCol].row == 6 ) ||
         (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==2 && this.board[toRow][toCol].row == 0 ) ) {
 
-        PawnPiece pawnPiece = (PawnPiece) this.board[toRow][toCol];
+        PawnPiece pawnPiece = (PawnPiece) getGamePiece(toRow,toCol);
         pawnPiece.superPawn = true;
 
         }
     }
 
     public void capturePiece(GamePiece pieceToBeCaptured){
-//        // Capture is supposed to remove a piece from board, as well as piece's array
-//        System.out.println("Before any capture the piece's array is like "+playerPiecesArray);
-//
-//        // extract the piece's column which is equal to index of piece in array
-//        int index = pieceToBeCaptured.column;
-//
-//        // if it is not pawn, column number is equal to indexes
-//        if (!(pieceToBeCaptured instanceof PawnPiece))
-//            playerPiecesArray[index] = null ;
-//
-//        else
-//            // if piece is pawn, index need to be added with 6
-//            playerPiecesArray[index + 7] = null;
-//
-//        System.out.println("After capturing" + pieceToBeCaptured + "The array is like "+playerPiecesArray);
-        this.board[pieceToBeCaptured.row][pieceToBeCaptured.column].setCaptured();
+        pieceToBeCaptured.setCaptured();
 
         // remove the piece from the board
-        this.board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null ;
+        this.board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
 }
