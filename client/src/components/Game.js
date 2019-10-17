@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
-import GameBoard from './GameBoard.js'
-import Registration from './Registration.js'
+import { Switch, Route, withRouter, Link } from "react-router-dom";
 
+import Home from './Home.js'
+import GameBoard from './GameBoard.js'
+import Form from './Form.js'
+import {attemptLogin, registerUser} from '../commObjects'
+import './styles/Game.scss'
+import { GiLion as CongoIcon } from 'react-icons/gi'
 
 class Game extends Component {
     constructor(props){
@@ -69,29 +74,43 @@ class Game extends Component {
     }
 
     render(){
-        let registration =
-            <Registration updateScreen={this.updateScreen} sendToServer={this.sendObject}/>
-            
-        let game = ''
-        if(this.state.loggedOn){
-            game = 
-                <GameBoard game={this.state.games[0]} send={this.sendObject}/>  
-                registration = ''
-        }
-                
+
         return(
-            <Container id="Application">
-                <Row>
-                    <Col className= 'text-center'>
-                        {registration}
-                        <br></br>
-                        {game}
-                    </Col>
-                </Row>
-            </Container>
+            <div id="Application">
+                <div id="header">
+                    <div id="title">CongoOnline <CongoIcon id="icon"/></div>
+                    <div id="menu">
+                        <a className="nav-link" href="/">Home</a>
+                        <a className="nav-link right" href="/register">Register</a>
+                        <a className="nav-link right" href="/login">Log In</a>
+                    </div>
+                </div>
+                <div id="page_container">
+                    <Switch location={window.location}>
+                        <Route
+                            exact
+                            path="/"
+                            render={(props) => <Home/>}
+                        />
+                        <Route
+                            path="/register"
+                            render={(props) => <Form {...props} title="Register an account" action={registerUser} updateScreen={this.updateScreen} sendToServer={this.sendObject}/>}
+                        />
+                        <Route
+                            path="/login"
+                            render={(props) => <Form {...props} title="Log in" action={attemptLogin} updateScreen={this.updateScreen} sendToServer={this.sendObject}/>}
+                        />
+                        <Route
+                            path="/game"
+                            render={(props) => <GameBoard game={this.state.games[0]} send={this.sendObject}/>}
+                        />
+                    </Switch>
+
+                </div>
+            </div>
         );
     }
 }
 
-export default Game;
+export default withRouter(Game);
 

@@ -1,0 +1,39 @@
+@import "./variables";
+
+#form {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  .page_title, .form_input, button {
+    width:350px;
+    display:flex;
+    align-items: baseline;
+    label {
+      margin-right:auto;
+      min-width: 80px;
+    }
+    input {
+      margin-left:auto;
+      margin-bottom: 15px;
+      height: 25px;
+    }
+  }
+  .page_title {
+    font-size: 28px;
+    margin-bottom: 15px;
+    border-bottom: $backgroundColor 3px solid;
+  }
+  button {
+    display:block;
+    background-color: $backgroundColor;
+    text-align:center;
+    border: 0px;
+    &:hover {
+      background-color: darken($backgroundColor, 20%);
+    }
+  }
+
+}
