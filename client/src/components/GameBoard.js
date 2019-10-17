@@ -106,7 +106,7 @@ class GameBoard extends Component {
         let board = 
             <div className="board">
                 {this.props.game.map((row, i)=>
-                    <div className="row">{row.map((piece, j)=>
+                    <div className="board_row">{row.map((piece, j)=>
                         <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}>{pieces[piece]}</div>
                         )}
                     </div>
@@ -121,7 +121,7 @@ class GameBoard extends Component {
             </div>
 
         return (
-            <div className="App">
+            <div id="gameboard">
                 {board}
                 {buttons}
             </div>
