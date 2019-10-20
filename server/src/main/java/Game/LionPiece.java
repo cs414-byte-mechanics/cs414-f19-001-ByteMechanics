@@ -11,6 +11,10 @@ public class LionPiece extends GamePiece {
         super(row, col, player);
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "l" : "L";
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /*The Lion moves like a chess king, but may not leave his castle at his side of the river.
         In addition, lions can capture other lions if they `see' it, i.e.,

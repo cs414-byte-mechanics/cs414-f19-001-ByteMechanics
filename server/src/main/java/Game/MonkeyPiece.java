@@ -12,6 +12,29 @@ public class MonkeyPiece extends GamePiece{
         super(row,col,player);
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "m" : "M";
+    }
+
+    private GamePiece moveCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
+        /* returns the object of a piece the monkey jumped over and captured */
+        int manhattanDist = manhattanDistance(fromRow, fromCol, destRow, destCol);
+        boolean orthoMove = orthogonalMove(fromRow, fromCol, destRow, destCol);
+        boolean diagMove = diagonalMove(fromRow, fromCol, destRow, destCol);
+
+        /* check if this move is jumping over another piece */
+        if ((orthoMove && (manhattanDist == 2)) || (diagMove && (manhattanDist == 4))){
+            /* determine coordinates of captured piece */
+            int deltaX = Math.abs(fromCol - destCol)/2;
+            int deltaY = Math.abs(fromRow - destRow)/2;
+            int captureX = (fromCol < destCol) ? fromCol + deltaX : destCol + deltaX;
+            int captureY = (fromRow < destRow) ? fromRow + deltaY : destRow + deltaY;
+            /* get piece from game board and return */
+            return board.getGamePiece(captureY, captureX);
+        }
+        else return null;
+    }
+
     public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board) {
     /* A monkey has two basic move types - the second of which can be chained together to form a sequence of captures.
             1) It can move a single step in any direction similar to a King piece in chess
@@ -74,7 +97,7 @@ public class MonkeyPiece extends GamePiece{
             /* To be a valid move it must ve a vertical, horizontal or diagonal move of 2 squares and jump over
             an opponent's piece which will then be captured.
             */
-                int manhattanDist = distCol + distRow;
+                int manhattanDist = manhattanDistance(curR, curC, destR, destC);
                 System.out.println("Manhattan distance "+distRow+","+distCol);
                 /* A horizontal or vertical move of 2 squares will have manhattanDist = 2.
                 A diagonal move will have manhattanDist = 4.

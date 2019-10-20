@@ -10,6 +10,10 @@ public class CrocodilePiece extends GamePiece {
         super(row, col, player);
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "c" : "C";
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /* A crocodile has three different move types.
             1) At any time it can move similar to a King piece in chess
@@ -22,10 +26,7 @@ public class CrocodilePiece extends GamePiece {
             */
 
         /* check for out of bounds moves */
-        if (destRow > 6 || destRow < 0) {
-            return false;
-        }
-        if (destCol > 6 || destCol < 0) {
+        if (destRow > 6 || destRow < 0 || destCol > 6 || destCol < 0) {
             return false;
         }
 
@@ -42,10 +43,8 @@ public class CrocodilePiece extends GamePiece {
         /* Check if move is along the river */
         if (inRiver() & inRiver(destRow)){
             /* crocodile and destination location are in river */
-            int riverDir;   /* are we going upriver (+1) or downriver (-1) */
-            if (this.column < destCol)
-                riverDir = 1;
-            else riverDir = -1;
+            /* are we going upriver (+1) or downriver (-1) */
+            int riverDir =  (this.column < destCol) ? 1 : -1;
 
             /* check for blocking pieces along the river */
             if (!(pathClear(destRow, destCol, board)))
@@ -56,8 +55,6 @@ public class CrocodilePiece extends GamePiece {
         }
 
         /* Check if this is a longer move DIRECTLY toward the river */
-        System.out.println("destRow, destCol " + destRow + "," +  destCol);
-        System.out.println("toward River " + moveTowardRiver(destRow, destCol));
         if (moveTowardRiver(destRow, destCol)){
             /* check for blocking pieces along the river */
             if (!(pathClear(destRow, destCol, board)))

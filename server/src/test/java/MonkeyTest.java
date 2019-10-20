@@ -35,7 +35,7 @@ public class MonkeyTest {
     public void testMonkeyMove() {
         /* Start with initial board */
         /* this test assumes there are no pawns on the board yet */
-        MonkeyPiece monkey1 = (MonkeyPiece) congoGame.board[0][1];
+        MonkeyPiece monkey1 = (MonkeyPiece) congoGame.getGamePiece(0,1);
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
         movesRow.add(1);
@@ -75,7 +75,6 @@ public class MonkeyTest {
         congoGame.movePiece(6,2,3,2);  /* initialize opponent's elephant to 3,2 */
         congoGame.movePiece(6,4,2,4);  /* initialize opponent's elephant to 2,4 */
         congoGame.movePiece(6,1,4,2);  /* initialize opponent's monkey to 4,2 */
-        System.out.println("board \n"+ congoGame.toString());
 
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
@@ -84,7 +83,7 @@ public class MonkeyTest {
         movesCol.add(3);
         movesRow.add(4);
         movesCol.add(1);
-        MonkeyPiece monkey1 = (MonkeyPiece) congoGame.board[2][1];
+        MonkeyPiece monkey1 = (MonkeyPiece) congoGame.getGamePiece(2,1);
         assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
         /* now try and do an illegal move by jumping the first elephant again to get to the second elephant */
         /* add jumps to (2,3) to (2,5) */
@@ -95,5 +94,20 @@ public class MonkeyTest {
         assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
     }
 
+//    @Test
+//    public void testMonkeySingleJump() {
+//        /* Start with initial board */
+//        /* tests to make sure monkey from player 1 can jump opponent's pawn and capture it */
+//        congoGame.movePiece(5,2, 1,2);  /* move player 2's pawn to 1,2 */
+//
+//        GamePiece monkey = congoGame.getGamePiece(0,1);
+//        GamePiece pawn = congoGame.getGamePiece(1,2);
+//        System.out.println(congoGame.toString());
+//        assertTrue(monkey.performMove(2, 3, congoGame));  /* this should jump and capture the pawn */
+//        assertTrue(congoGame.getGamePiece(0,1) == null);  /* monkey has moved and left square empty */
+//        assertTrue(congoGame.getGamePiece(2,3) instanceof MonkeyPiece);  /* monkey is now in square 2,3 */
+//        assertTrue(congoGame.getGamePiece(1,2) == null);  /* pawn has been captured */
+//        assertTrue(pawn.checkCaptured());  /* piece has been marked captured */
+//    }
 
 }

@@ -63,7 +63,7 @@
                     <argument>properties</argument>
                 </arguments> -->
             </configuration>  
-        </plugin>  
+        </plugin>
     </plugins>
     </build>
 </project>

@@ -8,6 +8,10 @@ public class ZebraPiece extends GamePiece {
         super(row,col,player);
     }
 
+    public String pieceIDString(){
+        return (player == 1) ? "z" : "Z";
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
     /* A zebra moves and captures other pieces exactly the same as a knight piece in chess */
 

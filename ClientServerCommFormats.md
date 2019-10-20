@@ -32,8 +32,8 @@ Here is the structure for each of the four objects:
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
-  "desiredMoves": [][],
+  "pieceID": "Z",
+  "desiredMoves": [],
   "userName": "",
   "userPassword": "",
   "userEmail": "",
@@ -55,7 +55,7 @@ Here is the structure for each of the four objects:
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
+  "pieceID": "m",
   "updatedBoard": [][],
   "whoseTurn": "",
   "successMessage": "The player's move was valid and the board has been updated",
@@ -84,7 +84,7 @@ Here is the structure for each of the four objects:
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
+  "pieceID": "L",
   "desiredMoves": [],
   "whoseTurn": "",
   "userName": "",
@@ -134,17 +134,27 @@ This communication type will be used to communicate to the server that a player 
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
-  "desiredMoves": [][]
+  "pieceID": "C",
+  "desiredMoves": []
 }
-```
-
-* `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
-* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
-* `matchID` is the identifier of the match that is object is regarding.
-* `playerName` is a string and will be the name of the player who is requesting the move to be made.
-* `pieceID` is an int and will be the ID of the piece that the player wishes to move. This is not simply a name because many pieces on the board have a duplicate so a unique identifier is needed for each piece.
-* `desiredMoves` will be a 2D array with the coordinates of the squares or positions on the board that the player would like to move to for their turn. The first array will be the coordinates for the first move, the second array will be the coordinates for the second move, etc...
+  * Player 1's pieces
+     * g: Giraffe
+     * m: Monkey
+     * e: Elephant
+     * l: Lion
+     * c: Crocodile
+     * z: Zebra
+     * p: Pawn
+   * Player 2's pieces
+     * G: Giraffe
+     * M: Monkey
+     * E: Elephant
+     * L: Lion
+     * C: Crocodile
+     * Z: Zebra
+     * P: Pawn
+* `desiredMoves` will be a 1D array with the coordinates of the squares or positions on the board that the player would like to move to for their turn. The [row,column] coordinates of each square will be combined to for a single 2 digit number.  Thus the square [2,3] would be stored in the array as 23.  
+The first value in the array must be the current location of the piece.  The next value in the array is the square the player wishes to move to.  So, desiredMoves[23,12] indicates the piece is currently at [2,3] and wishes to move to [1,2].  A monkey can indicate a sequence of jumps as follows:  [01,23,05].
 
 ## errorInvalidMove
 
@@ -156,7 +166,7 @@ This communication type will be sent by the server to a client after the server 
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
+  "pieceID": "e",
   "desiredMoves": [],
   "whoseTurn": "",
   "errorMessage": "The move requested by the player cannot be made."
@@ -167,8 +177,8 @@ This communication type will be sent by the server to a client after the server 
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who requested the invalid move.
-* `pieceID` is an int and will be the ID of the piece that the player wished to move to an invalid space
-* `desiredMoves` will be a 2D array with the coordinates of the invalid squares or positions on the board that the player wanted to move the piece to.
+* `pieceID` is a string and will be the ID of the piece that the player wished to move to an invalid space
+* `desiredMoves` will be a 1D array with the coordinates of the invalid squares or positions on the board that the player wanted to move the piece to.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. Because the previous move was invalid, the player who made the last move is try and move again.
 * `errorMessage` is a string and will contain a message stating that the requested was was invalid and could not be made. This string
 could also be altered to include the specifics of why the move was invalid such as it being out of bounds, conflicting with the rules
@@ -185,7 +195,7 @@ send the updated board to the clients so that they can display it so the players
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
-  "pieceID": 3,
+  "pieceID": "G",
   "updatedBoard": [][],
   "whoseTurn": "",
 }
@@ -195,7 +205,7 @@ send the updated board to the clients so that they can display it so the players
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who made the valid move that updated the board.
-* `pieceID` is an int and will be the ID of the piece that the player moved.
+* `pieceID` is a string and will be the ID of the piece that the player moved.
 * `updatedBoard` is a 2D array with the information containing the new state of the game board after the piece was moved.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. In this case it will be the name of the player who did not make the most recent move.
 
@@ -459,6 +469,7 @@ This communication type will be sent by the server when communicating with clien
 * 9/22/2019 zachklau renamed `desiredPosition` to `desiredMoves` and made it into a 2D array in case a piece moves more than one time in a turn.
 * 9/22/2019 zachklau edited the description of `userPassword` to specify that it will be a hash of the password rather than the the password itself
 * 9/23/2019 zachklau removed ClientError object as there is no forseen use for it yet.
+* 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

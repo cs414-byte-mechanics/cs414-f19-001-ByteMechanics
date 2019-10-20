@@ -2,6 +2,8 @@ package Game;
 
 import Game.GamePiece;
 
+import static Game.GameBoard.boardNumCols;
+
 public class Player {
 
     // every team has 14 single pieces, including 7 animals and 7 pawns
@@ -16,29 +18,19 @@ public class Player {
     public Player (int id ){
 
         playerID = id;
-        initPlayerPieces();
     }
 
-    public void initPlayerPieces(){
+    public void initPlayerPieces(GameBoard board){
 
-        // Initialize every single piece of each player
-        // if player one, all pieces row is 0 and all playerID are 1
-        // if player two, all pieces are on rows = 6 and playerID is 2
-        playerPieces[0] = new GiraffePiece( playerID == 1 ? 0: 6, 0, playerID == 1 ? 1:2);
-        playerPieces[1] = new MonkeyPiece( playerID == 1 ? 0: 6, 1, playerID == 1 ? 1:2);
-        playerPieces[2] = new ElephantPiece( playerID == 1 ? 0: 6, 2, playerID == 1 ? 1:2);
-        playerPieces[3] = new LionPiece( playerID ==1 ? 0: 6, 3, playerID == 1 ? 1:2);
-        playerPieces[4] = new ElephantPiece( playerID == 1 ? 0: 6, 4, playerID == 1 ? 1:2);
-        playerPieces[5] = new CrocodilePiece( playerID == 1 ? 0: 6, 5, playerID == 1 ? 1:2);
-        playerPieces[6] = new ZebraPiece( playerID ==1 ? 0: 6, 6, playerID == 1 ? 1:2);
+        int homeRow = (playerID == 1) ? 0 : 6;
+        int dir = (playerID == 1) ? 1 : -1;
 
-        playerPieces[7] = new PawnPiece( playerID ==1 ? 1: 5, 0, playerID == 1 ? 1:2);
-        playerPieces[8] = new PawnPiece( playerID ==1 ? 1: 5, 1, playerID == 1 ? 1:2);
-        playerPieces[9] = new PawnPiece( playerID ==1 ? 1: 5, 2, playerID == 1 ? 1:2);
-        playerPieces[10] = new PawnPiece( playerID ==1 ? 1: 5, 3, playerID == 1 ? 1:2);
-        playerPieces[11] = new PawnPiece( playerID ==1 ? 1: 5, 4, playerID == 1 ? 1:2);
-        playerPieces[12] = new PawnPiece( playerID ==1 ? 1: 5, 5, playerID == 1 ? 1:2);
-        playerPieces[13] = new PawnPiece( playerID ==1 ? 1: 5, 6, playerID == 1 ? 1:2);
-
+        int i = 0;  /* index to track the number of pieces */
+        for (int r = homeRow; r !=  homeRow + (2*dir);r= r + dir) {
+            for (int c = 0; c < boardNumCols; c++) {
+                playerPieces[i] = board.getGamePiece(r, c);
+                i++;
+            }
+        }
     }
 }
