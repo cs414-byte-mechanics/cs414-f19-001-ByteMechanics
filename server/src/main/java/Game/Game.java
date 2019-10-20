@@ -23,5 +23,9 @@ public class Game {
         /* change which player is now actively making a move */
         activePlayer = (activePlayer == 1) ? 2 : 1;
     }
+    
+    public String[][] getGameBoard(){
+        return gameBoard.getBoardForUpdate();
+    }
 
 }

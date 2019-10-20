@@ -15,7 +15,7 @@ public class Update {
     public String successMessage;
     public String userName;
     public String userEmail;
-    public int[][] initialBoard;
+    public String[][] initialBoard;
     public String matchBeginTime;
     public String invitationFrom;
     public String invitationTo;

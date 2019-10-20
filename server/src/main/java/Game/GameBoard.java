@@ -24,6 +24,19 @@ public class GameBoard{
         }
         /* this assumes the players have already set up the pieces that we're placing on the board */
     }
+    
+    public String[][] getBoardForUpdate(){
+        String[][] boardForUpdate = new String[5][5];
+        
+        for(int i = 0; i < boardNumRows; i++){
+            for(int j = 0; j < boardNumCols; j++){
+                GamePiece piece = getGamePiece(i,j);
+                boardForUpdate[i][j] = (piece == null) ? " " : piece.pieceIDString();
+            }
+        }
+        
+        return boardForUpdate;
+    }
 
     public GamePiece getGamePiece(int r, int c){
         if ((r >= 0) && (r < boardNumRows)

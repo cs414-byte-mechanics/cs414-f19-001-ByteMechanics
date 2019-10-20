@@ -234,11 +234,11 @@ public class WebsocketServerTest {
         testUpdate.successMessage = "TestSuccessMessage";
         testUpdate.userName = "TestUserName";
         testUpdate.userEmail = "TestUserEmail";
-        testUpdate.initialBoard = new int[2][2];
-        testUpdate.initialBoard[0][0] = 5;
-        testUpdate.initialBoard[0][1] = 6;
-        testUpdate.initialBoard[1][0] = 7;
-        testUpdate.initialBoard[1][1] = 8;
+        //testUpdate.initialBoard = new int[2][2];
+        //testUpdate.initialBoard[0][0] = 5;
+        //testUpdate.initialBoard[0][1] = 6;
+        //testUpdate.initialBoard[1][0] = 7;
+        //testUpdate.initialBoard[1][1] = 8;
         testUpdate.matchBeginTime = "TestMatchBeginTime";
         testUpdate.invitationFrom = "TestInvitationFrom";
         testUpdate.invitationTo = "TestInvitationTo";

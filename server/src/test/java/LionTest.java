@@ -2,7 +2,7 @@ package Game ;
 
 import Game.GamePiece;
 import Game.GiraffePiece;
-import jdk.jfr.StackTrace;
+//import jdk.jfr.StackTrace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

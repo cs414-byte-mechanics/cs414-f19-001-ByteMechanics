@@ -1,13 +1,11 @@
 package webconnection;
 import database.*;
+import Game.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
-public class UpdateFactory
-{
+public class UpdateFactory {
 
-    private Action action;
-    private Update update;
     private DatabaseHandler db;
 
     //client that action for the corresponding update was sent from
@@ -16,112 +14,118 @@ public class UpdateFactory
     //clients that the update will be sent to
     private ArrayList<WebSocket> sendTo;
 
-    public UpdateFactory(Action action, WebSocket sentFrom)
-    {
+    public UpdateFactory(){
         db = new DatabaseHandler();
-
-        this.action = action;
-        this.sentFrom = sentFrom;
-        this.sendTo = new ArrayList<>();
-        this.update = new Update();
-
+    }
+    
+    public Update performAction(Action action){
         //decide which update to construct given the type of action sent from the client
-        switch(action.communicationType)
-        {
-            case "requestMoves": this.buildUpdateBoard(); break;
-            case "registerUser": this.buildRegistrationSuccess(); break;
-            case "requestBeginNewMatch": this.buildBeginNewMatch(); break;
-            case "invitation": this.buildInvitation(); break;
-            case "invitationResponse": this.update = null; break;
-            case "quitMatch": this.buildEndMatch(); break;
-            case "unregisterUser": this.update = null; break;
-            case "attemptLogin": this.buildLoginSuccess(); break;
-            default: System.err.println("Invalid action communication type.");
+
+        switch(action.communicationType){
+            case "requestMoves":
+                return performMove(action); 
+            case "registerUser": 
+                return registerUser(action);
+            case "requestBeginNewMatch": 
+                return beginNewMatch(action);
+            case "invitation": 
+                return sendInvite(action);
+            case "invitationResponse": 
+                return null; 
+            case "quitMatch": 
+                return endMatch(action);
+            case "unregisterUser": 
+                return null;
+            case "attemptLogin": 
+                return loginUser(action); 
+            default: 
+                System.err.println("Invalid action communication type.");
+                return null;
         }
     }
 
-    private void buildUpdateBoard()
-    {
-        this.update.communicationType = "updateBoard";
-        this.update.matchID = "dummy_match_ID";
-        this.update.playerName = "dummy_player_name";
-        this.update.pieceID =  4;
-        this.update.updatedBoard = new int[3][3];
-        this.update.updatedBoard[0][0] = 1;
-        this.update.updatedBoard[0][1] = 2;
-        this.update.whoseTurn = "opponent";
-        this.sendTo.add(this.sentFrom);
+    private Update performMove(Action action) {
+        //Perform move here
+        
+        Update update = new Update();
+        
+        update.communicationType = "updateBoard";
+        update.matchID = "dummy_match_ID";
+        update.playerName = "dummy_player_name";
+        update.pieceID =  4;
+        update.updatedBoard = new int[3][3];
+        update.updatedBoard[0][0] = 1;
+        update.updatedBoard[0][1] = 2;
+        update.whoseTurn = "opponent";
+        return update;
     }
 
-    private void buildRegistrationSuccess()
-    {
+    private Update registerUser(Action action) {
         try {
-
-            boolean result = db.performDBSearch(this.action);
-
-            if(result) {
+            if(db.performDBSearch(action)) {
                 Update update = new Update();
                 update.communicationType = "registrationSuccess";
                 update.userEmail = action.userEmail;
                 update.userName = action.userName;
                 update.successMessage = "User account has been successfully created.";
-                this.update = update;
+                return update;
+            } else {
+                //return null for now
+                return null;
             }
 
         } catch (Exception e){
             System.out.println(e);
+            return null;
         }
-
-        this.sendTo.add(this.sentFrom);
-
     }
 
-    private void buildBeginNewMatch()
-    {
-      this.update.communicationType = "beginNewMatch";
-      this.update.matchID = "dummy_math_ID";
-      this.update.initialBoard = new int[5][5];
-      this.update.initialBoard[0][0] = 1;
-      this.update.initialBoard[0][1] = 2;
-      this.update.whoseTurn = "opponent";
-      this.update.matchBeginTime = "dummy_match_begin_time";
-        this.sendTo.add(this.sentFrom);
+    public Update beginNewMatch(Action action) {
+        Update update = new Update();
+        update.communicationType = "beginNewMatch";
+        update.matchBeginTime = "dummy_match_begin_time";       //do we need this?
+      
+      
+        //Creates a new Game object which creates board, and initializes it, and players
+        Game game = new Game();
+        update.initialBoard = game.getGameBoard();
+        update.whoseTurn = "opponent";               //will be determined by game, how?
+
+      
+        //Saves this to database TBD
+        update.matchID = "dummy_math_ID";            
+        return update;
     }
 
-    private void buildInvitation()
-    {
-        this.update.communicationType = "invitation";
-        this.update.invitationFrom = "player1";
-        this.update.invitationTo = "player2";
-        this.update.invitationTime = "dummy_time";
-        this.sendTo.add(this.sentFrom);
+    private Update sendInvite(Action action) {
+        Update update = new Update();
+        
+        update.communicationType = "invitation";
+        update.invitationFrom = "player1";
+        update.invitationTo = "player2";
+        update.invitationTime = "dummy_time";
+        return update;
     }
 
-    private void buildEndMatch()
-    {
-        this.update.communicationType = "endMatch";
-        this.update.matchID = "dummy_match_ID";
-        this.update.endCondition = "quit";
-        this.update.winnerName = "player1";
-        this.update.loserName = "player2";
-        this.update.matchEndTime = "dummy_end_time";
-        this.sendTo.add(this.sentFrom);
+    private Update endMatch(Action action) {
+        Update update = new Update();
+        
+        update.communicationType = "endMatch";
+        update.matchID = "dummy_match_ID";
+        update.endCondition = "quit";
+        update.winnerName = "player1";
+        update.loserName = "player2";
+        update.matchEndTime = "dummy_end_time";
+        return update;
     }
 
-    private void buildLoginSuccess()
-    {
-        this.update.communicationType = "loginSuccess";
-        this.update.invitations = null;
-        this.update.matchesInProgress = null;
-        this.update.matchesCompleted = null;
-        this.sendTo.add(this.sentFrom);
+    private Update loginUser(Action action) {
+        Update update = new Update();
+        
+        update.communicationType = "loginSuccess";
+        update.invitations = null;
+        update.matchesInProgress = null;
+        update.matchesCompleted = null;
+        return update;
     }
-
-    public Update getUpdate()
-    {
-        return this.update;
-    }
-    public WebSocket getSentFrom() {return this.sentFrom;}
-    public ArrayList<WebSocket> getSendTo() {return this.sendTo;}
-
 }
