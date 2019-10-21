@@ -127,7 +127,6 @@ public class GamePiecesTest {
 
         congoGame.movePiece(0,6,3,6);  /* move player 1's zebra to river */
         congoGame.movePiece(6,0,3,0);  /* move player 2's giraffe to river */
-        System.out.println(congoGame.toString());
         assertTrue(giraffe.pathClear(3, 6, congoGame.board) == true);
         assertTrue(zebra.pathClear(3, 0, congoGame.board) == true);
     }

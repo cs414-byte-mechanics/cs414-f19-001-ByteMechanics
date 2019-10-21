@@ -118,6 +118,13 @@ public class GameBoard{
         board[row][col] = piece;
     }
 
+    public void movePiece(GamePiece piece, int row, int col) {
+        /* places a piece in a specific square on the board and update it's row, column fields */
+        /* sets original location of piece on the board to null */
+        board[piece.getRow()][piece.getColumn()] = null;
+        placePiece(piece, row, col);
+    }
+
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
         /* routine does NO error checking but assumes move is legal and updates the piece's info
            as well as set it's previous square location to NULL */
