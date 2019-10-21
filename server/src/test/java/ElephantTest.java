@@ -110,6 +110,7 @@ public class ElephantTest {
 
         GamePiece[][] congoBoard = congoGame.board;
 
+        System.out.println(congoGame.toString());
         assertTrue(elephant1P2.ValidateMove(4, 2, congoBoard) == true); // jump two step down from 6,2 to 4,2
 
         congoGame.movePiece(6,4,5,4);
@@ -130,5 +131,36 @@ public class ElephantTest {
 
         congoGame.movePiece(3,4,3,6);
         assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
+    }
+
+    @Test
+    public void testElephantArraySimpleMove()
+    {
+        GamePiece myElephant = congoGame.getGamePiece(6, 4);
+        GamePiece myPawn = congoGame.getGamePiece(5,4);
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        /* attempt to perform invalid move to (5,3) */
+        movesRow.add(5);
+        movesCol.add(3);
+        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame) == false);
+        assertTrue(congoGame.getGamePiece(6,4) instanceof ElephantPiece);  /* elephant has not moved */
+
+        /* Now try a move diagonally over my own pawn to (4,2) which should fail since Elephant can't move diagonally */
+        movesRow.set(0, 4);
+        System.out.println("Farzane movesRow is "+movesRow);
+        System.out.println("Farzane movesRow is "+movesRow.get(0));
+        movesCol.set(0, 2);
+        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame) == false);
+
+//        /* Now try to move orthogonally over my own pawn to (4,4) which should pass */
+        movesCol.set(0, 4);
+        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame));
+        assertTrue(congoGame.getGamePiece(4,4) instanceof ElephantPiece);  /* elephant has moved */
+        assertTrue(congoGame.getGamePiece(6,4) == null);  /* elephant has left old square empty */
+        assertTrue(congoGame.getGamePiece(5,4) instanceof PawnPiece);  /* pawn was not touched or captured */
+        assertTrue(myPawn.checkCaptured() == false);  /* myPawn has not been marked captured */
     }
 }

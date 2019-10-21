@@ -16,7 +16,7 @@ public class ElephantPiece extends GamePiece {
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board)
     {
-        /* Elephant  can move to the first and second square in a straight direction.
+        /* Elephant  can move to the first and second square in a orthogonal direction.
            The move to the second square is a jump and cannot be blocked by interposing pieces of either color. */
 
         /* check for out of bound moves */
@@ -31,10 +31,9 @@ public class ElephantPiece extends GamePiece {
         int distCol = Math.abs(destCol - this.column);
 
         /* check if elephant moved one OR two steps straight - can moe and can capture*/
-        if ( (distRow== 1 && distCol == 0 ) || (distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 1) || (distRow== 0 && distCol == 2)) {
+        if (elephantMoveOneStepOrthogonal(distRow, distCol) || elephantMoveTwoStepOrthogonal(distRow, distCol))
 
             return squareEmptyOrCapturable(destRow, destCol, board);
-        }
         else
             return false;
 
