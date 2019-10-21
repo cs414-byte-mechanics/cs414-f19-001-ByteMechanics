@@ -244,4 +244,22 @@ public class GamePiece {
         else
             return false;
     }
+
+    // helper function for elephant move one step orthogonal
+    public boolean elephantMoveOneStepOrthogonal(int distRow, int distCol)
+    {
+        if ((distRow== 1 && distCol == 0 ) || (distRow== 0 && distCol == 1 ))
+            return true;
+        else
+            return false;
+    }
+
+    // helper function for elephant move two steps orthogonal
+    public boolean elephantMoveTwoStepOrthogonal(int distRow, int distCol)
+    {
+        if ((distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 2))
+            return true;
+        else
+            return false;
+    }
 }
