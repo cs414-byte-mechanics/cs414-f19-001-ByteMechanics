@@ -205,6 +205,7 @@ public class GamePiece {
      */
     public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
         /* Method determines if the move to (destRow, destCol) is a legal move for this piece */
+
         /* It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
         If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
         they will drown and be captured.
@@ -223,6 +224,7 @@ public class GamePiece {
             congoBoard.movePiece(this.row, this.column, destRow, destCol);
             /* check if we jumped a piece that needs to be captured */
             //GamePiece jumpedPiece = jumpCapturesPiece(this.row, this.column, destRow, destCol, congoBoard);
+
             /* now check if any river dwelling pieces are still in the river and need to drown and be captured */
             congoBoard.drownRiverDwellers(riverDwellers);
             return true;
@@ -289,6 +291,7 @@ public class GamePiece {
             int finalDestR = destRow.get(numMoves - 1);
             int finalDestC = destCol.get(numMoves - 1);
             congoBoard.movePiece(getRow(), getColumn(), finalDestR, finalDestC);
+
             /* now check if any river dwelling pieces are still in the river and need to drown and be captured */
             congoBoard.drownRiverDwellers(riverDwellers);
             return true;
@@ -343,6 +346,24 @@ public class GamePiece {
         if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
             // if destination is empty not occupied by any pieces
             return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
+        else
+            return false;
+    }
+
+    // helper function for elephant move one step orthogonal
+    public boolean elephantMoveOneStepOrthogonal(int distRow, int distCol)
+    {
+        if ((distRow== 1 && distCol == 0 ) || (distRow== 0 && distCol == 1 ))
+            return true;
+        else
+            return false;
+    }
+
+    // helper function for elephant move two steps orthogonal
+    public boolean elephantMoveTwoStepOrthogonal(int distRow, int distCol)
+    {
+        if ((distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 2))
+            return true;
         else
             return false;
     }

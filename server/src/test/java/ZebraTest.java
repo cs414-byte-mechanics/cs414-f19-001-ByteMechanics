@@ -137,4 +137,5 @@ public class ZebraTest {
         assertTrue(congoGame.getGamePiece(6, 6) == null);  /* zebra has moved */
         assertTrue(pawn.checkCaptured());  /* piece has been marked captured */
     }
+
 }

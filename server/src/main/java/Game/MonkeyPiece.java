@@ -96,6 +96,7 @@ public class MonkeyPiece extends GamePiece{
             an opponent's piece which will then be captured.
             */
                 int manhattanDist = manhattanDistance(curR, curC, destR, destC);
+
                 /* A horizontal or vertical move of 2 squares will have manhattanDist = 2.
                 A diagonal move will have manhattanDist = 4.
                 */

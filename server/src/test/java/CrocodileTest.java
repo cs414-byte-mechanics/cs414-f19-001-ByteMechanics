@@ -221,6 +221,7 @@ public class CrocodileTest {
         assertTrue(congoGame.getGamePiece(0,5) == null);  /* crocodile has moved and left square empty */
         assertTrue(congoGame.getGamePiece(2,5) instanceof CrocodilePiece);  /* opponentPawn has been captured */
         assertTrue(opponentPawn.checkCaptured());  /* opponentPawn has been marked captured */
+
     }
 
 }
