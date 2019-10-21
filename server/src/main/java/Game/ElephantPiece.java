@@ -14,6 +14,8 @@ public class ElephantPiece extends GamePiece {
         return (player == 1) ? "e" : "E";
     }
 
+
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board)
     {
         /* Elephant  can move to the first and second square in a orthogonal direction.
@@ -31,7 +33,7 @@ public class ElephantPiece extends GamePiece {
         int distCol = Math.abs(destCol - this.column);
 
         /* check if elephant moved one OR two steps straight - can moe and can capture*/
-        if (elephantMoveOneStepOrthogonal(distRow, distCol) || elephantMoveTwoStepOrthogonal(distRow, distCol))
+        if (MoveOneStepOrthogonal(distRow, distCol) || MoveTwoStepOrthogonal(distRow, distCol))
 
             return squareEmptyOrCapturable(destRow, destCol, board);
         else
