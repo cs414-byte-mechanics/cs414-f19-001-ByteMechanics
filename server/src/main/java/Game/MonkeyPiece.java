@@ -16,8 +16,12 @@ public class MonkeyPiece extends GamePiece{
         return (player == 1) ? "m" : "M";
     }
 
-    private GamePiece moveCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
-        /* returns the object of a piece the monkey jumped over and captured */
+    protected GamePiece jumpCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
+        /* Returns the object of a Gamepiece that was captured by jumping over it.
+        Monkey is the only piece that captures by jumping.  All other pieces capture by landing on the square.
+        So, this method returns NULL for any pieces that don't capture with a jump move.
+         */
+        /* returns the object of a piece jumped over and captured */
         int manhattanDist = manhattanDistance(fromRow, fromCol, destRow, destCol);
         boolean orthoMove = orthogonalMove(fromRow, fromCol, destRow, destCol);
         boolean diagMove = diagonalMove(fromRow, fromCol, destRow, destCol);
@@ -52,7 +56,6 @@ public class MonkeyPiece extends GamePiece{
         Boolean[][] captured = new Boolean[7][7];
 
         /* fill with false which indicates the piece hasn't been captured yet.  true indicates it's captured. */
-        //Arrays.fill(captured, false);
         for (int i = 0; i < 7; i++){
             for (int j = 0; j < 7; j++){
                 captured[i][j] = false;
@@ -66,13 +69,10 @@ public class MonkeyPiece extends GamePiece{
 
         while (moveCounter < numMoves) {
             /* get location piece is moving to */
-            System.out.println("move counter "+moveCounter);
             int destR = destRow.get(moveCounter);
             int destC = destCol.get(moveCounter);
-            System.out.println("moving to "+destR+","+destC);
             int distCol = Math.abs(destC - curC);
             int distRow = Math.abs(destR - curR);
-            System.out.println("distance to move "+distRow+","+distCol);
 
             /* check for out of bounds moves */
             if (destR > 6 || destR < 0) {
@@ -87,8 +87,6 @@ public class MonkeyPiece extends GamePiece{
                 if ((distCol <= 1) && (distRow <= 1)) {
                 /* Monkey is moving a single square in any direction.  Destination square must be empty.
                 If it contains opponents piece or player's piece, move is invalid. */
-                    System.out.println("Checking single square move to " + destR + "," + destC);
-                    System.out.println("square empty " + squareEmpty(destR, destC, board));
                     return squareEmpty(destR, destC, board);
                 }
             }
@@ -98,7 +96,7 @@ public class MonkeyPiece extends GamePiece{
             an opponent's piece which will then be captured.
             */
                 int manhattanDist = manhattanDistance(curR, curC, destR, destC);
-                System.out.println("Manhattan distance "+distRow+","+distCol);
+
                 /* A horizontal or vertical move of 2 squares will have manhattanDist = 2.
                 A diagonal move will have manhattanDist = 4.
                 */
@@ -109,20 +107,15 @@ public class MonkeyPiece extends GamePiece{
                     /* get coordinates of square being jumped */
                     int jumpSquareRow = curR + (destR - curR) / 2;
                     int jumpSquareCol = curC + (destC - curC) / 2;
-                    System.out.println("Jumped square = "+jumpSquareRow+","+jumpSquareCol);
-                    System.out.println("player "+this.player);
-                    System.out.println("piece owner "+board[jumpSquareRow][jumpSquareCol].player);
-                    System.out.println("Empty jump sq? "+squareEmpty(jumpSquareRow, jumpSquareCol, board));
-                    System.out.println("Empty dest sq? "+squareEmpty(destR, destC, board));
-                    System.out.println("Captured? "+captured[jumpSquareRow][jumpSquareCol]);
+                    GamePiece jumpedPiece = board[jumpSquareRow][jumpSquareCol];
+
                     if ((squareEmpty(jumpSquareRow, jumpSquareCol, board)) ||
                             !(squareEmpty(destR, destC, board)) ||
-                            (board[jumpSquareRow][jumpSquareCol].player == this.player) ||
+                            (jumpedPiece.getPlayer() == getPlayer()) ||
                             (captured[jumpSquareRow][jumpSquareCol])){
                         /* if square being jumped is empty OR contains a piece from the same player OR
                         piece has already been jumped then this is not a valid move sequence.
                         */
-                        System.out.println("move failed");
                         return false;
                     } else {
                         /* move is valid.  Mark the jumped piece as captured and continue checking move sequence */
