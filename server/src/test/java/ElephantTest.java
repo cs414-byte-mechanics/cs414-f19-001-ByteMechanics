@@ -134,33 +134,58 @@ public class ElephantTest {
     }
 
     @Test
-    public void testElephantArraySimpleMove()
-    {
+    public void testElephantArraySimpleMove() {
+        /* this test tries 2 invalid moves for the Elephant followed by a valid move */
+        /* it first tries moving diagonally on top of players own pawn.  Then it tries jumping diagonally over its
+        pawn.  Still not a legal move.  Finally it jumps its own pawn orthogonally toward the river which is legal
+         */
         GamePiece myElephant = congoGame.getGamePiece(6, 4);
         GamePiece myPawn = congoGame.getGamePiece(5,4);
 
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
-
         /* attempt to perform invalid move to (5,3) */
         movesRow.add(5);
         movesCol.add(3);
-        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame) == false);
+        assertTrue(myElephant.performMove(movesRow, movesCol, congoGame) == false);
         assertTrue(congoGame.getGamePiece(6,4) instanceof ElephantPiece);  /* elephant has not moved */
-
         /* Now try a move diagonally over my own pawn to (4,2) which should fail since Elephant can't move diagonally */
         movesRow.set(0, 4);
-        System.out.println("Farzane movesRow is "+movesRow);
-        System.out.println("Farzane movesRow is "+movesRow.get(0));
         movesCol.set(0, 2);
-        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame) == false);
+        assertTrue(myElephant.performMove(movesRow, movesCol, congoGame) == false);
 
-//        /* Now try to move orthogonally over my own pawn to (4,4) which should pass */
+        /* Now try to move orthogonally over my own pawn to (4,4) which should pass */
         movesCol.set(0, 4);
-        assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame));
+        assertTrue(myElephant.performMove(movesRow, movesCol, congoGame));
         assertTrue(congoGame.getGamePiece(4,4) instanceof ElephantPiece);  /* elephant has moved */
         assertTrue(congoGame.getGamePiece(6,4) == null);  /* elephant has left old square empty */
         assertTrue(congoGame.getGamePiece(5,4) instanceof PawnPiece);  /* pawn was not touched or captured */
         assertTrue(myPawn.checkCaptured() == false);  /* myPawn has not been marked captured */
+    }
+
+    @Test
+    public void testElephantArraySimpleCaptureMove() {
+        GamePiece myElephant = congoGame.getGamePiece(0, 4);
+        GamePiece opponentsPawn1 = congoGame.getGamePiece(5, 4);
+        GamePiece opponentsPawn2 = congoGame.getGamePiece(5, 5);
+
+        congoGame.movePiece(opponentsPawn1, 1, 4);  /* move opponent's pawn to 1,4 */
+        congoGame.movePiece(opponentsPawn2, 2, 4);  /* move opponent's pawn to 2,4 */
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        /* attempt to perform invalid move to (2,5) */
+        movesRow.add(2);
+        movesCol.add(5);
+        assertTrue(myElephant.performMove(movesRow, movesCol, congoGame) == false);
+        /* Now try a capturing move over opponent's pawn to (2,4) */
+        movesRow.set(0, 2);
+        movesCol.set(0, 4);
+        assertTrue(myElephant.performMove(movesRow, movesCol, congoGame));
+        assertTrue(congoGame.getGamePiece(0,4) == null);  /* elephant has moved and left square empty */
+        assertTrue(congoGame.getGamePiece(2,4) instanceof ElephantPiece);  /* opponentsPawn2 has been captured */
+        assertTrue(congoGame.getGamePiece(1,4) instanceof PawnPiece);   /* opponentsPawn1 is still on board */
+        assertTrue(opponentsPawn2.checkCaptured());  /* opponentsPawn2 has been marked captured */
+        assertTrue(opponentsPawn1.checkCaptured() == false);  /* opponentsPawn1 has not been marked captured */
     }
 }

@@ -195,4 +195,33 @@ public class CrocodileTest {
 
     }
 
+    @Test
+    public void testCrocArray2StepCapture() {
+        /* Start with initialized board */
+        /* tests to make sure crocodile captures 1 piece like a rook towards the river */
+        GamePiece myCroc = congoGame.getGamePiece(0,5);
+        GamePiece opponentPawn = congoGame.getGamePiece(5,5);
+        GamePiece myPawn = congoGame.getGamePiece(1,5);
+
+        congoGame.movePiece(opponentPawn, 2, 5);  /* move opponent's pawn to 2,5 on my side of the river */
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        /* try to perform move to 2,5 to capture opponent's pawn, but move is blocked by myPawn */
+        movesRow.add(2);
+        movesCol.add(5);
+
+        assertTrue(myCroc.performMove(movesRow, movesCol, congoGame) == false);  /* fails since it's blocked by myPawn */
+
+        assertTrue(congoGame.getGamePiece(2,5) != null);  /* opponentPawn is on board */
+        assertTrue(opponentPawn.checkCaptured() == false);  /* opponentPawn is not captured */
+        /* move myPawn out of the way to enable capture move */
+        congoGame.movePiece(myPawn, 2, 4);
+        assertTrue(myCroc.performMove(movesRow, movesCol, congoGame));  /* cleared path to opponentPawn so move succeeds */
+        assertTrue(congoGame.getGamePiece(0,5) == null);  /* crocodile has moved and left square empty */
+        assertTrue(congoGame.getGamePiece(2,5) instanceof CrocodilePiece);  /* opponentPawn has been captured */
+        assertTrue(opponentPawn.checkCaptured());  /* opponentPawn has been marked captured */
+
+    }
+
 }
