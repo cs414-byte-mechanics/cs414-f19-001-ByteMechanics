@@ -261,4 +261,27 @@ public class GamePiece {
         else
             return false;
     }
+
+    // helper routine for giraffe moves
+    public boolean moveOneStepAnyDirection(int distRow, int distCol){
+        if (distRow <=1 && distCol <=1 )
+            return true;
+        else return false;
+    }
+
+    // helper routine for giraffe to move two steps straight in any direction
+    public boolean moveTwoStepsStraightAnyDirection(int distRow, int distCol) {
+        if ((distRow == 0 && distCol ==2 ) || (distRow == 2 && distCol ==0))
+            return true;
+        else
+            return false;
+    }
+
+    // helper routine to move two steps diagonally in any direction
+    public boolean moveTwoStepsDiagonalAnyDirection(int distRow, int distCol){
+        if(distRow == 2 && distCol == 2)
+            return true;
+        else
+            return false;
+    }
 }
