@@ -110,7 +110,7 @@ public class ElephantTest {
 
         GamePiece[][] congoBoard = congoGame.board;
 
-        System.out.println(congoGame.toString());
+//        System.out.println(congoGame.toString());
         assertTrue(elephant1P2.ValidateMove(4, 2, congoBoard) == true); // jump two step down from 6,2 to 4,2
 
         congoGame.movePiece(6,4,5,4);
@@ -150,8 +150,6 @@ public class ElephantTest {
 
         /* Now try a move diagonally over my own pawn to (4,2) which should fail since Elephant can't move diagonally */
         movesRow.set(0, 4);
-        System.out.println("Farzane movesRow is "+movesRow);
-        System.out.println("Farzane movesRow is "+movesRow.get(0));
         movesCol.set(0, 2);
         assertTrue(myElephant.performMove(movesRow.get(0), movesCol.get(0), congoGame) == false);
 
@@ -162,5 +160,53 @@ public class ElephantTest {
         assertTrue(congoGame.getGamePiece(6,4) == null);  /* elephant has left old square empty */
         assertTrue(congoGame.getGamePiece(5,4) instanceof PawnPiece);  /* pawn was not touched or captured */
         assertTrue(myPawn.checkCaptured() == false);  /* myPawn has not been marked captured */
+    }
+
+    @Test
+    public void testElephantDrowning(){
+        GamePiece[][] congoBoard = congoGame.board;
+
+        /* Initial elephant is on 0,2*/
+        GamePiece myElephant = congoGame.getGamePiece(0, 2);
+        assertTrue(myElephant instanceof ElephantPiece);
+        assertFalse(myElephant.inRiver());
+
+        // then move into two square up and check in river ?? no
+        assertTrue(myElephant.ValidateMove(2,2, congoBoard));
+        myElephant.performMove(2,2, congoGame);
+        assertFalse(myElephant.inRiver());
+
+        // land elephant in river?
+        myElephant.performMove(3,2, congoGame);
+        assertTrue(myElephant.inRiver()); // in river ? yes
+        assertTrue(myElephant.checkCaptured() == false); // get captured ? not yet
+
+        // land in a square in the river for the 2nd time, it should drown
+        myElephant.performMove(3,4, congoGame);
+        assertTrue(myElephant.inRiver()); // in river
+        assertTrue(myElephant.checkCaptured()); // is captured
+        assertTrue(congoGame.getGamePiece(3,4) == null); // is it captured? yes and square is null
+    }
+
+    @Test
+    public void TestDrownRiverDwellers(){
+
+        ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
+        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece myElephant = congoGame.getGamePiece(0,4);
+
+        // land elephant in river
+        congoGame.placePiece(myElephant, 3,4);
+        assertTrue(congoGame.getGamePiece(3,4) instanceof ElephantPiece);
+        assertTrue(myElephant.checkCaptured() == false); // is captured? not yet
+
+        riverDwellers.add(myElephant); /* only elephant is in the river*/
+        assertEquals(congoGame.getRiverDwellers(1), riverDwellers);
+
+        // move it in river for the second time
+        assertTrue(myElephant.performMove(3,5, congoGame));
+        assertTrue(myElephant.checkCaptured());
+        riverDwellers.clear();
+        assertEquals(congoGame.getRiverDwellers(1), riverDwellers);
     }
 }
