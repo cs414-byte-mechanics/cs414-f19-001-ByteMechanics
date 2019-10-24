@@ -19,7 +19,6 @@ public class MonkeyPiece extends GamePiece{
     protected GamePiece jumpCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
         /* Returns the object of a Gamepiece that was captured by jumping over it.
         Monkey is the only piece that captures by jumping.  All other pieces capture by landing on the square.
-        So, this method returns NULL for any pieces that don't capture with a jump move.
          */
         /* returns the object of a piece jumped over and captured */
         int manhattanDist = manhattanDistance(fromRow, fromCol, destRow, destCol);
@@ -61,8 +60,8 @@ public class MonkeyPiece extends GamePiece{
                 captured[i][j] = false;
             }
         }
-        int curR = this.row;
-        int curC = this.column;
+        int curR = getRow();
+        int curC = getColumn();
 
         int numMoves = destRow.size();
         int moveCounter = 0;
@@ -129,5 +128,9 @@ public class MonkeyPiece extends GamePiece{
         }
         return true;
     }
+
+//    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board) {
+//
+//    }
 }
 

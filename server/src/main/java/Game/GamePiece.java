@@ -6,7 +6,7 @@ import Game.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GamePiece {
+public abstract class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
@@ -40,9 +40,11 @@ public class GamePiece {
         return player;
     }
 
-    public String pieceIDString(){
-        return " ";
-    }
+    public abstract String pieceIDString();
+
+//    public String pieceIDString(){
+//        return " ";
+//    }
 
     public void setCaptured(){
         /* indicates that piece is captured and no longer in play on the board */
@@ -55,10 +57,6 @@ public class GamePiece {
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
-        /* ValidateMove should always be called on a specific GamePiece - monkey, lion, etc
-        Therefore, this routine is returning false so it never validates and incorrect move.
-        This needs to be here so the use of ValidateMove() in performMove() will compile.
-         */
         return false;
     }
 
@@ -163,23 +161,26 @@ public class GamePiece {
         else return false;
     }
 
+    public int direction(int from, int to){
+        /* returns -1 if direction is left/down, 0 for vertical/horizontal, 1 for right/up */
+        int dir = to > from ? +1 : to < from ? -1 : 0;
+        return dir;
+    }
+
     public Boolean pathClear(int destRow, int destCol, GamePiece[][] board){
         /* check to ensure no pieces along the path */
         /* WARNING - does not check that final destination is clear */
-        int distCol = Math.abs(destCol - getColumn());
-        int distRow = Math.abs(destRow - getRow());
 
-        if ((destRow == this.row) && (destCol == this.column)) return true;  /* destination same as origin */
+        if ((destRow == getRow()) && (destCol == getColumn())) return true;  /* destination same as origin */
 
-        if ((destRow == this.row) /* horizontal move */
-            || (destCol == this.column) /* vertical move */
-            || (distCol == distRow) /* diagonal move */
-        ) {
-            int rowDir = (distRow == 0) ? 0 : (destRow - this.row)/distRow;  /* -1 for left dir, +1 for right dir, 0 for horizontal path */
-            int colDir = (distCol == 0) ? 0 : (destCol - this.column)/distCol; /* -1 for down dir, +1 for up dir, 0 for vertical path */
+        if (orthogonalMove(getRow(), getColumn(), destRow, destCol)
+            || diagonalMove(getRow(), getColumn(), destRow, destCol))  {
 
-            int x = this.column + colDir;
-            int y = this.row + rowDir;
+            int rowDir = direction(getRow(),destRow);  /* -1 for left dir, +1 for right dir, 0 for horizontal */
+            int colDir = direction(getColumn(),destCol);  /* -1 for down dir, +1 for up dir, 0 for vertical */
+
+            int x = getColumn() + colDir;
+            int y = getRow() + rowDir;
             while ((y != destRow) || (x != destCol)){
                 /* Until we've reached the destination square, */
                 /* travel along path and make sure all squares are NULL */
@@ -197,6 +198,7 @@ public class GamePiece {
             return false;  /* path is not a straight line */
         }
     }
+
 
     /* This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
     moves.  If there is another piece in the destination square of the move, then it is captured and removed from
