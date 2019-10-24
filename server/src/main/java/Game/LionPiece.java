@@ -76,39 +76,30 @@ public class LionPiece extends GamePiece {
         if there is a vertical or diagonal line with no pieces between the two lions, the lion may jump to the other lion and capture it.*/
 
         /* check for out of bound moves */
-        if (destRow > 6 || destRow < 0) {
-            return false;
-        }
-        if (destCol > 6 || destCol < 0) {
-            return false;
-        }
+        if (GameBoard.validBoardLocation(destRow, destCol)) {
 
-        // check if the destination located in own castle
-        if (DestinationIsInOwnCastle(destRow, destCol)){
+            // check if the destination located in own castle
+            if (DestinationIsInOwnCastle(destRow, destCol)) {
 
-            /*move one step to an empty square or capture if there is any opponent's piece  */
-            if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 1)
-                    ||(diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2))
+                /*move one step to an empty square or capture if there is any opponent's piece  */
+                if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 1) || (diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2))
 
-                return squareEmptyOrCapturable(destRow, destCol, board);
-        }
-
-        // check if destination is in opponent's lion castle
-        if (DestinationIsInOpponentCastle(destRow, destCol)){
-
-            // if destination is in opponent's castle, it must be the other lion with a clear path between
-            if ((board[destRow][destCol] instanceof LionPiece)  && (pathClear(destRow, destCol, board) )){
-
-                /* This condition never happens as every player has only one lion, but added to write extra tests */
-                if(this.player != board[destRow][destCol].player)
-                {
-                System.out.println(" Lion is captured and Game is Over");
-                return true;}
+                    return squareEmptyOrCapturable(destRow, destCol, board);
             }
-            else
-                return false;
-        }
 
-        return false;
+            // check if destination is in opponent's lion castle
+            if (DestinationIsInOpponentCastle(destRow, destCol)){
+
+                // if destination is in opponent's castle, it must be the other lion with a clear path between
+                if ((board[destRow][destCol] instanceof LionPiece) && (pathClear(destRow, destCol, board)) && this.player != board[destRow][destCol].player)   /* The last condition never happens as every player has only one lion, but added to write extra tests */
+
+                    return true;
+                }else
+                    return false;
+
+            return false;
+            }
+        else
+            return false;
+        }
     }
-}
