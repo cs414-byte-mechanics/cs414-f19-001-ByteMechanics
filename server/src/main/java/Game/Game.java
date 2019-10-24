@@ -1,17 +1,7 @@
 package Game;
 
 public class Game {
-    int activePlayer;
 
-    public Game(){
-        activePlayer = 1;
-    }
-
-    public void alternatePlayers(){
-        /* change which player is now actively making a move */
-        activePlayer = (activePlayer == 1) ? 2 : 1;
-    }
-    
     public void createNewGame(){
         GameBoard board = new GameBoard();
         board.initialize();
@@ -29,6 +19,11 @@ public class Game {
     }
     
     public void performMove(GameBoard board, int startLocation, int endLocation){
+        //get river dwellers
+        
+        //actually perform move 
+        
+        //get river dwellers again & drown any in river
     }
 
 }

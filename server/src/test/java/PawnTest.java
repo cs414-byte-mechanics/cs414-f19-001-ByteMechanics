@@ -67,8 +67,6 @@ public class PawnTest {
         // how bout 6,3 t0 2,3??no
         assertTrue(Pawn1P1.ValidateMove(2, 3, congoBoard) == false);
 
-        System.out.println(congoGame.toString());
-        System.out.println("Pawn1P1 "+Pawn1P1.row+","+Pawn1P1.column+","+Pawn1P1.player+","+Pawn1P1.superPawn);
         assertTrue(Pawn1P1.ValidateMove(5, 4, congoBoard) == false); // maybe there is obstacle
 
         assertTrue(Pawn1P1.ValidateMove(4, 5, congoBoard) == false); // there is obstacle
@@ -134,8 +132,6 @@ public class PawnTest {
         congoGame.movePiece(1,1,0,4);
         assertTrue(Pawn2P2.ValidateMove(0, 5, congoBoard) == true); // can move side by one square
 
-        System.out.println(congoGame.toString());
-        System.out.println("Pawn2P2 "+Pawn2P2.row+","+Pawn2P2.column+","+Pawn2P2.player+","+Pawn2P2.superPawn);
         assertTrue(Pawn2P2.ValidateMove(0, 3, congoBoard) == true);
 //        assertTrue(Pawn2P2.ValidateMove(1, 5, congoBoard) == true); // failed. maybe occupied
 
