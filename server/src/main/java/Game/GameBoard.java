@@ -11,6 +11,8 @@ public class GameBoard{
     static int riverRow = 3;  /* river is on row 3 in the board */
     static int boardNumRows = 7;
     static int boardNumCols = 7;
+    static int boardLowerIndex = 0;
+    static int boardUpperIndex = 6;
 
     /* playing board with 49 squares */
     GamePiece board[][] = new GamePiece[boardNumRows][boardNumCols];
@@ -157,5 +159,16 @@ public class GameBoard{
 
         // remove the piece from the board
         this.board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+    }
+
+    /* Helper routine to check if move is not out of board */
+    public static boolean validBoardLocation(int destRow, int destCol){
+        if (destRow > boardUpperIndex || destRow < boardLowerIndex)
+            return false;
+
+        if (destCol > boardUpperIndex || destCol < boardLowerIndex)
+            return  false;
+
+        return true;
     }
 }
