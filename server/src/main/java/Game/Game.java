@@ -4,24 +4,29 @@ import Game.GameBoard;
 import Game.Player;
 
 public class Game {
-    int activePlayer;
-    Player player1;
-    Player player2;
-    GameBoard gameBoard;
 
-    public Game(){
-        activePlayer = 1;
-        gameBoard = new GameBoard();
-        gameBoard.InitGameBoard();
-        player1 = new Player(1);
-        player2 = new Player(2);
-        player1.initPlayerPieces(gameBoard);
-        player2.initPlayerPieces(gameBoard);
+    public void createNewGame(){
+        GameBoard board = new GameBoard();
+        board.initialize();
+        
+        //save game info into database
     }
-
-    public void alternatePlayers(){
-        /* change which player is now actively making a move */
-        activePlayer = (activePlayer == 1) ? 2 : 1;
+    
+    public void loadExistingGame(String matchID){
+        GameBoard board = new GameBoard();       
+        
+        //load game with that matchID from database
+        //board.loadGame(currentBoard);
+        
+        //performMove
+    }
+    
+    public void performMove(GameBoard board, int startLocation, int endLocation){
+        //get river dwellers
+        
+        //actually perform move 
+        
+        //get river dwellers again & drown any in river
     }
 
 }

@@ -15,55 +15,17 @@ public class GameBoard{
     static int boardUpperIndex = 6;
 
     /* playing board with 49 squares */
-    GamePiece board[][] = new GamePiece[boardNumRows][boardNumCols];
+    GamePiece[][] board;
 
     public GameBoard(){
-     /* initialize every board square to NULL */
-        for (int i = 0; i < boardNumRows; i++){
-            for (int j = 0; j < boardNumCols; j++) {
-                board[i][j] = null;
-            }
-        }
-        /* this assumes the players have already set up the pieces that we're placing on the board */
+        board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
     }
 
-    public GamePiece getGamePiece(int r, int c){
-        if ((r >= 0) && (r < boardNumRows)
-                && (c >= 0) && (c < boardNumCols)){
-            return board[r][c];
-        }
-        else return null;
+    public void initialize(){
+        placePiecesForPlayer(1);
+        placePiecesForPlayer(2);
     }
-
-    private void placeInitialPieces(int player){
-        /* places all pieces on one side of the board for a specific player */
-        int homeRow = (player == 1) ? 0 : 6;
-        int pawnRow = (player == 1) ? 1 : 5;
-
-        /* Create and setup animal game pieces for player */
-        board[homeRow][0] = new GiraffePiece(homeRow, 0, player);
-        board[homeRow][1] = new MonkeyPiece(homeRow,1,player);
-        board[homeRow][2] = new ElephantPiece(homeRow,2,player);
-        board[homeRow][3] = new LionPiece(homeRow,3,player);
-        board[homeRow][4] = new ElephantPiece(homeRow,4,player);
-        board[homeRow][5] = new CrocodilePiece(homeRow,5, player);
-        board[homeRow][6] = new ZebraPiece(homeRow, 6, player);
-
-        /* need to initialize all pawns */
-        for (int i =0; i<=6; i++){
-            board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
-        }
-    }
-
-    public void InitGameBoard(){
-        /* Create and setup game pieces for player 1 */
-        placeInitialPieces(1);
-
-        /* Create and setup game pieces for player 2 */
-        placeInitialPieces(2);
-
-    }
-
+    
     public String toString(){
         String row = "";
         String boardStr = "--------------\n";
@@ -85,6 +47,37 @@ public class GameBoard{
 
         return boardStr;
     }
+    
+    public void loadGame(String[][] board){
+    }
+
+    public GamePiece getGamePiece(int row, int col){
+        if(inBounds(row, col)){
+            return board[row][col];
+        }
+        else return null;
+    }
+
+    private void placePiecesForPlayer(int player){
+        /* places all pieces on one side of the board for a specific player */
+        int animalRow = (player == 1) ? 0 : 6;
+        int pawnRow = (player == 1) ? 1 : 5;
+
+        /* Create and setup animal game pieces for player */
+        board[animalRow][0] = new GiraffePiece(animalRow, 0, player);
+        board[animalRow][1] = new MonkeyPiece(animalRow,1,player);
+        board[animalRow][2] = new ElephantPiece(animalRow,2,player);
+        board[animalRow][3] = new LionPiece(animalRow,3,player);
+        board[animalRow][4] = new ElephantPiece(animalRow,4,player);
+        board[animalRow][5] = new CrocodilePiece(animalRow,5, player);
+        board[animalRow][6] = new ZebraPiece(animalRow, 6, player);
+
+        /* need to initialize all pawns */
+        for (int i =0; i<=6; i++){
+            board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
+        }
+    }
+
 
     public ArrayList<GamePiece> getRiverDwellers(int activePlayer){
         /* find all of the pieces this player has in the river - with the exception of the crocodile */
@@ -112,53 +105,47 @@ public class GameBoard{
             }
         }
     }
-
-    public void placePiece(GamePiece piece, int row, int col) {
-        /* places a piece in a specific square on the board and update it's row, column fields */
-        piece.row = row;
-        piece.column = col;
-        board[row][col] = piece;
+    
+    public boolean inBounds(int row, int col){
+        return row < NUM_ROWS && row >= 0 && col < NUM_COLUMNS && col >= 0;
     }
 
     public void movePiece(GamePiece piece, int row, int col) {
-        /* places a piece in a specific square on the board and update it's row, column fields */
-        /* sets original location of piece on the board to null */
-        board[piece.getRow()][piece.getColumn()] = null;
-        placePiece(piece, row, col);
+        if(inBounds(row, col)){
+            int startingRow = piece.getRow();
+            int startingCol = piece.getColumn();
+            piece.row = row;
+            piece.column = col;
+            board[row][col] = piece;
+            board[startingRow][startingCol] = null;
+        }
+
     }
 
+    /**
+        routine does NO error checking but assumes move is legal and updates the piece's info as well as set it's previous square location to NULL
+    */
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
-        /* routine does NO error checking but assumes move is legal and updates the piece's info
-           as well as set it's previous square location to NULL */
-
         GamePiece movingPiece = getGamePiece(fromRow,fromCol);
-        GamePiece destPiece = getGamePiece(toRow,toCol);
 
-        /* capture piece that is in the destination square */
-        if (destPiece != null) {
-            /* This piece will remain in the player's list (Player.playerPiece[]) of pieces so we
-            need to mark it as captured */
-            destPiece.setCaptured();
+        movePiece(movingPiece, toRow, toCol);
+        
+        if(movingPiece instanceof PawnPiece){
+            checkForSuperPawn(movingPiece);
         }
-        /* now move conquering piece onto the square */
-        placePiece(movingPiece,toRow,toCol);
-        this.board[fromRow][fromCol] = null;
-
-        // when move a piece, if it is pawn and in land in row 6, we should turn on the super pawn flag
-        if ( (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==1 && this.board[toRow][toCol].row == 6 ) ||
-        (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==2 && this.board[toRow][toCol].row == 0 ) ) {
-
-        PawnPiece pawnPiece = (PawnPiece) getGamePiece(toRow,toCol);
-        pawnPiece.superPawn = true;
-
+    }
+    
+    public void checkForSuperPawn(GamePiece piece){
+        //If the pawn reaches the other side of the board, it's a super pawn
+        if ( (piece.getPlayer() == 1 && piece.getRow() == 6 ) || (piece.getPlayer() == 2 && piece.getRow() == 0 )) {
+            PawnPiece pawn = (PawnPiece) piece;
+            pawn.superPawn = true;
         }
     }
 
     public void capturePiece(GamePiece pieceToBeCaptured){
-        pieceToBeCaptured.setCaptured();
-
         // remove the piece from the board
-        this.board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+        board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
 
     /* Helper routine to check if move is not out of board */

@@ -11,6 +11,7 @@ public abstract class GamePiece {
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
     public boolean captured;
+    public String pieceID;
 
     public GamePiece(){
     }
@@ -20,6 +21,12 @@ public abstract class GamePiece {
         column = c;
         player = p;
         captured = false;
+    }
+    
+    public GamePiece(int r, int c, String pieceID){
+        row = r;
+        column = c;
+        this.pieceID = pieceID;
     }
 
     @Override
@@ -45,16 +52,6 @@ public abstract class GamePiece {
 //    public String pieceIDString(){
 //        return " ";
 //    }
-
-    public void setCaptured(){
-        /* indicates that piece is captured and no longer in play on the board */
-        captured = true;
-    }
-
-    public boolean checkCaptured(){
-        /* returns a value indicating if piece is captured */
-        return captured;
-    }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
         return false;
@@ -309,47 +306,4 @@ public abstract class GamePiece {
         }
         else return false;
     }
-
-/*
-    // helper function for elephant move one step orthogonal
-    public boolean MoveOneStepOrthogonal(int distRow, int distCol)
-    {
-        if ((distRow== 1 && distCol == 0 ) || (distRow== 0 && distCol == 1 ))
-            return true;
-        else
-            return false;
-    }
-
-    // helper function for elephant move two steps orthogonal
-    public boolean MoveTwoStepOrthogonal(int distRow, int distCol)
-    {
-        if ((distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 2))
-            return true;
-        else
-            return false;
-    }
-
-    // helper routine for giraffe moves
-    public boolean moveOneStepAnyDirection(int distRow, int distCol){
-        if (distRow <=1 && distCol <=1 )
-            return true;
-        else return false;
-    }
-
-    // helper routine for giraffe to move two steps straight in any direction
-    public boolean moveTwoStepsStraightAnyDirection(int distRow, int distCol) {
-        if ((distRow == 0 && distCol ==2 ) || (distRow == 2 && distCol ==0))
-            return true;
-        else
-            return false;
-    }
-
-    // helper routine to move two steps diagonally in any direction
-    public boolean moveTwoStepsDiagonalAnyDirection(int distRow, int distCol){
-        if(distRow == 2 && distCol == 2)
-            return true;
-        else
-            return false;
-    }
- */
 }
