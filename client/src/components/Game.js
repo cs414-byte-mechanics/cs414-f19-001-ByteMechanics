@@ -39,8 +39,6 @@ class Game extends Component {
     componentDidMount() {
         this.checkCookie();
         this.connection = new WebSocket('ws://localhost:4444');
-        console.log(typeof this.connection)
-        
         this.connection.onopen = function () {
           console.log('Connected!');
         }.bind(this);
@@ -53,35 +51,31 @@ class Game extends Component {
         this.connection.onmessage = function (e) {
           console.log('Server: ' + e.data);
           let update = JSON.parse(e.data);
-          switch(update.communicationType) {
-              case "registrationSuccess":
-                  this.setState({logIn: update}, ()=>{console.log("Registration success")});
-                  this.setCookie(update);
-                  window.location.href = "/";
-                  break;
-              case "errorInvalidRegistration": alert(update.errorMessage); break;
-              case "loginSuccess":
-                  this.setState({logIn: update}, ()=>{console.log("Login success")});
-                  this.setCookie(update);
-                  window.location.href = "/";
-                  break;
-              case "errorInvalidLogin": alert(update.errorMessage); break;
-              case "logoutSuccess":
-                  this.setState({logIn: {}});
-                  this.setCookie({});
-                  window.location.href = "/";
-                  break;
-              case "logoutFailure": alert(update.errorMessage); break;
-
-
-          }
-          
+          this.handleUpdate(update)
         }.bind(this);
     
         this.connection.onclose = function (e) {
           console.log('Connection lost');
           //THIS FUNCTION IS CALLED ON REFRESH IN FIREFOX BUT NOT CHROME
         };
+    }
+
+    handleUpdate(update) {
+        switch(update.communicationType) {
+            case "registrationSuccess": this.updateLogin(update); break;
+            case "errorInvalidRegistration": alert(update.errorMessage); break;
+            case "loginSuccess": this.updateLogin(update); break;
+            case "errorInvalidLogin": alert(update.errorMessage); break;
+            case "logoutSuccess": this.updateLogin(update); break;
+            case "logoutFailure": alert(update.errorMessage); break;
+        }
+    }
+
+    updateLogin(update) {
+        let new_login_state = update.communicationType === "logoutSuccess" ? {} : update;
+        this.setState({logIn: new_login_state}, ()=>{console.log("success")});
+        this.setCookie(new_login_state);
+        window.location.href = "/";
     }
 
     setCookie(logIn, exdays=0) {
