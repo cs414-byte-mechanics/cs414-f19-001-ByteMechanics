@@ -33,8 +33,8 @@ public class Query {
         return false;
     }
    
-    public static String createValidatePasswordQuery(Action action){
-        return "SELECT * FROM users WHERE password = \"" + action.userPassword + "\";";
+    public static String createValidateLoginQuery(Action action){
+        return "SELECT * FROM users WHERE email = \"" + action.userEmail + "\" AND password =\"" + action.userPassword + "\";";
     }
    
 }

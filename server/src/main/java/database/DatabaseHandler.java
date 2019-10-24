@@ -75,22 +75,10 @@ public class DatabaseHandler {
         
         try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
         {
-            Statement stmt = con.createStatement();
-            Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(Query.createCheckEmailQuery(action));
-            
-            if(rs.next()){
-                ResultSet rs2 = stmt.executeQuery(Query.createValidatePasswordQuery(action));
-                
-                if(rs2.next()){
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-            
+            Statement validateLogin = con.createStatement();
+            ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
+            return (rs.next());
+
         } catch(Exception e){
             System.out.println(e);
             return false;
