@@ -336,7 +336,6 @@ public class GamePiece {
             return false;
     }
 
-
     public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
 
         int distRow = Math.abs(destRow - this.row);
@@ -351,20 +350,44 @@ public class GamePiece {
     }
 
     // helper function for elephant move one step orthogonal
-    public boolean elephantMoveOneStepOrthogonal(int distRow, int distCol)
+    public boolean MoveOneStepOrthogonal(int distRow, int distCol)
     {
         if ((distRow== 1 && distCol == 0 ) || (distRow== 0 && distCol == 1 ))
             return true;
         else
             return false;
     }
-
+/*
     // helper function for elephant move two steps orthogonal
-    public boolean elephantMoveTwoStepOrthogonal(int distRow, int distCol)
+    public boolean MoveTwoStepOrthogonal(int distRow, int distCol)
     {
         if ((distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 2))
             return true;
         else
             return false;
     }
+
+    // helper routine for giraffe moves
+    public boolean moveOneStepAnyDirection(int distRow, int distCol){
+        if (distRow <=1 && distCol <=1 )
+            return true;
+        else return false;
+    }
+
+    // helper routine for giraffe to move two steps straight in any direction
+    public boolean moveTwoStepsStraightAnyDirection(int distRow, int distCol) {
+        if ((distRow == 0 && distCol ==2 ) || (distRow == 2 && distCol ==0))
+            return true;
+        else
+            return false;
+    }
+
+    // helper routine to move two steps diagonally in any direction
+    public boolean moveTwoStepsDiagonalAnyDirection(int distRow, int distCol){
+        if(distRow == 2 && distCol == 2)
+            return true;
+        else
+            return false;
+    }
+ */
 }
