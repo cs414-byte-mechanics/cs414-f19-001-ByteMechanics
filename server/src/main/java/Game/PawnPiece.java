@@ -83,7 +83,7 @@ public class PawnPiece extends GamePiece {
                 }
 
                 // if destination cross the river
-                if (destRow > this.row && destRow > GameBoard.riverRow ) {
+                if (destRow > this.row && destRow > GameBoard.RIVER_ROW ) {
 
                     // calculate distance to destination
                     int distRow = destRow - this.row;
@@ -95,7 +95,7 @@ public class PawnPiece extends GamePiece {
                 }
 
                 // after landing across the river , set flag to true
-                if (this.row > GameBoard.riverRow ){
+                if (this.row > GameBoard.RIVER_ROW ){
                     crossedRiver = true;
                     //System.out.println("Crossed the river");
                 }
@@ -114,7 +114,7 @@ public class PawnPiece extends GamePiece {
                 }
 
                 // in backward, maybe he landed in river or down side of river , so crossedRiver flag is false as he is not yet super pawn
-                if (this.row <= GameBoard.riverRow && this.row >= 0)
+                if (this.row <= GameBoard.RIVER_ROW && this.row >= 0)
                     crossedRiver = false;
             }
             // just added - in case if player is not either pawn or super pawn
@@ -156,12 +156,12 @@ public class PawnPiece extends GamePiece {
                 }
 
                 // if destination is cross the river
-                if (destRow < this.row && destRow < GameBoard.riverRow ) {
+                if (destRow < this.row && destRow < GameBoard.RIVER_ROW ) {
                     return moveOneStepsStraightOrDiagonally(destRow, destCol, board);
                 }
 
                 // after landing across the river , set flag to true
-                if (this.row < GameBoard.riverRow ){
+                if (this.row < GameBoard.RIVER_ROW ){
                     crossedRiver = true;
                     //System.out.println("Crossed the river");
                 }
@@ -179,7 +179,7 @@ public class PawnPiece extends GamePiece {
                 }
 
                 // in backward, maybe he landed in river or down side of river , so crossedRiver flag is false as he is not yet super pawn
-                if (this.row >= GameBoard.riverRow && this.row <= 6)
+                if (this.row >= GameBoard.RIVER_ROW && this.row <= 6)
                     crossedRiver = false;
             }
         }

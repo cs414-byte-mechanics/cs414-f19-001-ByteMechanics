@@ -1,33 +1,24 @@
 package Game;
 
-import Game.GamePiece;
-import Game.PawnPiece;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.ListIterator;
 
 public class GameBoard{
-    static int riverRow = 3;  /* river is on row 3 in the board */
-    static int boardNumRows = 7;
-    static int boardNumCols = 7;
+    public static final int NUM_ROWS = 7;
+    public static final int NUM_COLUMNS = 7;
+    public static final int RIVER_ROW = 3;
 
-    /* playing board with 49 squares */
-    GamePiece board[][] = new GamePiece[boardNumRows][boardNumCols];
+    public GamePiece[][] board;
 
     public GameBoard(){
-     /* initialize every board square to NULL */
-        for (int i = 0; i < boardNumRows; i++){
-            for (int j = 0; j < boardNumCols; j++) {
-                board[i][j] = null;
-            }
-        }
-        /* this assumes the players have already set up the pieces that we're placing on the board */
+        board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
+    }
+    
+    public void loadGame(String[][] board){
     }
 
     public GamePiece getGamePiece(int r, int c){
-        if ((r >= 0) && (r < boardNumRows)
-                && (c >= 0) && (c < boardNumCols)){
+        if ((r >= 0) && (r < NUM_ROWS) && (c >= 0) && (c < NUM_COLUMNS)){
             return board[r][c];
         }
         else return null;
@@ -53,7 +44,7 @@ public class GameBoard{
         }
     }
 
-    public void InitGameBoard(){
+    public void initialize(){
         /* Create and setup game pieces for player 1 */
         placeInitialPieces(1);
 
@@ -66,10 +57,10 @@ public class GameBoard{
         String row = "";
         String boardStr = "--------------\n";
         String playPiece;
-        for (int i = boardNumRows - 1; i >= 0; i--){
+        for (int i = NUM_ROWS - 1; i >= 0; i--){
             /* traverse each row one at a time */
             row = "|";
-            for (int j = 0; j < boardNumCols; j++){
+            for (int j = 0; j < NUM_COLUMNS; j++){
                 /* traverse all columns in this row to see what pieces are on the board */
                 GamePiece piece = getGamePiece(i,j);
                 playPiece = (piece == null) ? " " : piece.pieceIDString();
@@ -87,8 +78,8 @@ public class GameBoard{
     public ArrayList<GamePiece> getRiverDwellers(int activePlayer){
         /* find all of the pieces this player has in the river - with the exception of the crocodile */
         ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
-        for (int i = 0; i < boardNumCols; i++){
-            GamePiece piece = getGamePiece(riverRow,i);
+        for (int i = 0; i < NUM_COLUMNS; i++){
+            GamePiece piece = getGamePiece(RIVER_ROW,i);
             if ((piece != null ) && (piece.player == activePlayer) && !(piece instanceof CrocodilePiece)){
                 /* add to list if it's active player's piece and not a crocodile */
                 riverDwellers.add(piece);

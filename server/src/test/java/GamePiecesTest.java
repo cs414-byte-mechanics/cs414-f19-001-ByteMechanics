@@ -22,7 +22,7 @@ public class GamePiecesTest {
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test

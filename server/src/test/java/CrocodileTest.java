@@ -8,9 +8,6 @@ import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,18 +18,12 @@ import java.util.Arrays;
 
 public class CrocodileTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
-        congoPlayer1 = new Player(1);
-        congoPlayer1.initPlayerPieces(congoGame);
-        congoPlayer2 = new Player(2);
-        congoPlayer2.initPlayerPieces(congoGame);
+        congoGame.initialize();
     }
 
     @Test
@@ -101,13 +92,10 @@ public class CrocodileTest {
         assertTrue(croc.performMove(3, 5, congoGame) == true);
         /* check that source location of crocodile is now empty */
         assertTrue(congoGame.getGamePiece(6,5) == null);
-        /* check that player array of pieces has crocodile */
-        assertTrue(congoPlayer2.playerPieces[5] != null);
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 3);
         assertTrue(croc.column == 5);
         assertTrue(croc.checkCaptured() == false);
-        assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
     }
 
     @Test

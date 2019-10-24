@@ -1,8 +1,5 @@
 package Game;
 
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -121,7 +118,7 @@ public class GamePiece {
 
     public Boolean inRiver(int r){
         /* determines if specific location is in the river */
-        if (r == GameBoard.riverRow)
+        if (r == GameBoard.RIVER_ROW)
             return true;
         else
             return false;
@@ -157,8 +154,8 @@ public class GamePiece {
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= GameBoard.riverRow)) ||
-                ((getRow() < destRow) && (destRow <= GameBoard.riverRow)))
+        if (((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW)))
             return true;
         else return false;
     }
