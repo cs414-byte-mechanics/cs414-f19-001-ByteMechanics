@@ -27,15 +27,12 @@ public class ElephantPiece extends GamePiece {
             return  false;
         }
 
-        int distRow = Math.abs(destRow - this.row );
-        int distCol = Math.abs(destCol - this.column);
-
         /* check if elephant moved one OR two steps straight - can moe and can capture*/
-        if (elephantMoveOneStepOrthogonal(distRow, distCol) || elephantMoveTwoStepOrthogonal(distRow, distCol))
+        if (orthogonalMove(this.row, this.column, destRow, destCol) &&
+            (manhattanDistance(this.row, this.column, destRow, destCol) ==1 || manhattanDistance(this.row, this.column, destRow, destCol) ==2))
 
             return squareEmptyOrCapturable(destRow, destCol, board);
         else
             return false;
-
     }
 }

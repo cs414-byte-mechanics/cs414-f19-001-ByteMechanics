@@ -37,7 +37,7 @@ public class GiraffeTest {
 
     @Test /* Added By Fari -- Test for Giraffe piece valid moves */
     public void testGiraffeP1SimpleMove(){
-        /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (1,0) */
+        /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (2,0) */
 
         GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
         GamePiece[][] congoBoard = congoGame.board;
