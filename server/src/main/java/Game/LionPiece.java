@@ -15,6 +15,61 @@ public class LionPiece extends GamePiece {
         return (player == 1) ? "l" : "L";
     }
 
+    // variable to store castle bound/border for each player
+    int rowLowerBound , rowUpperBound;
+
+    // helper function to check castle's ROW bound/border
+    public boolean checkCastleRowBound(int destRow, int rowUpperBound, int rowLowerBound){
+        if (destRow >= rowLowerBound && destRow <= rowUpperBound)
+            return true;
+        else
+            return false;
+    }
+
+    // helper function to check castle's COLUMN bound/border
+    public boolean checkCastleColumnBound(int destCol){
+        if (destCol >= 2 && destCol <=4)
+            return true;
+        else
+            return false;
+    }
+
+    // helper function to check if destination is in lion's own castle
+    public boolean DestinationIsInOwnCastle(int destRow, int destCol)
+    {
+        if (this.player == 1) {
+            rowLowerBound = 0;
+            rowUpperBound= 2;
+        }
+        else {
+            rowLowerBound = 4;
+            rowUpperBound = 6;
+        }
+
+        if (checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol))
+            return true;
+        else
+            return false;
+    }
+
+    // helper function to check if destination is in lion's opponent castle
+    public boolean DestinationIsInOpponentCastle(int destRow, int destCol){
+        if (this.player == 1)
+        {
+            rowLowerBound = 4;
+            rowUpperBound = 6;
+        }
+        else{
+            rowLowerBound = 0;
+            rowUpperBound = 2;
+        }
+
+        if (checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol))
+            return true;
+        else
+            return false;
+    }
+
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /*The Lion moves like a chess king, but may not leave his castle at his side of the river.
         In addition, lions can capture other lions if they `see' it, i.e.,
@@ -28,64 +83,30 @@ public class LionPiece extends GamePiece {
             return false;
         }
 
-         //check for out of castle for lion belongs to player1
-        if (this.player == 1){
-            // Is the destination out of castle for lion from player 1 ???
-            if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4){
+        // check if the destination located in own castle
+        if (DestinationIsInOwnCastle(destRow, destCol)){
 
-                /*Check for chess king move, to any arbitrary direction just by one step */
+            /*move one step to an empty square or capture if there is any opponent's piece  */
+            if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 1)
+                    ||(diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2))
 
-                /* calculate distance to destination */
-                int distRow = Math.abs(destRow - this.row);
-                int distCol = Math.abs(destCol - this.column);
-
-                /*move one step to an empty square or capture if there is any opponent's piece  */
-                if ( distRow <= 1 && distCol <=1 ){
-                    return squareEmptyOrCapturable(destRow, destCol, board); }
-            }
-            // if destination is in opponent's castle, it must be the other lion with a clear path between
-            if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4 ){
-
-                if (board[destRow][destCol] instanceof LionPiece){
-                    if (pathClear(destRow, destCol, board))
-                    {
-                        System.out.println("Game is Over");
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-            }
+                return squareEmptyOrCapturable(destRow, destCol, board);
         }
 
-        //check for out of castle for lion belongs to player1
-        if (this.player == 2){
-            // check if destination is not out of castle for player2
-            if (destRow >= 4 && destRow <= 6 && destCol >= 2 && destCol <= 4){
+        // check if destination is in opponent's lion castle
+        if (DestinationIsInOpponentCastle(destRow, destCol)){
 
-                /*Check for chess king move, to any arbitrary direction just by one step */
+            // if destination is in opponent's castle, it must be the other lion with a clear path between
+            if ((board[destRow][destCol] instanceof LionPiece)  && (pathClear(destRow, destCol, board) )){
 
-                /* calculate distance to destination */
-                int distRow = Math.abs(destRow - this.row);
-                int distCol = Math.abs(destCol - this.column);
-
-                /*move one step to an empty square or capture if there is any opponent's piece  */
-                if ( distRow <= 1 && distCol <=1 ){
-                    return squareEmptyOrCapturable(destRow, destCol, board); }
+                /* This condition never happens as every player has only one lion, but added to write extra tests */
+                if(this.player != board[destRow][destCol].player)
+                {
+                System.out.println(" Lion is captured and Game is Over");
+                return true;}
             }
-            // if destination is in other castle, it must be a lion with a clear path between
-            if (destRow >= 0 && destRow <= 2 && destCol >= 2 && destCol <= 4 ){
-
-                if (board[destRow][destCol] instanceof LionPiece){
-                    if (pathClear(destRow, destCol, board))
-                    {
-                        System.out.println("Game is Over");
-                        return true;
-                    }
-                    else
-                        return false;
-                } 
-            }
+            else
+                return false;
         }
 
         return false;
