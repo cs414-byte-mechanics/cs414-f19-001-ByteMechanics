@@ -5,19 +5,15 @@ import { Switch, Route, withRouter, Link } from "react-router-dom";
 import Home from './Home.js'
 import GameBoard from './GameBoard.js'
 import Form from './Form.js'
-import {attemptLogin, registerUser} from '../commObjects'
+import Header from './Header'
+import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
-import { GiLion as CongoIcon } from 'react-icons/gi'
 
 class Game extends Component {
     constructor(props){
         super(props);
         this.state = {
-          loggedOn: false,
-          player: {
-            name: "test",
-            email: "test@gmail.com"
-          },
+          logIn: {},
           games: [
             [
               ["G", "M", "E", "L", "E", "C", "Z"],
@@ -33,27 +29,52 @@ class Game extends Component {
 
         this.connection = null;
         this.sendObject = this.sendObject.bind(this);
-        this.updateScreen = this.updateScreen.bind(this);
+        this.logOut = this.logOut.bind(this);
+        this.isLoggedIn = this.isLoggedIn.bind(this);
+
+        this.setCookie = this.setCookie.bind(this);
+        this.checkCookie = this.checkCookie.bind(this);
     }
 
     componentDidMount() {
+        this.checkCookie();
         this.connection = new WebSocket('ws://localhost:4444');
         console.log(typeof this.connection)
         
         this.connection.onopen = function () {
           console.log('Connected!');
-          this.connection.send("Hello World!")
-
         }.bind(this);
 
         this.connection.onerror = function (error) {
-          console.log('WebSocket Error ' + error);
+          console.log('WebSocket Error: ' + error);
           alert("Cannot reach server!")
         }.bind(this);
     
         this.connection.onmessage = function (e) {
           console.log('Server: ' + e.data);
-          //let message = JSON.parse(e.data);
+          let update = JSON.parse(e.data);
+          switch(update.communicationType) {
+              case "registrationSuccess":
+                  this.setState({logIn: update}, ()=>{console.log("Registration success")});
+                  this.setCookie(update);
+                  window.location.href = "/";
+                  break;
+              case "errorInvalidRegistration": alert(update.errorMessage); break;
+              case "loginSuccess":
+                  this.setState({logIn: update}, ()=>{console.log("Login success")});
+                  this.setCookie(update);
+                  window.location.href = "/";
+                  break;
+              case "errorInvalidLogin": alert(update.errorMessage); break;
+              case "logoutSuccess":
+                  this.setState({logIn: {}});
+                  this.setCookie({});
+                  window.location.href = "/";
+                  break;
+              case "logoutFailure": alert(update.errorMessage); break;
+
+
+          }
           
         }.bind(this);
     
@@ -63,42 +84,61 @@ class Game extends Component {
         };
     }
 
-    sendObject(obj){
-      this.connection.send(JSON.stringify(obj));
+    setCookie(logIn, exdays=0) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = (exdays===0) ? "" : "expires="+d.toUTCString() + ";path=/";
+        document.cookie = "logIn=" + JSON.stringify(logIn) + ";" + expires;
     }
-    
-    updateScreen(){
-        this.setState({
-            loggedOn: true
-        })
+
+    getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     }
+
+    checkCookie() {
+        let logIn_str = this.getCookie("logIn");
+        if (logIn_str !== "") {
+            let logIn = JSON.parse(logIn_str);
+            this.setState({logIn: logIn});
+        }
+    }
+
+    sendObject(obj){ this.connection.send(JSON.stringify(obj)); }
+
+    logOut() { this.sendObject(attemptLogout) }
+
+    isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 
     render(){
 
         return(
             <div id="Application">
-                <div id="header">
-                    <div id="title">CongoOnline <CongoIcon id="icon"/></div>
-                    <div id="menu">
-                        <a className="nav-link" href="/">Home</a>
-                        <a className="nav-link right" href="/register">Register</a>
-                        <a className="nav-link right" href="/login">Log In</a>
-                    </div>
-                </div>
+                <Header sendObject={this.sendObject} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
                 <div id="page_container">
                     <Switch location={window.location}>
                         <Route
                             exact
                             path="/"
-                            render={(props) => <Home/>}
+                            render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName}/>}
                         />
                         <Route
                             path="/register"
-                            render={(props) => <Form {...props} title="Register an account" action={registerUser} updateScreen={this.updateScreen} sendToServer={this.sendObject}/>}
+                            render={(props) => <Form {...props} title="Register an account" action={registerUser} isLoggedIn={this.isLoggedIn} sendToServer={this.sendObject}/>}
                         />
                         <Route
                             path="/login"
-                            render={(props) => <Form {...props} title="Log in" action={attemptLogin} updateScreen={this.updateScreen} sendToServer={this.sendObject}/>}
+                            render={(props) => <Form {...props} title="Log in" action={attemptLogin} isLoggedIn={this.isLoggedIn} sendToServer={this.sendObject}/>}
                         />
                         <Route
                             path="/game"

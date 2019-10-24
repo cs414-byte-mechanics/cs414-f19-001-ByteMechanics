@@ -1,4 +1,5 @@
 import React from 'react';
+import Dashboard from "./Dashboard";
 
 class Home extends React.Component {
     constructor(props){
@@ -8,7 +9,10 @@ class Home extends React.Component {
     render () {
         return (
             <div id="home">
-                Welcome to CongoOnline!
+                {this.props.isLoggedIn()
+                    ? <Dashboard userName={this.props.userName}/>
+                    : "Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
+                }
             </div>
         );
     }
