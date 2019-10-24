@@ -6,27 +6,27 @@ public class Update {
 
     public final String objectType = "Update";
     public String communicationType;
-    public transient int communicationVersion;
-    public transient String matchID;
-    public transient String playerName;
-    public transient int pieceID;
+    public int communicationVersion;
+    public String matchID;
+    public String playerName;
+    public int pieceID;
     public int[][] updatedBoard;
-    public transient String whoseTurn;
-    public transient String successMessage;
-    public transient String userName;
-    public transient String userEmail;
-    public transient int[][] initialBoard;
-    public transient String matchBeginTime;
-    public transient String invitationFrom;
-    public transient String invitationTo;
-    public transient String invitationTime;
-    public transient String endCondition;
-    public transient String winnerName;
-    public transient String loserName;
-    public transient String matchEndTime;
-    public transient String[][] invitations;
-    public transient Object[][] matchesInProgress;
-    public transient String[][] matchesCompleted;
+    public String whoseTurn;
+    public String successMessage;
+    public String userName;
+    public String userEmail;
+    public int[][] initialBoard;
+    public String matchBeginTime;
+    public String invitationFrom;
+    public String invitationTo;
+    public String invitationTime;
+    public String endCondition;
+    public String winnerName;
+    public String loserName;
+    public String matchEndTime;
+    public String[][] invitations;
+    public Object[][] matchesInProgress;
+    public String[][] matchesCompleted;
 
     @Override
     public String toString() {
