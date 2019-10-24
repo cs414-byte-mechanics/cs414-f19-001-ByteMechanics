@@ -299,56 +299,7 @@ public class GamePiece {
         else return false;
     }
 
-    public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
-
-        //check for one/two steps straight down
-        int  distRow = Math.abs(destRow - this.row ) ;
-        int distCol = Math.abs(destCol - this.column) ;
-
-        if (( distRow == 2 && distCol == 0 ) || (distRow == 1 && distCol == 0 ))
-            // if destination is empty not occupied by any pieces
-            return (squareEmpty(destRow, destCol, board) && pathClear(destRow, destCol, board));
-        else
-            return false;
-    }
-
-    // move/capture side away
-    public Boolean moveSideAwayForSuperPawn (int destRow , int destCol, GamePiece[][] board) {
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        if (distRow == 0 && distCol == 1)
-            return squareEmptyOrCapturable(destRow, destCol, board);
-
-        else
-            return false;
-    }
-
-    // move/capture one step forward
-    public Boolean moveOneStepsStraightOrDiagonally(int destRow, int destCol, GamePiece[][] board){
-
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        if ( (distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
-            return squareEmptyOrCapturable(destRow, destCol, board);
-        else
-            return false;
-    }
-
-    public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
-
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        //check for one/two steps diagonally down
-        if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
-            // if destination is empty not occupied by any pieces
-            return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
-        else
-            return false;
-    }
-
+/*
     // helper function for elephant move one step orthogonal
     public boolean MoveOneStepOrthogonal(int distRow, int distCol)
     {
@@ -357,7 +308,7 @@ public class GamePiece {
         else
             return false;
     }
-/*
+
     // helper function for elephant move two steps orthogonal
     public boolean MoveTwoStepOrthogonal(int distRow, int distCol)
     {

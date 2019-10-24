@@ -75,23 +75,18 @@ public class MonkeyPiece extends GamePiece{
             int distRow = Math.abs(destR - curR);
 
             /* check for out of bounds moves */
-            if (destR > 6 || destR < 0) {
-                return false;
-            }
-            if (destC > 6 || destC < 0) {
-                return false;
-            }
+            if (GameBoard.validBoardLocation(destR, destC)) {
 
-            /* test if monkey's FIRST move is a single square in any direction */
-            if (moveCounter == 0) {
-                if ((distCol <= 1) && (distRow <= 1)) {
+                /* test if monkey's FIRST move is a single square in any direction */
+                if (moveCounter == 0) {
+                    if ((distCol <= 1) && (distRow <= 1)) {
                 /* Monkey is moving a single square in any direction.  Destination square must be empty.
                 If it contains opponents piece or player's piece, move is invalid. */
-                    return squareEmpty(destR, destC, board);
+                        return squareEmpty(destR, destC, board);
+                    }
                 }
-            }
 
-            /* otherwise first move (and all subsequent moves) is > a distance of 1 square */
+                /* otherwise first move (and all subsequent moves) is > a distance of 1 square */
             /* To be a valid move it must ve a vertical, horizontal or diagonal move of 2 squares and jump over
             an opponent's piece which will then be captured.
             */
@@ -112,7 +107,7 @@ public class MonkeyPiece extends GamePiece{
                     if ((squareEmpty(jumpSquareRow, jumpSquareCol, board)) ||
                             !(squareEmpty(destR, destC, board)) ||
                             (jumpedPiece.getPlayer() == getPlayer()) ||
-                            (captured[jumpSquareRow][jumpSquareCol])){
+                            (captured[jumpSquareRow][jumpSquareCol])) {
                         /* if square being jumped is empty OR contains a piece from the same player OR
                         piece has already been jumped then this is not a valid move sequence.
                         */
@@ -126,6 +121,9 @@ public class MonkeyPiece extends GamePiece{
                 moveCounter = moveCounter + 1;
                 curR = destR;  /* move monkey forward to continue checking move sequence */
                 curC = destC;
+            }
+            else  /* if destination is out of board return false*/
+                return false;
 
 
         }
