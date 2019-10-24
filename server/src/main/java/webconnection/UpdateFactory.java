@@ -7,8 +7,7 @@ public class UpdateFactory
 {
     private DatabaseHandler db;
 
-    public UpdateFactory()
-    {
+    public UpdateFactory() {
         db = new DatabaseHandler();
     }
 
@@ -17,13 +16,13 @@ public class UpdateFactory
         switch(action.communicationType)
         {
             case "requestMoves": return this.buildUpdateBoard();
-            case "registerUser": return this.buildRegistrationSuccess(action);
+            case "registerUser": return this.registerUser(action);
             case "requestBeginNewMatch": return this.buildBeginNewMatch();
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
             case "quitMatch": return this.buildEndMatch();
             case "unregisterUser": return null;
-            case "attemptLogin": return this.buildLoginSuccess(action);
+            case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
             default:
                 System.err.println("Invalid action communication type.");
@@ -31,8 +30,7 @@ public class UpdateFactory
         }
     }
 
-    private Update buildUpdateBoard()
-    {
+    private Update buildUpdateBoard() {
         Update update = new Update();
         update.communicationType = "updateBoard";
         update.matchID = "dummy_match_ID";
@@ -42,20 +40,19 @@ public class UpdateFactory
         update.updatedBoard[0][0] = 1;
         update.updatedBoard[0][1] = 2;
         update.whoseTurn = "opponent";
+
         return update;
     }
 
-    private Update buildRegistrationSuccess(Action action)
-    {
+    private Update registerUser(Action action) {
         try {
+            db.registerUser(action);
             Update update = new Update();
+            update.communicationType = "registrationSuccess";
+            update.userEmail = action.userEmail;
+            update.userName = action.userName;
+            update.successMessage = "User account has been successfully created.";
 
-            if(db.performDBSearch(action)) {
-                update.communicationType = "registrationSuccess";
-                update.userEmail = action.userEmail;
-                update.userName = action.userName;
-                update.successMessage = "User account has been successfully created.";
-            } else throw new Exception();
             return update;
 
         } catch (Exception e){
@@ -65,16 +62,15 @@ public class UpdateFactory
         }
     }
 
-    private Update logIn(Action action)
-    {
+    private Update logIn(Action action) {
         try {
             Update update = new Update();
-            if(db.performDBSearch(action)) {
-                update.communicationType = "loginSuccess";
-                update.userEmail = action.userEmail;
-                update.userName = action.userName;
-            } else throw new Exception();
+            update.userName = db.attemptLogin(action);
+            update.userEmail = action.userEmail;
+            update.communicationType = "loginSuccess";
+
             return update;
+
         } catch (Exception e){
             System.out.println(e);
             //Return error update "errorInvalidRegistration"
@@ -82,23 +78,14 @@ public class UpdateFactory
         }
     }
 
-    private Update buildLogoutSuccess(Action action)
-    {
-        try {
-            Update update = new Update();
-            if(db.performDBSearch(action)) {
-                update.communicationType = "logoutSuccess";
-            } else throw new Exception();
-            return update;
-        } catch (Exception e){
-            System.out.println(e);
-            //Return error update "errorInvalidLogin"
-            return null;
-        }
+    private Update buildLogoutSuccess(Action action) {
+        Update update = new Update();
+        update.communicationType = "logoutSuccess";
+        update.successMessage = "User has successfully logged out.";
+        return update;
     }
 
-    private Update buildBeginNewMatch()
-    {
+    private Update buildBeginNewMatch() {
         Update update = new Update();
         update.communicationType = "beginNewMatch";
         update.matchID = "dummy_math_ID";
@@ -110,8 +97,7 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildInvitation()
-    {
+    private Update buildInvitation() {
         Update update = new Update();
         update.communicationType = "invitation";
         update.invitationFrom = "player1";
@@ -120,8 +106,7 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildEndMatch()
-    {
+    private Update buildEndMatch() {
         Update update = new Update();
         update.communicationType = "endMatch";
         update.matchID = "dummy_match_ID";
