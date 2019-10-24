@@ -34,7 +34,7 @@ public class GiraffePiece extends GamePiece {
                     || diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2) {
 
                 return squareEmpty(destRow, destCol, board);
-            } else
+            }else
                 return false;
         }
         else

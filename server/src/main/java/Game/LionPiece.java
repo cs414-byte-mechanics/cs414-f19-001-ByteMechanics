@@ -1,7 +1,5 @@
 package Game;
 
-//import Game.GameBoard;
-
 public class LionPiece extends GamePiece {
     /* initial constructor*/
     public LionPiece() {
