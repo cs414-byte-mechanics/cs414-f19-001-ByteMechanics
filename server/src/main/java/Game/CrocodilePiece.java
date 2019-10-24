@@ -26,42 +26,42 @@ public class CrocodilePiece extends GamePiece {
             */
 
         /* check for out of bounds moves */
-        if (destRow > 6 || destRow < 0 || destCol > 6 || destCol < 0) {
-            return false;
-        }
+        if (GameBoard.validBoardLocation(destRow, destCol)) {
 
-        int distCol = Math.abs(destCol - this.column);
-        int distRow = Math.abs(destRow - this.row);
-        /* Crocodile moves 1 square in any direction.  */
-        if ((distCol <= 1 ) && (distRow <= 1)){
+            int distCol = Math.abs(destCol - this.column);
+            int distRow = Math.abs(destRow - this.row);
+            /* Crocodile moves 1 square in any direction.  */
+            if ((distCol <= 1) && (distRow <= 1)) {
             /* Crocodile is moving a single square in any direction.
             Destination square must be empty or contain opponents piece.  If it contains
             opponents piece then it will be captured. */
-            return squareEmptyOrCapturable(destRow, destCol, board);
-        }
+                return squareEmptyOrCapturable(destRow, destCol, board);
+            }
 
-        /* Check if move is along the river */
-        if (inRiver() & inRiver(destRow)){
-            /* crocodile and destination location are in river */
-            /* are we going upriver (+1) or downriver (-1) */
-            int riverDir =  (this.column < destCol) ? 1 : -1;
+            /* Check if move is along the river */
+            if (inRiver() & inRiver(destRow)) {
+                /* crocodile and destination location are in river */
+                /* are we going upriver (+1) or downriver (-1) */
+                int riverDir = (this.column < destCol) ? 1 : -1;
 
-            /* check for blocking pieces along the river */
-            if (!(pathClear(destRow, destCol, board)))
+                /* check for blocking pieces along the river */
+                if (!(pathClear(destRow, destCol, board)))
                     return false;
 
-            /* check that destination square is open or contains opponent's piece */
-            return squareEmptyOrCapturable(destRow, destCol, board);
-        }
+                /* check that destination square is open or contains opponent's piece */
+                return squareEmptyOrCapturable(destRow, destCol, board);
+            }
 
-        /* Check if this is a longer move DIRECTLY toward the river */
-        if (moveTowardRiver(destRow, destCol)){
-            /* check for blocking pieces along the river */
-            if (!(pathClear(destRow, destCol, board)))
-                return false;
+            /* Check if this is a longer move DIRECTLY toward the river */
+            if (moveTowardRiver(destRow, destCol)) {
+                /* check for blocking pieces along the river */
+                if (!(pathClear(destRow, destCol, board)))
+                    return false;
             /* We've determined that path is clear, so Destination square must be empty or contain opponents piece.
             If it contains opponents piece then it will be captured. */
-            return squareEmptyOrCapturable(destRow, destCol, board);
+                return squareEmptyOrCapturable(destRow, destCol, board);
+            } else
+                return false;
         }
         else
             return false;
