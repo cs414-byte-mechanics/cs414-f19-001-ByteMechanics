@@ -56,13 +56,14 @@ public class GamePiece {
         return false;
     }
 
-    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board){
-        /* This method allows any piece other than monkey to handle recieving it's move specifications
+    /**
+    This method allows any piece other than monkey to handle recieving it's move specifications
         either using an array or individual integer values to indicate the square locations it is traversing.
-         */
-        /* Since all non-monkey pieces can only move one square at a time, the array can never contain more than
+        
+        Since all non-monkey pieces can only move one square at a time, the array can never contain more than
         one square location.
-         */
+    */
+    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board){
         if (destRow.size()>1 || destCol.size()>1)
             return false;
         else
@@ -78,19 +79,11 @@ public class GamePiece {
     }
 
     public boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
-        /* Returns true if this is an orthogonal move, false if not */
-        if ((fromRow == toRow) || (fromCol == toCol)){
-            return true;
-        }
-        else return false;
+        return fromRow == toRow || fromCol == toCol;
     }
 
     public boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
-        /* Returns true if this is a diagonal (45 degree) move, false if not */
-        if (Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol)){
-            return true;
-        }
-        else return false;
+        return Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol);
     }
 
     public int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
@@ -114,39 +107,22 @@ public class GamePiece {
     }
 
     public Boolean inRiver(int r){
-        /* determines if specific location is in the river */
-        if (r == GameBoard.RIVER_ROW)
-            return true;
-        else
-            return false;
+        return r == GameBoard.RIVER_ROW;
     }
 
     public Boolean squareEmptyOrCapturable(int row, int col, GamePiece[][] board){
-        if (board[row][col] == null || board[row][col].player != this.player){
-            /* square is open or contains opponent's piece */
-            return true;
-        }
-        else {
-            /* player tried landing on a square s/he already occupies */
-            return false;
-        }
+        return squareEmpty(row, col, board) || board[row][col].player != this.player;
     }
 
     public Boolean squareEmpty(int row, int col, GamePiece[][] board){
-        if (board[row][col] == null){
-            /* square is open */
-            return true;
-        }
-        else {
-            /* player tried landing on a square already occupied */
-            return false;
-        }
+        return board[row][col] == null;
     }
 
+    /**
+    determines if the game piece is going directly towards the river - e.g. a vertical move
+    returns false if it's crossing the river or moving away from the river or diagonally
+    */
     public Boolean moveTowardRiver(int destRow, int destCol){
-        /* determines if the game piece is going directly towards the river - e.g. a vertical move */
-        /* returns false if it's crossing the river or moving away from the river or diagonally */
-
         /* check for vertical move */
         if (destCol != getColumn()) return false;
 
@@ -192,21 +168,21 @@ public class GamePiece {
         }
     }
 
-    /* This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
+    /**
+    Determines if the move to (destRow, destCol) is a legal move for this piece
+
+    It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
+    If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
+    they will drown and be captured.
+    
+    This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
     moves.  If there is another piece in the destination square of the move, then it is captured and removed from
     the board.
     NOTE - Monkey should use performMoveSeq()
      */
     public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
-        /* Method determines if the move to (destRow, destCol) is a legal move for this piece */
-
-        /* It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
-        If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
-        they will drown and be captured.
-         */
         int activePlayer = this.player;
-        ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
-        riverDwellers = congoBoard.getRiverDwellers(activePlayer);
+        ArrayList<GamePiece> riverDwellers = congoBoard.getRiverDwellers(activePlayer);
 
         if (ValidateMove(destRow, destCol, congoBoard.board)){
             if (!(squareEmpty(destRow, destCol, congoBoard.board))){
