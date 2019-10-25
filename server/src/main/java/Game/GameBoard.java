@@ -53,9 +53,6 @@ public class GameBoard{
     public void loadGame(String[][] board){
         //this will be sent all the information it needs to create a new game with info from the database
     }
-=======
-    public void loadGame(String[][] board){
-    }
 
     public GamePiece getGamePiece(int row, int col){
         if(inBounds(row, col)){
