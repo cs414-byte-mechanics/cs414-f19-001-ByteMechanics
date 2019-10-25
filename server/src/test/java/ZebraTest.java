@@ -55,12 +55,9 @@ public class ZebraTest {
         assertTrue(zebra.performMove(4, 5, congoGame) == true);
         /* check that source location is now empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
-<<<<<<< HEAD
         /* check that player array of pieces has zebra and it's not captured */
         assertTrue(congoPlayer2.playerPieces[6] != null);
         //assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
@@ -78,13 +75,10 @@ public class ZebraTest {
         assertTrue(zebra.performMove(4, 5, congoGame) == true);
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
-<<<<<<< HEAD
         /* check that player array of pieces has zebra */
         assertTrue(congoPlayer2.playerPieces[6] != null);
         /* check that player array of pieces has crocodile marked as captured */
         //assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
