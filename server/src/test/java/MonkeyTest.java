@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,12 +19,10 @@ import java.util.Arrays;
 
 public class MonkeyTest {
     GameBoard congoGame;
-    Player congoPlayer;
 
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
-        congoPlayer = new Player(1);
         congoGame = new GameBoard();
         congoGame.initialize();
     }
@@ -136,6 +138,7 @@ public class MonkeyTest {
         assertTrue(congoGame.getGamePiece(3,4) == null);  /* pawn2 has been captured */
 //        assertTrue(pawn1.checkCaptured());  /* piece has been marked captured */
 //        assertTrue(pawn2.checkCaptured());  /* piece has been marked captured */
+<<<<<<< HEAD
     }
 
     @Test
@@ -172,6 +175,8 @@ public class MonkeyTest {
         assertTrue(congoGame.getGamePiece(5,1) instanceof MonkeyPiece);  /* monkey is now in square 5,1 */
         assertTrue(congoGame.getGamePiece(4,1) instanceof PawnPiece);  /* pawn has been moved */
 
+=======
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test

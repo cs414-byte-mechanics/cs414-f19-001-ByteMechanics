@@ -9,9 +9,6 @@ import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;

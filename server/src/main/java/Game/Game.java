@@ -1,8 +1,5 @@
 package Game;
 
-import Game.GameBoard;
-import Game.Player;
-
 public class Game {
 
     public void createNewGame(){

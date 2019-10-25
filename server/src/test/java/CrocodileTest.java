@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,18 +19,19 @@ import java.util.Arrays;
 
 public class CrocodileTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
         congoGame = new GameBoard();
         congoGame.initialize();
+<<<<<<< HEAD
         congoPlayer1 = new Player(1);
         congoPlayer1.initPlayerPieces(congoGame);
         congoPlayer2 = new Player(2);
         congoPlayer2.initPlayerPieces(congoGame);
+=======
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
@@ -95,13 +100,15 @@ public class CrocodileTest {
         assertTrue(croc.performMove(3, 5, congoGame) == true);
         /* check that source location of crocodile is now empty */
         assertTrue(congoGame.getGamePiece(6,5) == null);
-        /* check that player array of pieces has crocodile */
-        assertTrue(congoPlayer2.playerPieces[5] != null);
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 3);
         assertTrue(croc.column == 5);
+<<<<<<< HEAD
        // assertTrue(croc.checkCaptured() == false);
         //assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
+=======
+     //   assertTrue(croc.checkCaptured() == false);
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test

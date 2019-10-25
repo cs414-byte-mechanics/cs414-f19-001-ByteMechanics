@@ -1,26 +1,29 @@
 package Game ;
 
+<<<<<<< HEAD
+=======
+import Game.GamePiece;
+import Game.GiraffePiece;
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GiraffeTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // before any test, we need to initiate players and Gameboard
     @Before
     public void initialize(){
-        // initialize players
-        congoPlayer1 = new Player(1);
-        congoPlayer2 = new Player(2);
-
         // initialize board
         congoGame = new GameBoard();
         congoGame.initialize();

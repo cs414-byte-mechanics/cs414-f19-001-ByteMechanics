@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,18 +19,19 @@ import java.util.Arrays;
 
 public class ZebraTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
         congoGame = new GameBoard();
         congoGame.initialize();
+<<<<<<< HEAD
         congoPlayer1 = new Player(1);
         congoPlayer1.initPlayerPieces(congoGame);
         congoPlayer2 = new Player(2);
         congoPlayer2.initPlayerPieces(congoGame);
+=======
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
@@ -61,9 +66,12 @@ public class ZebraTest {
         assertTrue(zebra.performMove(4, 5, congoGame) == true);
         /* check that source location is now empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
+<<<<<<< HEAD
         /* check that player array of pieces has zebra and it's not captured */
         assertTrue(congoPlayer2.playerPieces[6] != null);
         //assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
+=======
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
@@ -81,10 +89,13 @@ public class ZebraTest {
         assertTrue(zebra.performMove(4, 5, congoGame) == true);
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
+<<<<<<< HEAD
         /* check that player array of pieces has zebra */
         assertTrue(congoPlayer2.playerPieces[6] != null);
         /* check that player array of pieces has crocodile marked as captured */
         //assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
+=======
+>>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
