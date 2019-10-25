@@ -1,46 +1,24 @@
 package Game;
 
-<<<<<<< HEAD
 import java.util.*;
 
-public class GameBoard{
-    public static final int RIVER_ROW = 3;
-    public static final int NUM_ROWS = 7;
-    public static final int NUM_COLUMNS = 7;
-=======
-import java.util.ArrayList;
-import java.util.ListIterator;
-
-public class GameBoard{
-    public static final int NUM_ROWS = 7;
-    public static final int NUM_COLUMNS = 7;
-    public static final int RIVER_ROW = 3;
-
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     public GamePiece[][] board;
 
     public GameBoard(){
         board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
     }
-<<<<<<< HEAD
 
     /**
     Places pieces on the board during initial setup
     */
-=======
-    
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     public void initialize(){
         placePiecesForPlayer(1);
         placePiecesForPlayer(2);
     }
     
-<<<<<<< HEAD
     /**
     Returns a visual represenation of the state of the board
     */
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     public String toString(){
         String row = "";
         String boardStr = "--------------\n";
@@ -63,7 +41,7 @@ public class GameBoard{
         return boardStr;
     }
     
-<<<<<<< HEAD
+
     /**
     Loads an existing game
     @param string representation of board
@@ -71,7 +49,7 @@ public class GameBoard{
     public void loadGame(String[][] board){
         //this will be sent all the information it needs to create a new game with info from the database
     }
-=======
+
     public void loadGame(String[][] board){
     }
 
@@ -101,8 +79,6 @@ public class GameBoard{
             board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
         }
     }
-
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 
     /**
     Returns the player at the given position. Returns null if position is out of bounds
@@ -147,10 +123,7 @@ public class GameBoard{
     */
     public ArrayList<GamePiece> getRiverDwellers(int activePlayer){
         ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
-<<<<<<< HEAD
-        
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
+
         for (int i = 0; i < NUM_COLUMNS; i++){
             GamePiece piece = getGamePiece(RIVER_ROW,i);
             if ((piece != null ) && (piece.player == activePlayer) && !(piece instanceof CrocodilePiece)){
@@ -175,16 +148,12 @@ public class GameBoard{
         }
     }
     
-<<<<<<< HEAD
     /**
     Checks if the given position (row, col) is valid on the board
     @param row of desired square
     @param column of desired square
     */
     public static boolean inBounds(int row, int col){
-=======
-    public boolean inBounds(int row, int col){
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         return row < NUM_ROWS && row >= 0 && col < NUM_COLUMNS && col >= 0;
     }
 
@@ -203,7 +172,6 @@ public class GameBoard{
             board[row][col] = piece;
             board[startingRow][startingCol] = null;
         }
-<<<<<<< HEAD
     }
 
     /**
@@ -213,13 +181,6 @@ public class GameBoard{
     @param col of piece to move
     @param row of square to move to
     @param col of square to move to
-=======
-
-    }
-
-    /**
-        routine does NO error checking but assumes move is legal and updates the piece's info as well as set it's previous square location to NULL
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     */
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
         GamePiece movingPiece = getGamePiece(fromRow,fromCol);
@@ -231,13 +192,10 @@ public class GameBoard{
         }
     }
     
-<<<<<<< HEAD
     /**
     Checks if the pawn needs to be declared a super pawn
     @param piece to check for super pawn
     */
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     public void checkForSuperPawn(GamePiece piece){
         //If the pawn reaches the other side of the board, it's a super pawn
         if ( (piece.getPlayer() == 1 && piece.getRow() == 6 ) || (piece.getPlayer() == 2 && piece.getRow() == 0 )) {
@@ -250,10 +208,6 @@ public class GameBoard{
     Captures the given piece and removes it from the board
     */
     public void capturePiece(GamePiece pieceToBeCaptured){
-<<<<<<< HEAD
-=======
-        // remove the piece from the board
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
 }
