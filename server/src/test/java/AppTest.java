@@ -27,7 +27,7 @@ public class AppTest {
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test

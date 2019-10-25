@@ -4,14 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
-
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,7 +22,7 @@ public class CrocodileTest {
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
         congoPlayer1 = new Player(1);
         congoPlayer1.initPlayerPieces(congoGame);
         congoPlayer2 = new Player(2);
@@ -106,12 +100,8 @@ public class CrocodileTest {
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 3);
         assertTrue(croc.column == 5);
-<<<<<<< HEAD
-        assertTrue(croc.checkCaptured() == false);
-        assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
-=======
-     //   assertTrue(croc.checkCaptured() == false);
->>>>>>> Remove capture and Refactor movePiece
+       // assertTrue(croc.checkCaptured() == false);
+        //assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
     }
 
     @Test

@@ -1,20 +1,11 @@
 package Game ;
 
-import Game.GamePiece;
-import Game.GiraffePiece;
-import jdk.jfr.StackTrace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
-
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,7 +24,7 @@ public class LionTest {
 
         // initialize board
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test/*Added by Fari -- test for lion valid move */

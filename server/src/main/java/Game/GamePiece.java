@@ -102,7 +102,7 @@ public abstract class GamePiece {
         return false;
     }
 
-    public static boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
+    public boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
         int manhattanDist = manhattanDistance(fromRow,fromCol,toRow,toCol);
         if ((orthogonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 1)
                 || (diagonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 2)) {
@@ -137,8 +137,8 @@ public abstract class GamePiece {
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= GameBoard.riverRow)) ||
-                ((getRow() < destRow) && (destRow <= GameBoard.riverRow)))
+        if (((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW)))
             return true;
         else return false;
     }
