@@ -50,96 +50,6 @@ public class MonkeyPiece extends GamePiece{
         return null;
     }
 
-//    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board) {
-//    /* A monkey has two basic move types - the second of which can be chained together to form a sequence of captures.
-//            1) It can move a single step in any direction similar to a King piece in chess
-//                but without the capability to capture the opponent's piece.
-//            2) It can also jump over an adjacent piece in an orthogonal or diagonal direction.
-//                - This results in the capture of the opponent's piece.
-//                - The square landed on after jumping & capturing must be empty.
-//                - These jump/capture moves can be chained subsequent to the following rules -
-//                    * A given piece can only be jumped once.
-//                    * Successive jumps can be in different directions.
-//                    * A given square can be visited more than once.
-//                    * Captured pieces are removed after the entire sequence of jumps is completed.
-//            */
-//
-//        Boolean[][] captured = new Boolean[7][7];
-//
-//        /* fill with false which indicates the piece hasn't been captured yet.  true indicates it's captured. */
-//        for (int i = 0; i < 7; i++){
-//            for (int j = 0; j < 7; j++){
-//                captured[i][j] = false;
-//            }
-//        }
-//        int curR = getRow();
-//        int curC = getColumn();
-//
-//        int numMoves = destRow.size();
-//        int moveCounter = 0;
-//
-//        while (moveCounter < numMoves) {
-//            /* get location piece is moving to */
-//            int destR = destRow.get(moveCounter);
-//            int destC = destCol.get(moveCounter);
-//            int distCol = Math.abs(destC - curC);
-//            int distRow = Math.abs(destR - curR);
-//
-//            /* check for out of bounds moves */
-//            if (GameBoard.validBoardLocation(destR, destC)) {
-//
-//                /* test if monkey's FIRST move is a single square in any direction */
-//                if (moveCounter == 0) {
-//                    if ((distCol <= 1) && (distRow <= 1)) {
-//                /* Monkey is moving a single square in any direction.  Destination square must be empty.
-//                If it contains opponents piece or player's piece, move is invalid. */
-//                        return squareEmpty(destR, destC, board);
-//                    }
-//                }
-//
-//                /* otherwise first move (and all subsequent moves) is > a distance of 1 square */
-//            /* To be a valid move it must ve a vertical, horizontal or diagonal move of 2 squares and jump over
-//            an opponent's piece which will then be captured.
-//            */
-//                int manhattanDist = manhattanDistance(curR, curC, destR, destC);
-//
-//                /* A horizontal or vertical move of 2 squares will have manhattanDist = 2.
-//                A diagonal move will have manhattanDist = 4.
-//                */
-//                if (!((manhattanDist == 2) || (manhattanDist == 4))) {
-//                    return false;
-//                } else {
-//                    /* check that piece we are jumping is opponent's piece so that we can capture it */
-//                    /* get coordinates of square being jumped */
-//                    int jumpSquareRow = curR + (destR - curR) / 2;
-//                    int jumpSquareCol = curC + (destC - curC) / 2;
-//                    GamePiece jumpedPiece = board[jumpSquareRow][jumpSquareCol];
-//
-//                    if ((squareEmpty(jumpSquareRow, jumpSquareCol, board)) ||
-//                            !(squareEmpty(destR, destC, board)) ||
-//                            (jumpedPiece.getPlayer() == getPlayer()) ||
-//                            (captured[jumpSquareRow][jumpSquareCol])) {
-//                        /* if square being jumped is empty OR contains a piece from the same player OR
-//                        piece has already been jumped then this is not a valid move sequence.
-//                        */
-//                        return false;
-//                    } else {
-//                        /* move is valid.  Mark the jumped piece as captured and continue checking move sequence */
-//                        captured[jumpSquareRow][jumpSquareCol] = true;
-//                    }
-//                }
-//
-//                moveCounter = moveCounter + 1;
-//                curR = destR;  /* move monkey forward to continue checking move sequence */
-//                curC = destC;
-//            }
-//            else  /* if destination is out of board return false*/
-//                return false;
-//
-//
-//        }
-//        return true;
-//    }
     public Boolean[][] initializeCaptureArray(){
         Boolean[][] captured = new Boolean[7][7];  /* array tracks which pieces have been jumped and can't be jumped twice */
 
@@ -214,5 +124,6 @@ public class MonkeyPiece extends GamePiece{
         }
 
     }
+
 }
 
