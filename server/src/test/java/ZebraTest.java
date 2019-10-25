@@ -6,10 +6,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
-<<<<<<< HEAD
-=======
-
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,13 +21,6 @@ public class ZebraTest {
     public void initialize() {
         congoGame = new GameBoard();
         congoGame.initialize();
-<<<<<<< HEAD
-        congoPlayer1 = new Player(1);
-        congoPlayer1.initPlayerPieces(congoGame);
-        congoPlayer2 = new Player(2);
-        congoPlayer2.initPlayerPieces(congoGame);
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
