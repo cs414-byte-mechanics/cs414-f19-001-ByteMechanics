@@ -21,13 +21,6 @@ public class CrocodileTest {
     public void initialize() {
         congoGame = new GameBoard();
         congoGame.initialize();
-<<<<<<< HEAD
-        congoPlayer1 = new Player(1);
-        congoPlayer1.initPlayerPieces(congoGame);
-        congoPlayer2 = new Player(2);
-        congoPlayer2.initPlayerPieces(congoGame);
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
@@ -99,12 +92,8 @@ public class CrocodileTest {
         /* check that GamePiece got updated correctly */
         assertTrue(croc.row == 3);
         assertTrue(croc.column == 5);
-<<<<<<< HEAD
        // assertTrue(croc.checkCaptured() == false);
         //assertTrue(congoPlayer1.playerPieces[12].checkCaptured());
-=======
-     //   assertTrue(croc.checkCaptured() == false);
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
