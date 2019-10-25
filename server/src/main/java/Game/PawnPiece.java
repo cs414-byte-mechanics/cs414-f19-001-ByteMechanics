@@ -14,11 +14,8 @@ public class PawnPiece extends GamePiece {
     }
 
     public PawnPiece(int row, int col, int player){
-//        super(row, col, player);
-        this.row = row;
-        this.column = col;
-        this.player = player;
-        this.superPawn = false;
+        super(row, col, player);
+        superPawn = false;
 //        this.crossedRiver = false;
     }
 
@@ -60,7 +57,7 @@ public class PawnPiece extends GamePiece {
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
         /* A pawn moves and captures one step straight or diagonally forward. When past the river, it can also move (but not capture) one or two steps straight backward (without jumping).*/
 
-        if (GameBoard.validBoardLocation(destRow, destCol))
+        if (GameBoard.inBounds(destRow, destCol))
         {
             /* pawn can move one step straight/diagonally forward- it can also capture*/
             if (forwardMove(this.row, destRow) && (manhattanDistance(this.row, this.column, destRow, destCol) == 1 || ( diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol)==2 )))
