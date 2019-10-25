@@ -134,7 +134,6 @@ public class MonkeyTest {
         assertTrue(congoGame.getGamePiece(3,4) == null);  /* pawn2 has been captured */
 //        assertTrue(pawn1.checkCaptured());  /* piece has been marked captured */
 //        assertTrue(pawn2.checkCaptured());  /* piece has been marked captured */
-<<<<<<< HEAD
     }
 
     @Test
@@ -170,9 +169,6 @@ public class MonkeyTest {
         assertTrue(congoGame.getGamePiece(6,1) == null);  /* monkey has moved and left square empty */
         assertTrue(congoGame.getGamePiece(5,1) instanceof MonkeyPiece);  /* monkey is now in square 5,1 */
         assertTrue(congoGame.getGamePiece(4,1) instanceof PawnPiece);  /* pawn has been moved */
-
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     }
 
     @Test
