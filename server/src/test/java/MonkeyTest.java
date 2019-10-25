@@ -145,4 +145,51 @@ public class MonkeyTest {
         assertTrue(pawn2.checkCaptured());  /* piece has been marked captured */
     }
 
+    @Test
+    public void testMonkeyCantCaptureAdjacentSquare() {
+        /* Start with initial board */
+        MonkeyPiece monkey = (MonkeyPiece) congoGame.getGamePiece(6, 1);
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        movesRow.add(5);
+        movesCol.add(0);
+
+        /* move to 5,0 which should be blocked by this player's pawn */
+        /* Can't capture it's own piece */
+        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        /* move the opponent's elephant to 5,2 */
+        congoGame.movePiece(0,2,5,2);  /* move elephant from 0,2 to 5,2 so it is capturable with a jump but not a 1 step move */
+
+        movesRow.set(0,5);
+        movesCol.set(0,2);
+        /* Can't capture opponent's elephant */
+        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+
+        /* now move pawn forward so monkey can move */
+        GamePiece pawn = congoGame.getGamePiece(5, 1);
+        movesRow.set(0,4);
+        movesCol.set(0,1);
+        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));  /* this should move pawn forward 1 step */
+        /* now monkey can move forward to empty space */
+        movesRow.set(0,5);
+        movesCol.set(0,1);
+        assertTrue(monkey.ValidateMove(movesRow, movesCol, congoGame.board));
+        assertTrue(monkey.performMove(movesRow, movesCol, congoGame));
+        assertTrue(congoGame.getGamePiece(6,1) == null);  /* monkey has moved and left square empty */
+        assertTrue(congoGame.getGamePiece(5,1) instanceof MonkeyPiece);  /* monkey is now in square 5,1 */
+        assertTrue(congoGame.getGamePiece(4,1) instanceof PawnPiece);  /* pawn has been moved */
+
+    }
+
+    @Test
+    public void testMonkeyCantJumpSamePlayersPiece() {
+        /* Start with initial board */
+        MonkeyPiece monkey = (MonkeyPiece) congoGame.getGamePiece(6, 1);
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        movesRow.add(4);
+        movesCol.add(3);
+
+        assertTrue(monkey.performMove(movesRow, movesCol, congoGame) == false);
+    }
 }

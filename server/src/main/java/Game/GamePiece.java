@@ -24,8 +24,8 @@ public abstract class GamePiece {
 
     @Override
     public String toString() {
-        return ("pieceID: "+pieceIDString()+"\nrow: "+row+"\ncolumn: "+column+"\nplayer: "
-                +player+"\ncaptured: "+captured+"\n");
+        return ("pieceID: "+pieceIDString()+"  row: "+row+"  column: "+column+"  player: "
+                +player+"  captured: "+captured+"\n");
     }
 
     public int getRow(){
@@ -73,7 +73,7 @@ public abstract class GamePiece {
             return ValidateMove(destRow.get(0), destCol.get(0), board);
     }
 
-    protected GamePiece jumpCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GameBoard board){
+    protected GamePiece jumpCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GamePiece[][] board){
         /* Returns the object of a Gamepiece that was captured by jumping over it.
         Monkey is the only piece that captures by jumping.  All other pieces capture by landing on the square.
         So, this method returns NULL for any pieces that don't capture with a jump move.
@@ -81,7 +81,7 @@ public abstract class GamePiece {
         return null;
     }
 
-    public boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
+    public static boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
         /* Returns true if this is an orthogonal move, false if not */
         if ((fromRow == toRow) || (fromCol == toCol)){
             return true;
@@ -89,7 +89,7 @@ public abstract class GamePiece {
         else return false;
     }
 
-    public boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
+    public static boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
         /* Returns true if this is a diagonal (45 degree) move, false if not */
         if (Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol)){
             return true;
@@ -97,7 +97,7 @@ public abstract class GamePiece {
         else return false;
     }
 
-    public int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
+    public static int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
         /* Returns the manhattan distance associated with a moves coordinates */
         return (Math.abs(fromRow - toRow) + Math.abs(fromCol - toCol));
     }
@@ -110,6 +110,15 @@ public abstract class GamePiece {
                 manhattanDistance(fromRow, fromCol, toRow, toCol) == 4)
             return true;
         return false;
+    }
+
+    public static boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
+        int manhattanDist = manhattanDistance(fromRow,fromCol,toRow,toCol);
+        if ((orthogonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 1)
+                || (diagonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 2)) {
+            return true;
+        }
+        else return false;
     }
 
     public Boolean inRiver(){
@@ -276,7 +285,7 @@ public abstract class GamePiece {
                     int toCol = destCol.get(moveCounter);
 
                     /* check if we jumped a piece that needs to be captured */
-                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard);
+                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard.board);
                     if (jumpedPiece != null) {
                         /* it should never be null for a monkey */
                         congoBoard.capturePiece(jumpedPiece);
