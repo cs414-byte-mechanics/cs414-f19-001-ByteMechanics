@@ -149,9 +149,7 @@ public class GameBoard{
         (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==2 && this.board[toRow][toCol].row == 0 ) ) {
 
             PawnPiece pawnPiece = (PawnPiece) getGamePiece(toRow,toCol);
-            System.out.println(pawnPiece.row);
             pawnPiece.superPawn = true;
-
         }
     }
 
