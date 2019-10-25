@@ -7,11 +7,8 @@ public abstract class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
-<<<<<<< HEAD
-=======
     public boolean captured;
     public String pieceID;
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 
     public GamePiece(){}
 
@@ -47,14 +44,7 @@ public abstract class GamePiece {
         return player;
     }
 
-<<<<<<< HEAD
     public abstract String pieceIDString();
-
-=======
-    public String pieceIDString(){
-        return " ";
-    }
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
         return false;
@@ -193,10 +183,6 @@ public abstract class GamePiece {
         }
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
     /**
     Determines if the move to (destRow, destCol) is a legal move for this piece
 
@@ -297,8 +283,6 @@ public abstract class GamePiece {
         }
         else return false;
     }
-<<<<<<< HEAD
-=======
 
     public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
 
@@ -358,5 +342,4 @@ public abstract class GamePiece {
         else
             return false;
     }
->>>>>>> c7b58d0539f2dd4115144a153c81334d34b0947c
 }
