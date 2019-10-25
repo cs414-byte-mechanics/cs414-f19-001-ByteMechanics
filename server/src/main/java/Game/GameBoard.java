@@ -148,9 +148,8 @@ public class GameBoard{
         if ( (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==1 && this.board[toRow][toCol].row == 6 ) ||
         (this.board[toRow][toCol] instanceof PawnPiece && this.board[toRow][toCol].player==2 && this.board[toRow][toCol].row == 0 ) ) {
 
-        PawnPiece pawnPiece = (PawnPiece) getGamePiece(toRow,toCol);
-        pawnPiece.superPawn = true;
-
+            PawnPiece pawnPiece = (PawnPiece) getGamePiece(toRow,toCol);
+            pawnPiece.superPawn = true;
         }
     }
 
