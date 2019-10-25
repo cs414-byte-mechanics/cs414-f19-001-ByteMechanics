@@ -53,34 +53,7 @@ public class GameBoard{
     public void loadGame(String[][] board){
         //this will be sent all the information it needs to create a new game with info from the database
     }
-
-    public GamePiece getGamePiece(int row, int col){
-        if(inBounds(row, col)){
-            return board[row][col];
-        }
-        else return null;
-    }
-
-    private void placePiecesForPlayer(int player){
-        /* places all pieces on one side of the board for a specific player */
-        int animalRow = (player == 1) ? 0 : 6;
-        int pawnRow = (player == 1) ? 1 : 5;
-
-        /* Create and setup animal game pieces for player */
-        board[animalRow][0] = new GiraffePiece(animalRow, 0, player);
-        board[animalRow][1] = new MonkeyPiece(animalRow,1,player);
-        board[animalRow][2] = new ElephantPiece(animalRow,2,player);
-        board[animalRow][3] = new LionPiece(animalRow,3,player);
-        board[animalRow][4] = new ElephantPiece(animalRow,4,player);
-        board[animalRow][5] = new CrocodilePiece(animalRow,5, player);
-        board[animalRow][6] = new ZebraPiece(animalRow, 6, player);
-
-        /* need to initialize all pawns */
-        for (int i =0; i<=6; i++){
-            board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
-        }
-    }
-
+   
     /**
     Returns the player at the given position. Returns null if position is out of bounds
     @param row of position
