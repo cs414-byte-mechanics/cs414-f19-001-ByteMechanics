@@ -1,7 +1,5 @@
 package Game;
 
-import Game.GameBoard;
-
 import java.util.concurrent.SynchronousQueue;
 
 public class PawnPiece extends GamePiece {
