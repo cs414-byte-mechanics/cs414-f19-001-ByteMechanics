@@ -177,6 +177,9 @@ public class GameBoard{
         }
     }
 
+    /**
+    Captures the given piece and removes it from the board
+    */
     public void capturePiece(GamePiece pieceToBeCaptured){
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
