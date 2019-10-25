@@ -18,7 +18,7 @@ public class ZebraPiece extends GamePiece {
         /* A zebra moves and captures other pieces exactly the same as a knight piece in chess */
 
         /* check for out of bounds moves */
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
 
         /* zebra moves 2 squares laterally followed by 1 vertically OR
            1 square vertically followed by 2 laterally.  Total distance moved should be 3 squares in an 'L' shape.

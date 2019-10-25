@@ -10,29 +10,21 @@ public abstract class GamePiece {
     public int row;
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
-    public boolean captured;
-    public String pieceID;
 
-    public GamePiece(){
-    }
+    public GamePiece(){}
 
     public GamePiece(int r, int c, int p){
         row = r;
         column = c;
         player = p;
-        captured = false;
-    }
-    
-    public GamePiece(int r, int c, String pieceID){
-        row = r;
-        column = c;
-        this.pieceID = pieceID;
     }
 
-    @Override
+    /**
+    Returns information about the state of the piece including row, column, pieceID, and player
+    */
     public String toString() {
         return ("pieceID: "+pieceIDString()+"  row: "+row+"  column: "+column+"  player: "
-                +player+"  captured: "+captured+"\n");
+                +player+"\n");
     }
 
     public int getRow(){
@@ -49,9 +41,6 @@ public abstract class GamePiece {
 
     public abstract String pieceIDString();
 
-//    public String pieceIDString(){
-//        return " ";
-//    }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
         return false;
@@ -79,14 +68,23 @@ public abstract class GamePiece {
         return null;
     }
 
+    /**
+    Checks if the move from (fromRow, fromCol) to (toRow, toCol) is an orthogonal move. A move in any direction except diagonal is considered orthogonal
+    */
     public boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
         return fromRow == toRow || fromCol == toCol;
     }
 
+    /**
+    Checks if the move from (fromRow, fromCol) to (toRow, toCol) is a diagonal move
+    */
     public boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
         return Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol);
     }
 
+    /**
+    Returns the manhattan distance from (fromRow, fromCol) to (toRow, toCol). Manhattan distance is the distance between two positions measured along axes at a right angle
+    */
     public static int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
         /* Returns the manhattan distance associated with a moves coordinates */
         return (Math.abs(fromRow - toRow) + Math.abs(fromCol - toCol));

@@ -19,7 +19,7 @@ public class ElephantPiece extends GamePiece {
            The move to the second square is a jump and cannot be blocked by interposing pieces of either color. */
 
         /* check for out of bound moves */
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
 
             /* check if elephant moved one OR two steps straight - can moe and can capture*/
             if (orthogonalMove(this.row, this.column, destRow, destCol) &&

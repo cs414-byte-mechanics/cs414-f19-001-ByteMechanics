@@ -30,21 +30,14 @@ public class PawnPiece extends GamePiece {
         /* A pawn moves and captures one step straight or diagonally forward.
         When past the river, it can also move (but not capture) one or two steps straight backward (without jumping).*/
 
-        // check for out of move bounds
-        if (destRow < 0 || destRow > 6)
+        if(!GameBoard.inBounds(destRow, destCol)){
             return false;
-
-        if (destCol < 0 || destCol > 6)
-            return false;
+        }
 
         // for pawns belongs to player1
         if (this.player == 1) {
 
-            // if s/he is a super pawn ???
-            //System.out.println("****"+superPawn+this.row+this.column);
-
             if (superPawn == true) {
-                System.out.println("I am SUPER pawn1 !!!!!");
                 // like a normal pawn can move/capture one step straight or diagonally forward
                 if (destRow > this.row) {
 
@@ -103,8 +96,7 @@ public class PawnPiece extends GamePiece {
                 // check if landing across the river promoted him as a super pawn
                 if (this.row == 6){
                     superPawn = true;
-                    System.out.println("Promoted as super Pawn1");
-                        }
+                }
 
                 //if s/he crossed the river he can move one/steps straight backward -- NO JUMP and NO CAPTURE
                 if (crossedRiver = true && destRow < this.row ) {
@@ -122,11 +114,7 @@ public class PawnPiece extends GamePiece {
         }
 
         if (this.player == 2) {
-            // if s/he is a super pawn ???
-//            System.out.println("SuperPawn flag"+superPawn);
-
             if (superPawn == true) {
-                System.out.println("I am SUPER pawn2!!");
 
                 // like a normal pawn, super pawn can move/capture one step straight or diagonally forward
                 if (destRow < this.row) {
@@ -140,7 +128,6 @@ public class PawnPiece extends GamePiece {
 
                 // as a superPawn s/he can move/capture one square sideAway
                 if (destRow == this.row) {
-                    System.out.println("can move side");
                     return moveSideAwayForSuperPawn(destRow, destCol, board);
                 }
             }
