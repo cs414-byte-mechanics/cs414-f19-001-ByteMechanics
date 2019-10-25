@@ -110,9 +110,9 @@ public class PawnPiece extends GamePiece {
             // just added - in case if player is not either pawn or super pawn
 //            return false;
         }
-
-
-    /*helper routine to check sideAway move*/
+    }
+    
+        /*helper routine to check sideAway move*/
     public boolean sideMove(int currRow , int destRow){
         if (destRow - currRow  == 0 )
             return true;
@@ -134,11 +134,11 @@ public class PawnPiece extends GamePiece {
     }
 
     public boolean pastRiver(int currRow){
-                // as a superPawn s/he can move/capture one square sideAway
-                if (destRow == this.row) {
-                    return moveSideAwayForSuperPawn(destRow, destCol, board);
-                }
-            }
+        // as a superPawn s/he can move/capture one square sideAway
+        if (destRow == this.row) {
+            return moveSideAwayForSuperPawn(destRow, destCol, board);
+        }
+      
 
             // if s/he is not super pawn
             if (superPawn == false) {
@@ -176,7 +176,6 @@ public class PawnPiece extends GamePiece {
                 if (this.row >= GameBoard.RIVER_ROW && this.row <= 6)
                     crossedRiver = false;
             }
-        }
         if(this.player == 2 && currRow < GameBoard.riverRow)
             return true;
 
@@ -213,8 +212,6 @@ public class PawnPiece extends GamePiece {
         }
         else
             return false;
-
-        return false;
     }
 }
 
