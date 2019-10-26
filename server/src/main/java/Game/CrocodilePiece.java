@@ -26,7 +26,7 @@ public class CrocodilePiece extends GamePiece {
             */
 
         /* check for out of bounds moves */
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
 
             int distCol = Math.abs(destCol - this.column);
             int distRow = Math.abs(destRow - this.row);

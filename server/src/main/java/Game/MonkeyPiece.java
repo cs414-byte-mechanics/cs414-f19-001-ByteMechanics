@@ -71,7 +71,7 @@ public class MonkeyPiece extends GamePiece{
         for (int i = 0; i < numMoves; i++){
             toRow = destRow.get(i);
             toCol = destCol.get(i);
-            if (GameBoard.validBoardLocation(toRow, toCol)){
+            if (GameBoard.inBounds(toRow, toCol)){
                 GamePiece piece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, board);
                 if ((piece != null) && (captured[piece.getRow()][piece.getColumn()] == false)){
                     /* move is a legal jump capture over an opponent's piece which hasn't been jumped yet
@@ -89,7 +89,7 @@ public class MonkeyPiece extends GamePiece{
     }
 
     public boolean validate1StepMove(int destRow, int destCol, GamePiece[][] board) {
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
             if (validMove1SquareAnyDirection(getRow(), getColumn(), destRow, destCol)) {
                 return squareEmpty(destRow, destCol, board);
             }

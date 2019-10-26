@@ -1,38 +1,23 @@
 package Game ;
 
-import Game.GamePiece;
-import Game.GiraffePiece;
-import jdk.jfr.StackTrace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
-
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GiraffeTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // before any test, we need to initiate players and Gameboard
     @Before
     public void initialize(){
-        // initialize players
-        congoPlayer1 = new Player(1);
-        congoPlayer2 = new Player(2);
-
         // initialize board
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test /* Added By Fari -- Test for Giraffe piece valid moves */

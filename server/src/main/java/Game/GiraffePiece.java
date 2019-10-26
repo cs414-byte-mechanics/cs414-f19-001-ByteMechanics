@@ -21,7 +21,7 @@ public class GiraffePiece extends GamePiece {
         In addition it has the king's move, without the right to capture with it.*/
 
         /* check for out of bound moves */
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
 
             /* check if Giraffe moved/jumped by two steps straight OR diagonal and it MUST capture*/
             if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2)

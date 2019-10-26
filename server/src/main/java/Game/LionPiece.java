@@ -74,7 +74,7 @@ public class LionPiece extends GamePiece {
         if there is a vertical or diagonal line with no pieces between the two lions, the lion may jump to the other lion and capture it.*/
 
         /* check for out of bound moves */
-        if (GameBoard.validBoardLocation(destRow, destCol)) {
+        if (GameBoard.inBounds(destRow, destCol)) {
 
             // check if the destination located in own castle
             if (DestinationIsInOwnCastle(destRow, destCol)) {
