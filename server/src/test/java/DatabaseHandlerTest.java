@@ -16,30 +16,30 @@ public class DatabaseHandlerTest {
     }
    
     //@Test
-    public void testRegisterUser() throws SQLException {
+    public void testRegisterUser() throws Exception {
         Action action = new Action();
         action.communicationType = "registerUser";
         action.userEmail = "dummy@gmail.com";
         action.userName = "dummy";
         action.userPassword = "pass123";
-        assertTrue(dbh.performDBSearch(action));
+        dbh.registerUser(action);
         
         Action action2 = new Action();
         action2.communicationType = "unregisterUser";
         action2.userName = "dummy";
-        assertTrue(dbh.performDBSearch(action2));
+        dbh.unregisterUser(action2);
 
     }
     
     //@Test
-    public void testRegisterUserTwice() throws SQLException {
+    public void testRegisterUserTwice() throws Exception {
         //Add first
         Action action = new Action();
         action.communicationType = "registerUser";
         action.userEmail = "dummy@gmail.com";
         action.userName = "dummy";
         action.userPassword = "pass123";
-        assertTrue(dbh.performDBSearch(action));
+        dbh.registerUser(action);
         
         //Try to add second
         Action action2 = new Action();
@@ -47,36 +47,36 @@ public class DatabaseHandlerTest {
         action2.userEmail = "dummy@gmail.com";
         action2.userName = "dummy";
         action2.userPassword = "pass123";
-        assertFalse(dbh.performDBSearch(action2));
+        dbh.registerUser(action2);
         
         //Remove first
         Action action3 = new Action();
         action3.communicationType = "unregisterUser";
         action3.userName = "dummy";
-        assertTrue(dbh.performDBSearch(action3));
+        dbh.unregisterUser(action3);
     }
     
     //@Test
-    public void testUserLogin() throws SQLException {
+    public void testUserLogin() throws Exception {
         //Add user
         Action action2 = new Action();
         action2.communicationType = "registerUser";
         action2.userEmail = "hello@world.com";
         action2.userName = "java";
         action2.userPassword = "fortcollins";
-        assertTrue(dbh.performDBSearch(action2));
+        dbh.registerUser(action2);
     
         //Attempt to login
         Action action = new Action();
         action.communicationType = "attemptLogin";
         action.userEmail = "hello@world.com";
         action.userPassword = "fortcollins";
-        assertTrue(dbh.performDBSearch(action));
+        dbh.attemptLogin(action);
         
         //Remove entry
         Action action3 = new Action();
         action3.communicationType = "unregisterUser";
         action3.userName = "java";
-        assertTrue(dbh.performDBSearch(action3));
+        dbh.unregisterUser(action3);
     }
 }

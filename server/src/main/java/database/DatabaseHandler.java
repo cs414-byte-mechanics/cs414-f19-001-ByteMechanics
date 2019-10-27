@@ -5,96 +5,42 @@ import webconnection.*;
 
 public class DatabaseHandler {
 
-    public boolean performDBSearch(Action action) throws SQLException{
-   
-        if(action.communicationType.equals("registerUser")){
-            
-            return registerUser(action);
-            
-        } else if(action.communicationType.equals("unregisterUser")){
-            
-            return unregisterUser(action);
-            
-        } else if(action.communicationType.equals("attemptLogin")){
-            
-            return attemptLogin(action);
-            
+    private final String database = "jdbc:mysql://faure/bytemechanics";
+    private final String user = "jeskea";
+    private final String password = "831702229";
+
+    public void registerUser(Action action) throws Exception {
+        Connection con = DriverManager.getConnection(database, user, password);
+        Statement checkCredentials = con.createStatement();
+        ResultSet rs = checkCredentials.executeQuery(Query.createCountExistingCredentialsQuery(action));
+        if (rs.next() && rs.getInt("total") == 0) {
+            Statement registerUser = con.createStatement();
+            if(registerUser.executeUpdate(Query.createRegisterUserQuery(action)) != 1 ) throw new Exception("User not registered.");
         } else {
-            return true;
+            throw new Exception("User already in system.");
         }
     }
+
+    public void unregisterUser(Action action) throws Exception {
     
-    /**
-    * @return: true if user is registered correctly, false otherwise
-    */
-    public boolean registerUser(Action action){
-        
-        try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
-        {
-            Statement stmt = con.createStatement();
-            Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(Query.createCheckEmailQuery(action));
-            ResultSet rs2 = stmt2.executeQuery(Query.createCheckUsernameQuery(action));
-            
-            if(!rs.next() && !rs2.next()){
-                Statement stmt3 = con.createStatement();
-                ResultSet rs3 = stmt.executeQuery(Query.createRegisterUserQuery(action));
-                return true;
-            } else {
-                return false;
-            }
-            
-        } catch(Exception e){
-            System.out.println(e);
-            return false;
-        }
+        Connection con = DriverManager.getConnection(database, user, password);
+        Statement unregisterUser = con.createStatement();
+        int rowsAffected = unregisterUser.executeUpdate(Query.createUnregisterUser(action));
+
+        if (rowsAffected < 1) throw new Exception("No users removed from system.");
     }
-    
+
     /**
-    * @return: true if user was in database and was removed, or if user wasn't in database
-    */
-    public boolean unregisterUser(Action action){
-    
-        try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
-        {
-            Statement stmt = con.createStatement();
-            Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(Query.createUnregisterUser(action));
-            return true;
-            
-        } catch(Exception e){
-            System.out.println(e);
-            return false;
-        }
-    }
-    
-    /**
-    * @return: true if user email exists and password matches, false otherwise
-    */
-    public boolean attemptLogin(Action action){
+     * @return: username of user logging in
+     */
+    public String attemptLogin(Action action) throws Exception {
         
-        try(Connection con = DriverManager.getConnection("jdbc:mysql://faure/bytemechanics", "jeskea", "831702229"))
-        {
-            Statement stmt = con.createStatement();
-            Statement stmt2 = con.createStatement();
-            ResultSet rs = stmt.executeQuery(Query.createCheckEmailQuery(action));
-            
-            if(rs.next()){
-                ResultSet rs2 = stmt.executeQuery(Query.createValidatePasswordQuery(action));
-                
-                if(rs2.next()){
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-            
-        } catch(Exception e){
-            System.out.println(e);
-            return false;
-        }
-        
+        Connection con = DriverManager.getConnection(database, user, password);
+        Statement validateLogin = con.createStatement();
+        ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
+
+        if (!rs.next()) throw new Exception("No user exists with this email and password.");
+
+        return rs.getString("username");
     }
 } 

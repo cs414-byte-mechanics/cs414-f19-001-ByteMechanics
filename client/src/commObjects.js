@@ -11,8 +11,14 @@ let attemptLogin = {
     "userEmail": "",
     "userPassword": ""
 }
+let attemptLogout = {
+    "communicationType": "attemptLogout",
+    "communicationVersion": 1,
+    "userEmail": ""
+}
 
 export {
          registerUser,
-         attemptLogin
+         attemptLogin,
+         attemptLogout
        };

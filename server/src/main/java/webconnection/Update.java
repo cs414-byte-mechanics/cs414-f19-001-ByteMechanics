@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Update {
 
-    public String objectType;
+    public final String objectType = "Update";
     public String communicationType;
     public int communicationVersion;
     public String matchID;

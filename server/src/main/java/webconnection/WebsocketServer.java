@@ -16,6 +16,8 @@ public class WebsocketServer extends WebSocketServer {
     private static int TCP_PORT = 4444;
     private Set<WebSocket> conns;
     private static Gson gson = new GsonBuilder().serializeNulls().create();
+  
+    UpdateFactory updateFactory = new UpdateFactory();
 
     public WebsocketServer() {
         super(new InetSocketAddress(TCP_PORT));
@@ -36,11 +38,7 @@ public class WebsocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         Action clientAction = handleClientAction(message);
-        UpdateFactory updateMaker = new UpdateFactory(clientAction, conn);
-        for(WebSocket client: updateMaker.getSendTo())
-        {
-            sendUpdateToClient(client, updateMaker.getUpdate());
-        }
+        sendUpdateToClient(conn, updateFactory.getUpdate(clientAction));
     }
 
     @Override
