@@ -4,14 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
-
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,18 +15,12 @@ import java.util.Arrays;
 
 public class ZebraTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // Setup to be done before every test in TestPlan
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
-        congoPlayer1 = new Player(1);
-        congoPlayer1.initPlayerPieces(congoGame);
-        congoPlayer2 = new Player(2);
-        congoPlayer2.initPlayerPieces(congoGame);
+        congoGame.initialize();
     }
 
     @Test
@@ -68,8 +56,8 @@ public class ZebraTest {
         /* check that source location is now empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra and it's not captured */
-        assertTrue(congoPlayer2.playerPieces[6] != null);
-        assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
+       // assertTrue(congoPlayer2.playerPieces[6] != null);
+        //assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
@@ -88,9 +76,9 @@ public class ZebraTest {
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra */
-        assertTrue(congoPlayer2.playerPieces[6] != null);
+       // assertTrue(congoPlayer2.playerPieces[6] != null);
         /* check that player array of pieces has crocodile marked as captured */
-        assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
+        //assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
         /* check that GamePiece got updated correctly */
         assertTrue(zebra.row == 4);
         assertTrue(zebra.column == 5);
@@ -105,12 +93,12 @@ public class ZebraTest {
         /* now move zebra into river */
         zebra.performMove(3, 3, congoGame);
         assertTrue(zebra.inRiver());
-        assertTrue(zebra.checkCaptured() == false);
+        //assertTrue(zebra.checkCaptured() == false);
         /* now move a pawn so that zebra ends 2 consecutive turns in the river and drowns */
         PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,0);
         pawn.performMove(2, 1, congoGame);
         /* check if zebra was drown (captured) and removed from the board */
-        assertTrue(zebra.checkCaptured());
+       // assertTrue(zebra.checkCaptured());
         assertTrue(congoGame.getGamePiece(3,3) == null);
     }
 
@@ -135,7 +123,6 @@ public class ZebraTest {
         assertTrue(zebra.ValidateMove(5, 4, congoGame.board));
         assertTrue(zebra.performMove(movesRow, movesCol, congoGame));  /* now can move since pawn is opponent's */
         assertTrue(congoGame.getGamePiece(6, 6) == null);  /* zebra has moved */
-        assertTrue(pawn.checkCaptured());  /* piece has been marked captured */
     }
 
 }

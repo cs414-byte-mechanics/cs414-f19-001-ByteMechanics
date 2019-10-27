@@ -4,12 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
-
 import static org.junit.Assert.*;
-import Game.GamePiece;
-import Game.GameBoard;
 
 /*
   This class contains tests for the helper methods in the GamePiece class in the Congo game app.
@@ -22,7 +18,7 @@ public class GamePiecesTest {
     @Before
     public void initialize() {
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test
