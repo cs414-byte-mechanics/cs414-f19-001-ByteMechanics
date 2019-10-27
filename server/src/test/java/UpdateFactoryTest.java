@@ -18,6 +18,8 @@ public class UpdateFactoryTest
 {
     WebsocketServer wss;
     WebSocket dummyClient;
+    UpdateFactory updateMaker = new UpdateFactory();
+
 
     @Before
     public void initialize() {
@@ -62,12 +64,12 @@ public class UpdateFactoryTest
         };
     }
 
+
     @Test
     public void testBuildUpdateBoard()
     {
         Action action = new Action();
         action.communicationType = "requestMoves";
-        UpdateFactory updateMaker = new UpdateFactory(action, null);
         Update expected = new Update();
         expected.communicationType = "updateBoard";
         expected.matchID = "dummy_match_ID";
@@ -77,7 +79,7 @@ public class UpdateFactoryTest
         expected.updatedBoard[0][0] = 1;
         expected.updatedBoard[0][1] = 2;
         expected.whoseTurn = "opponent";
-        assertEquals(updateMaker.getUpdate(),expected);
+        assertEquals(updateMaker.getUpdate(action),expected);
     }
 
     //implement once we are able to connect to database from off campus
@@ -92,7 +94,6 @@ public class UpdateFactoryTest
     {
         Action action = new Action();
         action.communicationType = "requestBeginNewMatch";
-        UpdateFactory updateMaker = new UpdateFactory(action, null);
         Update expected = new Update();
         expected.communicationType = "beginNewMatch";
         expected.matchID = "dummy_math_ID";
@@ -101,7 +102,7 @@ public class UpdateFactoryTest
         expected.initialBoard[0][1] = 2;
         expected.whoseTurn = "opponent";
         expected.matchBeginTime = "dummy_match_begin_time";
-        assertEquals(updateMaker.getUpdate(),expected);
+        assertEquals(updateMaker.getUpdate(action),expected);
     }
 
     @Test
@@ -109,13 +110,12 @@ public class UpdateFactoryTest
     {
         Action action = new Action();
         action.communicationType = "invitation";
-        UpdateFactory updateMaker = new UpdateFactory(action, null);
         Update expected = new Update();
         expected.communicationType = "invitation";
         expected.invitationFrom = "player1";
         expected.invitationTo = "player2";
         expected.invitationTime = "dummy_time";
-        assertEquals(updateMaker.getUpdate(),expected);
+        assertEquals(updateMaker.getUpdate(action),expected);
     }
 
     @Test
@@ -123,7 +123,6 @@ public class UpdateFactoryTest
     {
         Action action = new Action();
         action.communicationType = "quitMatch";
-        UpdateFactory updateMaker = new UpdateFactory(action, null);
         Update expected = new Update();
         expected.communicationType = "endMatch";
         expected.matchID = "dummy_match_ID";
@@ -131,21 +130,7 @@ public class UpdateFactoryTest
         expected.winnerName = "player1";
         expected.loserName = "player2";
         expected.matchEndTime = "dummy_end_time";
-        assertEquals(updateMaker.getUpdate(),expected);
-    }
-
-    @Test
-    public void testBuildLoginSuccess()
-    {
-        Action action = new Action();
-        action.communicationType = "attemptLogin";
-        UpdateFactory updateMaker = new UpdateFactory(action, null);
-        Update expected = new Update();
-        expected.communicationType = "loginSuccess";
-        expected.invitations = null;
-        expected.matchesInProgress = null;
-        expected.matchesCompleted = null;
-        assertEquals(updateMaker.getUpdate(),expected);
+        assertEquals(updateMaker.getUpdate(action),expected);
     }
 
 }

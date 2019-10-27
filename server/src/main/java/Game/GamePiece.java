@@ -1,8 +1,5 @@
 package Game;
 
-import Game.GameBoard;
-import Game.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,21 +8,28 @@ public abstract class GamePiece {
     public int column;
     public int player;  /* set to 1 or 2 to indicate which player owns the piece */
     public boolean captured;
+    public String pieceID;
 
-    public GamePiece(){
-    }
+    public GamePiece(){}
 
     public GamePiece(int r, int c, int p){
         row = r;
         column = c;
         player = p;
-        captured = false;
+    }
+    
+    public GamePiece(int r, int c, String pieceID){
+        row = r;
+        column = c;
+        this.pieceID = pieceID;
     }
 
-    @Override
+    /**
+    Returns information about the state of the piece including row, column, pieceID, and player
+    */
     public String toString() {
         return ("pieceID: "+pieceIDString()+"  row: "+row+"  column: "+column+"  player: "
-                +player+"  captured: "+captured+"\n");
+                +player+"\n");
     }
 
     public int getRow(){
@@ -42,31 +46,18 @@ public abstract class GamePiece {
 
     public abstract String pieceIDString();
 
-//    public String pieceIDString(){
-//        return " ";
-//    }
-
-    public void setCaptured(){
-        /* indicates that piece is captured and no longer in play on the board */
-        captured = true;
-    }
-
-    public boolean checkCaptured(){
-        /* returns a value indicating if piece is captured */
-        return captured;
-    }
-
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
         return false;
     }
 
-    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board){
-        /* This method allows any piece other than monkey to handle recieving it's move specifications
+    /**
+    This method allows any piece other than monkey to handle recieving it's move specifications
         either using an array or individual integer values to indicate the square locations it is traversing.
-         */
-        /* Since all non-monkey pieces can only move one square at a time, the array can never contain more than
+        
+        Since all non-monkey pieces can only move one square at a time, the array can never contain more than
         one square location.
-         */
+    */
+    public boolean ValidateMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GamePiece[][] board){
         if (destRow.size()>1 || destCol.size()>1)
             return false;
         else
@@ -81,22 +72,23 @@ public abstract class GamePiece {
         return null;
     }
 
-    public static boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
-        /* Returns true if this is an orthogonal move, false if not */
-        if ((fromRow == toRow) || (fromCol == toCol)){
-            return true;
-        }
-        else return false;
+    /**
+    Checks if the move from (fromRow, fromCol) to (toRow, toCol) is an orthogonal move. A move in any direction except diagonal is considered orthogonal
+    */
+    public boolean orthogonalMove(int fromRow, int fromCol, int toRow, int toCol){
+        return fromRow == toRow || fromCol == toCol;
     }
 
-    public static boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
-        /* Returns true if this is a diagonal (45 degree) move, false if not */
-        if (Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol)){
-            return true;
-        }
-        else return false;
+    /**
+    Checks if the move from (fromRow, fromCol) to (toRow, toCol) is a diagonal move
+    */
+    public boolean diagonalMove(int fromRow, int fromCol, int toRow, int toCol){
+        return Math.abs(fromRow - toRow) == Math.abs(fromCol - toCol);
     }
 
+    /**
+    Returns the manhattan distance from (fromRow, fromCol) to (toRow, toCol). Manhattan distance is the distance between two positions measured along axes at a right angle
+    */
     public static int manhattanDistance(int fromRow, int fromCol, int toRow, int toCol){
         /* Returns the manhattan distance associated with a moves coordinates */
         return (Math.abs(fromRow - toRow) + Math.abs(fromCol - toCol));
@@ -112,7 +104,7 @@ public abstract class GamePiece {
         return false;
     }
 
-    public static boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
+    public boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
         int manhattanDist = manhattanDistance(fromRow,fromCol,toRow,toCol);
         if ((orthogonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 1)
                 || (diagonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 2)) {
@@ -127,45 +119,28 @@ public abstract class GamePiece {
     }
 
     public Boolean inRiver(int r){
-        /* determines if specific location is in the river */
-        if (r == GameBoard.riverRow)
-            return true;
-        else
-            return false;
+        return r == GameBoard.RIVER_ROW;
     }
 
     public Boolean squareEmptyOrCapturable(int row, int col, GamePiece[][] board){
-        if (board[row][col] == null || board[row][col].player != this.player){
-            /* square is open or contains opponent's piece */
-            return true;
-        }
-        else {
-            /* player tried landing on a square s/he already occupies */
-            return false;
-        }
+        return squareEmpty(row, col, board) || board[row][col].player != this.player;
     }
 
     public Boolean squareEmpty(int row, int col, GamePiece[][] board){
-        if (board[row][col] == null){
-            /* square is open */
-            return true;
-        }
-        else {
-            /* player tried landing on a square already occupied */
-            return false;
-        }
+        return board[row][col] == null;
     }
 
+    /**
+    determines if the game piece is going directly towards the river - e.g. a vertical move
+    returns false if it's crossing the river or moving away from the river or diagonally
+    */
     public Boolean moveTowardRiver(int destRow, int destCol){
-        /* determines if the game piece is going directly towards the river - e.g. a vertical move */
-        /* returns false if it's crossing the river or moving away from the river or diagonally */
-
         /* check for vertical move */
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= GameBoard.riverRow)) ||
-                ((getRow() < destRow) && (destRow <= GameBoard.riverRow)))
+        if (((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW)))
             return true;
         else return false;
     }
@@ -208,22 +183,21 @@ public abstract class GamePiece {
         }
     }
 
+    /**
+    Determines if the move to (destRow, destCol) is a legal move for this piece
 
-    /* This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
+    It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
+    If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
+    they will drown and be captured.
+    
+    This routine executes one move for a specific piece other than Monkey.  Monkey can do a sequence of
     moves.  If there is another piece in the destination square of the move, then it is captured and removed from
     the board.
     NOTE - Monkey should use performMoveSeq()
      */
     public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
-        /* Method determines if the move to (destRow, destCol) is a legal move for this piece */
-
-        /* It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
-        If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
-        they will drown and be captured.
-         */
         int activePlayer = this.player;
-        ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
-        riverDwellers = congoBoard.getRiverDwellers(activePlayer);
+        ArrayList<GamePiece> riverDwellers = congoBoard.getRiverDwellers(activePlayer);
 
         if (ValidateMove(destRow, destCol, congoBoard.board)){
             if (!(squareEmpty(destRow, destCol, congoBoard.board))){
@@ -310,7 +284,56 @@ public abstract class GamePiece {
         else return false;
     }
 
-/*
+    public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
+
+        //check for one/two steps straight down
+        int  distRow = Math.abs(destRow - this.row ) ;
+        int distCol = Math.abs(destCol - this.column) ;
+
+        if (( distRow == 2 && distCol == 0 ) || (distRow == 1 && distCol == 0 ))
+            // if destination is empty not occupied by any pieces
+            return (squareEmpty(destRow, destCol, board) && pathClear(destRow, destCol, board));
+        else
+            return false;
+    }
+
+    // move/capture side away
+    public Boolean moveSideAwayForSuperPawn (int destRow , int destCol, GamePiece[][] board) {
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        if (distRow == 0 && distCol == 1)
+            return squareEmptyOrCapturable(destRow, destCol, board);
+
+        else
+            return false;
+    }
+
+    // move/capture one step forward
+    public Boolean moveOneStepsStraightOrDiagonally(int destRow, int destCol, GamePiece[][] board){
+
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        if ( (distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
+            return squareEmptyOrCapturable(destRow, destCol, board);
+        else
+            return false;
+    }
+
+    public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
+
+        int distRow = Math.abs(destRow - this.row);
+        int distCol = Math.abs(destCol - this.column);
+
+        //check for one/two steps diagonally down
+        if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
+            // if destination is empty not occupied by any pieces
+            return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
+        else
+            return false;
+    }
+
     // helper function for elephant move one step orthogonal
     public boolean MoveOneStepOrthogonal(int distRow, int distCol)
     {
@@ -319,37 +342,4 @@ public abstract class GamePiece {
         else
             return false;
     }
-
-    // helper function for elephant move two steps orthogonal
-    public boolean MoveTwoStepOrthogonal(int distRow, int distCol)
-    {
-        if ((distRow == 2 && distCol == 0 ) || (distRow== 0 && distCol == 2))
-            return true;
-        else
-            return false;
-    }
-
-    // helper routine for giraffe moves
-    public boolean moveOneStepAnyDirection(int distRow, int distCol){
-        if (distRow <=1 && distCol <=1 )
-            return true;
-        else return false;
-    }
-
-    // helper routine for giraffe to move two steps straight in any direction
-    public boolean moveTwoStepsStraightAnyDirection(int distRow, int distCol) {
-        if ((distRow == 0 && distCol ==2 ) || (distRow == 2 && distCol ==0))
-            return true;
-        else
-            return false;
-    }
-
-    // helper routine to move two steps diagonally in any direction
-    public boolean moveTwoStepsDiagonalAnyDirection(int distRow, int distCol){
-        if(distRow == 2 && distCol == 2)
-            return true;
-        else
-            return false;
-    }
- */
 }

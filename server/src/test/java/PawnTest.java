@@ -1,30 +1,26 @@
 package Game ;
 
-import jdk.jfr.StackTrace;
+//import javafx.scene.media.MediaPlayer;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /*This class contains several tests for the Pawn piece */
 public class PawnTest {
     GameBoard congoGame;
-    Player congoPlayer1;
-    Player congoPlayer2;
 
     // before any test, we need to initiate players and GameBoard
     @Before
     public void initialize(){
-        // initialize players
-        congoPlayer1 = new Player(1);
-        congoPlayer2 = new Player(2);
-
         // initialize board
         congoGame = new GameBoard();
-        congoGame.InitGameBoard();
+        congoGame.initialize();
     }
 
     @Test
