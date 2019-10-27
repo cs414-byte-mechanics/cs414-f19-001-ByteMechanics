@@ -13,7 +13,6 @@ class Form extends React.Component {
         this.updateTextField = this.updateTextField.bind(this);
     }
     handleFormSubmit(){
-        this.props.updateScreen();
         this.props.sendToServer(this.state.registerUser);
     }
     updateTextField(key, value) {
@@ -26,17 +25,20 @@ class Form extends React.Component {
         return (
 
                 <div id="form">
-                    <div className="page_title">{this.props.title}</div>
-                    {Object.keys(this.state.registerUser).filter((key) => key.match(/user/i)).map((field)=>{
-                        let type = field.match(/email/, "gi") ? "email" : field.match(/password/i) ? "password" : "text";
-                        return (
-                            <div className="form_input">
-                                <Label for={field}>{field.replace("user", "")}: </Label>
-                                <Input type={type} key={field} onChange={(event)=>{this.updateTextField(field, event.target.value)}}/>
-                            </div>
-                        );}
-                    )}
-                    <Button block size="sm" onClick={this.handleFormSubmit}>Submit</Button>
+                    {this.props.isLoggedIn() ? "You're already logged in!" :
+                    <>
+                        <div className="page_title">{this.props.title}</div>
+                        {Object.keys(this.state.registerUser).filter((key) => key.match(/user/i)).map((field)=>{
+                            let type = field.match(/email/, "gi") ? "email" : field.match(/password/i) ? "password" : "text";
+                            return (
+                                <div className="form_input">
+                                    <Label for={field}>{field.replace("user", "")}: </Label>
+                                    <Input type={type} key={field} onChange={(event)=>{this.updateTextField(field, event.target.value)}}/>
+                                </div>
+                            );}
+                        )}
+                        <Button block size="sm" onClick={this.handleFormSubmit}>Submit</Button>
+                    </>}
                 </div>
         );
     }
