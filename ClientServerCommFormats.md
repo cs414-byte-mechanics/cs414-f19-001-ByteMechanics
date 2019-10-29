@@ -79,22 +79,21 @@ Here is the structure for each of the four objects:
 
 ```javascript
 {
-  "objectType": "ServerError",
-  "communicationType": "errorInvalidMove",
-  "communicationVersion": 1,
-  "matchID": "",
-  "playerName": "",
-  "pieceID": "L",
-  "desiredMoves": [],
-  "whoseTurn": "",
-  "userName": "",
-  "userPassword": "",
-  "userEmail": "",
-  "errorMessage": ""
+  "objectType":"ServerError",
+  "errorCode": 100,
+  "errorMessage": "Invalid password"
 }
 ```
-`objectType` is the type of communication object being sent.
-`commucationType` will be a string corresponding to what type of information the object is trying to convey and so which properties of the object should have values. 
+`objectType` is the type of communication object being sent (ServerError).
+`errorCode` is the code for the type of error that occurred.
+`errorMessage` is a message detailing the error that occurred.
+
+List of error codes:
+
+* 100 = Invalid password when attempting a login
+* 101 = Username not found when attempting a login
+* 102 = Invalid move
+* 103 = Player not found in search (in search for who to invite)
 
 List of communication types for `Action`:
 
@@ -470,6 +469,7 @@ This communication type will be sent by the server when communicating with clien
 * 9/22/2019 zachklau edited the description of `userPassword` to specify that it will be a hash of the password rather than the the password itself
 * 9/23/2019 zachklau removed ClientError object as there is no forseen use for it yet.
 * 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
+* 10/26/2019 zachklau updated ServerError to remove unnecessary fields and add server error codes.
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.
