@@ -21,6 +21,23 @@ public class GameBoard{
         placePiecesForPlayer(2);
     }
     
+    public String[][] getBoardForDatabase(){
+        String[][] stringBoard = new String[NUM_ROWS][NUM_COLUMNS];
+    
+        for(int row = 0; row < NUM_ROWS; row++){
+            for(int col = 0; col < NUM_COLUMNS; col++){
+                GamePiece piece = getGamePiece(row, col);
+                if(piece == null){
+                    stringBoard[row][col] = " ";
+                } else {
+                    stringBoard[row][col] = piece.pieceIDString();
+                }
+            }
+        }
+        
+        return stringBoard;
+    }
+    
     /**
     Returns a visual represenation of the state of the board
     */
