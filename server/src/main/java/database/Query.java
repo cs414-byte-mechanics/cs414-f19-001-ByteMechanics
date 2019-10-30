@@ -30,6 +30,6 @@ public class Query {
             }
         }
    
-        return "INSERT INTO matches (board, p1, p2) VALUES (" + boardAsString + "," + action.playerOneName + "," + action.playerTwoName + ");";
+        return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardAsString + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
    }
 }
