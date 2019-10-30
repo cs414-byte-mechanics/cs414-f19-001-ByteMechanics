@@ -36,6 +36,7 @@ public class UpdateFactory
         update.matchID = "dummy_match_ID";
         update.playerName = "dummy_player_name";
         update.pieceID =  4;
+        //  update.pieceID =  action.pieceID;
         update.updatedBoard = new int[3][3];
         update.updatedBoard[0][0] = 1;
         update.updatedBoard[0][1] = 2;
