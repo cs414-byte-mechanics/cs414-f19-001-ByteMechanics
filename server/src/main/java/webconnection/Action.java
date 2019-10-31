@@ -9,8 +9,8 @@ public class Action {
   public int communicationVersion;
   public String matchID;
   public String playerName;
-  public int pieceID;
-  public int[][] desiredMoves;
+  public String pieceID;
+  public int[] desiredMoves;
   public String userName;
   public String userPassword;
   public String userEmail;
@@ -30,7 +30,7 @@ public class Action {
                                   + "matchID: " + this.matchID + "\n"
                                   + "playerName: " + this.playerName + "\n"
                                   + "pieceID: " + this.pieceID + "\n"
-                                  + "desiredMoves: " + Arrays.deepToString(this.desiredMoves) + "\n"
+                                  + "desiredMoves: " + Arrays.toString(this.desiredMoves) + "\n"
                                   + "userName: " + this.userName + "\n"
                                   + "userPassword: " + this.userPassword + "\n"
                                   + "userEmail: " + this.userEmail + "\n"

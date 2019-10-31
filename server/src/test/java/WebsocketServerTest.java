@@ -81,8 +81,8 @@ public class WebsocketServerTest {
                            "\"communicationVersion\": 1," +
                            "\"matchID\": \"5654\"," +
                            "\"playerName\": \"JohnDoe\"," +
-                           "\"pieceID\": 16," +
-                           "\"desiredMoves\": [[1,2],[3,4]]," +
+                           "\"pieceID\": \"G\"," +
+                           "\"desiredMoves\": [1,2,3,4]," +
                            "\"userName\": \"john123\"," +
                            "\"userPassword\": \"p@ssword\"," +
                            "\"userEmail\": \"cool@gmail.com\"," +
@@ -100,12 +100,12 @@ public class WebsocketServerTest {
         correctResult.communicationVersion = 1;
         correctResult.matchID = "5654";
         correctResult.playerName = "JohnDoe";
-        correctResult.pieceID = 16;
-        correctResult.desiredMoves = new int[2][2];
-        correctResult.desiredMoves[0][0] = 1;
-        correctResult.desiredMoves[0][1] = 2;
-        correctResult.desiredMoves[1][0] = 3;
-        correctResult.desiredMoves[1][1] = 4;
+        correctResult.pieceID = "G";
+        correctResult.desiredMoves = new int[4];
+        correctResult.desiredMoves[0] = 1;
+        correctResult.desiredMoves[1] = 2;
+        correctResult.desiredMoves[2] = 3;
+        correctResult.desiredMoves[3] = 4;
         correctResult.userName = "john123";
         correctResult.userPassword = "p@ssword";
         correctResult.userEmail = "cool@gmail.com";
@@ -129,7 +129,7 @@ public class WebsocketServerTest {
                            "\"communicationVersion\": 0," +
                            "\"matchID\": \"\"," +
                            "\"playerName\": \"\"," +
-                           "\"pieceID\": 0," +
+                           "\"pieceID\": \"\"," +
                            "\"desiredMoves\": null," +
                            "\"userName\": \"\"," +
                            "\"userPassword\": \"\"," +
@@ -148,7 +148,7 @@ public class WebsocketServerTest {
         correctResult.communicationVersion = 0;
         correctResult.matchID = "";
         correctResult.playerName = "";
-        correctResult.pieceID = 0;
+        correctResult.pieceID = "";
         correctResult.desiredMoves = null;
         correctResult.userName = "";
         correctResult.userPassword = "";
@@ -173,8 +173,8 @@ public class WebsocketServerTest {
                 "\"communicationVersion\": 1," +
                 "\"matchID\": \"\"," +
                 "\"playerName\": \"JohnDoe\"," +
-                "\"pieceID\": 16," +
-                "\"desiredMoves\": [[1,2],[3,4]]," +
+                "\"pieceID\": \"m\"," +
+                "\"desiredMoves\": [1,2,3,4]," +
                 "\"userName\": \"john123\"," +
                 "\"userPassword\": \"\"," +
                 "\"userEmail\": \"\"," +
@@ -192,12 +192,12 @@ public class WebsocketServerTest {
         correctResult.communicationVersion = 1;
         correctResult.matchID = "";
         correctResult.playerName = "JohnDoe";
-        correctResult.pieceID = 16;
-        correctResult.desiredMoves = new int[2][2];
-        correctResult.desiredMoves[0][0] = 1;
-        correctResult.desiredMoves[0][1] = 2;
-        correctResult.desiredMoves[1][0] = 3;
-        correctResult.desiredMoves[1][1] = 4;
+        correctResult.pieceID = "m";
+        correctResult.desiredMoves = new int[4];
+        correctResult.desiredMoves[0] = 1;
+        correctResult.desiredMoves[1] = 2;
+        correctResult.desiredMoves[2] = 3;
+        correctResult.desiredMoves[3] = 4;
         correctResult.userName = "john123";
         correctResult.userPassword = "";
         correctResult.userEmail = "";
@@ -224,7 +224,7 @@ public class WebsocketServerTest {
         testUpdate.communicationVersion = 7;
         testUpdate.matchID = "TestMatchID";
         testUpdate.playerName = "TestPlayerName";
-        testUpdate.pieceID = 18;
+        testUpdate.pieceID = "E";
         testUpdate.updatedBoard = new int[2][2];
         testUpdate.updatedBoard[0][0] = 1;
         testUpdate.updatedBoard[0][1] = 2;
@@ -268,7 +268,7 @@ public class WebsocketServerTest {
                 + "\"communicationVersion\":7,"
                 + "\"matchID\":\"TestMatchID\","
                 + "\"playerName\":\"TestPlayerName\","
-                + "\"pieceID\":18,"
+                + "\"pieceID\":\"E\","
                 + "\"updatedBoard\":[[1,2],[3,4]],"
                 + "\"whoseTurn\":\"TestWhoseTurn\","
                 + "\"successMessage\":\"TestSuccessMessage\","
@@ -301,7 +301,7 @@ public class WebsocketServerTest {
         testUpdate.communicationVersion = 7;
         testUpdate.matchID = "TestMatchID";
         testUpdate.playerName = "TestPlayerName";
-        testUpdate.pieceID = 18;
+        testUpdate.pieceID = "c";
         testUpdate.updatedBoard = new int[2][2];
         testUpdate.updatedBoard[0][0] = 1;
         testUpdate.updatedBoard[0][1] = 2;
@@ -325,7 +325,7 @@ public class WebsocketServerTest {
                 + "\"communicationVersion\":7,"
                 + "\"matchID\":\"TestMatchID\","
                 + "\"playerName\":\"TestPlayerName\","
-                + "\"pieceID\":18,"
+                + "\"pieceID\":\"c\","
                 + "\"updatedBoard\":[[1,2],[3,4]],"
                 + "\"whoseTurn\":\"TestWhoseTurn\","
                 + "\"successMessage\":\"TestSuccessMessage\","
@@ -360,7 +360,7 @@ public class WebsocketServerTest {
                 + "\"communicationVersion\":0,"
                 + "\"matchID\":null,"
                 + "\"playerName\":null,"
-                + "\"pieceID\":0,"
+                + "\"pieceID\":null,"
                 + "\"updatedBoard\":null,"
                 + "\"whoseTurn\":null,"
                 + "\"successMessage\":null,"
