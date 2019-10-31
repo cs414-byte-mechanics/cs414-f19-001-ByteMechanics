@@ -98,7 +98,7 @@ public class ElephantTest {
 
         GamePiece[][] congoBoard = congoGame.board;
 
-        System.out.println(congoGame.toString());
+        //System.out.println(congoGame.toString());
         assertTrue(elephant1P2.ValidateMove(4, 2, congoBoard) == true); // jump two step down from 6,2 to 4,2
 
         congoGame.movePiece(6,4,5,4);

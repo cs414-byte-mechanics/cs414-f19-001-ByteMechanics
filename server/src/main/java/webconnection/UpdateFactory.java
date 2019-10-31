@@ -1,21 +1,27 @@
 package webconnection;
 import database.*;
+import Game.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
 public class UpdateFactory
 {
     private DatabaseHandler db;
+    private GameBoard congoGame;
 
     public UpdateFactory() {
         db = new DatabaseHandler();
+        //congoGame = new Game();
+        //congoGame.createNewGame();
+        congoGame = new GameBoard();
+        congoGame.initialize();
     }
 
     public Update getUpdate(Action action) {
         //decide which update to construct given the type of action sent from the client
         switch(action.communicationType)
         {
-            case "requestMoves": return this.buildUpdateBoard();
+            case "requestMoves": return this.buildUpdateBoard(action);
             case "registerUser": return this.registerUser(action);
             case "requestBeginNewMatch": return this.buildBeginNewMatch();
             case "invitation": return this.buildInvitation();
@@ -30,13 +36,31 @@ public class UpdateFactory
         }
     }
 
-    private Update buildUpdateBoard() {
+    private Update buildUpdateBoard(Action action) {
+//        System.out.println(action.toString());
+
+        if (action.desiredMoves != null) {
+            int pieceCol = action.desiredMoves[0] % 10;
+            int pieceRow = (action.desiredMoves[0] - pieceCol)/10;
+            GamePiece piece = congoGame.getGamePiece(pieceRow, pieceCol);
+
+            ArrayList<Integer> movesRow = new ArrayList<>();
+            ArrayList<Integer> movesCol = new ArrayList<>();
+            for (int i = 1; i < action.desiredMoves.length; i++){
+                int col = action.desiredMoves[i] % 10;
+                int row = (action.desiredMoves[i] - col)/10;
+                movesCol.add(col);
+                movesRow.add(row);
+            }
+          boolean moveSucceeded = piece.performMove(movesRow, movesCol, congoGame);
+//          System.out.println("moveSucceeded: "+moveSucceeded);
+        }
+
         Update update = new Update();
         update.communicationType = "updateBoard";
         update.matchID = "dummy_match_ID";
         update.playerName = "dummy_player_name";
-        update.pieceID =  4;
-        //  update.pieceID =  action.pieceID;
+        update.pieceID =  "M";
         update.updatedBoard = new int[3][3];
         update.updatedBoard[0][0] = 1;
         update.updatedBoard[0][1] = 2;
