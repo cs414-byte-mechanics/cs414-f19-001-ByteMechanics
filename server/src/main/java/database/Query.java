@@ -21,4 +21,19 @@ public class Query {
         return "SELECT * FROM users WHERE email = \"" + action.userEmail + "\" AND password =\"" + action.userPassword + "\";";
     }
    
+   public static String createAddNewGameQuery(Action action, String[][] board){
+        String boardAsString = "";
+   
+        for(int row = 0; row < board.length; row++){
+            for(int col = 0; col < board[row].length; col++){
+                boardAsString += board[row][col];
+            }
+        }
+   
+        return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardAsString + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
+   }
+   
+   public static String createRetrieveGameQuery(Action action){
+        return "SELECT * FROM matches WHERE match_id=\"" + action.matchID + "\";";
+   }
 }

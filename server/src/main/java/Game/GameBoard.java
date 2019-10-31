@@ -21,6 +21,23 @@ public class GameBoard{
         placePiecesForPlayer(2);
     }
     
+    public String[][] getBoardForDatabase(){
+        String[][] stringBoard = new String[NUM_ROWS][NUM_COLUMNS];
+    
+        for(int row = 0; row < NUM_ROWS; row++){
+            for(int col = 0; col < NUM_COLUMNS; col++){
+                GamePiece piece = getGamePiece(row, col);
+                if(piece == null){
+                    stringBoard[row][col] = " ";
+                } else {
+                    stringBoard[row][col] = piece.pieceIDString();
+                }
+            }
+        }
+        
+        return stringBoard;
+    }
+    
     /**
     Returns a visual represenation of the state of the board
     */
@@ -47,11 +64,44 @@ public class GameBoard{
     }
     
     /**
-    Loads an existing game
+    Loads an existing game from a string[][] representation taken from the database
     @param string representation of board
     */
-    public void loadGame(String[][] board){
-        //this will be sent all the information it needs to create a new game with info from the database
+    public void loadGame(String[][] boardFromDatabase){
+        //If the character is lower case, it's player 1
+        
+        for(int i = 0; i < NUM_ROWS; i++){
+            for(int j = 0; j < NUM_COLUMNS; j++){
+                int player;
+                if(Character.isLowerCase(boardFromDatabase[i][j].charAt(0))){
+                    player = 1;
+                } else {
+                    player = 2;
+                }
+                
+                board[i][j] = pieceFactory(boardFromDatabase[i][j].charAt(0), player, i, j);
+            }
+        }
+    }
+    
+    public GamePiece pieceFactory(char pieceID, int player, int row, int col){
+        if(pieceID == 'e' || pieceID == 'E'){
+            return new ElephantPiece(row, col, player);
+        } else if(pieceID == 'c' || pieceID == 'C'){
+            return new CrocodilePiece(row, col, player);
+        } else if(pieceID == 'g' || pieceID == 'G'){
+            return new GiraffePiece(row, col, player);
+        } else if(pieceID == 'l' || pieceID == 'L'){
+            return new LionPiece(row, col, player);
+        } else if(pieceID == 'z' || pieceID == 'Z'){
+            return new ZebraPiece(row, col, player);
+        } else if(pieceID == 'm' || pieceID == 'M'){
+            return new MonkeyPiece(row, col, player);
+        } else if(pieceID == 'p' || pieceID == 'P'){
+            return new PawnPiece(row, col, player);
+        } else {
+            return null;
+        }
     }
    
     /**
