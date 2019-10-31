@@ -28,7 +28,8 @@ public class Game {
         String[][] board = dbHandler.retrieveGameInfo(action);
         
         //load game with that matchID from database
-        gameBoard.loadGame(currentBoard);
+        gameBoard.loadGame(board);
+        //System.out.println(gameBoard);
         
         //performMove
     }

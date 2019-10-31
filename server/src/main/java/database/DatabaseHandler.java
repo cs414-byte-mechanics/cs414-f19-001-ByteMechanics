@@ -60,11 +60,6 @@ public class DatabaseHandler {
         
         if (!results.next()) throw new Exception("No game exists with this match ID.");
         
-        System.out.println(results.getInt("match_id"));
-        System.out.println(results.getString("board"));
-        System.out.println(results.getString("p1"));
-        System.out.println(results.getString("p2"));
-        
         String boardAsString = results.getString("board");
         String[][] board = new String[GameBoard.NUM_ROWS][GameBoard.NUM_COLUMNS];
         
