@@ -28,7 +28,7 @@ Here is the structure for each of the four objects:
 ```javascript
 {
   "objectType": "Action",
-  "communicationType": "requestMove",
+  "communicationType": "requestMoves",
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",
@@ -129,7 +129,7 @@ This communication type will be used to communicate to the server that a player 
 
 ```javascript
 {
-  "communicationType": "requestMove",
+  "communicationType": "requestMoves",
   "communicationVersion": 1,
   "matchID": "",
   "playerName": "",

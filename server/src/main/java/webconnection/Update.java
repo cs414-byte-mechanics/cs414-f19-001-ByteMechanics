@@ -9,7 +9,7 @@ public class Update {
     public int communicationVersion;
     public String matchID;
     public String playerName;
-    public int pieceID;
+    public String pieceID;
     public int[][] updatedBoard;
     public String whoseTurn;
     public String successMessage;

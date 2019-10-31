@@ -8,12 +8,14 @@ class GameBoard extends Component {
         super(props);
         this.state = {
             selectionType: "pieceID",
+            pieceLocation: -1,
             requestMove: {
-                "communicationType": "requestMove",
+                "communicationType": "requestMoves",
                 "communicationVersion": 1,
                 "matchID": "",
                 "playerName": "",
-                "pieceID": [],
+//                "pieceID": [],
+                "pieceID" : "",
                 "desiredMoves": []
               }
         }
@@ -27,15 +29,18 @@ class GameBoard extends Component {
 
     //send move to server for validation and completion
     confirmSelection() {
-        this.props.send(this.state.requestMove)
+        this.props.send(this.state.requestMove);
+        this.clearSelection();
     }
 
     //clear currently selected piece and move
     clearSelection() {
         let state = this.state;
-        state.requestMove.pieceID = [];
+//        state.requestMove.pieceID = [];
+        state.requestMove.pieceID = "";
         state.requestMove.desiredMoves = [];
         state.selectionType = "pieceID"
+        state.pieceLocation = -1;
         this.setState(state);
     }
 
@@ -47,7 +52,9 @@ class GameBoard extends Component {
     //select a piece or move
     select(i,j){
         //prevent selection of current space 
-        if(this.state.requestMove.pieceID[0]===i && this.state.requestMove.pieceID[1]===j) return;
+//        if(this.state.requestMove.pieceID[0]===i && this.state.requestMove.pieceID[1]===j) return;
+        //if(this.state.requestMove.pieceID===(i * 10 + j)) return;
+        if(this.state.pieceLocation===(i * 10 + j)) return;
         
         //make selection
         if(this.state.selectionType==='pieceID') this.selectPiece(i,j);
@@ -58,16 +65,35 @@ class GameBoard extends Component {
     }
     selectPiece(i, j) {
         let state = this.state;
-        state.requestMove['pieceID'] = [i, j];
+//        state.requestMove['pieceID'] = [i, j];
+
+        let encodeLocation = i * 10 + j;
+        //get alphanumeric representation of piece
+        state.requestMove.pieceID = this.props.game[i][j];
+        state.pieceLocation = encodeLocation;
+        state.requestMove.desiredMoves.push(encodeLocation);
         this.setState(state);
     }
     selectMove(i, j) {
         //prevent pieces other than monkey from taking multiple moves
-        let piece = this.state.requestMove.pieceID;
-        if(this.props.game[piece[0]][piece[1]]!=='M' && this.state.requestMove['desiredMoves'].length>=1) return; 
+        //let piece = this.state.requestMove.pieceID;
+        let piece = this.state.pieceLocation;
+        let col = piece % 10;
+        let row = (piece - col)/10;
+
+//        if(this.props.game[piece[0]][piece[1]]!=='M' && this.state.requestMove['desiredMoves'].length>=1) return;
+        console.log(this.props.game);
+        console.log(row);
+        console.log(col);
+        console.log(this.props.game[row][col]);
+        //if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=1) return;
+        if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
-        state.requestMove[state.selectionType].push([i, j]);
+        //state.requestMove[state.selectionType].push([i, j]);
+        let encodeLocation = i * 10 + j;
+        state.requestMove[state.selectionType].push(encodeLocation);
+        console.log(state.requestMove[state.selectionType]);
         this.setState(state);
     }
 
@@ -79,9 +105,13 @@ class GameBoard extends Component {
         return (2<=j && j<=4 && !this.isInRiver(i,j)) ? "castle" : ""
     }
     isSelected(i, j) {
-        let piece = this.state.requestMove.pieceID;
+        //let piece = this.state.requestMove.pieceID;
+        let piece = this.state.pieceLocation;
         let moves = this.state.requestMove.desiredMoves;
-        return `${(i===piece[0] && j===piece[1]) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
+        let col = piece % 10;
+        let row = (piece - col)/10;
+        //return `${(i===piece[0] && j===piece[1]) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
+        return `${(i===row && j===col) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
     }
 
     //generate classes for styling
