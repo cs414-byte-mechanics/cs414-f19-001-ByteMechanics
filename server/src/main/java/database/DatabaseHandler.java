@@ -5,9 +5,17 @@ import webconnection.*;
 
 public class DatabaseHandler {
 
-    private final String database = "jdbc:mysql://faure/bytemechanics";
+    private String database;
     private final String user = "jeskea";
     private final String password = "831702229";
+
+    public DatabaseHandler() {
+        if(System.getenv("TUNNEL").equals("true")) {
+            database = "jdbc:mysql://localhost:56247/bytemechanics";
+        } else {
+            database = "jdbc:mysql://faure/bytemechanics";
+        }
+    }
 
     public void registerUser(Action action) throws Exception {
         Connection con = DriverManager.getConnection(database, user, password);

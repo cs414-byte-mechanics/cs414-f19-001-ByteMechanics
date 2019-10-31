@@ -22,13 +22,23 @@ class Header extends React.Component {
                 <CongoIcon id="icon"/>
             </div>
             <div id="menu">
+                {this.displayInvitations()}
                 <a className="nav-link" href="/">Home</a>
                 {logInOut}
             </div>
             </div>
         );
     }
-}
 
+    displayInvitations()
+    {
+        if (this.props.isLoggedIn())
+        {
+            return (<a className="nav-link" href="/invitations">Invitations</a>);
+        }
+    }
+
+
+}
 export default Header;
 
