@@ -2,6 +2,7 @@ package database;
 
 import java.sql.*;
 import webconnection.*;
+import Game.*;
 
 public class DatabaseHandler {
 
@@ -50,5 +51,30 @@ public class DatabaseHandler {
         Statement addNewGame = con.createStatement();
         int matchID = addNewGame.executeUpdate(Query.createAddNewGameQuery(action, board), Statement.RETURN_GENERATED_KEYS);
         return matchID;
+    }
+    
+    public String[][] retrieveGameInfo(Action action) throws Exception {
+        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Statement gameInfo = con.createStatement();
+        ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
+        
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        
+        System.out.println(results.getInt("match_id"));
+        System.out.println(results.getString("board"));
+        System.out.println(results.getString("p1"));
+        System.out.println(results.getString("p2"));
+        
+        String boardAsString = results.getString("board");
+        String[][] board = new String[GameBoard.NUM_ROWS][GameBoard.NUM_COLUMNS];
+        
+        int index = 0;
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j++){
+                board[i][j] = Character.toString(boardAsString.charAt(index));
+                index++;
+            }
+        }
+        return board;
     }
 } 

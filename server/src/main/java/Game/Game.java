@@ -2,6 +2,7 @@ package Game;
 
 import database.*;
 import webconnection.*;
+import java.util.*;
 
 public class Game {
     private DatabaseHandler dbHandler;
@@ -20,13 +21,14 @@ public class Game {
         int matchID = dbHandler.addNewGame(action, board.getBoardForDatabase());
     }
     
-    public void loadExistingGame(String matchID){
-        GameBoard board = new GameBoard();       
+    public void loadExistingGame(Action action) throws Exception {
+        GameBoard gameBoard = new GameBoard();       
         
         //get game with that matchID from database
+        String[][] board = dbHandler.retrieveGameInfo(action);
         
         //load game with that matchID from database
-        //board.loadGame(currentBoard);
+        gameBoard.loadGame(currentBoard);
         
         //performMove
     }

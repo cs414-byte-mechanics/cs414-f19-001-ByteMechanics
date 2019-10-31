@@ -32,4 +32,8 @@ public class Query {
    
         return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardAsString + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
    }
+   
+   public static String createRetrieveGameQuery(Action action){
+        return "SELECT * FROM matches WHERE match_id=\"" + action.matchID + "\";";
+   }
 }

@@ -64,11 +64,12 @@ public class GameBoard{
     }
     
     /**
-    Loads an existing game
+    Loads an existing game from a string[][] representation taken from the database
     @param string representation of board
     */
     public void loadGame(String[][] board){
         //this will be sent all the information it needs to create a new game with info from the database
+        
     }
    
     /**

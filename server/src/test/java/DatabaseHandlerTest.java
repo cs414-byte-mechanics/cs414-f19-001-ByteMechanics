@@ -27,6 +27,16 @@ public class DatabaseHandlerTest {
         game.createNewGame(action);
    }
    
+   @Test
+   public void testRetrieveGameInfo() throws Exception {
+        Action action = new Action();
+        action.communicationType = "requestMoves";
+        action.matchID = "1";
+        
+        Game game = new Game();
+        game.loadExistingGame(action);
+   }
+   
     //@Test
     public void testRegisterUser() throws Exception {
         Action action = new Action();
