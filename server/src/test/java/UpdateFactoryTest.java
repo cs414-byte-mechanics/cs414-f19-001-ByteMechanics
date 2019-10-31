@@ -74,7 +74,7 @@ public class UpdateFactoryTest
         expected.communicationType = "updateBoard";
         expected.matchID = "dummy_match_ID";
         expected.playerName = "dummy_player_name";
-        expected.pieceID =  4;
+        expected.pieceID =  "M";
         expected.updatedBoard = new int[3][3];
         expected.updatedBoard[0][0] = 1;
         expected.updatedBoard[0][1] = 2;

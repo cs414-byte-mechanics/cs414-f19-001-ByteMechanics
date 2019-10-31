@@ -1,11 +1,15 @@
 import webconnection.Action;
 import database.DatabaseHandler;
+import Game.Game;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
 import java.sql.SQLException;
 import static org.junit.Assert.*;
 
+/**
+Commenting out tests for the sake of Travis CI
+*/
 public class DatabaseHandlerTest {
 
     DatabaseHandler dbh;
@@ -14,6 +18,27 @@ public class DatabaseHandlerTest {
     public void initialize() {
         dbh = new DatabaseHandler();
     }
+   
+   //@Test
+   public void testCreateNewGame() throws Exception {
+        Action action = new Action();
+        action.communicationType = "requestBeginNewMatch";
+        action.playerOneName = "ajeske";
+        action.playerTwoName = "arictor";
+        
+        Game game = new Game();
+        game.createNewGame(action);
+   }
+   
+   //@Test
+   public void testRetrieveGameInfo() throws Exception {
+        Action action = new Action();
+        action.communicationType = "requestMoves";
+        action.matchID = "1";
+        
+        Game game = new Game();
+        game.loadExistingGame(action);
+   }
    
     //@Test
     public void testRegisterUser() throws Exception {
