@@ -36,4 +36,8 @@ public class Query {
    public static String createRetrieveGameQuery(Action action){
         return "SELECT * FROM matches WHERE match_id=\"" + action.matchID + "\";";
    }
+   
+   public static String createUpdateGameStateQuery(int matchID, String[][] board){
+        return "UPDATE matches SET board = \"" + board + "\" WHERE match_id = " + matchID + ";";
+   }
 }

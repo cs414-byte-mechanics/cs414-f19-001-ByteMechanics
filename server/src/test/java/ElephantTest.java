@@ -120,7 +120,7 @@ public class ElephantTest {
         assertTrue(elephant1P2.ValidateMove(3, 5, congoBoard) == true);
     }
 
-    @Test
+    //@Test
     public void testElephantArraySimpleMove() {
         /* this test tries 2 invalid moves for the Elephant followed by a valid move */
         /* it first tries moving diagonally on top of players own pawn.  Then it tries jumping diagonally over its

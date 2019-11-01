@@ -32,7 +32,7 @@ public class DatabaseHandler {
     }
 
     /**
-     * @return: username of user logging in
+     * @return username of user logging in
      */
     public String attemptLogin(Action action) throws Exception {
         
@@ -46,6 +46,9 @@ public class DatabaseHandler {
     }
     
 
+    /**
+    @return matchID of game
+    */
     public int addNewGame(Action action, String[][] board) throws Exception {
         Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
         Statement addNewGame = con.createStatement();
@@ -53,6 +56,9 @@ public class DatabaseHandler {
         return matchID;
     }
     
+    /**
+    @return board state of game
+    */
     public String[][] retrieveGameInfo(Action action) throws Exception {
         Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
@@ -71,5 +77,13 @@ public class DatabaseHandler {
             }
         }
         return board;
+    }
+    
+    public void saveGameState(int matchID, String[][] board) throws Exception {
+        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Statement saveGame = con.createStatement();
+        int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
+        
+        if (rowsAffected < 1) throw new Exception("Game state was not saved in database.");
     }
 } 
