@@ -22,15 +22,8 @@ public class Query {
     }
    
    public static String createAddNewGameQuery(Action action, String[][] board){
-        String boardAsString = "";
    
-        for(int row = 0; row < board.length; row++){
-            for(int col = 0; col < board[row].length; col++){
-                boardAsString += board[row][col];
-            }
-        }
-   
-        return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardAsString + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
+        return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
    }
    
    public static String createRetrieveGameQuery(Action action){
@@ -38,6 +31,17 @@ public class Query {
    }
    
    public static String createUpdateGameStateQuery(int matchID, String[][] board){
-        return "UPDATE matches SET board = \"" + board + "\" WHERE match_id = " + matchID + ";";
+        return "UPDATE matches SET board = \"" + boardToString(board) + "\" WHERE match_id = " + matchID + ";";
+   }
+   
+   public static String boardToString(String[][] board){
+        String boardAsString = "";
+   
+        for(int row = 0; row < board.length; row++){
+            for(int col = 0; col < board[row].length; col++){
+                boardAsString += board[row][col];
+            }
+        }
+        return boardAsString;
    }
 }
