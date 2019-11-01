@@ -4,6 +4,8 @@ import java.sql.*;
 import webconnection.*;
 import Game.*;
 
+//NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
+
 public class DatabaseHandler {
 
     private String database;
@@ -11,9 +13,11 @@ public class DatabaseHandler {
     private final String PASSWORD = "831702229";
 
     public DatabaseHandler() {
-        if(System.getenv("TUNNEL").equals("true")) {
+        String tunnel = System.getenv("TUNNEL");
+        if (tunnel != null && tunnel.equals("true")) {
             database = "jdbc:mysql://localhost:56247/bytemechanics";
-        } else {
+        }
+        else {
             database = "jdbc:mysql://faure/bytemechanics";
         }
     }
