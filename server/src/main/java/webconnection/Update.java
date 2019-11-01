@@ -10,7 +10,7 @@ public class Update {
     public String matchID;
     public String playerName;
     public String pieceID;
-    public int[][] updatedBoard;
+    public String[][] updatedBoard;
     public String whoseTurn;
     public String successMessage;
     public String userName;
