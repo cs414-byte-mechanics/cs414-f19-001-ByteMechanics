@@ -1,6 +1,7 @@
 package webconnection;
 import database.*;
-import Game.*;
+import game.*;
+import game.pieces.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 

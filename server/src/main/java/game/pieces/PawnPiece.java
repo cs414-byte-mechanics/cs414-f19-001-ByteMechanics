@@ -1,13 +1,11 @@
-package Game;
+package game.pieces;
 
-import Game.GameBoard;
-
-import java.util.concurrent.SynchronousQueue;
+import game.*;
 
 public class PawnPiece extends GamePiece {
 
     // every pawn can be promoted as a superPawn / can cross river 
-    boolean superPawn  ;
+    public boolean superPawn  ;
 
     /* initial constructor*/
     public PawnPiece(){

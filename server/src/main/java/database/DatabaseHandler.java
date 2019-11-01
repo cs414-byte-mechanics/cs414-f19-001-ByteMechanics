@@ -2,7 +2,7 @@ package database;
 
 import java.sql.*;
 import webconnection.*;
-import Game.*;
+import game.*;
 
 public class DatabaseHandler {
 

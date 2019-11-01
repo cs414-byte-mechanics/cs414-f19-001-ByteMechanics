@@ -1,6 +1,6 @@
-package Game;
+package game.pieces;
 
-import Game.GameBoard;
+import game.*;
 
 public class CrocodilePiece extends GamePiece {
     public CrocodilePiece(){
