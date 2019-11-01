@@ -8,6 +8,7 @@ public class UpdateFactory
 {
     private DatabaseHandler db;
     private GameBoard congoGame;
+    private int errorCode;
 
     public UpdateFactory() {
         db = new DatabaseHandler();
@@ -36,35 +37,82 @@ public class UpdateFactory
         }
     }
 
-    private Update buildUpdateBoard(Action action) {
-//        System.out.println(action.toString());
+    /* this function extract desired move and validate that the move from current location to destination is valid or no */
+    public boolean processMove(int[] desiredMove, GameBoard congoGame){
+        ArrayList<Integer> movesRow = new ArrayList<>();
+        ArrayList<Integer> movesCol = new ArrayList<>();
 
-        if (action.desiredMoves != null) {
-            int pieceCol = action.desiredMoves[0] % 10;
-            int pieceRow = (action.desiredMoves[0] - pieceCol)/10;
+        if (desiredMove != null) {
+            /* Extract current location*/
+            int pieceCol = desiredMove[0] % 10;
+            int pieceRow = desiredMove[0] / 10;
+            System.out.println(" Piece is currently on " + pieceRow + pieceCol);
+
+            /* Grab the piece based on the current location */
             GamePiece piece = congoGame.getGamePiece(pieceRow, pieceCol);
 
-            ArrayList<Integer> movesRow = new ArrayList<>();
-            ArrayList<Integer> movesCol = new ArrayList<>();
-            for (int i = 1; i < action.desiredMoves.length; i++){
-                int col = action.desiredMoves[i] % 10;
-                int row = (action.desiredMoves[i] - col)/10;
+            /* Extract destination*/
+            movesCol.add(desiredMove[1]%10);
+            movesRow.add(desiredMove[1] / 10);
+
+            /*
+            for (int i = 1; i < desiredMove.length; i++) {
+                int col = desiredMove[i] % 10;
+                int row = (desiredMove[i] - col) / 10;
                 movesCol.add(col);
-                movesRow.add(row);
-            }
-          boolean moveSucceeded = piece.performMove(movesRow, movesCol, congoGame);
-//          System.out.println("moveSucceeded: "+moveSucceeded);
+                movesRow.add(row);}*/
+
+            return (piece.performMove(movesRow, movesCol, congoGame));
         }
 
+        return false;
+    }
+
+    private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board,String turn){
+        update.communicationType = communicationType;
+//        update.communicationVersion = 1;
+        update.matchID = action.matchID;
+        update.playerName = action.playerName;
+        update.pieceID =  action.pieceID;
+        update.successMessage = message;
+
+        /* updated board needs to be sent/returned to the client correctly*/
+        update.updatedBoard = board ;
+//        update.updatedBoard[0][0] = 1;
+//        update.updatedBoard[0][1] = 2;
+        update.whoseTurn = turn;
+
+        return update;
+    }
+    public Update buildUpdateBoard(Action action) {
+//        System.out.println(action.toString());
+
+        String communicationType , message, whoseTurn;
         Update update = new Update();
-        update.communicationType = "updateBoard";
-        update.matchID = "dummy_match_ID";
-        update.playerName = "dummy_player_name";
-        update.pieceID =  "M";
-        update.updatedBoard = new int[3][3];
-        update.updatedBoard[0][0] = 1;
-        update.updatedBoard[0][1] = 2;
-        update.whoseTurn = "opponent";
+        String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
+
+        boolean moveSucceeded = processMove(action.desiredMoves, congoGame);
+
+        /* if it's true, means move is validated/legal, so we need to return updated board back to client */
+        if (moveSucceeded == true)
+        {
+            communicationType = "updateBoard";
+            message = "The player's move was valid and the board has been updated";
+            whoseTurn = "opponent";
+
+            /* In case of valid/legal requestMove, move performed and board get updated- so we update previous board*/
+            boardToBeSent = congoGame.getBoardForDatabase();
+            wrapUpResponse(update, action, communicationType, message, boardToBeSent, whoseTurn);
+        }
+        else /* validate move is false, so we return error */
+        {
+            communicationType = "errorInvalidMove";
+            errorCode =102;
+            ServerError serverError = new ServerError(errorCode);
+            message = serverError.getErrorMessage(errorCode);
+            whoseTurn = "You";
+            wrapUpResponse(update, action, communicationType, message, boardToBeSent,whoseTurn);
+        }
 
         return update;
     }
