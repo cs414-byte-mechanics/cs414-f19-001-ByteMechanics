@@ -4,14 +4,26 @@ import java.sql.*;
 import webconnection.*;
 import Game.*;
 
+//NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
+
 public class DatabaseHandler {
 
-    private final String DATABASE = "jdbc:mysql://faure/bytemechanics";
+    private String database;
     private final String USER = "jeskea";
     private final String PASSWORD = "831702229";
 
+    public DatabaseHandler() {
+        String tunnel = System.getenv("TUNNEL");
+        if (tunnel != null && tunnel.equals("true")) {
+            database = "jdbc:mysql://localhost:56247/bytemechanics";
+        }
+        else {
+            database = "jdbc:mysql://faure/bytemechanics";
+        }
+    }
+
     public void registerUser(Action action) throws Exception {
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement checkCredentials = con.createStatement();
         ResultSet rs = checkCredentials.executeQuery(Query.createCountExistingCredentialsQuery(action));
         if (rs.next() && rs.getInt("total") == 0) {
@@ -24,7 +36,7 @@ public class DatabaseHandler {
 
     public void unregisterUser(Action action) throws Exception {
     
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement unregisterUser = con.createStatement();
         int rowsAffected = unregisterUser.executeUpdate(Query.createUnregisterUser(action));
 
@@ -36,7 +48,7 @@ public class DatabaseHandler {
      */
     public String attemptLogin(Action action) throws Exception {
         
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement validateLogin = con.createStatement();
         ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
 
@@ -47,14 +59,14 @@ public class DatabaseHandler {
     
 
     public int addNewGame(Action action, String[][] board) throws Exception {
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement addNewGame = con.createStatement();
         int matchID = addNewGame.executeUpdate(Query.createAddNewGameQuery(action, board), Statement.RETURN_GENERATED_KEYS);
         return matchID;
     }
     
     public String[][] retrieveGameInfo(Action action) throws Exception {
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
         
