@@ -1,9 +1,8 @@
-package game;
+package Game;
 
 import database.*;
 import webconnection.*;
 import java.util.*;
-import game.pieces.*;
 
 public class Game {
     private DatabaseHandler dbHandler;
