@@ -61,10 +61,15 @@ public class UpdateFactory
         update.matchID = "dummy_match_ID";
         update.playerName = "dummy_player_name";
         update.pieceID =  "M";
+//        update.updatedBoard = new int[7][7];
+//        update.updatedBoard = congoGame.getBoardForDatabase();
+//        update.updatedBoard[4][1] = "P";
+//        update.updatedBoard[5][1] = "";
         update.updatedBoard = new int[3][3];
         update.updatedBoard[0][0] = 1;
         update.updatedBoard[0][1] = 2;
         update.whoseTurn = "opponent";
+        update.errorMessage = "The move requested by the player cannot be made.";
 
         return update;
     }
