@@ -92,7 +92,7 @@ public class DatabaseHandler {
     }
     
     public void saveGameState(int matchID, String[][] board) throws Exception {
-        Connection con = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement saveGame = con.createStatement();
         int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
         
