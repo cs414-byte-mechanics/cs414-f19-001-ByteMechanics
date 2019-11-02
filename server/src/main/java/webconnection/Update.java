@@ -10,12 +10,12 @@ public class Update {
     public String matchID;
     public String playerName;
     public String pieceID;
-    public int[][] updatedBoard;
+    public String[][] updatedBoard;
     public String whoseTurn;
     public String successMessage;
     public String userName;
     public String userEmail;
-    public int[][] initialBoard;
+    public String[][] initialBoard;
     public String matchBeginTime;
     public String invitationFrom;
     public String invitationTo;

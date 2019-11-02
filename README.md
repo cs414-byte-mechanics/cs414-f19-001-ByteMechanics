@@ -20,5 +20,15 @@ These `npm` scripts are mapped to common actions in one directory for convenienc
 - *server*: `mvn install`
 - *test*: `mvn test`
 
+## Connect to database from off campus or on non-cs lab machine
+1. In a terminal separate from where are the starting the server, enter the command 
+
+`ssh -N -L 56247:faure.cs.colostate.edu:3306 <your-username>@eel.cs.colostate.edu`
+
+  * Replace <your-username> with the username you use to login to the CS department machines.
+  
+ 2. In the terminal from where you are starting the server, enter the command `export TUNNEL=true` 
+ 3. Start the server. It should now be able to communicate with the database.
+
 # Contributors
 This project is for CS414: Introduction to Object Oriented Design at Colorado State University. Group members include Aislinn Jeske, Abigail Rictor, Farzaneh Kadkhodaie, Marylou Nash, and Zach Klausner.

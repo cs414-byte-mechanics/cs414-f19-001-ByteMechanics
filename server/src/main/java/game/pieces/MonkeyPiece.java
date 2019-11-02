@@ -1,5 +1,6 @@
-package Game;
+package game.pieces;
 
+import game.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +17,9 @@ public class MonkeyPiece extends GamePiece{
         return (player == 1) ? "m" : "M";
     }
 
+    public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){
+        return false;
+    }
 
     protected GamePiece jumpCapturesPiece(int fromRow, int fromCol, int destRow, int destCol, GamePiece[][] board) {
         /* Returns the object of a Gamepiece that was captured by jumping over it.

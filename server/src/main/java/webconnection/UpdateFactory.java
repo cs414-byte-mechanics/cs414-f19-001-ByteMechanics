@@ -1,20 +1,16 @@
 package webconnection;
 import database.*;
-import Game.*;
+import game.*;
+import game.pieces.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
 public class UpdateFactory
 {
     private DatabaseHandler db;
-    private GameBoard congoGame;
 
     public UpdateFactory() {
         db = new DatabaseHandler();
-        //congoGame = new Game();
-        //congoGame.createNewGame();
-        congoGame = new GameBoard();
-        congoGame.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -23,7 +19,7 @@ public class UpdateFactory
         {
             case "requestMoves": return this.buildUpdateBoard(action);
             case "registerUser": return this.registerUser(action);
-            case "requestBeginNewMatch": return this.buildBeginNewMatch();
+            case "requestBeginNewMatch": return this.createNewMatch(action);
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
             case "quitMatch": return this.buildEndMatch();
@@ -37,41 +33,46 @@ public class UpdateFactory
     }
 
     private Update buildUpdateBoard(Action action) {
-//        System.out.println(action.toString());
+        try {
+            Game game = new Game();
+            game.loadExistingGame(action);
+        
+            if (action.desiredMoves != null) {
+                ArrayList<Integer> movesRow = new ArrayList<>();
+                ArrayList<Integer> movesCol = new ArrayList<>();
+                for (int i = 1; i < action.desiredMoves.length; i++){
+                    int col = action.desiredMoves[i] % 10;
+                    int row = (action.desiredMoves[i] - col)/10;
+                    movesCol.add(col);
+                    movesRow.add(row);
+                }
 
-        if (action.desiredMoves != null) {
-            int pieceCol = action.desiredMoves[0] % 10;
-            int pieceRow = (action.desiredMoves[0] - pieceCol)/10;
-            GamePiece piece = congoGame.getGamePiece(pieceRow, pieceCol);
-
-            ArrayList<Integer> movesRow = new ArrayList<>();
-            ArrayList<Integer> movesCol = new ArrayList<>();
-            for (int i = 1; i < action.desiredMoves.length; i++){
-                int col = action.desiredMoves[i] % 10;
-                int row = (action.desiredMoves[i] - col)/10;
-                movesCol.add(col);
-                movesRow.add(row);
+                boolean moveSucceeded = game.performMove(action.desiredMoves[0], movesRow, movesCol);
+            
+                if(moveSucceeded){
+                    game.saveMatchState(Integer.parseInt(action.matchID));
+                }
             }
-          boolean moveSucceeded = piece.performMove(movesRow, movesCol, congoGame);
-//          System.out.println("moveSucceeded: "+moveSucceeded);
-        }
 
-        Update update = new Update();
-        update.communicationType = "updateBoard";
-        update.matchID = "dummy_match_ID";
-        update.playerName = "dummy_player_name";
-        update.pieceID =  "M";
+            Update update = new Update();
+            update.communicationType = "updateBoard";
+            update.matchID = action.matchID;
+            update.playerName = action.playerName;
+            update.pieceID =  "M";
 //        update.updatedBoard = new int[7][7];
 //        update.updatedBoard = congoGame.getBoardForDatabase();
 //        update.updatedBoard[4][1] = "P";
 //        update.updatedBoard[5][1] = "";
-        update.updatedBoard = new int[3][3];
-        update.updatedBoard[0][0] = 1;
-        update.updatedBoard[0][1] = 2;
-        update.whoseTurn = "opponent";
-        update.errorMessage = "The move requested by the player cannot be made.";
+            update.updatedBoard = game.getBoard();
+            update.whoseTurn = "opponent";
+            update.errorMessage = "The move requested by the player cannot be made.";
 
-        return update;
+            return update;
+        } catch (Exception e){
+            System.err.println("Game cannot be fetched");
+            return null;
+        }
+
     }
 
     private Update registerUser(Action action) {
@@ -115,16 +116,22 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildBeginNewMatch() {
-        Update update = new Update();
-        update.communicationType = "beginNewMatch";
-        update.matchID = "dummy_math_ID";
-        update.initialBoard = new int[5][5];
-        update.initialBoard[0][0] = 1;
-        update.initialBoard[0][1] = 2;
-        update.whoseTurn = "opponent";
-        update.matchBeginTime = "dummy_match_begin_time";
-        return update;
+    private Update createNewMatch(Action action) {
+        try {
+            Game game = new Game();
+            Update update = new Update();
+            
+            update.communicationType = "beginNewMatch";
+            update.matchID = Integer.toString(game.createNewGame(action));
+            update.initialBoard = game.getBoard();
+            update.whoseTurn = action.playerOneName;
+    //         update.matchBeginTime = "dummy_match_begin_time";
+            return update;
+        } catch(Exception e){
+            System.err.println("New match cannot be created");
+            return null;
+        }
+
     }
 
     private Update buildInvitation() {

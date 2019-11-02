@@ -8,6 +8,7 @@ import Form from './Form.js'
 import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
+import Invitations from "./Invitations";
 
 class Game extends Component {
     constructor(props){
@@ -130,6 +131,11 @@ class Game extends Component {
                 <div id="page_container">
                     <Switch location={window.location}>
                         <Route
+                          exact
+                          path="/invitations"
+                          render={(props) => <Invitations isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName}/>}
+                        />
+                        <Route
                             exact
                             path="/"
                             render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName}/>}
@@ -147,7 +153,6 @@ class Game extends Component {
                             render={(props) => <GameBoard game={this.state.games[0]} send={this.sendObject}/>}
                         />
                     </Switch>
-
                 </div>
             </div>
         );

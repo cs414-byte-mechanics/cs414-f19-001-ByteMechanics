@@ -1,8 +1,6 @@
-package Game ;
+package game ;
 
-import Game.GamePiece;
-import Game.GiraffePiece;
-
+import game.pieces.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

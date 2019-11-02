@@ -1,6 +1,6 @@
-package Game ;
+package game ;
 
-// import jdk.jfr.StackTrace;
+import game.pieces.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
