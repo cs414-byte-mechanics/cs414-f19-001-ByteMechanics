@@ -8,6 +8,7 @@ import webconnection.Update;
 import webconnection.Action;
 import webconnection.UpdateFactory;
 import webconnection.WebsocketServer;
+import Game.*;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -17,6 +18,7 @@ import static org.junit.Assert.*;
 
 public class UpdateFactoryTest
 {
+    GameBoard congoGame;
     WebsocketServer wss;
     WebSocket dummyClient;
     UpdateFactory updateMaker = new UpdateFactory();
@@ -25,6 +27,9 @@ public class UpdateFactoryTest
     @Before
     public void initialize() {
         wss = new WebsocketServer();
+        congoGame = new GameBoard();
+        congoGame.initialize();
+
         dummyClient = new WebSocket() {
             @Override
             public void close(int i, String s) {}
@@ -65,8 +70,8 @@ public class UpdateFactoryTest
         };
     }
 
-/* This test is not passing
-    @Test
+/* This test is not passing as the content's of  function has changed*/
+/*    @Test
     public void testBuildUpdateBoard()
     {
         Action action = new Action();
@@ -133,6 +138,30 @@ public class UpdateFactoryTest
         expected.matchEndTime = "dummy_end_time";
         assertEquals(updateMaker.getUpdate(action),expected);
     }
+
+//    @Test // added by fari
+//    public void testBuildUpdateBoard()
+//    {
+//        Action action = new Action();
+//        action.communicationType = "requestMoves";
+//        action.desiredMoves[0] = 12 ;
+//        action.desiredMoves[1]= 23 ;
+//
+//        Update expected = new Update();
+//        expected.communicationType = "updateBoard";
+//
+//        expected.matchID = action.matchID;
+//        expected.playerName = action.playerName;
+//        expected.pieceID =  action.pieceID;
+//
+//        System.out.println();
+//
+//        expected.updatedBoard = new String[3][3];
+//        expected.updatedBoard[0][0] = "1";
+//        expected.updatedBoard[0][1] = "2";
+//        expected.whoseTurn = "opponent";
+//        assertEquals(updateMaker.getUpdate(action),expected);
+//    }
 
 //    @Test // added by Fari -- not sure how to write test to check board get updated
 //    public void testBuildUpdateBoard()

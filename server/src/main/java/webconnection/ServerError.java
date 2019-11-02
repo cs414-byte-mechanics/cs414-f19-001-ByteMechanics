@@ -36,7 +36,7 @@ public class ServerError
         }
     }
 
-    public String getErrorMessage( int errorCode){
+    public static String getErrorMessage( int errorCode){
     switch (errorCode){
         case 100: return "Invalid password when attempting a login";
         case 101: return " Username not found when attempting a login";

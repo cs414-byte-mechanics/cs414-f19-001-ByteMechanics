@@ -9,11 +9,11 @@ public class UpdateFactory
     private DatabaseHandler db;
     private GameBoard congoGame;
     private int errorCode;
+    private String communicationType , message, whoseTurn;
+//    private String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
 
     public UpdateFactory() {
         db = new DatabaseHandler();
-        //congoGame = new Game();
-        //congoGame.createNewGame();
         congoGame = new GameBoard();
         congoGame.initialize();
     }
@@ -67,10 +67,35 @@ public class UpdateFactory
 
         return false;
     }
+    private String constructMessage(String communicationType) {
+        switch (communicationType){
+            case "updateBoard": return  "The player's move was valid and the board has been updated";
+            case "errorInvalidMove": errorCode= 102; return ServerError.getErrorMessage(errorCode);
 
-    private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board,String turn){
+            default:
+                System.err.println("Message has not been constructed!!");
+                return null;
+        }
+    }
+
+    private String[][] updateBoard(String communicationType, String[][] board){
+        if (communicationType == "updateBoard")
+            board = congoGame.getBoardForDatabase();
+
+        return board;
+    }
+
+    private String updateTurn (String communicationType){
+        if(communicationType == "updateBoard")
+            return "opponents";
+        else
+            return "you";
+    }
+
+    private Update wrapUpResponse(Update update, Action action, String communicationType, String message,String[][] board , String turn)
+    {
         update.communicationType = communicationType;
-//        update.communicationVersion = 1;
+        update.communicationVersion = 1;
         update.matchID = action.matchID;
         update.playerName = action.playerName;
         update.pieceID =  action.pieceID;
@@ -80,40 +105,46 @@ public class UpdateFactory
         update.updatedBoard = board ;
 //        update.updatedBoard[0][0] = 1;
 //        update.updatedBoard[0][1] = 2;
-        update.whoseTurn = turn;
+//        update.whoseTurn = turn;
+        return update;
+    }
+
+    private Update constructResponse(Update update, Action action, String communicationType, String[][] board)
+    {
+        /*Construct response message according to communicationType*/
+        String message = constructMessage(communicationType);
+
+        /*Update board if communicationType is updateBoard */
+        board = updateBoard(communicationType, board);
+
+        /* switch the turn if move is valid and board get updated*/
+        String Turn = updateTurn(communicationType);
+
+        /*Finally wrap up the response and send back to client*/
+        update = wrapUpResponse(update, action, communicationType, message, board, Turn);
 
         return update;
     }
+
+
     public Update buildUpdateBoard(Action action) {
-//        System.out.println(action.toString());
 
-        String communicationType , message, whoseTurn;
         Update update = new Update();
-        String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
-
         boolean moveSucceeded = processMove(action.desiredMoves, congoGame);
+        String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
 
         /* if it's true, means move is validated/legal, so we need to return updated board back to client */
         if (moveSucceeded == true)
         {
             communicationType = "updateBoard";
-            message = "The player's move was valid and the board has been updated";
-            whoseTurn = "opponent";
-
             /* In case of valid/legal requestMove, move performed and board get updated- so we update previous board*/
-            boardToBeSent = congoGame.getBoardForDatabase();
-            wrapUpResponse(update, action, communicationType, message, boardToBeSent, whoseTurn);
+            constructResponse(update, action, communicationType, boardToBeSent);
         }
         else /* validate move is false, so we return error */
         {
             communicationType = "errorInvalidMove";
-            errorCode =102;
-            ServerError serverError = new ServerError(errorCode);
-            message = serverError.getErrorMessage(errorCode);
-            whoseTurn = "You";
-            wrapUpResponse(update, action, communicationType, message, boardToBeSent,whoseTurn);
+            constructResponse(update, action, communicationType, boardToBeSent);
         }
-
         return update;
     }
 
