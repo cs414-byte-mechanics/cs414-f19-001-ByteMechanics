@@ -2,7 +2,7 @@ package database;
 
 import java.sql.*;
 import webconnection.*;
-import game.*;
+import Game.*;
 
 //NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
 

@@ -1,6 +1,5 @@
-package game;
+package Game;
 
-import game.pieces.*;
 import java.util.ArrayList;
 import java.util.ListIterator;
 

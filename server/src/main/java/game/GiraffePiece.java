@@ -1,6 +1,4 @@
-package game.pieces;
-
-import game.*;
+package Game;
 
 public class GiraffePiece extends GamePiece {
 
