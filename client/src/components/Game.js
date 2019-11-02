@@ -64,6 +64,8 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
+            case "errorInvalidMove": alert(update.errorMessage); break;
+            case "updateBoard": this.updateBoard(update); break;
             case "errorInvalidRegistration": alert(update.errorMessage); break;
             case "loginSuccess": this.updateLogin(update); break;
             case "errorInvalidLogin": alert(update.errorMessage); break;
@@ -77,6 +79,12 @@ class Game extends Component {
         this.setState({logIn: new_login_state}, ()=>{console.log("success")});
         this.setCookie(new_login_state);
         window.location.href = "/";
+    }
+
+    updateBoard(update){
+        let state = this.state;
+        state.games = update.updatedBoard;
+        this.setState(state);
     }
 
     setCookie(logIn, exdays=0) {
