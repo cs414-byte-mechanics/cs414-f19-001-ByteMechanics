@@ -1,11 +1,12 @@
 import webconnection.Action;
 import database.DatabaseHandler;
-import Game.Game;
+import game.Game;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
 import java.sql.SQLException;
 import static org.junit.Assert.*;
+import java.util.*;
 
 /**
 Commenting out tests for the sake of Travis CI
@@ -31,6 +32,23 @@ public class DatabaseHandlerTest {
    }
    
    //@Test
+   public void testSaveGameState() throws Exception {
+        Action action = new Action();
+        action.communicationType = "requestMoves";
+        action.matchID = "10";
+        
+        Game game = new Game();
+        game.loadExistingGame(action);
+        ArrayList<Integer> destRows = new ArrayList<>();
+        ArrayList<Integer> destCols = new ArrayList<>();
+        destRows.add(2);
+        destCols.add(1);
+
+        game.performMove(11, destRows, destCols);
+        game.saveMatchState(10);
+   }
+   
+    //@Test
    public void testRetrieveGameInfo() throws Exception {
         Action action = new Action();
         action.communicationType = "requestMoves";
