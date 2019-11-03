@@ -53,7 +53,7 @@ public class Query {
     public static String createUpdateInvitationTimesQuery(String updatedInvitationTimes, Action action) {
         return "UPDATE users SET invitation_times = \"" + updatedInvitationTimes + "\" WHERE username = \"" + action.invitationTo + "\";";
     }
-
+  
    public static String boardToString(String[][] board){
         String boardAsString = "";
    

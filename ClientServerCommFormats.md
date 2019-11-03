@@ -122,6 +122,7 @@ List of communication types for `Update`
 * loadInvitations
 * invitationSentStatus
 
+
 List of communication types for `ServerError`:
 
 * errorInvalidMove
@@ -529,6 +530,7 @@ This communication type will be sent by the server when communicating with clien
 * 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
 * 10/26/2019 zachklau updated ServerError to remove unnecessary fields and add server error codes.
 * 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
+* 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
 
 # Notes

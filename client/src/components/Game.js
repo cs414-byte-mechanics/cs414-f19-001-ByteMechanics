@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 import { Switch, Route, withRouter, Link } from "react-router-dom";
-
 import Home from './Home.js'
 import GameBoard from './GameBoard.js'
 import Form from './Form.js'
@@ -13,7 +12,9 @@ import Invitations from "./Invitations";
 class Game extends Component {
     constructor(props){
         super(props);
-
+      
+        this.updateSearchResult = this.updateSearchResult.bind(this);
+      
         this.state = {
           logIn: {},
           games: [
@@ -31,9 +32,12 @@ class Game extends Component {
             userName: "",
             userFound: false
           },
+
           showInvitePlayer: false,
           showInvitationSentStatus: false,
-          invitationSent: false
+          invitationSent: false,
+          showInvitePlayer: false
+
         }
 
         this.connection = null;
@@ -135,6 +139,7 @@ class Game extends Component {
     updateInvitationSentStatus(update) {
       this.setState({invitationSent: update.invitationSent});
       this.setState({showInvitationSentStatus: true});
+      this.setState({showInvitePlayer: true});
     }
 
     render(){
@@ -154,6 +159,7 @@ class Game extends Component {
                                                           showInvitePlayer={this.state.showInvitePlayer}
                                                           invitationSent={this.state.invitationSent}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
+
                           />}
                         />
                         <Route

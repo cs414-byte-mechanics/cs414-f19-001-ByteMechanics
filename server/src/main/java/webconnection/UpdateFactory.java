@@ -1,7 +1,7 @@
 package webconnection;
+
 import database.*;
-import game.*;
-import game.pieces.*;
+import Game.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
@@ -171,7 +171,7 @@ public class UpdateFactory
 
         return update;
     }
-
+  
     private Update buildInvitationSentStatus(Action action) {
         Update update = new Update();
         update.communicationType = "invitationSentStatus";
@@ -184,5 +184,4 @@ public class UpdateFactory
         update.invitationSent = true;
         return update;
     }
-
 }

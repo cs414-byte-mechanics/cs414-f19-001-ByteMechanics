@@ -57,6 +57,26 @@ class Invitations extends React.Component {
         );
     }
 
+    renderSearchBox() {
+        return (
+          <div>
+          <Col>
+            <Label>Search for a User to Invite</Label>
+            <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Enter the name of the user..." onChange={event => this.updateSearchString(event)}/>
+          </Col>
+          <Col>
+            {this.renderSearchButton()}
+          </Col>
+          </div>
+        );
+    }
+
+    renderSearchButton() {
+        return (
+          <Button color="info" onClick={this.submitSearchString}>Search</Button>
+        );
+    }
+
     updateSearchString(event) {
       this.setState({
         searchString: event.target.value
@@ -72,7 +92,6 @@ class Invitations extends React.Component {
     }
 
     renderInvitePlayer() {
-
       if (this.props.showInvitePlayer) {
         if (this.props.searchResult.userFound && this.props.showInvitePlayer) {
           return (
@@ -124,11 +143,6 @@ class Invitations extends React.Component {
       this.props.sendObject(inviteObject);
       this.setState({showInvitePlayer: false});
     }
-
 }
-
-// "communicationType": "sendInvitation",
-//   "invitationFrom": "",
-//   "invitationTo": "",
 
 export default Invitations;
