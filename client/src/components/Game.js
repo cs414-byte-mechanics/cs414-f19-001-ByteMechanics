@@ -13,6 +13,9 @@ import Invitations from "./Invitations";
 class Game extends Component {
     constructor(props){
         super(props);
+        
+        this.updateSearchResult = this.updateSearchResult.bind(this);
+
         this.state = {
           logIn: {},
           games: [
@@ -25,7 +28,12 @@ class Game extends Component {
               ["P", "P", "P", "P", "P", "P", "P"],
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
-          ]
+          ],
+          searchResult: {
+            userName: "",
+            userFound: false
+          },
+          showInvitePlayer: false
         }
 
         this.connection = null;
@@ -69,6 +77,7 @@ class Game extends Component {
             case "errorInvalidLogin": alert(update.errorMessage); break;
             case "logoutSuccess": this.updateLogin(update); break;
             case "logoutFailure": alert(update.errorMessage); break;
+            case "searchResult": this.updateSearchResult(update); break;
         }
     }
 
@@ -115,6 +124,11 @@ class Game extends Component {
 
     isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 
+    updateSearchResult(update) {
+      this.setState({searchResult: update});
+      this.setState({showInvitePlayer: true})
+    }
+
     render(){
 
         return(
@@ -125,7 +139,12 @@ class Game extends Component {
                         <Route
                           exact
                           path="/invitations"
-                          render={(props) => <Invitations isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName}/>}
+                          render={(props) => <Invitations isLoggedIn={this.isLoggedIn}
+                                                          userName={this.state.logIn.userName}
+                                                          sendObject={this.sendObject}
+                                                          searchResult={this.state.searchResult}
+                                                          showInvitePlayer={this.state.showInvitePlayer}
+                          />}
                         />
                         <Route
                             exact
