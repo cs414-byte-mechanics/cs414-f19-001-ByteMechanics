@@ -109,6 +109,7 @@ List of communication types for `Action`:
 * unregisterUser
 * attemptLogin
 * searchUser
+* requestInvitations
 
 List of communication types for `Update`
 
@@ -344,6 +345,18 @@ This communication type will both be sent from clients to the server and from th
 * `communicationType` is a string and will specify that the purpose of the object is to communicate the status of a sent invitation.
 * `invitationSent` will be true if the invitation was successfully sent and false otherwise.
 
+## requestInvitations
+
+```javascript 
+{
+    "communicationType": "requestInvitations",
+    "userName": "name of user"
+}
+```
+
+* `communicationType` is a string and specifies that the purpose of the object is to request the users invitations.
+* `userName` is a string and is the name of the user who is requesting their invitations.
+
 ## loadInvitations
 
 ```javascript
@@ -529,7 +542,7 @@ This communication type will be sent by the server when communicating with clien
 * 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
 * 10/26/2019 zachklau updated ServerError to remove unnecessary fields and add server error codes.
 * 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
-* 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
+* 11/2/2019 zachklau removed invitation and added sendInvitation, loadInvitation, requestInvitation, and invitationSentStatus
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

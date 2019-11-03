@@ -28,6 +28,7 @@ public class UpdateFactory
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
             case "sendInvitation": return this.buildInvitationSentStatus(action);
+            case "requestInvitations": return this.buildLoadInvitations(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -182,6 +183,23 @@ public class UpdateFactory
             return update;
         }
         update.invitationSent = true;
+        return update;
+    }
+
+    private Update buildLoadInvitations(Action action) {
+        Update update = new Update();
+        ArrayList<String> invitationsAndTimes = new ArrayList<>();
+        update.communicationType = "loadInvitations";
+        update.userName = action.userName;
+        try {
+            invitationsAndTimes = db.loadInvitations(action);
+        } catch(Exception e) {
+            update.invitationsFrom = null;
+            update.invitationTimes = null;
+            return update;
+        }
+        update.invitationsFrom = invitationsAndTimes.get(0);
+        update.invitationTimes = invitationsAndTimes.get(1);
         return update;
     }
 

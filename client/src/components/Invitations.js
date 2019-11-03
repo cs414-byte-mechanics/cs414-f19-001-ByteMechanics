@@ -1,6 +1,6 @@
 import React from 'react';
 import Dashboard from "./Dashboard";
-import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
+import {Label, Input, Button, Row, Col, Table, ButtonGroup} from 'reactstrap';
 
 class Invitations extends React.Component {
 
@@ -9,6 +9,7 @@ class Invitations extends React.Component {
 
       this.submitSearchString = this.submitSearchString.bind(this);
       this.sendGameInvite = this.sendGameInvite.bind(this);
+      this.sendInvitationsRequest = this.sendInvitationsRequest.bind(this);
 
         this.state = {
           searchString: ''
@@ -25,6 +26,8 @@ class Invitations extends React.Component {
             <Row>{this.renderInvitePlayer()}</Row>
             <p/>
             <Row>{this.renderInviteStatus()}</Row>
+            <p/>
+            <Row>{this.renderInvitationsTable()}</Row>
           </div>
         );
     }
@@ -125,10 +128,62 @@ class Invitations extends React.Component {
       this.setState({showInvitePlayer: false});
     }
 
-}
+    renderInvitationsTable() {
+      if (this.props.invitationsFrom.length > 1) {
+        let invArr = this.props.invitationsFrom.split(',');
+        let timeArr = this.props.invitationTimes.split(',');
+        return (
+          <Col>
+            <div>
+              <Table>
+                <thead>
+                <tr>
+                  <th>Invitation From</th>
+                  <th>Time Received</th>
+                  <th>Accept/Decline</th>
+                </tr>
+                </thead>
+                <tbody>
+                {this.renderTableBody(invArr, timeArr)}
+                </tbody>
+              </Table>
+            </div>
+          </Col>
+        );
+      }
+    }
 
-// "communicationType": "sendInvitation",
-//   "invitationFrom": "",
-//   "invitationTo": "",
+    sendInvitationsRequest() {
+      let requestObject = {
+        communicationType: "requestInvitations",
+        userName: this.props.userName
+      };
+      this.props.sendObject(requestObject);
+    }
+
+    renderTableBody(invArr, timeArr) {
+      let tableRows = [];
+      for (let i = 1; i < invArr.length; i++) {
+        tableRows.add(
+          <tr>
+            <td>
+            {invArr.get(i)}
+            </td>
+            <td>
+              {new Date(timeArr.get(i))}
+            </td>
+            <td>
+              <ButtonGroup>
+                <Button color="success">Accept</Button>
+                <Button color="danger">Decline</Button>
+              </ButtonGroup>
+            </td>
+          </tr>
+        );
+      }
+      return tableRows;
+    }
+
+}
 
 export default Invitations;

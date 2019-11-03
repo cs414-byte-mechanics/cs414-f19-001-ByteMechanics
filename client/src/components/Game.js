@@ -13,7 +13,6 @@ import Invitations from "./Invitations";
 class Game extends Component {
     constructor(props){
         super(props);
-
         this.state = {
           logIn: {},
           games: [
@@ -33,7 +32,9 @@ class Game extends Component {
           },
           showInvitePlayer: false,
           showInvitationSentStatus: false,
-          invitationSent: false
+          invitationSent: false,
+          invitationsFrom: "",
+          invitationTimes: ""
         }
 
         this.connection = null;
@@ -41,6 +42,8 @@ class Game extends Component {
         this.logOut = this.logOut.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
         this.updateSearchResult = this.updateSearchResult.bind(this);
+        this.updateInvitationsAndTimes = this.updateInvitationsAndTimes.bind(this);
+        this.sendInvitationsRequest = this.sendInvitationsRequest.bind(this);
 
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
@@ -51,6 +54,7 @@ class Game extends Component {
         this.connection = new WebSocket('ws://localhost:4444');
         this.connection.onopen = function () {
           console.log('Connected!');
+          this.sendInvitationsRequest();
         }.bind(this);
 
         this.connection.onerror = function (error) {
@@ -80,6 +84,7 @@ class Game extends Component {
             case "logoutFailure": alert(update.errorMessage); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
+            case "loadInvitations": this.updateInvitationsAndTimes(update); break;
         }
     }
 
@@ -137,8 +142,20 @@ class Game extends Component {
       this.setState({showInvitationSentStatus: true});
     }
 
-    render(){
+    updateInvitationsAndTimes(update) {
+      this.state.invitationsFrom = update.invitationsFrom;
+      this.state.invitationTimes = update.invitationTimes;
+    }
 
+    sendInvitationsRequest() {
+      let requestObject = {
+        communicationType: "requestInvitations",
+        userName: this.state.logIn.userName
+      };
+      this.sendObject(requestObject);
+    }
+
+    render(){
         return(
             <div id="Application">
                 <Header sendObject={this.sendObject} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
@@ -154,6 +171,8 @@ class Game extends Component {
                                                           showInvitePlayer={this.state.showInvitePlayer}
                                                           invitationSent={this.state.invitationSent}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
+                                                          invitationsFrom={this.state.invitationsFrom}
+                                                          invitationTimes={this.state.invitationTimes}
                           />}
                         />
                         <Route

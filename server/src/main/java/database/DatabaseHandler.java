@@ -1,6 +1,8 @@
 package database;
 
 import java.sql.*;
+import java.util.ArrayList;
+
 import webconnection.*;
 import game.*;
 
@@ -155,6 +157,38 @@ public class DatabaseHandler {
 
 
         } catch(Exception e) {throw new Exception();}
+    }
+
+    public ArrayList<String> loadInvitations(Action action) throws Exception {
+        ResultSet rs = null;
+        String invitations = "";
+        String invitationTimes = "";
+
+        try {
+            Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+            Statement getInvitations = con.createStatement();
+            rs = getInvitations.executeQuery(Query.createGetCurrentInvitationsQuery(action));
+
+            if (!rs.next()) {
+                throw new Exception();
+            }
+
+            invitations = rs.getString(1);
+            Statement getInvitationTimes = con.createStatement();
+            rs = getInvitationTimes.executeQuery(Query.createGetCurrentInvitationTimesQuery(action));
+
+            if (!rs.next()) {
+                throw new Exception();
+            }
+
+            invitationTimes = rs.getString(1);
+        } catch(Exception e) {throw new Exception();}
+
+        ArrayList<String> invitationsAndTimes = new ArrayList<>();
+        invitationsAndTimes.add(invitations);
+        invitationsAndTimes.add(invitationTimes);
+
+        return invitationsAndTimes;
     }
 
 } 
