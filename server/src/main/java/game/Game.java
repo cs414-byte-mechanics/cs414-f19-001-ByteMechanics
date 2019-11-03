@@ -17,9 +17,10 @@ public class Game {
     public int createNewGame(Action action) throws Exception {
         //Initialize board and pieces
         gameBoard.initialize();
-        
+
         //Save to database
         int matchID = dbHandler.addNewGame(action, gameBoard.getBoardForDatabase());
+
         return matchID;
     }
     
@@ -46,5 +47,7 @@ public class Game {
     public String[][] getBoard(){
         return gameBoard.getBoardForDatabase();
     }
+
+    public GameBoard getGameBoard() {return gameBoard;}
 
 }

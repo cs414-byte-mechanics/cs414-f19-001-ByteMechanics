@@ -22,8 +22,8 @@ class Game extends Component {
               ["", "", "", "", "", "", ""],
               ["", "", "", "", "", "", ""],
               ["", "", "", "", "", "", ""],
-              ["P", "P", "P", "P", "P", "P", "P"],
-              ["G", "M", "E", "L", "E", "C", "Z"]
+              ["p", "p", "p", "p", "p", "p", "p"],
+              ["g", "m", "e", "l", "e", "c", "z"]
             ]
           ]
         }
@@ -83,7 +83,7 @@ class Game extends Component {
 
     updateBoard(update){
         let state = this.state;
-        state.games = update.updatedBoard;
+        state.games = [update.updatedBoard];
         this.setState(state);
     }
 
