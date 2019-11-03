@@ -1,16 +1,22 @@
 package webconnection;
-
 import database.*;
-import Game.*;
+import game.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
 public class UpdateFactory
 {
     private DatabaseHandler db;
+    private GameBoard congoGame;
+    private int errorCode;
+    private String communicationType , message, whoseTurn;
+//    private String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
 
     public UpdateFactory() {
+
         db = new DatabaseHandler();
+        congoGame = new GameBoard();
+        congoGame.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -32,43 +38,117 @@ public class UpdateFactory
         }
     }
 
+    /* this function extract desired move and validate that the move from current location to destination is valid or no */
+    public boolean processMove(int[] desiredMove, GameBoard congoGame){
+        ArrayList<Integer> movesRow = new ArrayList<>();
+        ArrayList<Integer> movesCol = new ArrayList<>();
+
+        if (desiredMove != null) {
+            /* Extract current location*/
+            int pieceCol = desiredMove[0] % 10;
+            int pieceRow = desiredMove[0] / 10;
+//            System.out.println(" Piece is currently on " + pieceRow + pieceCol);
+
+            /* Grab the piece based on the current location */
+            GamePiece piece =  congoGame.getGamePiece(pieceRow, pieceCol);
+
+            /* Extract destination*/
+            for (int i = 1; i < desiredMove.length; i++) {
+                int col = desiredMove[i] % 10;
+                int row = (desiredMove[i] - col) / 10;
+                movesCol.add(col);
+                movesRow.add(row);
+            }
+
+            return (piece.performMove(movesRow, movesCol, congoGame));
+        }
+
+        return false;
+    }
+
+    /* helper routine to fill out message fields*/
+    private String constructMessage(String communicationType) {
+        switch (communicationType){
+            case "updateBoard": return  "The player's move was valid and the board has been updated";
+            case "errorInvalidMove": errorCode= 102; return ServerError.getErrorMessage(errorCode);
+
+            default:
+                System.err.println("Message has not been constructed!!");
+                return null;
+        }
+    }
+
+    private String[][] updateBoard(String communicationType, String[][] board){
+        if (communicationType == "updateBoard")
+            board = congoGame.getBoardForDatabase();
+
+        return board;
+    }
+
+    private String updateTurn (String communicationType){
+        if(communicationType == "updateBoard")
+            return "opponent";
+        else
+            return "you";
+    }
+
+    private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board, String turn)
+    {
+        update.communicationType = communicationType;
+        update.communicationVersion = 0;
+        update.matchID = action.matchID = "dummy_match_ID";
+        update.playerName = action.playerName = "dummy_playerName";
+        update.pieceID =  action.pieceID = "dummy_pieceID";
+        update.successMessage = message;
+
+        /* updated board needs to be sent/returned to the client correctly*/
+        update.updatedBoard = board ;
+        update.whoseTurn = turn;
+
+        return update;
+    }
+
+    private Update constructResponse(Update update, Action action, String communicationType, String[][] board)
+    {
+        /*Construct response message according to communicationType*/
+        String message = constructMessage(communicationType);
+
+        /*Update board if communicationType is updateBoard */
+        board = updateBoard(communicationType, board);
+
+        /* switch the turn if move is valid and board get updated*/
+        String Turn = updateTurn(communicationType);
+
+        /*Finally wrap up the response and send back to client*/
+        update = wrapUpResponse(update, action, communicationType, message, board, Turn);
+
+        return update;
+    }
+
     private Update buildUpdateBoard(Action action) {
         try {
             Game game = new Game();
             game.loadExistingGame(action);
-        
-            if (action.desiredMoves != null) {
-                ArrayList<Integer> movesRow = new ArrayList<>();
-                ArrayList<Integer> movesCol = new ArrayList<>();
-                for (int i = 1; i < action.desiredMoves.length; i++){
-                    int col = action.desiredMoves[i] % 10;
-                    int row = (action.desiredMoves[i] - col)/10;
-                    movesCol.add(col);
-                    movesRow.add(row);
-                }
 
-                boolean moveSucceeded = game.performMove(action.desiredMoves[0], movesRow, movesCol);
-            
-                if(moveSucceeded){
-                    game.saveMatchState(Integer.parseInt(action.matchID));
-                }
-            }
-
+            String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
             Update update = new Update();
-            update.communicationType = "updateBoard";
-            update.matchID = action.matchID;
-            update.playerName = action.playerName;
-//             update.pieceID =  "M";
-            update.updatedBoard = game.getBoard();
-            update.whoseTurn = "opponent";
 
+            boolean moveSucceeded = processMove(action.desiredMoves, congoGame);
+
+            if (moveSucceeded == true) /* move is validated/legal, so we need to return updated board back to client */ {
+                communicationType = "updateBoard";
+                constructResponse(update, action, communicationType, boardToBeSent);
+            }
+            else /* move isn't valid, so we return error */ {
+                communicationType = "errorInvalidMove";
+                constructResponse(update, action, communicationType, boardToBeSent);
+            }
             return update;
+
         } catch (Exception e){
             System.err.println("Game cannot be fetched");
             return null;
         }
-    
-
     }
 
     private Update registerUser(Action action) {
