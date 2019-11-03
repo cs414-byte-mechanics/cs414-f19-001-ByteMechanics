@@ -115,4 +115,46 @@ public class DatabaseHandler {
         
         if (rowsAffected < 1) throw new Exception("Game state was not saved in database.");
     }
+
+    public void sendGameInvitation(Action action) throws Exception {
+        ResultSet rs = null;
+        String currInvs = "";
+        String updatedInvitations = "";
+        String currInvTimes = "";
+        String updatedInvitationTimes = "";
+
+        try {
+            Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+            Statement currentInvitations = con.createStatement();
+            rs = currentInvitations.executeQuery(Query.createGetCurrentInvitationsQuery(action));
+
+            if (!rs.next()) {
+                throw new Exception();
+            }
+            else {
+                currInvs = rs.getString(1);
+            }
+
+            updatedInvitations = currInvs + "," + action.invitationFrom;
+            Statement updateInvitations = con.createStatement();
+            rs = updateInvitations.executeQuery(Query.createUpdateInvitationsQuery(updatedInvitations, action));
+
+            Statement currentInvitationTimes = con.createStatement();
+            rs = currentInvitationTimes.executeQuery(Query.createGetCurrentInvitationTimesQuery(action));
+
+            if (!rs.next()) {
+                throw new Exception();
+            }
+            else {
+                currInvTimes = rs.getString(1);
+            }
+
+            updatedInvitationTimes = currInvTimes + "," + System.currentTimeMillis();
+            Statement updateInvitationTimes = con.createStatement();
+            rs = updateInvitationTimes.executeQuery(Query.createUpdateInvitationTimesQuery(updatedInvitationTimes, action));
+
+
+        } catch(Exception e) {throw new Exception();}
+    }
+
 } 

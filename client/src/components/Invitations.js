@@ -8,6 +8,7 @@ class Invitations extends React.Component {
         super(props);
 
       this.submitSearchString = this.submitSearchString.bind(this);
+      this.sendGameInvite = this.sendGameInvite.bind(this);
 
         this.state = {
           searchString: ''
@@ -22,6 +23,8 @@ class Invitations extends React.Component {
             <Row>{this.renderSearchBox()}</Row>
             <p/>
             <Row>{this.renderInvitePlayer()}</Row>
+            <p/>
+            <Row>{this.renderInviteStatus()}</Row>
           </div>
         );
     }
@@ -70,15 +73,13 @@ class Invitations extends React.Component {
 
     renderInvitePlayer() {
 
-      console.log("in renderInvitePlayer");
-
       if (this.props.showInvitePlayer) {
         if (this.props.searchResult.userFound && this.props.showInvitePlayer) {
           return (
             <Col>
               <div>
                 <p>{this.props.searchResult.userName} has been found!</p>
-                <Button color= "info">Invite Player</Button>
+                <Button color= "info" onClick={this.sendGameInvite}>Invite Player</Button>
               </div>
             </Col>
         );
@@ -95,6 +96,39 @@ class Invitations extends React.Component {
       }
     }
 
+    renderInviteStatus() {
+      if (this.props.showInvitationSentStatus) {
+        if (this.props.invitationSent) {
+          return(
+            <Col>
+              <div><p>Invitation was successfully sent to {this.props.searchResult.userName}!</p></div>
+            </Col>
+          );
+        }
+        else {
+          return(
+            <Col>
+              <div><p>Was not able to send invitation to {this.props.searchResult.userName}!</p></div>
+            </Col>
+          );
+        }
+      }
+    }
+
+    sendGameInvite() {
+      let inviteObject = {
+        communicationType: "sendInvitation",
+        invitationFrom: this.props.userName,
+        invitationTo: this.props.searchResult.userName
+      };
+      this.props.sendObject(inviteObject);
+      this.setState({showInvitePlayer: false});
+    }
+
 }
+
+// "communicationType": "sendInvitation",
+//   "invitationFrom": "",
+//   "invitationTo": "",
 
 export default Invitations;

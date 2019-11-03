@@ -25,6 +25,7 @@ public class Update {
     public String loserName;
     public String matchEndTime;
     public boolean userFound;
+    public boolean invitationSent;
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
@@ -53,6 +54,7 @@ public class Update {
                                     + "loserName: " + this.loserName + "\n"
                                     + "matchEndTime: " + this.matchEndTime + "\n"
                                     + "userFound: " + this.userFound + "\n"
+                                    + "invitationSent: " + this.invitationSent + "\n"
                                     + "invitation: " + Arrays.deepToString(this.invitations) + "\n"
                                     + "matchesInProgress: " + Arrays.deepToString(this.matchesInProgress) + "\n"
                                     + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n";

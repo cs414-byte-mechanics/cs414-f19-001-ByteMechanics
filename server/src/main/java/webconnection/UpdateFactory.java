@@ -27,6 +27,7 @@ public class UpdateFactory
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
+            case "sendInvitation": return this.buildInvitationSentStatus(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -168,6 +169,19 @@ public class UpdateFactory
             update.userFound = true;
         }
 
+        return update;
+    }
+
+    private Update buildInvitationSentStatus(Action action) {
+        Update update = new Update();
+        update.communicationType = "invitationSentStatus";
+        try {
+            db.sendGameInvitation(action);
+        } catch(Exception e) {
+            update.invitationSent = false;
+            return update;
+        }
+        update.invitationSent = true;
         return update;
     }
 
