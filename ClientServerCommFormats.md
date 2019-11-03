@@ -70,6 +70,7 @@ Here is the structure for each of the four objects:
   "winnerName": "",
   "loserName": "",
   "matchEndTime": "",
+  "userFound",
   "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
   "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
@@ -105,6 +106,7 @@ List of communication types for `Action`:
 * quitMatch
 * unregisterUser
 * attemptLogin
+* searchUser
 
 List of communication types for `Update`
 
@@ -114,6 +116,7 @@ List of communication types for `Update`
 * invitation
 * endMatch
 * loginSuccess
+* searchResults
 
 List of communication types for `ServerError`:
 
@@ -460,6 +463,30 @@ This communication type will be sent by the server when communicating with clien
 * `matchesInProgress` is an array of objects. These objects contain information regarding matches that the player is currently playing.
 * `matchesCompleted` is an array of objects. These objects contain information regarding past matches that have ended. 
 
+## searchUser
+
+```javascript
+{
+  "communicationType": "searchUser",
+  "userName": "name of user"
+}
+```
+
+* `communicationType` is a string "searUsers" identifying the action type
+* `playerName` is the name of the user who the client is searching for
+
+## searchResult
+
+```javascript
+{
+  "communicationType": "searchResult",
+  "userName": "name of user",
+  "userFound": true
+}
+```
+* `communicationType` is a string "searchResults identifying the update type
+* `userFound` is a boolean specifying whether or not the user was found in the database
+
 # Update History
 ## Sprint 1
 * 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
@@ -470,6 +497,7 @@ This communication type will be sent by the server when communicating with clien
 * 9/23/2019 zachklau removed ClientError object as there is no forseen use for it yet.
 * 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
 * 10/26/2019 zachklau updated ServerError to remove unnecessary fields and add server error codes.
+* 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

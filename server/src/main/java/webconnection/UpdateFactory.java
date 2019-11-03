@@ -32,6 +32,7 @@ public class UpdateFactory
             case "unregisterUser": return null;
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
+            case "searchUser": return this.buildSearchResult(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -228,6 +229,26 @@ public class UpdateFactory
         update.winnerName = "player1";
         update.loserName = "player2";
         update.matchEndTime = "dummy_end_time";
+        return update;
+    }
+
+    private Update buildSearchResult(Action action) {
+        Update update = new Update();
+        update.communicationType = "searchResult";
+        update.userName= action.userName;
+        String databaseSearchResult = "";
+
+        try {
+            databaseSearchResult = db.searchUser(action);
+        } catch(Exception e) {}
+
+        if (databaseSearchResult.equals("user not found")) {
+            update.userFound = false;
+        }
+        else {
+            update.userFound = true;
+        }
+
         return update;
     }
 

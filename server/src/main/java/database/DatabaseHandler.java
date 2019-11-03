@@ -56,7 +56,24 @@ public class DatabaseHandler {
 
         return rs.getString("username");
     }
-    
+
+    public String searchUser(Action action) throws Exception {
+
+        ResultSet rs = null;
+
+        try {
+            Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+            Statement search = con.createStatement();
+            rs = search.executeQuery(Query.createSearchUserQuery(action));
+        } catch(Exception e) {return "user not found";}
+
+        if (!rs.next()) {
+            return "user not found";
+        }
+        else {
+            return "user found";
+        }
+    }
 
     /**
     @return matchID of game
