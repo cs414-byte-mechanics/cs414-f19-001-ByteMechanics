@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,8 +135,8 @@ public abstract class GamePiece {
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
-                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW)))
+        if (((getRow() > destRow) && (destRow >= game.GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= game.GameBoard.RIVER_ROW)))
             return true;
         else return false;
     }
