@@ -66,7 +66,7 @@ public class UpdateFactory
         return false;
     }
 
-    /* helper routine to fill out message fields*/
+    /* helper routine to fill out message field*/
     private String constructMessage(String communicationType) {
         switch (communicationType){
             case "updateBoard": return  "The player's move was valid and the board has been updated";
@@ -92,7 +92,7 @@ public class UpdateFactory
             return "you";
     }
 
-    private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board, String turn)
+    private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board)
     {
         update.communicationType = communicationType;
         update.communicationVersion = 0;
@@ -103,7 +103,7 @@ public class UpdateFactory
 
         /* updated board needs to be sent/returned to the client correctly*/
         update.updatedBoard = board ;
-        update.whoseTurn = turn;
+//        update.whoseTurn = turn;
 
         return update;
     }
@@ -117,10 +117,10 @@ public class UpdateFactory
         board = updateBoard(communicationType, board);
 
         /* switch the turn if move is valid and board get updated*/
-        String Turn = updateTurn(communicationType);
+//        String Turn = updateTurn(communicationType);
 
         /*Finally wrap up the response and send back to client*/
-        update = wrapUpResponse(update, action, communicationType, message, board, Turn);
+        update = wrapUpResponse(update, action, communicationType, message, board);
 
         return update;
     }
@@ -134,6 +134,7 @@ public class UpdateFactory
             Update update = new Update();
 
             boolean moveSucceeded = processMove(action.desiredMoves, congoGame);
+            System.out.println("Request move is "+ moveSucceeded);
 
             if (moveSucceeded == true) /* move is validated/legal, so we need to return updated board back to client */ {
                 communicationType = "updateBoard";

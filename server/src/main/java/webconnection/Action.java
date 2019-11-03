@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Action {
 
-  public String objectType;
+  public String objectType = "Update";
   public String communicationType;
   public int communicationVersion;
   public String matchID;
