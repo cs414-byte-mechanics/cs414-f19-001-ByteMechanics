@@ -1,5 +1,6 @@
-package Game ;
-
+import game.GameBoard;
+import game.GamePiece;
+import game.GiraffePiece;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
