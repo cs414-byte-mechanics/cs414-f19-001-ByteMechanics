@@ -15,7 +15,7 @@ public class WebsocketServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
     private Set<WebSocket> conns;
-    private static Gson gson = new GsonBuilder().serializeNulls().create();
+    private static Gson gson = new GsonBuilder().create();
   
     UpdateFactory updateFactory = new UpdateFactory();
 

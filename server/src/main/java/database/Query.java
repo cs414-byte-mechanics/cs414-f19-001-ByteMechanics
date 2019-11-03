@@ -33,7 +33,11 @@ public class Query {
    public static String createUpdateGameStateQuery(int matchID, String[][] board){
         return "UPDATE matches SET board = \"" + boardToString(board) + "\" WHERE match_id = " + matchID + ";";
    }
-   
+
+   public static String createSearchUserQuery(Action action) {
+        return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
+   }
+
    public static String boardToString(String[][] board){
         String boardAsString = "";
    
