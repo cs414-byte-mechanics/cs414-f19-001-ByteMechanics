@@ -8,9 +8,25 @@ import java.util.ArrayList;
 public class UpdateFactory
 {
     private DatabaseHandler db;
+    private GameBoard gameBoard;
+    private Game game;
+//    private String matchID = "";
 
     public UpdateFactory() {
         db = new DatabaseHandler();
+        //temporarily starting a game in the server until the client is ready to handle it
+        game = new Game();
+        gameBoard = game.getGameBoard();
+        gameBoard.initialize();
+//        Update update = new Update();
+//        Action action = new Action();
+//        action.communicationType = "requestBeginNewMatch";
+//        action.communicationVersion = 1;
+//        action.playerOneName = "CongoCarly";
+//        action.playerTwoName = "JungleJoe";
+//        update = createNewMatch(action);
+//        matchID = update.matchID;
+
     }
 
     public Update getUpdate(Action action) {
@@ -35,8 +51,14 @@ public class UpdateFactory
 
     private Update buildUpdateBoard(Action action) {
         try {
-            Game game = new Game();
-            game.loadExistingGame(action);
+//            Game game = new Game();
+//            game.loadExistingGame(action);
+
+            Update update = new Update();
+            update.matchID = action.matchID;
+            update.playerName = action.playerName;
+            update.pieceID =  "M";
+            update.whoseTurn = "opponent";
         
             if (action.desiredMoves != null) {
                 ArrayList<Integer> movesRow = new ArrayList<>();
@@ -51,24 +73,24 @@ public class UpdateFactory
                 boolean moveSucceeded = game.performMove(action.desiredMoves[0], movesRow, movesCol);
             
                 if(moveSucceeded){
-                    game.saveMatchState(Integer.parseInt(action.matchID));
+//                    game.saveMatchState(Integer.parseInt(action.matchID));
+                    update.communicationType = "updateBoard";
+                    update.updatedBoard = game.getBoard();
+                }
+                else{
+                    update.communicationType = "errorInvalidMove";
+                    update.errorMessage = "The move requested by the player cannot be made.";
                 }
             }
 
-            Update update = new Update();
-            update.communicationType = "updateBoard";
-            update.matchID = action.matchID;
-            update.playerName = action.playerName;
-//             update.pieceID =  "M";
-            update.updatedBoard = game.getBoard();
-            update.whoseTurn = "opponent";
-
             return update;
         } catch (Exception e){
+            Update update = new Update();
+            update.communicationType = "errorInvalidMove";
+            update.errorMessage = "GameBoard not found.  Unable to make move.";
             System.err.println("Game cannot be fetched");
-            return null;
+            return update;
         }
-    
 
     }
 

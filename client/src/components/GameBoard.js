@@ -106,12 +106,12 @@ class GameBoard extends Component {
     }
     isSelected(i, j) {
         //let piece = this.state.requestMove.pieceID;
-        let piece = this.state.pieceLocation;
+        let pieceLoc = this.state.pieceLocation;
         let moves = this.state.requestMove.desiredMoves;
-        let col = piece % 10;
-        let row = (piece - col)/10;
+        let numMoves = moves.length;
+        let moveLoc = i * 10 + j;
         //return `${(i===piece[0] && j===piece[1]) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
-        return `${(i===row && j===col) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
+        return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move==moveLoc) && (pieceLoc!=moveLoc)) ? "move" : ""}`
     }
 
     //generate classes for styling
@@ -129,7 +129,14 @@ class GameBoard extends Component {
             'M': <>&#128018;</>,
             'E': <>&#x1F418;</>,
             'C': <>&#x1f40a;</>,
-            'Z': <>&#129427;</>  
+            'Z': <>&#129427;</>,
+            'p': <>&#x1f334;</>,
+            'l': <>&#x1f981;</>,
+            'g': <>&#x1f992;</>,
+            'm': <>&#x1F435;</>,
+            'e': <>&#x1F418;</>,
+            'c': <>&#x1f40a;</>,
+            'z': <>&#129427;</>
         }
 
         //generate board from game state array

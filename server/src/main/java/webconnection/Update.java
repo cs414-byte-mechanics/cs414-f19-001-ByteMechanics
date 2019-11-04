@@ -28,6 +28,7 @@ public class Update {
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
+    public String errorMessage;
 
     @Override
     public String toString() {
