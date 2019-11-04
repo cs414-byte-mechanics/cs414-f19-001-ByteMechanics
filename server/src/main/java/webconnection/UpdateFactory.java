@@ -9,7 +9,7 @@ public class UpdateFactory
     private DatabaseHandler db;
     private GameBoard congoGame;
     private int errorCode;
-    private String communicationType , message, whoseTurn;
+    private String communicationType , turn;
 //    private String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
 
     public UpdateFactory() {
@@ -40,7 +40,7 @@ public class UpdateFactory
     }
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
-    public boolean processMove(int[] desiredMove, GameBoard congoGame){
+    private boolean processMove(int[] desiredMove, GameBoard congoGame){
         ArrayList<Integer> movesRow = new ArrayList<>();
         ArrayList<Integer> movesCol = new ArrayList<>();
 
@@ -86,25 +86,31 @@ public class UpdateFactory
         return board;
     }
 
-    private String updateTurn (String communicationType){
-        if(communicationType == "updateBoard")
-            return "opponent";
-        else
-            return "you";
+    private String updateTurn (Update update, Action action){
+        if(update.communicationType == "updateBoard" )
+            if (update.whoseTurn == action.playerOneName)
+                update.whoseTurn = action.playerTwoName;
+
+            if(update.whoseTurn == action.playerTwoName)
+                update.whoseTurn = action.playerOneName;
+
+        return update.whoseTurn;
     }
 
     private Update wrapUpResponse(Update update, Action action, String communicationType, String message, String[][] board)
     {
         update.communicationType = communicationType;
         update.communicationVersion = 0;
-        update.matchID = action.matchID = "dummy_match_ID";
-        update.playerName = action.playerName = "dummy_playerName";
-        update.pieceID =  action.pieceID = "dummy_pieceID";
+        update.matchID = action.matchID ;
+        update.playerName = action.playerName ;
+        update.pieceID =  action.pieceID ;
         update.successMessage = message;
 
+        update.whoseTurn = updateTurn(update, action);
+
         /* updated board needs to be sent/returned to the client correctly*/
-        update.updatedBoard = board ;
-//        update.whoseTurn = turn;
+        update.updatedBoard = updateBoard(communicationType, board) ;
+        update.whoseTurn = updateTurn(update, action);
 
         return update;
     }
@@ -137,7 +143,7 @@ public class UpdateFactory
             boolean moveSucceeded = processMove(action.desiredMoves, congoGame);
             System.out.println("Request move is "+ moveSucceeded);
 
-            if (moveSucceeded == true) /* move is validated/legal, so we need to return updated board back to client */ {
+            if (moveSucceeded == true) /* move is valid/legal, so we need to return updated board back to client */ {
                 communicationType = "updateBoard";
                 constructResponse(update, action, communicationType, boardToBeSent);
             }
