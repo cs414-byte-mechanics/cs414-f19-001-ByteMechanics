@@ -1,6 +1,6 @@
 import webconnection.Action;
 import database.DatabaseHandler;
-import game.*;
+import Game.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;

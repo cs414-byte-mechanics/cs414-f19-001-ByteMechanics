@@ -2,7 +2,7 @@ package database;
 
 import java.sql.*;
 import webconnection.*;
-import game.*;
+import Game.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.Long;
