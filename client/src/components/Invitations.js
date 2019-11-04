@@ -8,6 +8,7 @@ class Invitations extends React.Component {
         super(props);
 
       this.submitSearchString = this.submitSearchString.bind(this);
+      this.sendGameInvite = this.sendGameInvite.bind(this);
 
         this.state = {
           searchString: ''
@@ -22,6 +23,8 @@ class Invitations extends React.Component {
             <Row>{this.renderSearchBox()}</Row>
             <p/>
             <Row>{this.renderInvitePlayer()}</Row>
+            <p/>
+            <Row>{this.renderInviteStatus()}</Row>
           </div>
         );
     }
@@ -54,6 +57,26 @@ class Invitations extends React.Component {
         );
     }
 
+    renderSearchBox() {
+        return (
+          <div>
+          <Col>
+            <Label>Search for a User to Invite</Label>
+            <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Enter the name of the user..." onChange={event => this.updateSearchString(event)}/>
+          </Col>
+          <Col>
+            {this.renderSearchButton()}
+          </Col>
+          </div>
+        );
+    }
+
+    renderSearchButton() {
+        return (
+          <Button color="info" onClick={this.submitSearchString}>Search</Button>
+        );
+    }
+
     updateSearchString(event) {
       this.setState({
         searchString: event.target.value
@@ -61,24 +84,23 @@ class Invitations extends React.Component {
     }
 
     submitSearchString() {
-      let searchObject = {
-        communicationType: "searchUser",
-        userName: this.state.searchString
-      };
-      this.props.sendObject(searchObject);
+      if (this.state.searchString !== "") {
+        let searchObject = {
+          communicationType: "searchUser",
+          userName: this.state.searchString
+        };
+        this.props.sendObject(searchObject);
+      }
     }
 
     renderInvitePlayer() {
-
-      console.log("in renderInvitePlayer");
-
       if (this.props.showInvitePlayer) {
         if (this.props.searchResult.userFound && this.props.showInvitePlayer) {
           return (
             <Col>
               <div>
                 <p>{this.props.searchResult.userName} has been found!</p>
-                <Button color= "info">Invite Player</Button>
+                <Button color= "info" onClick={this.sendGameInvite}>Invite Player</Button>
               </div>
             </Col>
         );
@@ -95,6 +117,44 @@ class Invitations extends React.Component {
       }
     }
 
+    renderInviteStatus() {
+      console.log(this.props.invitationSentStatus.statusMessage);
+      if (this.props.showInvitationSentStatus) {
+        if (this.props.invitationSentStatus.invitationSent) {
+          return(
+            <Col>
+              <div><p>An invitation was successfully sent to {this.props.searchResult.userName}!</p></div>
+            </Col>
+          );
+        }
+        else {
+          if (this.props.invitationSentStatus.statusMessage === "java.lang.Exception: duplicate invitation") {
+            return (
+              <Col>
+                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}! An Invitation from {this.props.searchResult.userName} has already been sent or received!</p></div>
+              </Col>
+            );
+          }
+          else {
+            return (
+              <Col>
+                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}!</p></div>
+              </Col>
+            );
+          }
+        }
+      }
+    }
+
+    sendGameInvite() {
+      let inviteObject = {
+        communicationType: "sendInvitation",
+        invitationFrom: this.props.userName,
+        invitationTo: this.props.searchResult.userName
+      };
+      this.props.sendObject(inviteObject);
+      this.setState({showInvitePlayer: false});
+    }
 }
 
 export default Invitations;

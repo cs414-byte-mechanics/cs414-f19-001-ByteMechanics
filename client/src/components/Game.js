@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 import { Switch, Route, withRouter, Link } from "react-router-dom";
-
 import Home from './Home.js'
 import GameBoard from './GameBoard.js'
 import Form from './Form.js'
@@ -13,9 +12,9 @@ import Invitations from "./Invitations";
 class Game extends Component {
     constructor(props){
         super(props);
-        
+      
         this.updateSearchResult = this.updateSearchResult.bind(this);
-
+      
         this.state = {
           logIn: {},
           games: [
@@ -33,13 +32,24 @@ class Game extends Component {
             userName: "",
             userFound: false
           },
+
+          showInvitationSentStatus: false,
+
+          invitationSentStatus: {
+            communicationType: "",
+            invitationSent: false,
+            statusMessage: ""
+          },
+
           showInvitePlayer: false
+
         }
 
         this.connection = null;
         this.sendObject = this.sendObject.bind(this);
         this.logOut = this.logOut.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
+        this.updateSearchResult = this.updateSearchResult.bind(this);
 
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
@@ -80,6 +90,7 @@ class Game extends Component {
             case "logoutSuccess": this.updateLogin(update); break;
             case "logoutFailure": alert(update.errorMessage); break;
             case "searchResult": this.updateSearchResult(update); break;
+            case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
     }
 
@@ -134,7 +145,14 @@ class Game extends Component {
 
     updateSearchResult(update) {
       this.setState({searchResult: update});
-      this.setState({showInvitePlayer: true})
+      this.setState({showInvitePlayer: true});
+      this.setState({showInvitationSentStatus: false});
+    }
+
+    updateInvitationSentStatus(update) {
+      this.setState({invitationSentStatus: update});
+      this.setState({showInvitationSentStatus: true});
+      this.setState({showInvitePlayer: true});
     }
 
     render(){
@@ -152,6 +170,9 @@ class Game extends Component {
                                                           sendObject={this.sendObject}
                                                           searchResult={this.state.searchResult}
                                                           showInvitePlayer={this.state.showInvitePlayer}
+                                                          invitationSentStatus={this.state.invitationSentStatus}
+                                                          showInvitationSentStatus={this.state.showInvitationSentStatus}
+
                           />}
                         />
                         <Route
