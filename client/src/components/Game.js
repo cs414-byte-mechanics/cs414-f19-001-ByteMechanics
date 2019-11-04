@@ -33,9 +33,14 @@ class Game extends Component {
             userFound: false
           },
 
-          showInvitePlayer: false,
           showInvitationSentStatus: false,
-          invitationSent: false,
+
+          invitationSentStatus: {
+            communicationType: "",
+            invitationSent: false,
+            statusMessage: ""
+          },
+
           showInvitePlayer: false
 
         }
@@ -137,7 +142,7 @@ class Game extends Component {
     }
 
     updateInvitationSentStatus(update) {
-      this.setState({invitationSent: update.invitationSent});
+      this.setState({invitationSentStatus: update});
       this.setState({showInvitationSentStatus: true});
       this.setState({showInvitePlayer: true});
     }
@@ -157,7 +162,7 @@ class Game extends Component {
                                                           sendObject={this.sendObject}
                                                           searchResult={this.state.searchResult}
                                                           showInvitePlayer={this.state.showInvitePlayer}
-                                                          invitationSent={this.state.invitationSent}
+                                                          invitationSentStatus={this.state.invitationSentStatus}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
 
                           />}

@@ -338,12 +338,14 @@ This communication type will both be sent from clients to the server and from th
 ```javascript
 {
   "communicationType": "invitationSentStatus",
-  "invitationSent:" true
+  "invitationSent:" true,
+  "statusMessage:" ""
 }
 ```
 
 * `communicationType` is a string and will specify that the purpose of the object is to communicate the status of a sent invitation.
 * `invitationSent` will be true if the invitation was successfully sent and false otherwise.
+* `statusMessage` is an optional string for conveying the status of the message (used for if the user attempted to send a duplicate invitation)
 
 ## loadInvitations
 

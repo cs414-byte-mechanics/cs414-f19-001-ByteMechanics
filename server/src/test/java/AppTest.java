@@ -1,4 +1,3 @@
-package Game ;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +7,7 @@ import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import static org.junit.Assert.*;
+import game.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

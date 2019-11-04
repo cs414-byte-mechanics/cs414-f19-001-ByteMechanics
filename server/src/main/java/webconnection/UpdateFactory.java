@@ -1,7 +1,7 @@
 package webconnection;
 
 import database.*;
-import Game.*;
+import game.*;
 import org.java_websocket.WebSocket;
 import java.util.ArrayList;
 
@@ -178,7 +178,10 @@ public class UpdateFactory
         try {
             db.sendGameInvitation(action);
         } catch(Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             update.invitationSent = false;
+            update.statusMessage = e.toString();
             return update;
         }
         update.invitationSent = true;

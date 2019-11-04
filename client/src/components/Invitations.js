@@ -84,11 +84,13 @@ class Invitations extends React.Component {
     }
 
     submitSearchString() {
-      let searchObject = {
-        communicationType: "searchUser",
-        userName: this.state.searchString
-      };
-      this.props.sendObject(searchObject);
+      if (this.state.searchString !== "") {
+        let searchObject = {
+          communicationType: "searchUser",
+          userName: this.state.searchString
+        };
+        this.props.sendObject(searchObject);
+      }
     }
 
     renderInvitePlayer() {
@@ -116,20 +118,30 @@ class Invitations extends React.Component {
     }
 
     renderInviteStatus() {
+      console.log(this.props.invitationSentStatus.statusMessage);
       if (this.props.showInvitationSentStatus) {
-        if (this.props.invitationSent) {
+        if (this.props.invitationSentStatus.invitationSent) {
           return(
             <Col>
-              <div><p>Invitation was successfully sent to {this.props.searchResult.userName}!</p></div>
+              <div><p>An invitation was successfully sent to {this.props.searchResult.userName}!</p></div>
             </Col>
           );
         }
         else {
-          return(
-            <Col>
-              <div><p>Was not able to send invitation to {this.props.searchResult.userName}!</p></div>
-            </Col>
-          );
+          if (this.props.invitationSentStatus.statusMessage === "java.lang.Exception: duplicate invitation") {
+            return (
+              <Col>
+                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}! An Invitation from {this.props.searchResult.userName} has already been sent or received!</p></div>
+              </Col>
+            );
+          }
+          else {
+            return (
+              <Col>
+                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}!</p></div>
+              </Col>
+            );
+          }
         }
       }
     }

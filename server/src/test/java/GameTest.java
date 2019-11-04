@@ -1,4 +1,3 @@
-package Game;
 
 import webconnection.Action;
 import database.DatabaseHandler;
@@ -7,6 +6,7 @@ import org.junit.Test;
 import org.junit.After;
 import java.sql.SQLException;
 import static org.junit.Assert.*;
+import game.*;
 
 /**
 Commenting out tests for the sake of Travis CI

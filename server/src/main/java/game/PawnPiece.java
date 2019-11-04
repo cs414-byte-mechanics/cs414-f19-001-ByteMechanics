@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 public class PawnPiece extends GamePiece {
 

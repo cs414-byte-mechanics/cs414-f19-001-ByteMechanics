@@ -2,7 +2,10 @@ package database;
 
 import java.sql.*;
 import webconnection.*;
-import Game.*;
+import game.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.Long;
 
 //NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
 
@@ -47,7 +50,9 @@ public class DatabaseHandler {
      * @return username of user logging in
      */
     public String attemptLogin(Action action) throws Exception {
-        
+
+        System.out.println(action);
+
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement validateLogin = con.createStatement();
         ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
@@ -117,44 +122,88 @@ public class DatabaseHandler {
     }
 
     public void sendGameInvitation(Action action) throws Exception {
-        ResultSet rs = null;
-        String currInvs = "";
-        String updatedInvitations = "";
-        String currInvTimes = "";
-        String updatedInvitationTimes = "";
-
         try {
             Connection con = DriverManager.getConnection(database, USER, PASSWORD);
-            Statement currentInvitations = con.createStatement();
-            rs = currentInvitations.executeQuery(Query.createGetCurrentInvitationsQuery(action));
+            String invColTo = "invitations_sent_to";
+            String invColFrom = "received_invitations_from";
+            String invColTimeTo = "invitations_sent_times";
+            String invColTimeFrom = "invitations_received_times";
 
-            if (!rs.next()) {
-                throw new Exception();
-            }
-            else {
-                currInvs = rs.getString(1);
-            }
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.invitationFrom);
+            setInvitationsOrTimes(con, invColTo, currentInvitationsTo, action.invitationFrom, action.invitationTo);
 
-            updatedInvitations = currInvs + "," + action.invitationFrom;
-            Statement updateInvitations = con.createStatement();
-            rs = updateInvitations.executeQuery(Query.createUpdateInvitationsQuery(updatedInvitations, action));
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.invitationTo);
+            setInvitationsOrTimes(con, invColFrom, currentInvitationsFrom, action.invitationTo, action.invitationFrom);
 
-            Statement currentInvitationTimes = con.createStatement();
-            rs = currentInvitationTimes.executeQuery(Query.createGetCurrentInvitationTimesQuery(action));
+            String currentTime = Long.toString(System.currentTimeMillis());
 
-            if (!rs.next()) {
-                throw new Exception();
-            }
-            else {
-                currInvTimes = rs.getString(1);
-            }
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.invitationFrom);
+            setInvitationsOrTimes(con, invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, currentTime);
 
-            updatedInvitationTimes = currInvTimes + "," + System.currentTimeMillis();
-            Statement updateInvitationTimes = con.createStatement();
-            rs = updateInvitationTimes.executeQuery(Query.createUpdateInvitationTimesQuery(updatedInvitationTimes, action));
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.invitationTo);
+            setInvitationsOrTimes(con, invColTimeFrom, currentInvitationsTimesFrom, action.invitationTo, currentTime);
 
+        } catch (Exception e) {
+            throw e;
+        }
 
-        } catch(Exception e) {throw new Exception();}
     }
 
+    public String getCurrentInvitationsOrTimes(Connection con, String colName, String invitationsOf) throws Exception {
+
+        String current = "";
+
+        try {
+            Statement currentInvsOrTimes = con.createStatement();
+            ResultSet rs = currentInvsOrTimes.executeQuery(Query.createGetCurrentInvitationsOrTimesQuery(colName, invitationsOf));
+
+            if (!rs.next()) {
+                throw new Exception("rs.next() returned false");
+            }
+            else {
+                current = rs.getString(1);
+            }
+
+        } catch (Exception e) {
+            throw e;
+        }
+
+        return current;
+
+    }
+
+    public void setInvitationsOrTimes(Connection con, String colName, String currentInvitationsOrTimes, String addToInvitationsListOf, String invitedOrInviting) throws Exception {
+        String updated = "";
+
+        if (!duplicateInvitation(currentInvitationsOrTimes, invitedOrInviting)) {
+            if (currentInvitationsOrTimes == null) {
+                updated = invitedOrInviting;
+            }
+            else {
+                updated = currentInvitationsOrTimes + "," + invitedOrInviting;
+            }
+        }
+        else {
+            throw new Exception("duplicate invitation");
+        }
+
+        try {
+            Statement updateCurrentInvsOrTimes = con.createStatement();
+            ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, addToInvitationsListOf));
+
+        } catch(Exception e) {
+            throw e;
+        }
+    }
+
+    public boolean duplicateInvitation(String currentInvitations, String newInvitation) {
+
+        if (currentInvitations != null) {
+            ArrayList<String> currentInvs = new ArrayList<>(Arrays.asList(currentInvitations.split(",")));
+            if (currentInvs.contains(newInvitation)) {
+                return true;
+            }
+        }
+        return false;
+    }
 } 

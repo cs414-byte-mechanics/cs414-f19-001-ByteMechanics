@@ -38,21 +38,14 @@ public class Query {
         return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
    }
 
-   public static String createGetCurrentInvitationsQuery(Action action) {
-        return "SELECT invitations from users where username = \"" + action.invitationTo + "\";";
+   public static String createGetCurrentInvitationsOrTimesQuery(String colName, String userName) {
+        return "SELECT " + colName + " from users where username = \"" + userName + "\";";
    }
 
-   public static String createUpdateInvitationsQuery(String updatedInvitations, Action action) {
-        return "UPDATE users SET invitations = \"" + updatedInvitations + "\" WHERE username = \"" + action.invitationTo + "\";";
+   public static String createUpdateInvitationsOrTimesQuery(String colName, String updatedInvitationsOrTimes, String userName) {
+        return "UPDATE users SET " + colName + " = \"" + updatedInvitationsOrTimes + "\" WHERE username = \"" + userName + "\";";
    }
 
-    public static String createGetCurrentInvitationTimesQuery(Action action) {
-        return "SELECT invitation_times from users where username = \"" + action.invitationTo + "\";";
-    }
-
-    public static String createUpdateInvitationTimesQuery(String updatedInvitationTimes, Action action) {
-        return "UPDATE users SET invitation_times = \"" + updatedInvitationTimes + "\" WHERE username = \"" + action.invitationTo + "\";";
-    }
   
    public static String boardToString(String[][] board){
         String boardAsString = "";
