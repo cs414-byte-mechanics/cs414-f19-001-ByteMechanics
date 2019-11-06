@@ -40,19 +40,6 @@ public class UpdateFactory
         }
     }
 
-    /* helper routine to fill out message field with proper message*/
-    private String constructMessage(String communicationType, Update update) {
-        switch (communicationType){
-            case "updateBoard": return  "The player's move was valid and the board has been updated";
-            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
-            case "endMatch": return "Lion is captured, Game is Over!";
-
-            default:
-                System.err.println("Message has not been constructed!!");
-                return null;
-        }
-    }
-
     private String updateTurn(Update update, Action action) {
         if (update.communicationType == "updateBoard")
             if (update.whoseTurn == action.playerOneName)
@@ -123,6 +110,7 @@ public class UpdateFactory
             ServerError error = new ServerError(102, e.getMessage());
             return error;
         }
+
     }
 
     private Update registerUser(Action action) {
