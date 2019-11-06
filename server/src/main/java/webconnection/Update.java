@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Update {
 
-    public final String objectType = "Update";
+    public String objectType = "Update";
     public String communicationType;
     public int communicationVersion;
     public String matchID;
@@ -30,6 +30,8 @@ public class Update {
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
+
+    public int errorCode;
     public String errorMessage;
 
     @Override

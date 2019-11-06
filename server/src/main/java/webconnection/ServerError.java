@@ -1,11 +1,20 @@
 package webconnection;
 
-public class ServerError
+public class ServerError extends Update
 {
 
-  public String objectType;
-  public int errorCode;
-  public String errorMessage;
+
+//  public int errorCode;
+//  public String errorMessage;
+
+    public ServerError() { };
+
+    public ServerError(int errorCode, String errorMessage) {
+        this.objectType = "ServerError";
+        this.communicationType = "ServerError";
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
 
     @Override
     public String toString() {
