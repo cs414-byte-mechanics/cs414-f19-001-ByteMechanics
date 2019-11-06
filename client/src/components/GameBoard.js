@@ -113,10 +113,13 @@ class GameBoard extends Component {
         //return `${(i===piece[0] && j===piece[1]) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
         return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move==moveLoc) && (pieceLoc!=moveLoc)) ? "move" : ""}`
     }
+    player(i, j) {
+        return this.props.game[i][j] != this.props.game[i][j].toUpperCase() ? "one" : "two"
+    }
 
     //generate classes for styling
     generatePieceClasses(i, j){
-        return `piece ${this.state.selectionType} ${this.isInRiver(i,j)}${this.isInCastle(i,j)} ${this.isSelected(i,j)}`
+        return `piece ${this.state.selectionType} ${this.isInRiver(i,j)}${this.isInCastle(i,j)} ${this.isSelected(i,j)} ${this.player(i, j)}`
     }
 
 
