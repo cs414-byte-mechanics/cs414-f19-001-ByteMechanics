@@ -5,6 +5,9 @@ $castleColor: #fffab0;
 $pieceSelectionColor: yellow;
 $moveSelectionColor: red;
 
+$playerOneColor: red;
+$playerTwoColor: blue;
+
 .board{
     margin-bottom: 20px;
     max-width:600px;
@@ -34,7 +37,12 @@ $moveSelectionColor: red;
             outline: black 1px solid;
             transition: .2s;
             cursor: pointer;
-            
+            &.one {
+                text-shadow: 2px 2px $playerOneColor;
+            }
+            &.two {
+                text-shadow: 2px 2px $playerTwoColor;
+            }
             &.river {
                 background: $riverColor;
             }
