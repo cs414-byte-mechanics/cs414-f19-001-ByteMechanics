@@ -21,13 +21,15 @@ These `npm` scripts are mapped to common actions in one directory for convenienc
 - *test*: `mvn test`
 
 ## Connect to database from off campus or on non-cs lab machine
-1. In a terminal separate from where are the starting the server, enter the command 
+1. Run `remote.sh` (found in the root directory) or use the following command in a terminal separate from where you are starting the server: 
 
-`ssh -N -L 56247:faure.cs.colostate.edu:3306 <your-username>@eel.cs.colostate.edu`
+    `ssh -N -L <local-port>:faure.cs.colostate.edu:3306 <your-username>@eel.cs.colostate.edu`
 
-  * Replace <your-username> with the username you use to login to the CS department machines.
+    * Replace <your-username> with the username you use to login to the CS department machines.
+    * Replace <local-port> with any open port number on your local machine.
   
- 2. In the terminal from where you are starting the server, enter the command `export TUNNEL=true` 
+ 2. In the terminal from where you are starting the server, enter the command `export TUNNEL=<local-port>` on Linux or `set TUNNEL=<local-port>` on Windows.
+    * Replace <local-port> with the same port you used above.
  3. Start the server. It should now be able to communicate with the database.
 
 # Contributors
