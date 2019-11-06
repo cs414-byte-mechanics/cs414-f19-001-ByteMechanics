@@ -1,27 +1,28 @@
 package webconnection;
 
-public class ServerError
+public class ServerError extends Update
 {
+
     public String objectType;
     public int errorCode;
     public String errorMessage;
 
-    /* constructors */
-    public ServerError(){
-        this.objectType = "ServerError";
-    }
+    public ServerError() { };
 
     public ServerError(int errorCode) {
-        this.errorCode = errorCode; }
+        this.objectType = "ServerError";
+        this.communicationType = "ServerError";
+        this.errorCode = errorCode;
+        this.errorMessage = getErrorMessage(this.errorCode);
+    }
 
     @Override
     public String toString() {
 
         String stringRepresentation = ""
-            + "objectType: " + this.objectType + "\n"
-            + "errorCode: " + this.errorCode + "\n"
-//                + "errorMessage: " + this.errorMessage + "\n";
-            + "errorMessage: " + this.getErrorMessage(errorCode) + "\n";
+                + "objectType: " + this.objectType + "\n"
+                + "errorCode: " + this.errorCode + "\n"
+                + "errorMessage: " + this.errorMessage + "\n";
         return stringRepresentation;
 
     }
@@ -48,5 +49,4 @@ public class ServerError
                 return null;
         }
     }
-
 }
