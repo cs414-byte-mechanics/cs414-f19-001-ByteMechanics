@@ -14,22 +14,15 @@ public class ServerError extends Update
 
     @Override
     public String toString() {
-
         String stringRepresentation = ""
                 + "communicationType: " + this.communicationType + "\n"
                 + "errorCode: " + this.errorCode + "\n"
                 + "errorMessage: " + this.statusMessage + "\n";
         return stringRepresentation;
-
     }
 
     @Override
     public boolean equals(Object o) {
-
-        if (this.toString().equals(o.toString())) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.toString().equals(o.toString());
     }
 }
