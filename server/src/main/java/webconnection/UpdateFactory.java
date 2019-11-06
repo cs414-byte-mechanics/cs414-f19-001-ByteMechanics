@@ -108,8 +108,8 @@ public class UpdateFactory
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update
-            return null;
+            ServerError error = new ServerError(101, e.toString());
+            return error;
         }
     }
 
@@ -124,8 +124,10 @@ public class UpdateFactory
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update "errorInvalidRegistration"
-            return null;
+            ServerError error = new ServerError(100, e.toString());
+            return error;
+//            Return error update "errorInvalidRegistration"
+//            return new Update();
         }
     }
 
