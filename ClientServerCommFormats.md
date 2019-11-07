@@ -71,6 +71,8 @@ Here is the structure for each of the four objects:
   "loserName": "",
   "matchEndTime": "",
   "userFound",
+  "invitationsFrom",
+  "invitationTimes",
   "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
   "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
@@ -101,7 +103,7 @@ List of communication types for `Action`:
 * requestMoves
 * registerUser
 * requestBeginNewMatch
-* invitation
+* sendInvitation
 * invitationResponse
 * quitMatch
 * unregisterUser
@@ -117,6 +119,9 @@ List of communication types for `Update`
 * endMatch
 * loginSuccess
 * searchResults
+* loadInvitations
+* invitationSentStatus
+
 
 List of communication types for `ServerError`:
 
@@ -139,22 +144,25 @@ This communication type will be used to communicate to the server that a player 
   "pieceID": "C",
   "desiredMoves": []
 }
-  * Player 1's pieces
-     * g: Giraffe
-     * m: Monkey
-     * e: Elephant
-     * l: Lion
-     * c: Crocodile
-     * z: Zebra
-     * p: Pawn
-   * Player 2's pieces
-     * G: Giraffe
-     * M: Monkey
-     * E: Elephant
-     * L: Lion
-     * C: Crocodile
-     * Z: Zebra
-     * P: Pawn
+```
+
+* Player 1's pieces
+   * g: Giraffe
+   * m: Monkey
+   * e: Elephant
+   * l: Lion
+   * c: Crocodile
+   * z: Zebra
+   * p: Pawn
+* Player 2's pieces
+   * G: Giraffe
+   * M: Monkey
+   * E: Elephant
+   * L: Lion
+   * C: Crocodile
+   * Z: Zebra
+   * P: Pawn
+     
 * `desiredMoves` will be a 1D array with the coordinates of the squares or positions on the board that the player would like to move to for their turn. The [row,column] coordinates of each square will be combined to for a single 2 digit number.  Thus the square [2,3] would be stored in the array as 23.  
 The first value in the array must be the current location of the piece.  The next value in the array is the square the player wishes to move to.  So, desiredMoves[23,12] indicates the piece is currently at [2,3] and wishes to move to [1,2].  A monkey can indicate a sequence of jumps as follows:  [01,23,05].
 
@@ -199,7 +207,7 @@ send the updated board to the clients so that they can display it so the players
   "playerName": "",
   "pieceID": "G",
   "updatedBoard": [][],
-  "whoseTurn": "",
+  "whoseTurn": ""
 }
 ```
 
@@ -309,25 +317,51 @@ This communication type will be sent by the server to the two clients who recent
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. At the start of the match this will be the player who created the match unless therwise stated in the rules.
 * `matchBeginTime` is a string and contains the time that the match was created. 
 
-## invitation
+## sendInvitation
 
 This communication type will both be sent from clients to the server and from the server to the clients. A client who wishes to start a new match with a player will send the the invitation to the server. The server will then pass the invitation on to the addressed client who will then either accept or reject the invitation.
   
 ```javascript
 {
-  "communicationType": "invitation",
-  "communicationVersion": 1,
+  "communicationType": "sendInvitation",
   "invitationFrom": "",
   "invitationTo": "",
-  "invitationTime": ""
 }
 ```
 
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
-* `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `invitationFrom` is a string and is the name of the player who is sending the invitation.
 * `invitationTo` is a string and is the name of the player who is receiving the invitation.
-* `invitationTime` is a string containing the time at which the invitation was created.
+
+## invitationSentStatus
+
+```javascript
+{
+  "communicationType": "invitationSentStatus",
+  "invitationSent:" true,
+  "statusMessage:" ""
+}
+```
+
+* `communicationType` is a string and will specify that the purpose of the object is to communicate the status of a sent invitation.
+* `invitationSent` will be true if the invitation was successfully sent and false otherwise.
+* `statusMessage` is an optional string for conveying the status of the message (used for if the user attempted to send a duplicate invitation)
+
+## loadInvitations
+
+```javascript
+{
+  "communicationType": "loadInvitations",
+  "userName": "name of user",
+  "invitationsFrom": "person1,person2,person3",
+  "invitationTimes": "time1,time2,time3"
+}
+```
+
+* `communicationType` is a string and specifies that the purpose of the object is to load invitations
+* `userName` is a string and specifies the name of the user whose invitations are being retrieved
+* `invitationsFrom` is a string of user names who sent invitations to the user. They are separated by commas.
+* `inviationTimes`: is a string and specifies the times that each invitation was sent. They are separated by commas and line up with invitationsFrom.
 
 ## invitationResponse
 
@@ -497,7 +531,9 @@ This communication type will be sent by the server when communicating with clien
 * 9/23/2019 zachklau removed ClientError object as there is no forseen use for it yet.
 * 10/13/2019 mlnash2 proposed changes to pieceID and desiredMoves[].
 * 10/26/2019 zachklau updated ServerError to remove unnecessary fields and add server error codes.
+* 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
+* 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.
