@@ -12,7 +12,7 @@ public class Update {
     public String pieceID;
     public String[][] updatedBoard;
     public String whoseTurn;
-    public String successMessage;
+    public String message;
     public String userName;
     public String userEmail;
     public String[][] initialBoard;
@@ -32,7 +32,6 @@ public class Update {
     public String[][] matchesCompleted;
 
     public int errorCode;
-    public String errorMessage;
 
     @Override
     public String toString() {
@@ -45,7 +44,7 @@ public class Update {
                                     + "pieceID: " + this.pieceID + "\n"
                                     + "updatedBoard: " + Arrays.deepToString(this.updatedBoard) + "\n"
                                     + "whoseTurn: " + this.whoseTurn + "\n"
-                                    + "successMessage: " + this.successMessage + "\n"
+                                    + "successMessage: " + this.message + "\n"
                                     + "userName: " + this.userName + "\n"
                                     + "userEmail: " + this.userEmail + "\n"
                                     + "initialBoard: " + Arrays.deepToString(this.initialBoard) + "\n"
@@ -63,9 +62,7 @@ public class Update {
                                     + "invitation: " + Arrays.deepToString(this.invitations) + "\n"
                                     + "matchesInProgress: " + Arrays.deepToString(this.matchesInProgress) + "\n"
                                     + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n"
-                                    + "errorCode: " + this.errorCode + "\n"
-                                    + "errorMessage: " + this.errorMessage + "\n" ;
-
+                                    + "errorCode: " + this.errorCode + "\n";
 
         return stringRepresentation;
 

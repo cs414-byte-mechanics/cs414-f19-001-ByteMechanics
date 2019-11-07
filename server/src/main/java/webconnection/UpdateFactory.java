@@ -8,30 +8,15 @@ public class UpdateFactory
 {
     private DatabaseHandler db;
     private GameBoard congoGame;
-//    private int errorCode;
     private String communicationType;
     private GameBoard gameBoard;
     private Game game;
-//    private String matchID = "";
 
     public UpdateFactory() {
 
         db = new DatabaseHandler();
         congoGame = new GameBoard();
         congoGame.initialize();
-
-        //temporarily starting a game in the server until the client is ready to handle it
-//        game = new Game();
-//        gameBoard = game.getGameBoard();
-//        gameBoard.initialize();
-//        Update update = new Update();
-//        Action action = new Action();
-//        action.communicationType = "requestBeginNewMatch";
-//        action.communicationVersion = 1;
-//        action.playerOneName = "CongoCarly";
-//        action.playerTwoName = "JungleJoe";
-//        update = createNewMatch(action);
-//        matchID = update.matchID;
     }
 
     public Update getUpdate(Action action) {
@@ -56,18 +41,15 @@ public class UpdateFactory
     }
 
     /* helper routine to fill out message field with proper message*/
-    private Update constructMessage(String communicationType, Update update) {
+    private String constructMessage(String communicationType, Update update) {
         switch (communicationType){
-//            case "updateBoard": return  "The player's move was valid and the board has been updated";
-            case "updateBoard" : update.successMessage = "The player's move was valid and the board has been updated";
-//            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
-            case "errorInvalidMove": update.errorCode= 102; update.errorMessage =  ServerError.getErrorMessage(update.errorCode);
+            case "updateBoard": return  "The player's move was valid and the board has been updated";
+            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
 
             default:
                 System.err.println("Message has not been constructed!!");
-//                return null;
+                return null;
 
-        return update;
         }
     }
 
@@ -93,8 +75,7 @@ public class UpdateFactory
         /* fill out board, turn and message filed */
         update.updatedBoard = congoGame.getBoardForDatabase();
         update.whoseTurn = updateTurn(update, action);
-//        update.successMessage = constructMessage(communicationType, update) ;
-        update = constructMessage(communicationType, update);
+        update.message = constructMessage(communicationType, update) ;
 
         return update;
     }
@@ -118,7 +99,7 @@ public class UpdateFactory
         } catch (Exception e){
             Update update = new Update();
             update.communicationType = "ErrorInvalidMove";
-            update.errorMessage = "GameBoard not found! Unable to make move";
+            update.message = "GameBoard not found! Unable to make move";
 
             System.err.println("Game cannot be fetched");
             return update;
@@ -132,7 +113,7 @@ public class UpdateFactory
             update.communicationType = "registrationSuccess";
             update.userEmail = action.userEmail;
             update.userName = action.userName;
-            update.successMessage = "User account has been successfully created.";
+            update.message = "User account has been successfully created.";
 
             return update;
 
@@ -162,7 +143,7 @@ public class UpdateFactory
     private Update buildLogoutSuccess(Action action) {
         Update update = new Update();
         update.communicationType = "logoutSuccess";
-        update.successMessage = "User has successfully logged out.";
+        update.message = "User has successfully logged out.";
         return update;
     }
 

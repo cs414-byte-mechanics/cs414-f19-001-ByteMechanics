@@ -160,7 +160,7 @@ public class UpdateFactoryTest
         expected.pieceID = action.pieceID;
         expected.updatedBoard = congoGame.getBoardForDatabase();
         expected.whoseTurn = action.playerOneName;
-        expected.successMessage = "Invalid move, select another move";
+        expected.message = "Invalid move, select another move";
 
         System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
         System.out.println(expected);
@@ -187,7 +187,7 @@ public class UpdateFactoryTest
         expected.playerName = action.playerName ;
         expected.pieceID =  action.pieceID  ;
         expected.whoseTurn = action.playerTwoName;
-        expected.successMessage = "The player's move was valid and the board has been updated" ;
+        expected.message = "The player's move was valid and the board has been updated" ;
 
         /* Created updated board and pass it to updateBoard filed*/
         GamePiece piece = congoGame.getGamePiece(1, 2);
