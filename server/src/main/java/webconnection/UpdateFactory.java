@@ -11,12 +11,28 @@ public class UpdateFactory
     private int errorCode;
     private String communicationType , turn;
 //    private String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
+    private GameBoard gameBoard;
+    private Game game;
+//    private String matchID = "";
 
     public UpdateFactory() {
 
         db = new DatabaseHandler();
         congoGame = new GameBoard();
         congoGame.initialize();
+        //temporarily starting a game in the server until the client is ready to handle it
+        game = new Game();
+        gameBoard = game.getGameBoard();
+        gameBoard.initialize();
+//        Update update = new Update();
+//        Action action = new Action();
+//        action.communicationType = "requestBeginNewMatch";
+//        action.communicationVersion = 1;
+//        action.playerOneName = "CongoCarly";
+//        action.playerTwoName = "JungleJoe";
+//        update = createNewMatch(action);
+//        matchID = update.matchID;
+
     }
 
     public Update getUpdate(Action action) {
@@ -33,6 +49,7 @@ public class UpdateFactory
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
+            case "sendInvitation": return this.buildInvitationSentStatus(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -95,7 +112,6 @@ public class UpdateFactory
                 communicationType = "errorInvalidMove";
 
             wrapUpResponse(update, action, communicationType);
-
             return update;
 
         } catch (Exception e){
@@ -202,5 +218,20 @@ public class UpdateFactory
 
         return update;
     }
-
+  
+    private Update buildInvitationSentStatus(Action action) {
+        Update update = new Update();
+        update.communicationType = "invitationSentStatus";
+        try {
+            db.sendGameInvitation(action);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            update.invitationSent = false;
+            update.statusMessage = e.toString();
+            return update;
+        }
+        update.invitationSent = true;
+        return update;
+    }
 }

@@ -17,9 +17,10 @@ public class Game {
     public int createNewGame(Action action) throws Exception {
         //Initialize board and pieces
         gameBoard.initialize();
-        
+
         //Save to database
         int matchID = dbHandler.addNewGame(action, gameBoard.getBoardForDatabase());
+
         return matchID;
     }
     
@@ -31,13 +32,13 @@ public class Game {
         gameBoard.loadGame(board);
     }
     
-    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
-        int pieceCol = pieceLocation % 10;
-        int pieceRow = pieceLocation /10;
-        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
-    
-        return pieceToMove.performMove(destRows, destCols, gameBoard);
-    }
+//    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
+//        int pieceCol = pieceLocation % 10;
+//        int pieceRow = pieceLocation /10;
+//        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
+//
+//        return pieceToMove.performMove(destRows, destCols, gameBoard);
+//    }
     
     public void saveMatchState(int matchID) throws Exception {
         dbHandler.saveGameState(matchID, gameBoard.getBoardForDatabase());
@@ -46,6 +47,8 @@ public class Game {
     public String[][] getBoard(){
         return gameBoard.getBoardForDatabase();
     }
+
+    public GameBoard getGameBoard() {return gameBoard;}
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
     public boolean processMove(int[] desiredMove, GameBoard congoGame){ // OK -- move this to Game instead of perfprm move

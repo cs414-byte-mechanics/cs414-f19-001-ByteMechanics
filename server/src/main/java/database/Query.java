@@ -38,6 +38,15 @@ public class Query {
         return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
    }
 
+   public static String createGetCurrentInvitationsOrTimesQuery(String colName, String userName) {
+        return "SELECT " + colName + " from users where username = \"" + userName + "\";";
+   }
+
+   public static String createUpdateInvitationsOrTimesQuery(String colName, String updatedInvitationsOrTimes, String userName) {
+        return "UPDATE users SET " + colName + " = \"" + updatedInvitationsOrTimes + "\" WHERE username = \"" + userName + "\";";
+   }
+
+  
    public static String boardToString(String[][] board){
         String boardAsString = "";
    

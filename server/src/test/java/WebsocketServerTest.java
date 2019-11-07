@@ -14,7 +14,6 @@ import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import static org.junit.Assert.*;
-import Game.*;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
