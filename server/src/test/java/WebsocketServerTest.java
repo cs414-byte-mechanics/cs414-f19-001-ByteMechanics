@@ -14,14 +14,13 @@ import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import static org.junit.Assert.*;
-import game.*;
+import Game.*;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 //@RunWith(JUnit4.class)
 public class WebsocketServerTest {

@@ -7,7 +7,7 @@ import webconnection.Update;
 import webconnection.Action;
 import webconnection.UpdateFactory;
 import webconnection.WebsocketServer;
-import game.*;
+import Game.*;
 
 
 import java.net.InetSocketAddress;
@@ -145,19 +145,13 @@ public class UpdateFactoryTest
     public void ErrorInvalidMoveResponseTest()  {
 
         Action action = new Action();
-        Game game = new Game();
-        try {
-            game.loadExistingGame(action);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         action.communicationType = "requestMoves";
         action.desiredMoves = new int[]{12, 32}; /*Invalid move */
-        System.out.println("CURRENT LOCATION " + action.desiredMoves[0] + " And Destination is " + action.desiredMoves[1]); /* this is an illegal move*/
-        System.out.println("ACTION IS ********** " + action);
+//        System.out.println("CURRENT LOCATION " + action.desiredMoves[0] + " And Destination is " + action.desiredMoves[1]); /* this is an illegal move*/
+//        System.out.println("ACTION IS >>>>>>>>>>>>>>>>>>>> " + action);
 
-            // created expected response
+        // created expected response
         Update expected = new Update();
         expected.communicationType = "errorInvalidMove";
         expected.communicationVersion = action.communicationVersion; // changed to 0 from 1
@@ -168,42 +162,39 @@ public class UpdateFactoryTest
         expected.whoseTurn = action.playerOneName;
         expected.successMessage = "Invalid move, select another move";
 
-        System.out.println("EXPECTED IS ************************");
-        System.out.println(expected);
-//        System.out.println(action.pieceID + "%%%%%%%%%%%%%%%% " + expected.pieceID );
-        /* This test failed */
-//        assertEquals(updateMaker.getUpdate(action),expected);
+//        System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println(expected);
+        assertEquals(updateMaker.getUpdate(action),expected);
 }
 
     /* Fari: this test wraps up an updateBoard response for valid move and send back to client  */
-//    @Test
-//    public void updatedBoardResponseTest()
-//    {
-//        Action action = new Action();
-//        action.communicationType = "requestMoves";
-//        action.desiredMoves = new int[]{12, 22}; /*Valid move*/
-//        System.out.println("ACTION IS ********** "+ action);
-//        Update expected = new Update();
-//        ArrayList<Integer> movesRow = new ArrayList<>();
-//        ArrayList<Integer> movesCol = new ArrayList<>();
-//        movesRow.add(2);
-//        movesCol.add(2);
-//
-//        expected.communicationType = "updateBoard";
-//        expected.communicationVersion = 0;
-//        expected.matchID = action.matchID = "dummy_match_ID";
-//        expected.playerName = action.playerName = "dummy_playerName";
-//        expected.pieceID =  action.pieceID = "dummy_pieceID" ;
-//        expected.whoseTurn = "opponent";
-//        expected.successMessage = "The player's move was valid and the board has been updated" ;
-//
-//        GamePiece piece = congoGame.getGamePiece(1, 2);
-//        piece.performMove(movesRow, movesCol, congoGame);
-//        expected.updatedBoard = congoGame.getBoardForDatabase();
-//        System.out.println("EXPECTED IS ************************");
+    @Test
+    public void updatedBoardResponseTest()
+    {
+        Action action = new Action();
+        action.communicationType = "requestMoves";
+        action.desiredMoves = new int[]{12, 22}; /*Valid move*/
+//        System.out.println("ACTION IS >>>>>>>>>>>>>>>> "+ action);
+        Update expected = new Update();
+        ArrayList<Integer> movesRow = new ArrayList<>();
+        ArrayList<Integer> movesCol = new ArrayList<>();
+        movesRow.add(2);
+        movesCol.add(2);
+
+        expected.communicationType = "updateBoard";
+        expected.communicationVersion = 0;
+        expected.matchID = action.matchID ;
+        expected.playerName = action.playerName ;
+        expected.pieceID =  action.pieceID  ;
+        expected.whoseTurn = action.playerTwoName;
+        expected.successMessage = "The player's move was valid and the board has been updated" ;
+
+        /* Created updated board and pass it to updateBoard filed*/
+        GamePiece piece = congoGame.getGamePiece(1, 2);
+        piece.performMove(movesRow, movesCol, congoGame);
+        expected.updatedBoard = congoGame.getBoardForDatabase();
+//        System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
 //        System.out.println(expected);
-//
-//        /* This test failed as well!! */
-//        assertEquals(updateMaker.getUpdate(action),expected);
-//    }
+        assertEquals(updateMaker.getUpdate(action),expected);
+    }
 }
