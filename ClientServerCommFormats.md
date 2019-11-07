@@ -17,7 +17,7 @@ The server will send `Update` and `ServerError` objects.
 
 An `Action` object will be sent by a client whenever a player wants to perform an action such as registering, logging in, inviting another player, moving a piece on the board, etc...
 
-An `Update` object will be sent by the server whenever the server is responding to a client's action. These are things like updating the game board, sending the client their acount information, etc...
+An `Update` object will be sent by the server whenever the server is responding to a client's action. These are things like updating the Game board, sending the client their acount information, etc...
 
 A  `ServerError` object will be sent by the server whenever there is an error on the server side. These are things like the player attempted to perform an invalid set of moves, the login information was incorrect, etc...
 
@@ -184,7 +184,7 @@ This communication type will be sent by the server to a client after the server 
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. Because the previous move was invalid, the player who made the last move is try and move again.
 * `errorMessage` is a string and will contain a message stating that the requested was was invalid and could not be made. This string
 could also be altered to include the specifics of why the move was invalid such as it being out of bounds, conflicting with the rules
-of the game, etc..
+of the Game, etc..
 
 ## updateBoard
 
@@ -208,7 +208,7 @@ send the updated board to the clients so that they can display it so the players
 * `matchID` is the identifier of the match that is object is regarding.
 * `playerName` is a string and will be the name of the player who made the valid move that updated the board.
 * `pieceID` is a string and will be the ID of the piece that the player moved.
-* `updatedBoard` is a 2D array with the information containing the new state of the game board after the piece was moved.
+* `updatedBoard` is a 2D array with the information containing the new state of the Game board after the piece was moved.
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. In this case it will be the name of the player who did not make the most recent move.
 
 ## registerUser
@@ -351,7 +351,7 @@ This communication type will be sent from clients to the server. It will be sent
 
 ## quitMatch
 
-This communication type will be sent from clients to the server. It will be sent to notify the server that the client wishes to forfeit the match and leave, thus ending the game. The client who sends this request will automatically lose the match and the opponent will win. 
+This communication type will be sent from clients to the server. It will be sent to notify the server that the client wishes to forfeit the match and leave, thus ending the Game. The client who sends this request will automatically lose the match and the opponent will win. 
 
 ```javasctipt
 {
@@ -386,8 +386,8 @@ This communication type will be sent from the server to the clients. It will be 
 * `communicationType` is a string and will specify what the type of the JSON object is and so what information it should contain.
 * `communicationVersion` is an int and will specify the version of this document that the object's structure is based on.
 * `matchID` is a string and is the identifier of the match that has ended.
-* `endCondition` can be one of two string values. `won` indicates that a player has won the match by making a final move which won the game. `quit` indicates that the game has ended because one of the players has quit and left the match.
-* `winnerName` is a string and is the name of player who has won the match either be making the winning move or remaining in the game after the other player has quit.
+* `endCondition` can be one of two string values. `won` indicates that a player has won the match by making a final move which won the Game. `quit` indicates that the Game has ended because one of the players has quit and left the match.
+* `winnerName` is a string and is the name of player who has won the match either be making the winning move or remaining in the Game after the other player has quit.
 * `loserName` is a string and is the name of the player who has lost the match either by the other player making the winning move or by quitting the match.
 * `matchEndTime` is a string and contains the time that the match was ended. 
 
