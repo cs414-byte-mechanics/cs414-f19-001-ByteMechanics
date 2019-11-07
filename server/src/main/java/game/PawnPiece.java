@@ -1,4 +1,4 @@
-package game;
+package Game;
 
 public class PawnPiece extends GamePiece {
 
@@ -21,10 +21,7 @@ public class PawnPiece extends GamePiece {
 
     /*helper routine to check sideAway move*/
     public boolean sideMove(int currRow , int destRow){
-        if (destRow - currRow  == 0 )
-            return true;
-        else
-            return false;
+        return destRow - currRow == 0;
     }
 
     /* helper routine to identify if move is forward or backward for a pawn*/
@@ -34,20 +31,14 @@ public class PawnPiece extends GamePiece {
         if (this.player == 1 && dir > 0)
             return true;
 
-        if (this.player == 2 && dir < 0)
-            return true;
-
-        return false;
+        return this.player == 2 && dir < 0;
     }
 
     public boolean pastRiver(int currRow){
         if (this.player == 1 && currRow > GameBoard.RIVER_ROW)
             return true;
 
-        if(this.player == 2 && currRow < GameBoard.RIVER_ROW)
-            return true;
-
-        return false;
+        return this.player == 2 && currRow < GameBoard.RIVER_ROW;
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {

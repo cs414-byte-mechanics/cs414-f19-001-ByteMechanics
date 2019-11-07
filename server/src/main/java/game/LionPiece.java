@@ -1,4 +1,4 @@
-package game;
+package Game;
 
 public class LionPiece extends GamePiece {
     /* initial constructor*/
@@ -18,18 +18,12 @@ public class LionPiece extends GamePiece {
 
     // helper function to check castle's ROW bound/border
     public boolean checkCastleRowBound(int destRow, int rowUpperBound, int rowLowerBound){
-        if (destRow >= rowLowerBound && destRow <= rowUpperBound)
-            return true;
-        else
-            return false;
+        return destRow >= rowLowerBound && destRow <= rowUpperBound;
     }
 
     // helper function to check castle's COLUMN bound/border
     public boolean checkCastleColumnBound(int destCol){
-        if (destCol >= 2 && destCol <=4)
-            return true;
-        else
-            return false;
+        return destCol >= 2 && destCol <= 4;
     }
 
     // helper function to check if destination is in lion's own castle
@@ -44,10 +38,7 @@ public class LionPiece extends GamePiece {
             rowUpperBound = 6;
         }
 
-        if (checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol))
-            return true;
-        else
-            return false;
+        return checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol);
     }
 
     // helper function to check if destination is in lion's opponent castle
@@ -62,10 +53,7 @@ public class LionPiece extends GamePiece {
             rowUpperBound = 2;
         }
 
-        if (checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol))
-            return true;
-        else
-            return false;
+        return checkCastleRowBound(destRow, rowUpperBound, rowLowerBound) && checkCastleColumnBound(destCol);
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -89,14 +77,12 @@ public class LionPiece extends GamePiece {
             if (DestinationIsInOpponentCastle(destRow, destCol)){
 
                 // if destination is in opponent's castle, it must be the other lion with a clear path between
-                if ((board[destRow][destCol] instanceof LionPiece) && (pathClear(destRow, destCol, board)) && this.player != board[destRow][destCol].player)   /* The last condition never happens as every player has only one lion, but added to write extra tests */
-
-                    return true;
+                /* The last condition never happens as every player has only one lion, but added to write extra tests */
+                return (board[destRow][destCol] instanceof LionPiece) && (pathClear(destRow, destCol, board)) && this.player != board[destRow][destCol].player;
                 }else
                     return false;
 
-            return false;
-            }
+        }
         else
             return false;
         }

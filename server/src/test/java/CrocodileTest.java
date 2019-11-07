@@ -1,7 +1,5 @@
-import game.CrocodilePiece;
-import game.GameBoard;
-import game.GamePiece;
-import game.PawnPiece;
+package Game;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
