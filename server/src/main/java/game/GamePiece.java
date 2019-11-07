@@ -1,7 +1,6 @@
-package game;
+package Game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class GamePiece {
     public int row;
@@ -95,19 +94,14 @@ public abstract class GamePiece {
         if (orthogonalMove(fromRow, fromCol, toRow, toCol) &&
                 manhattanDistance(fromRow, fromCol, toRow, toCol) == 2)
             return true;
-        if (diagonalMove(fromRow, fromCol, toRow, toCol) &&
-                manhattanDistance(fromRow, fromCol, toRow, toCol) == 4)
-            return true;
-        return false;
+        return diagonalMove(fromRow, fromCol, toRow, toCol) &&
+                manhattanDistance(fromRow, fromCol, toRow, toCol) == 4;
     }
 
     public boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
         int manhattanDist = manhattanDistance(fromRow,fromCol,toRow,toCol);
-        if ((orthogonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 1)
-                || (diagonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 2)) {
-            return true;
-        }
-        else return false;
+        return (orthogonalMove(fromRow, fromCol, toRow, toCol) && manhattanDist == 1)
+                || (diagonalMove(fromRow, fromCol, toRow, toCol) && manhattanDist == 2);
     }
 
     public Boolean inRiver(){
@@ -135,10 +129,8 @@ public abstract class GamePiece {
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= game.GameBoard.RIVER_ROW)) ||
-                ((getRow() < destRow) && (destRow <= game.GameBoard.RIVER_ROW)))
-            return true;
-        else return false;
+        return ((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW));
     }
 
     public int direction(int from, int to){

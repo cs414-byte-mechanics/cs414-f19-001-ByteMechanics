@@ -1,4 +1,4 @@
-package game;
+package Game;
 
 public class CrocodilePiece extends GamePiece {
     public CrocodilePiece(){
