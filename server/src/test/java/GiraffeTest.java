@@ -1,6 +1,4 @@
-import game.GameBoard;
-import game.GamePiece;
-import game.GiraffePiece;
+package Game;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +7,8 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 public class GiraffeTest {
     GameBoard congoGame;
