@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Update {
 
-    public final String objectType = "Update";
+    public String objectType = "Update";
     public String communicationType;
     public int communicationVersion;
     public String matchID;
@@ -12,7 +12,7 @@ public class Update {
     public String pieceID;
     public String[][] updatedBoard;
     public String whoseTurn;
-    public String successMessage;
+    public String message;
     public String userName;
     public String userEmail;
     public String[][] initialBoard;
@@ -30,7 +30,8 @@ public class Update {
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
-    public String errorMessage;
+
+    public int errorCode;
 
     @Override
     public String toString() {
@@ -43,7 +44,7 @@ public class Update {
                                     + "pieceID: " + this.pieceID + "\n"
                                     + "updatedBoard: " + Arrays.deepToString(this.updatedBoard) + "\n"
                                     + "whoseTurn: " + this.whoseTurn + "\n"
-                                    + "successMessage: " + this.successMessage + "\n"
+                                    + "successMessage: " + this.message + "\n"
                                     + "userName: " + this.userName + "\n"
                                     + "userEmail: " + this.userEmail + "\n"
                                     + "initialBoard: " + Arrays.deepToString(this.initialBoard) + "\n"
@@ -60,7 +61,9 @@ public class Update {
                                     + "invitationSent: " + this.invitationSent + "\n"
                                     + "invitation: " + Arrays.deepToString(this.invitations) + "\n"
                                     + "matchesInProgress: " + Arrays.deepToString(this.matchesInProgress) + "\n"
-                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n";
+                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n"
+                                    + "errorCode: " + this.errorCode + "\n";
+
         return stringRepresentation;
 
     }

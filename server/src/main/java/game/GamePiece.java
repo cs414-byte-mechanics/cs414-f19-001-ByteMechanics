@@ -1,7 +1,6 @@
 package Game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class GamePiece {
     public int row;
@@ -95,19 +94,14 @@ public abstract class GamePiece {
         if (orthogonalMove(fromRow, fromCol, toRow, toCol) &&
                 manhattanDistance(fromRow, fromCol, toRow, toCol) == 2)
             return true;
-        if (diagonalMove(fromRow, fromCol, toRow, toCol) &&
-                manhattanDistance(fromRow, fromCol, toRow, toCol) == 4)
-            return true;
-        return false;
+        return diagonalMove(fromRow, fromCol, toRow, toCol) &&
+                manhattanDistance(fromRow, fromCol, toRow, toCol) == 4;
     }
 
     public boolean validMove1SquareAnyDirection(int fromRow, int fromCol, int toRow, int toCol){
         int manhattanDist = manhattanDistance(fromRow,fromCol,toRow,toCol);
-        if ((orthogonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 1)
-                || (diagonalMove(fromRow,fromCol,toRow,toCol) && manhattanDist == 2)) {
-            return true;
-        }
-        else return false;
+        return (orthogonalMove(fromRow, fromCol, toRow, toCol) && manhattanDist == 1)
+                || (diagonalMove(fromRow, fromCol, toRow, toCol) && manhattanDist == 2);
     }
 
     public Boolean inRiver(){
@@ -135,10 +129,8 @@ public abstract class GamePiece {
         if (destCol != getColumn()) return false;
 
         /* check for river crossing */
-        if (((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
-                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW)))
-            return true;
-        else return false;
+        return ((getRow() > destRow) && (destRow >= GameBoard.RIVER_ROW)) ||
+                ((getRow() < destRow) && (destRow <= GameBoard.RIVER_ROW));
     }
 
     public int direction(int from, int to){
@@ -261,59 +253,5 @@ public abstract class GamePiece {
             return true;
         }
         else return false;
-    }
-
-    public Boolean moveOneOrTwoStepStraightBackward (int destRow, int destCol, GamePiece[][] board){
-
-        //check for one/two steps straight down
-        int  distRow = Math.abs(destRow - this.row ) ;
-        int distCol = Math.abs(destCol - this.column) ;
-
-        if (( distRow == 2 && distCol == 0 ) || (distRow == 1 && distCol == 0 ))
-            // if destination is empty not occupied by any pieces
-            return (squareEmpty(destRow, destCol, board) && pathClear(destRow, destCol, board));
-        else
-            return false;
-    }
-
-    // move/capture side away
-    public Boolean moveSideAwayForSuperPawn (int destRow , int destCol, GamePiece[][] board) {
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        if (distRow == 0 && distCol == 1)
-            return squareEmptyOrCapturable(destRow, destCol, board);
-
-        else
-            return false;
-    }
-
-    // move/capture one step forward
-    public Boolean moveOneStepsStraightOrDiagonally(int destRow, int destCol, GamePiece[][] board){
-
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        if ( (distRow == 1 && distCol == 0) || (distRow == 1 && distCol == 1))
-            return squareEmptyOrCapturable(destRow, destCol, board);
-        else
-            return false;
-    }
-
-    public Boolean moveOneOrTwoStepsDiagonallyBackward (int destRow, int destCol, GamePiece[][] board) {
-        int distRow = Math.abs(destRow - this.row);
-        int distCol = Math.abs(destCol - this.column);
-
-        //check for one/two steps diagonally down
-        if ((distRow == 1 && distCol == 1 ) || (distRow == 2 && distCol == 2 ))
-            // if destination is empty not occupied by any pieces
-            return ( squareEmpty(destRow, destCol, board) && pathClear(destRow,destCol,board) );
-        else
-            return false;
-    }
-
-    // helper function for elephant move one step orthogonal
-    public boolean MoveOneStepOrthogonal(int distRow, int distCol){
-        return (distRow== 1 && distCol == 0 ) || (distRow== 0 && distCol == 1 );
     }
 }

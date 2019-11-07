@@ -21,7 +21,6 @@ import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 //@RunWith(JUnit4.class)
 public class WebsocketServerTest {
 
@@ -229,7 +228,7 @@ public class WebsocketServerTest {
         testUpdate.updatedBoard[1][0] = "3";
         testUpdate.updatedBoard[1][1] = "4";
         testUpdate.whoseTurn = "TestWhoseTurn";
-        testUpdate.successMessage = "TestSuccessMessage";
+        testUpdate.message = "TestSuccessMessage";
         testUpdate.userName = "TestUserName";
         testUpdate.userEmail = "TestUserEmail";
         testUpdate.initialBoard = new String[2][2];
@@ -306,7 +305,7 @@ public class WebsocketServerTest {
         testUpdate.updatedBoard[1][0] = "3";
         testUpdate.updatedBoard[1][1] = "4";
         testUpdate.whoseTurn = "TestWhoseTurn";
-        testUpdate.successMessage = "TestSuccessMessage";
+        testUpdate.message = "TestSuccessMessage";
         testUpdate.matchBeginTime = "TestMatchBeginTime";
         testUpdate.endCondition = "TestEndCondition";
         testUpdate.winnerName = "TestWinnerName";

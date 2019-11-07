@@ -1,32 +1,22 @@
 package webconnection;
-
 import database.*;
 import Game.*;
-import org.java_websocket.WebSocket;
+
 import java.util.ArrayList;
 
 public class UpdateFactory
 {
     private DatabaseHandler db;
+    private GameBoard congoGame;
+    private String communicationType;
     private GameBoard gameBoard;
     private Game game;
-//    private String matchID = "";
 
     public UpdateFactory() {
-        db = new DatabaseHandler();
-        //temporarily starting a game in the server until the client is ready to handle it
-        game = new Game();
-        gameBoard = game.getGameBoard();
-        gameBoard.initialize();
-//        Update update = new Update();
-//        Action action = new Action();
-//        action.communicationType = "requestBeginNewMatch";
-//        action.communicationVersion = 1;
-//        action.playerOneName = "CongoCarly";
-//        action.playerTwoName = "JungleJoe";
-//        update = createNewMatch(action);
-//        matchID = update.matchID;
 
+        db = new DatabaseHandler();
+        congoGame = new GameBoard();
+        congoGame.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -50,49 +40,70 @@ public class UpdateFactory
         }
     }
 
+    /* helper routine to fill out message field with proper message*/
+    private String constructMessage(String communicationType, Update update) {
+        switch (communicationType){
+            case "updateBoard": return  "The player's move was valid and the board has been updated";
+            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
+
+            default:
+                System.err.println("Message has not been constructed!!");
+                return null;
+
+        }
+    }
+
+    private String updateTurn(Update update, Action action){
+        if (update.communicationType == "updateBoard")
+            if (update.whoseTurn == action.playerOneName)
+                update.whoseTurn = action.playerTwoName;
+
+            if (update.whoseTurn == action.playerTwoName)
+                update.whoseTurn = action.playerOneName;
+
+        return update.whoseTurn;
+    }
+
+    private Update wrapUpResponse(Update update, Action action, String communicationType)
+    {
+        update.communicationType = communicationType;
+        update.communicationVersion = 0;
+        update.matchID = action.matchID ;
+        update.playerName = action.playerName ;
+        update.pieceID =  action.pieceID ;
+
+        /* fill out board, turn and message filed */
+        update.updatedBoard = congoGame.getBoardForDatabase();
+        update.whoseTurn = updateTurn(update, action);
+        update.message = constructMessage(communicationType, update) ;
+
+        return update;
+    }
+
     private Update buildUpdateBoard(Action action) {
         try {
-//            Game game = new Game();
+            Game game = new Game();
 //            game.loadExistingGame(action);
-
             Update update = new Update();
-            update.matchID = action.matchID;
-            update.playerName = action.playerName;
-            update.pieceID =  "M";
-            update.whoseTurn = "opponent";
-        
-            if (action.desiredMoves != null) {
-                ArrayList<Integer> movesRow = new ArrayList<>();
-                ArrayList<Integer> movesCol = new ArrayList<>();
-                for (int i = 1; i < action.desiredMoves.length; i++){
-                    int col = action.desiredMoves[i] % 10;
-                    int row = (action.desiredMoves[i] - col)/10;
-                    movesCol.add(col);
-                    movesRow.add(row);
-                }
 
-                boolean moveSucceeded = game.performMove(action.desiredMoves[0], movesRow, movesCol);
-            
-                if(moveSucceeded){
-//                    game.saveMatchState(Integer.parseInt(action.matchID));
-                    update.communicationType = "updateBoard";
-                    update.updatedBoard = game.getBoard();
-                }
-                else{
-                    update.communicationType = "errorInvalidMove";
-                    update.errorMessage = "The move requested by the player cannot be made.";
-                }
-            }
+            boolean moveSucceeded = game.processMove(action.desiredMoves, congoGame);
 
+            if (moveSucceeded == true) /* move is valid/legal, so we need to return updated board back to client */
+                communicationType = "updateBoard";
+            else /* move isn't valid, so we return error */
+                communicationType = "errorInvalidMove";
+
+            wrapUpResponse(update, action, communicationType);
             return update;
+
         } catch (Exception e){
             Update update = new Update();
-            update.communicationType = "errorInvalidMove";
-            update.errorMessage = "GameBoard not found.  Unable to make move.";
+            update.communicationType = "ErrorInvalidMove";
+            update.message = "GameBoard not found! Unable to make move";
+
             System.err.println("Game cannot be fetched");
             return update;
         }
-
     }
 
     private Update registerUser(Action action) {
@@ -102,7 +113,7 @@ public class UpdateFactory
             update.communicationType = "registrationSuccess";
             update.userEmail = action.userEmail;
             update.userName = action.userName;
-            update.successMessage = "User account has been successfully created.";
+            update.message = "User account has been successfully created.";
 
             return update;
 
@@ -132,7 +143,7 @@ public class UpdateFactory
     private Update buildLogoutSuccess(Action action) {
         Update update = new Update();
         update.communicationType = "logoutSuccess";
-        update.successMessage = "User has successfully logged out.";
+        update.message = "User has successfully logged out.";
         return update;
     }
 

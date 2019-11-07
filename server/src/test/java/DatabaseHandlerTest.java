@@ -30,7 +30,7 @@ public class DatabaseHandlerTest {
         Game game = new Game();
         game.createNewGame(action);
    }
-   
+   /* -- function performMove in Game class is deleted, therefore this test won't be functional
    //@Test
    public void testSaveGameState() throws Exception {
         Action action = new Action();
@@ -46,7 +46,7 @@ public class DatabaseHandlerTest {
 
         game.performMove(11, destRows, destCols);
         game.saveMatchState(10);
-   }
+   }*/
    
     //@Test
    public void testRetrieveGameInfo() throws Exception {

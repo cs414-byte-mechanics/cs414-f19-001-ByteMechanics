@@ -32,13 +32,13 @@ public class Game {
         gameBoard.loadGame(board);
     }
     
-    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
-        int pieceCol = pieceLocation % 10;
-        int pieceRow = pieceLocation /10;
-        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
-    
-        return pieceToMove.performMove(destRows, destCols, gameBoard);
-    }
+//    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
+//        int pieceCol = pieceLocation % 10;
+//        int pieceRow = pieceLocation /10;
+//        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
+//
+//        return pieceToMove.performMove(destRows, destCols, gameBoard);
+//    }
     
     public void saveMatchState(int matchID) throws Exception {
         dbHandler.saveGameState(matchID, gameBoard.getBoardForDatabase());
@@ -49,5 +49,32 @@ public class Game {
     }
 
     public GameBoard getGameBoard() {return gameBoard;}
+
+    /* this function extract desired move and validate that the move from current location to destination is valid or no */
+    public boolean processMove(int[] desiredMove, GameBoard congoGame){ // OK -- move this to Game instead of perfprm move
+        ArrayList<Integer> movesRow = new ArrayList<>();
+        ArrayList<Integer> movesCol = new ArrayList<>();
+
+        if (desiredMove != null) {
+            /* Extract current location*/
+            int pieceCol = desiredMove[0] % 10;
+            int pieceRow = desiredMove[0] / 10;
+
+            /* Grab the piece based on the current location */
+            GamePiece piece =  congoGame.getGamePiece(pieceRow, pieceCol);
+
+            /* Extract destination*/
+            for (int i = 1; i < desiredMove.length; i++) {
+                int col = desiredMove[i] % 10;
+                int row = (desiredMove[i] - col) / 10;
+                movesCol.add(col);
+                movesRow.add(row);
+            }
+
+            return (piece.performMove(movesRow, movesCol, congoGame));
+        }
+
+        return false;
+    }
 
 }

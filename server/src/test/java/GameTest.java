@@ -1,5 +1,4 @@
-package Game;
-
+import Game.Game;
 import webconnection.Action;
 import database.DatabaseHandler;
 import org.junit.Before;

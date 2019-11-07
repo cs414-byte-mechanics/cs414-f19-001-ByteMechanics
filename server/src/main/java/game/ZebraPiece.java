@@ -1,7 +1,5 @@
 package Game;
 
-import java.util.ArrayList;
-
 public class ZebraPiece extends GamePiece {
     public ZebraPiece(){
     }
