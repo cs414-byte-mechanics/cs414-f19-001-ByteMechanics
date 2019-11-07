@@ -8,9 +8,8 @@ public class UpdateFactory
 {
     private DatabaseHandler db;
     private GameBoard congoGame;
-    private int errorCode;
-    private String communicationType , turn;
-//    private String[][] boardToBeSent = congoGame.getBoardForDatabase(); /* current board has been stored*/
+//    private int errorCode;
+    private String communicationType;
     private GameBoard gameBoard;
     private Game game;
 //    private String matchID = "";
@@ -20,10 +19,11 @@ public class UpdateFactory
         db = new DatabaseHandler();
         congoGame = new GameBoard();
         congoGame.initialize();
+
         //temporarily starting a game in the server until the client is ready to handle it
-        game = new Game();
-        gameBoard = game.getGameBoard();
-        gameBoard.initialize();
+//        game = new Game();
+//        gameBoard = game.getGameBoard();
+//        gameBoard.initialize();
 //        Update update = new Update();
 //        Action action = new Action();
 //        action.communicationType = "requestBeginNewMatch";
@@ -32,7 +32,6 @@ public class UpdateFactory
 //        action.playerTwoName = "JungleJoe";
 //        update = createNewMatch(action);
 //        matchID = update.matchID;
-
     }
 
     public Update getUpdate(Action action) {
@@ -57,14 +56,18 @@ public class UpdateFactory
     }
 
     /* helper routine to fill out message field with proper message*/
-    private String constructMessage(String communicationType) {
+    private Update constructMessage(String communicationType, Update update) {
         switch (communicationType){
-            case "updateBoard": return  "The player's move was valid and the board has been updated";
-            case "errorInvalidMove": errorCode= 102; return ServerError.getErrorMessage(errorCode);
+//            case "updateBoard": return  "The player's move was valid and the board has been updated";
+            case "updateBoard" : update.successMessage = "The player's move was valid and the board has been updated";
+//            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
+            case "errorInvalidMove": update.errorCode= 102; update.errorMessage =  ServerError.getErrorMessage(update.errorCode);
 
             default:
                 System.err.println("Message has not been constructed!!");
-                return null;
+//                return null;
+
+        return update;
         }
     }
 
@@ -87,10 +90,11 @@ public class UpdateFactory
         update.playerName = action.playerName ;
         update.pieceID =  action.pieceID ;
 
-        /* updated board needs to be sent/returned to the client correctly*/
+        /* fill out board, turn and message filed */
         update.updatedBoard = congoGame.getBoardForDatabase();
         update.whoseTurn = updateTurn(update, action);
-        update.successMessage = constructMessage(communicationType) ;
+//        update.successMessage = constructMessage(communicationType, update) ;
+        update = constructMessage(communicationType, update);
 
         return update;
     }
@@ -99,12 +103,9 @@ public class UpdateFactory
         try {
             Game game = new Game();
 //            game.loadExistingGame(action);
-
-            /* current board has been stored*/
             Update update = new Update();
 
             boolean moveSucceeded = game.processMove(action.desiredMoves, congoGame);
-//            System.out.println("Request move is "+ moveSucceeded);
 
             if (moveSucceeded == true) /* move is valid/legal, so we need to return updated board back to client */
                 communicationType = "updateBoard";
@@ -115,8 +116,12 @@ public class UpdateFactory
             return update;
 
         } catch (Exception e){
+            Update update = new Update();
+            update.communicationType = "ErrorInvalidMove";
+            update.errorMessage = "GameBoard not found! Unable to make move";
+
             System.err.println("Game cannot be fetched");
-            return null;
+            return update;
         }
     }
 
