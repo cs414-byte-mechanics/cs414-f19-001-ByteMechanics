@@ -23,7 +23,8 @@ public class Query {
    
    public static String createAddNewGameQuery(Action action, String[][] board){
    
-        return "INSERT INTO matches (board, p1, p2, start) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
+        return "INSERT INTO matches (board, next_turn, p1, p2, start) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName
+                + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
    }
    
    public static String createRetrieveGameQuery(Action action){

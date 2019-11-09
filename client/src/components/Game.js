@@ -17,6 +17,8 @@ class Game extends Component {
       
         this.state = {
           logIn: {},
+          player1: ["CongoKate"],
+          player2: ["JungleJoe"],
           games: [
             [
               ["g", "m", "e", "l", "e", "c", "z"],
@@ -82,7 +84,7 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "errorInvalidMove": alert(update.errorMessage); break;
+            case "errorInvalidMove": alert(update.message); break;
             case "updateBoard": this.updateBoard(update); break;
             case "errorInvalidRegistration": alert(update.errorMessage); break;
             case "loginSuccess": this.updateLogin(update); break;
@@ -190,7 +192,8 @@ class Game extends Component {
                         />
                         <Route
                             path="/game"
-                            render={(props) => <GameBoard game={this.state.games[0]} send={this.sendObject}/>}
+                            render={(props) => <GameBoard game={this.state.games[0]} player1={this.state.player1[0]}
+                                                          player2={this.state.player2[0]} send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>
