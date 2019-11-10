@@ -28,7 +28,7 @@ public class UpdateFactory
             case "requestBeginNewMatch": return this.createNewMatch(action);
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
-            case "quitMatch": return this.buildEndMatch();
+            case "quitMatch": return this.buildEndMatch(action);
             case "unregisterUser": return null;
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
@@ -174,14 +174,19 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildEndMatch() {
+    private Update buildEndMatch(Action action) {
         Update update = new Update();
         update.communicationType = "endMatch";
-        update.matchID = "dummy_match_ID";
-        update.endCondition = "quit";
-        update.winnerName = "player1";
-        update.loserName = "player2";
+        update.matchID = action.matchID; //"dummy_matchID";
+        update.endCondition = action.endCondition;
+        if (update.endCondition == "won")
+            update.message = "Game Is Over!";
+
+        update.winnerName = action.playerName;
+        update.loserName = "The other player";
         update.matchEndTime = "dummy_end_time";
+
+//        System.out.println("Update is " + update );
         return update;
     }
 
