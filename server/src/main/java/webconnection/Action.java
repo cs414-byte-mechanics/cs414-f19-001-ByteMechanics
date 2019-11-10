@@ -20,6 +20,7 @@ public class Action {
   public String invitationTo;
   public String invitationTime;
   public String playerQuitting;
+  public String endCondition;
 
   @Override
   public String toString() {

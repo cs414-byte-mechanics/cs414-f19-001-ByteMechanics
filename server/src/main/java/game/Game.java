@@ -51,7 +51,7 @@ public class Game {
     public GameBoard getGameBoard() {return gameBoard;}
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
-    public boolean processMove(int[] desiredMove, GameBoard congoGame){ // OK -- move this to Game instead of perfprm move
+    public boolean processMove(int[] desiredMove, GameBoard congoGame){
         ArrayList<Integer> movesRow = new ArrayList<>();
         ArrayList<Integer> movesCol = new ArrayList<>();
 
