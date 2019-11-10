@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /*
@@ -127,4 +130,49 @@ public class GamePiecesTest {
         assertTrue(zebra.pathClear(3, 0, congoGame.board) == true);
     }
 
+    @Test
+    public void testCapturePieceUpdateBoardArray() {
+
+        /** this test try to capture a lion by the other lion, and then check if board and string array represented board get update or no ? */
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        GamePiece myLion = congoGame.getGamePiece(0, 3);
+        GamePiece opponentLion = congoGame.getGamePiece(6, 3);
+
+        congoGame.movePiece(myLion, 2, 3); /*move my lion from 0,3 to 2,3*/
+        congoGame.movePiece(opponentLion, 4, 3); /* move opponent's lion to 4,3*/
+
+        movesRow.add(2);
+        movesCol.add(3);
+        assertTrue(opponentLion.performMove(movesRow, movesCol, congoGame));
+
+//        System.out.println(congoGame.toString());
+        String[][] stringBoard = congoGame.getBoardForDatabase();
+//        System.out.println( Arrays.deepToString(stringBoard));
+
+        /*move lion from 2,3 to 1,3 and see that both board and string array represented board get updated   */
+        congoGame.movePiece(opponentLion, 1, 3);
+//        System.out.println(congoGame.toString());
+        stringBoard = congoGame.getBoardForDatabase();
+//        System.out.println( Arrays.deepToString(stringBoard));
+    }
+
+    @Test
+    public void testCaptureLion(){
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        GamePiece myLion = congoGame.getGamePiece(0, 3);
+        GamePiece pawn = congoGame.getGamePiece(5,2);
+        congoGame.movePiece(pawn, 1, 3);
+
+        movesRow.add(0);
+        movesCol.add(3);
+
+        pawn.performMove(movesRow, movesCol, congoGame);
+//        System.out.println(congoGame.toString());
+//        System.out.println( Arrays.deepToString(congoGame.getBoardForDatabase()));
+
+    }
 }
