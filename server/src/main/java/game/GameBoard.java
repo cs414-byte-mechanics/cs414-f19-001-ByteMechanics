@@ -1,7 +1,11 @@
 package Game;
 
+import webconnection.Action;
+import webconnection.Update;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
+import webconnection.UpdateFactory;
 
 public class GameBoard{
     public static final int NUM_ROWS = 7;
@@ -229,6 +233,26 @@ public class GameBoard{
     }
 
     public void capturePiece(GamePiece pieceToBeCaptured){
+
+        String pieceId = pieceToBeCaptured.pieceIDString();
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+
+        /** while Capture, we check whether piece is a lion? if so, we need to tell players that lion is
+         * captured and game is over! */
+        if (pieceToBeCaptured instanceof LionPiece) {
+
+            Action action = new Action();
+            action.communicationType = "quitMatch";
+            action.endCondition = "won";
+
+            /* to find winner , we check which lion is captured? the opponent player is winner*/
+            if (pieceId != null && Character.isLowerCase(pieceId.charAt(0)))
+                action.playerName ="playerTwo";
+            else
+                action.playerName = "playerOne";
+
+            UpdateFactory updatefactory = new UpdateFactory();
+            updatefactory.getUpdate(action);
+        }
     }
 }
