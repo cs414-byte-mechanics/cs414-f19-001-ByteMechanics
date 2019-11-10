@@ -246,6 +246,15 @@ public abstract class GamePiece {
             /* move piece to its final location */
             int finalDestR = destRow.get(numMoves - 1);
             int finalDestC = destCol.get(numMoves - 1);
+
+            /** At this point, we want to move a piece from its current location to its desired destination -- but before move, we first capture
+             * the piece sit on the destination and check if it's a lion, game needs to be terminate/over */
+            GamePiece pieceToBeCaptured = congoBoard.getGamePiece(finalDestR, finalDestC);
+
+            if (pieceToBeCaptured != null)
+                /** we might need more arguments contains player info to fill out update fields to show that in client side who is winner  */
+                congoBoard.capturePiece(pieceToBeCaptured);
+            /** we move piece*/
             congoBoard.movePiece(getRow(), getColumn(), finalDestR, finalDestC);
 
             /* now check if any river dwelling pieces are still in the river and need to drown and be captured */
