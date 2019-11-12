@@ -50,9 +50,14 @@ public class ZebraTest {
 
     @Test
     public void testZebraPerformSimpleMoveNoCapture() {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
         /* Start with initial board and test if Player 2 zebra can move from (6,6) to (4,5) */
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(6,6);
-        assertTrue(zebra.performMove(4, 5, congoGame) == true);
+        movesRow.add(4);
+        movesCol.add(5);
+        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == true);
         /* check that source location is now empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra and it's not captured */
@@ -65,14 +70,19 @@ public class ZebraTest {
 
     @Test
     public void testZebraPerformSimpleMoveWithCapture() {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
         /* Start with initial board and test if Player 2 zebra can move from (6,6) to (4,5) */
 
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(6,6);
         /* move opponent's crocodile from 0,5 to 4,5 */
         congoGame.movePiece(0,5,4,5);
         /* Now move zebra from 6,6 to 4,5 to see if it can capture crocodile */
+        movesRow.add(4);
+        movesCol.add(5);
         assertTrue(zebra.ValidateMove(4, 5, congoGame.board) == true);
-        assertTrue(zebra.performMove(4, 5, congoGame) == true);
+        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == true);
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra */
@@ -86,17 +96,26 @@ public class ZebraTest {
 
     @Test
     public void testZebraDrowning() {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
         /* Start with initial board and test if Player 1 zebra can move from (0,6) to (2,5) */
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(0,6);
-        zebra.performMove(2, 5, congoGame);
+        movesRow.add(2);
+        movesCol.add(5);
+        zebra.performMove(movesRow, movesCol, congoGame);
         assertTrue(zebra.inRiver() == false);
         /* now move zebra into river */
-        zebra.performMove(3, 3, congoGame);
+        movesRow.set(0,3);
+        movesCol.set(0,3);
+        zebra.performMove(movesRow, movesCol, congoGame);
         assertTrue(zebra.inRiver());
         //assertTrue(zebra.checkCaptured() == false);
         /* now move a pawn so that zebra ends 2 consecutive turns in the river and drowns */
         PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,0);
-        pawn.performMove(2, 1, congoGame);
+        movesRow.set(0,2);
+        movesCol.set(0,1);
+        pawn.performMove(movesRow, movesCol, congoGame);
         /* check if zebra was drown (captured) and removed from the board */
        // assertTrue(zebra.checkCaptured());
         assertTrue(congoGame.getGamePiece(3,3) == null);

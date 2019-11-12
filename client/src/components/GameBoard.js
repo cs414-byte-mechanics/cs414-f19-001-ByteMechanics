@@ -14,9 +14,10 @@ class GameBoard extends Component {
                 "communicationVersion": 1,
                 "matchID": "",
                 "playerName": "",
-//                "pieceID": [],
                 "pieceID" : "",
-                "desiredMoves": []
+                "desiredMoves": [],
+                "playerOneName": this.props.player1,
+                "playerTwoName": this.props.player2
               }
         }
         this.select = this.select.bind(this);
