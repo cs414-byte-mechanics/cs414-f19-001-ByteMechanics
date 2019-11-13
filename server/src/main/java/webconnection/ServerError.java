@@ -2,27 +2,23 @@ package webconnection;
 
 public class ServerError extends Update
 {
-
-    public String objectType;
-    public int errorCode;
-    public String errorMessage;
+    int errorCode;
 
     public ServerError() { };
 
-    public ServerError(int errorCode) {
-        this.objectType = "ServerError";
-        this.communicationType = "ServerError";
+    public ServerError(int errorCode, String message) {
+        this.communicationType = "error";
         this.errorCode = errorCode;
-        this.errorMessage = getErrorMessage(this.errorCode);
+        this.statusMessage = message;
     }
 
     @Override
     public String toString() {
 
         String stringRepresentation = ""
-                + "objectType: " + this.objectType + "\n"
+                + "communicationType: " + this.communicationType + "\n"
                 + "errorCode: " + this.errorCode + "\n"
-                + "errorMessage: " + this.errorMessage + "\n";
+                + "errorMessage: " + this.statusMessage + "\n";
         return stringRepresentation;
 
     }
@@ -34,19 +30,6 @@ public class ServerError extends Update
             return true;
         } else {
             return false;
-        }
-    }
-
-    public static String getErrorMessage( int errorCode){
-        switch (errorCode){
-            case 100: return "Invalid password when attempting a login";
-            case 101: return " Username not found when attempting a login";
-            case 102: return "Invalid move, select another move";
-            case 103: return " Player not found in search (in search for who to invite)";
-
-            default:
-                System.err.println("This error is not handled yet!");
-                return null;
         }
     }
 }
