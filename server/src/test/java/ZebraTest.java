@@ -49,7 +49,7 @@ public class ZebraTest {
     }
 
     @Test
-    public void testZebraPerformSimpleMoveNoCapture() {
+    public void testZebraPerformSimpleMoveNoCapture() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -69,7 +69,7 @@ public class ZebraTest {
     }
 
     @Test
-    public void testZebraPerformSimpleMoveWithCapture() {
+    public void testZebraPerformSimpleMoveWithCapture() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -95,7 +95,7 @@ public class ZebraTest {
     }
 
     @Test
-    public void testZebraDrowning() {
+    public void testZebraDrowning() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -121,8 +121,8 @@ public class ZebraTest {
         assertTrue(congoGame.getGamePiece(3,3) == null);
     }
 
-    @Test
-    public void testZebraMoveArray() {
+    @Test(expected = Exception.class)
+    public void testZebraMoveArrayFailure() throws Exception {
         /* Start with initial board and test if Player 1 zebra can move from (6,6) to (5,4)
         using array to contain move sequence */
         /* since (5,4) contains one of the active player's pawns, it should not be able to move */
@@ -134,7 +134,20 @@ public class ZebraTest {
         movesRow.add(5);
         movesCol.add(4);
         assertTrue(zebra.ValidateMove(5, 4, congoGame.board) == false);
-        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == false);  /* can't move since pawn is blocking /
+        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == false);  /* can't move since pawn is blocking */
+    }
+
+    @Test
+    public void testZebraMoveArray() throws Exception {
+        /* Start with initial board and test if Player 1 zebra can move from (6,6) to (5,4)
+        using array to contain move sequence */
+        /* since (5,4) contains one of the active player's pawns, it should not be able to move */
+        ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(6, 6);
+        /* move opponent's pawn so zebra has something to capture */
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        movesRow.add(5);
+        movesCol.add(4);
         /* now move an opponent's pawn on top of blocking pawn */
         PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1, 6);
         congoGame.movePiece(pawn, 5, 4);

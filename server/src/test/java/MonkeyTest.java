@@ -85,7 +85,7 @@ public class MonkeyTest {
     }
 
     @Test
-    public void testMonkeySingleJump() {
+    public void testMonkeySingleJump() throws Exception {
         /* Start with initial board */
         /* tests to make sure monkey from player 1 can jump opponent's pawn and capture it */
         congoGame.movePiece(5,2, 1,2);  /* move player 2's pawn to 1,2 */
@@ -137,7 +137,7 @@ public class MonkeyTest {
     }
 
     @Test
-    public void testMonkeyCantCaptureAdjacentSquare() {
+    public void testMonkeyCantCaptureAdjacentSquare() throws Exception {
         /* Start with initial board */
         MonkeyPiece monkey = (MonkeyPiece) congoGame.getGamePiece(6, 1);
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
@@ -171,8 +171,8 @@ public class MonkeyTest {
         assertTrue(congoGame.getGamePiece(4,1) instanceof PawnPiece);  /* pawn has been moved */
     }
 
-    @Test
-    public void testMonkeyCantJumpSamePlayersPiece() {
+    @Test(expected = Exception.class)
+    public void testMonkeyCantJumpSamePlayersPiece() throws Exception {
         /* Start with initial board */
         MonkeyPiece monkey = (MonkeyPiece) congoGame.getGamePiece(6, 1);
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
@@ -180,6 +180,6 @@ public class MonkeyTest {
         movesRow.add(4);
         movesCol.add(3);
 
-        assertTrue(monkey.performMove(movesRow, movesCol, congoGame) == false);
+        monkey.performMove(movesRow, movesCol, congoGame);
     }
 }

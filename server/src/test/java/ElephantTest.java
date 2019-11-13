@@ -120,7 +120,7 @@ public class ElephantTest {
     }
 
     //@Test
-    public void testElephantArraySimpleMove() {
+    public void testElephantArraySimpleMove() throws Exception {
         /* this test tries 2 invalid moves for the Elephant followed by a valid move */
         /* it first tries moving diagonally on top of players own pawn.  Then it tries jumping diagonally over its
         pawn.  Still not a legal move.  Finally it jumps its own pawn orthogonally toward the river which is legal
@@ -149,8 +149,8 @@ public class ElephantTest {
     //    assertTrue(myPawn.checkCaptured() == false);  /* myPawn has not been marked captured */
     }
 
-    @Test
-    public void testElephantArraySimpleCaptureMove() {
+    @Test(expected = Exception.class)
+    public void testElephantArraySimpleCaptureMoveFailure() throws Exception {
         GamePiece myElephant = congoGame.getGamePiece(0, 4);
         GamePiece opponentsPawn1 = congoGame.getGamePiece(5, 4);
         GamePiece opponentsPawn2 = congoGame.getGamePiece(5, 5);
@@ -164,6 +164,21 @@ public class ElephantTest {
         movesRow.add(2);
         movesCol.add(5);
         assertTrue(myElephant.performMove(movesRow, movesCol, congoGame) == false);
+    }
+
+    @Test
+    public void testElephantArraySimpleCaptureMove() throws Exception {
+        GamePiece myElephant = congoGame.getGamePiece(0, 4);
+        GamePiece opponentsPawn1 = congoGame.getGamePiece(5, 4);
+        GamePiece opponentsPawn2 = congoGame.getGamePiece(5, 5);
+
+        congoGame.movePiece(opponentsPawn1, 1, 4);  /* move opponent's pawn to 1,4 */
+        congoGame.movePiece(opponentsPawn2, 2, 4);  /* move opponent's pawn to 2,4 */
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        movesRow.add(2);
+        movesCol.add(5);
         /* Now try a capturing move over opponent's pawn to (2,4) */
         movesRow.set(0, 2);
         movesCol.set(0, 4);
