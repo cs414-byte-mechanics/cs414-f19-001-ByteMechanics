@@ -154,13 +154,12 @@ public class UpdateFactoryTest
         // created expected response
         Update expected = new Update();
         expected.communicationType = "errorInvalidMove";
-        expected.communicationVersion = action.communicationVersion; // changed to 0 from 1
         expected.matchID = action.matchID;
         expected.playerName = action.playerName;
         expected.pieceID = action.pieceID;
         expected.updatedBoard = congoGame.getBoardForDatabase();
         expected.whoseTurn = action.playerOneName;
-        expected.message = "Invalid move, select another move";
+        expected.statusMessage = "Invalid move, select another move";
 
         System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
         System.out.println(expected);
@@ -169,7 +168,7 @@ public class UpdateFactoryTest
 
     /* Fari: this test wraps up an updateBoard response for valid move and send back to client  */
     @Test
-    public void updatedBoardResponseTest()
+    public void updatedBoardResponseTest() throws Exception
     {
         Action action = new Action();
         action.communicationType = "requestMoves";
@@ -182,12 +181,11 @@ public class UpdateFactoryTest
         movesCol.add(2);
 
         expected.communicationType = "updateBoard";
-        expected.communicationVersion = 0;
         expected.matchID = action.matchID ;
         expected.playerName = action.playerName ;
         expected.pieceID =  action.pieceID  ;
         expected.whoseTurn = action.playerTwoName;
-        expected.message = "The player's move was valid and the board has been updated" ;
+        expected.statusMessage = "The player's move was valid and the board has been updated" ;
 
         /* Created updated board and pass it to updateBoard filed*/
         GamePiece piece = congoGame.getGamePiece(1, 2);
