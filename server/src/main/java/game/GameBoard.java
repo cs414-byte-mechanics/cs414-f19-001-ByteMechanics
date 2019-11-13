@@ -7,7 +7,13 @@ public class GameBoard{
     public static final int NUM_ROWS = 7;
     public static final int NUM_COLUMNS = 7;
     public static final int RIVER_ROW = 3;
+    public static final int CASTLE_LEFT_BOUND =2 ;
+    public static final int CASTLE_RIGHT_BOUND =4 ;
+
     public GamePiece[][] board;
+    int activePlayer;
+    int[] opponentCastleBound;
+    String lionPieceId;
 
     public GameBoard(){
         board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
@@ -231,4 +237,46 @@ public class GameBoard{
     public void capturePiece(GamePiece pieceToBeCaptured){
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
+
+    public boolean lionInCastle(String[][] board, int pieceCurrentLocation){
+        /* Find first active player*/
+        activePlayer = findActivePlayer(board, pieceCurrentLocation);
+
+        /* based on the player, we define opponent's castle bound */
+        if (activePlayer == 1) {
+            opponentCastleBound = new int[]{4, 6};
+            lionPieceId = "l"; }
+
+        if (activePlayer ==2) {
+            opponentCastleBound = new int[]{0, 2};
+            lionPieceId="L";}
+
+        return lionExist(opponentCastleBound, lionPieceId, board);
+    }
+
+    public int findActivePlayer(String[][] board, int pieceCurrentLocation){
+        /* extract piece current location's row and column*/
+        int col = pieceCurrentLocation % 10;
+        int row = pieceCurrentLocation - col / 10;
+
+        /* specify who is active player - lower case letters belongs to player 1*/
+        if ( board[row][col] != null && Character.isLowerCase(board[row][col].charAt(0)))
+            return 1 ;
+        else
+            return 2 ;
+    }
+
+    public boolean lionExist(int[] opponentCastleBound, String lionPieceId, String[][] board){
+
+        /* start to scan opponent's castle to see if lion is still alive*/
+        for (int i = opponentCastleBound[0]; i <= opponentCastleBound[1] ; i++ )
+            for (int j= CASTLE_LEFT_BOUND; j<= CASTLE_RIGHT_BOUND; j++)
+                if (board[i][j] == lionPieceId )
+                    return true;
+                else
+                    return false;
+
+        return false;
+    }
+
 }
