@@ -122,30 +122,25 @@ public class DatabaseHandler {
     }
 
     public void sendGameInvitation(Action action) throws Exception {
-        try {
-            Connection con = DriverManager.getConnection(database, USER, PASSWORD);
-            String invColTo = "invitations_sent_to";
-            String invColFrom = "received_invitations_from";
-            String invColTimeTo = "invitations_sent_times";
-            String invColTimeFrom = "invitations_received_times";
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
 
-            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.invitationFrom);
-            setInvitationsOrTimes(con, invColTo, currentInvitationsTo, action.invitationFrom, action.invitationTo);
+        String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.invitationFrom);
+        setInvitationsOrTimes(con, invColTo, currentInvitationsTo, action.invitationFrom, action.invitationTo);
 
-            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.invitationTo);
-            setInvitationsOrTimes(con, invColFrom, currentInvitationsFrom, action.invitationTo, action.invitationFrom);
+        String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.invitationTo);
+        setInvitationsOrTimes(con, invColFrom, currentInvitationsFrom, action.invitationTo, action.invitationFrom);
 
-            String currentTime = Long.toString(System.currentTimeMillis());
+        String currentTime = Long.toString(System.currentTimeMillis());
 
-            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.invitationFrom);
-            setInvitationsOrTimes(con, invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, currentTime);
+        String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.invitationFrom);
+        setInvitationsOrTimes(con, invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, currentTime);
 
-            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.invitationTo);
-            setInvitationsOrTimes(con, invColTimeFrom, currentInvitationsTimesFrom, action.invitationTo, currentTime);
-
-        } catch (Exception e) {
-            throw e;
-        }
+        String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.invitationTo);
+        setInvitationsOrTimes(con, invColTimeFrom, currentInvitationsTimesFrom, action.invitationTo, currentTime);
 
     }
 
@@ -184,7 +179,7 @@ public class DatabaseHandler {
             }
         }
         else {
-            throw new Exception("duplicate invitation");
+            throw new Exception("Duplicate invitation");
         }
 
         try {
