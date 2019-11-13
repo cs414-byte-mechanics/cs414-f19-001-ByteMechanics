@@ -84,14 +84,10 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "ServerError" : alert(update.message);break
-            case "errorInvalidMove": alert(update.message); break;
+            case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
-            case "errorInvalidRegistration": alert(update.message); break;
             case "loginSuccess": this.updateLogin(update); break;
-            case "errorInvalidLogin": alert(update.message); break;
             case "logoutSuccess": this.updateLogin(update); break;
-            case "logoutFailure": alert(update.message); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
