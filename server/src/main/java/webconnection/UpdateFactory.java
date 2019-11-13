@@ -70,7 +70,9 @@ public class UpdateFactory
         int activePlayer;
 
         if (communicationType == "endMatch") {
-            activePlayer = congoGame.findActivePlayer(update.updatedBoard, currLocation);
+//            activePlayer = congoGame.findActivePlayer(update.updatedBoard, currLocation);
+            GamePiece piece = congoGame.getGamePiece(currLocation/10, currLocation%10);
+            activePlayer = piece.player;
 
             if (activePlayer == 1)
                 winner= "playerOne";
@@ -112,15 +114,15 @@ public class UpdateFactory
                 moveSucceeded = game.processMove(action.desiredMoves, congoGame);
 //            else //need to alert that opponent's lion does not exist !!!!!
 
-            if (moveSucceeded == true) /* if move is valid/legal */
+            if (moveSucceeded == true) { /* if move is valid/legal */
                 /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
                 lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
                 if (lionExist)  /*lion is not captured, so we need to return updated board back to client */
                     communicationType = "updateBoard";
 
                 if (!lionExist)  /* move is valid/legal, but lion is captured, so we need to terminate game (GAME OVER)*/
-                    communicationType = "endMatch" ;
-
+                    communicationType = "endMatch";
+            }
             else /* move isn't valid, so we return error message */
                 communicationType = "errorInvalidMove";
 

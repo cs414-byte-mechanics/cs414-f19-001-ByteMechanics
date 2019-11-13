@@ -8,13 +8,8 @@ public class GameBoard{
     public static final int NUM_ROWS = 7;
     public static final int NUM_COLUMNS = 7;
     public static final int RIVER_ROW = 3;
-    public static final int CASTLE_LEFT_BOUND =2 ;
-    public static final int CASTLE_RIGHT_BOUND =4 ;
 
     public GamePiece[][] board;
-    int activePlayer;
-    int[] opponentCastleBound;
-    String lionPieceId;
 
     public GameBoard(){
         board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
@@ -240,6 +235,11 @@ public class GameBoard{
     }
 
     public boolean lionInCastle(String[][] board, int pieceCurrentLocation){
+
+        int activePlayer;
+        int[] opponentCastleBound = null;
+        String lionPieceId = null;
+
         /* Find first active player*/
         activePlayer = findActivePlayer(board, pieceCurrentLocation);
 
@@ -252,8 +252,6 @@ public class GameBoard{
             opponentCastleBound = new int[]{0, 2};
             lionPieceId="l";}
 
-//        System.out.println("opponent's castle" + Arrays.toString(opponentCastleBound));
-//        System.out.println("lion piece is " + lionPieceId);
         return lionExist(opponentCastleBound, lionPieceId, board);
     }
 
@@ -271,6 +269,8 @@ public class GameBoard{
 
     public boolean lionExist(int[] opponentCastleBound, String lionPieceId, String[][] board){
 
+        int CASTLE_LEFT_BOUND =2 ;
+        int CASTLE_RIGHT_BOUND =4 ;
         boolean found = false;
 
         /* start to scan opponent's castle to see if lion is still alive*/
