@@ -14,6 +14,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -196,5 +197,66 @@ public class UpdateFactoryTest
         System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
         System.out.println(expected);
 //        assertEquals(updateMaker.getUpdate(action),expected); // this assert works in case of having access to DB
+    }
+
+    @Test
+    public void activePlayerTest(){
+
+        int[] desiredMoves = new int[]{12, 22};
+        String[][] board = congoGame.getBoardForDatabase();
+
+        assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 1);
+//        System.out.println(congoGame);
+
+        desiredMoves = new int[]{53,43};
+        assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 2);
+    }
+
+    @Test
+    public void lionInCastle(){
+        int[] desiredMoves = new int[]{12, 22};
+        String[][] board = congoGame.getBoardForDatabase();
+
+//        System.out.println(congoGame);
+//        System.out.println(Arrays.deepToString(board));
+        assertTrue(congoGame.lionInCastle(board, desiredMoves[0]) == true);
+
+        desiredMoves = new int[]{54,44};
+        assertTrue(congoGame.lionInCastle(board, desiredMoves[0]) == true);
+    }
+
+    @Test
+    public void lionExist(){
+        // board
+        String[][] board = congoGame.getBoardForDatabase();
+
+        GamePiece myLion =  congoGame.getGamePiece(0,3);
+        GamePiece opponentLion = congoGame.getGamePiece(6, 3);
+
+        /* move lion from 2,3 to capture other lion sit in 4,3*/
+        congoGame.movePiece(myLion, 2,3 );
+        congoGame.movePiece(opponentLion,4,3);
+
+//        System.out.println(congoGame);
+//        System.out.println(Arrays.deepToString(board));
+
+        int[] desiredMoves = new int[] {23, 43};
+
+        ArrayList<Integer> movesRow = new ArrayList<>();
+        ArrayList<Integer> movesCol = new ArrayList<>();
+        movesRow.add(4);
+        movesCol.add(3);
+        //before move and capture , opponent lion is in castle
+        assertTrue(congoGame.lionInCastle(board, desiredMoves[1]) == true);
+        myLion.performMove(movesRow, movesCol, congoGame);
+        /*update array*/
+        board = congoGame.getBoardForDatabase();
+
+//        System.out.println(congoGame);
+        int[] opponentCastleBound= new int[] {4,6};
+
+        /* after move lion is not castle*/
+        assertTrue(congoGame.lionInCastle(board, desiredMoves[1]) == false);
+        assertTrue(congoGame.lionExist(opponentCastleBound, "L", board) == false);
     }
 }
