@@ -1,12 +1,14 @@
 package Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ListIterator;
 
 public class GameBoard{
     public static final int NUM_ROWS = 7;
     public static final int NUM_COLUMNS = 7;
     public static final int RIVER_ROW = 3;
+
     public GamePiece[][] board;
 
     public GameBoard(){
@@ -230,5 +232,54 @@ public class GameBoard{
 
     public void capturePiece(GamePiece pieceToBeCaptured){
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+    }
+
+    public boolean lionInCastle(String[][] board, int pieceCurrentLocation){
+
+        int activePlayer;
+        int[] opponentCastleBound = null;
+        String lionPieceId = null;
+
+        /* Find first active player*/
+        activePlayer = findActivePlayer(board, pieceCurrentLocation);
+
+        /* based on the player, we define opponent's castle bound */
+        if (activePlayer == 1) {
+            opponentCastleBound = new int[]{4, 6};
+            lionPieceId = "L"; }
+
+        if (activePlayer ==2) {
+            opponentCastleBound = new int[]{0, 2};
+            lionPieceId="l";}
+
+        return lionExist(opponentCastleBound, lionPieceId, board);
+    }
+
+    public int findActivePlayer(String[][] board, int pieceCurrentLocation){
+        /* extract piece current location's row and column*/
+        int col = pieceCurrentLocation % 10;
+        int row = (pieceCurrentLocation - col) /10 ;
+
+        /* specify who is active player - lower case letters belongs to player 1*/
+        if ( board[row][col] != null && Character.isLowerCase(board[row][col].charAt(0)))
+            return 1 ;
+        else
+            return 2 ;
+    }
+
+    public boolean lionExist(int[] opponentCastleBound, String lionPieceId, String[][] board){
+
+        int CASTLE_LEFT_BOUND =2 ;
+        int CASTLE_RIGHT_BOUND =4 ;
+        boolean found = false;
+
+        /* start to scan opponent's castle to see if lion is still alive*/
+        for (int i = opponentCastleBound[0]; i <= opponentCastleBound[1] ; i++ )
+            for (int j= CASTLE_LEFT_BOUND; j<= CASTLE_RIGHT_BOUND; j++)
+
+                if (board[i][j] == lionPieceId )
+                    found = true;
+
+        return found;
     }
 }
