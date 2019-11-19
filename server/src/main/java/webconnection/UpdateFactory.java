@@ -51,7 +51,7 @@ public class UpdateFactory
         return update.whoseTurn;
     }
 
-    private String findWinner(String communicationType, Update update, int currLocation) {
+    private String findWinner(String communicationType, Update update, int currLocation) throws Exception {
         String winner = null;
         int activePlayer;
 
@@ -72,31 +72,17 @@ public class UpdateFactory
     private Update buildUpdateBoard(Action action) {
         try {
             Game game = new Game();
-//            game.loadExistingGame(action);
             Update update = new Update();
-
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
             boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist)
-                moveSucceeded = game.processMove(action.desiredMoves, congoGame);
-//            else //need to alert that opponent's lion does not exist !!!!!
-
-
+            if (lionExist) game.processMove(action.desiredMoves, congoGame);
+            else throw new Exception("Opponent's lion does not exist");
             /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
             lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist) { /*lion is not captured, so we need to return updated board back to client */
-                update.communicationType = "updateBoard";
-                update.statusMessage = "The player's move was valid and the board has been updated";//constructMessage(communicationType, update) ;
-            }
-            else { /* move is valid/legal, but lion is captured, so we need to terminate game (GAME OVER)*/
-                update.communicationType = "endMatch";
-                update.statusMessage = "Lion is captured, Game is Over!";
-            }
 
-            game.processMove(action.desiredMoves, congoGame);
-
-            update.communicationType = "updateBoard";
-            update.matchID = action.matchID ;
+            update.communicationType = lionExist ? "updateBoard" : "endMatch";
+            update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+            update.matchID = action.matchID;
             update.playerName = action.playerName ;
             update.pieceID =  action.pieceID ;
             update.updatedBoard = congoGame.getBoardForDatabase();
@@ -107,10 +93,10 @@ public class UpdateFactory
             return update;
 
         } catch (Exception e){
+            e.printStackTrace();
             ServerError error = new ServerError(102, e.getMessage());
             return error;
         }
-
     }
 
     private Update registerUser(Action action) {

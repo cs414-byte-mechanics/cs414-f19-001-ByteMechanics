@@ -194,7 +194,7 @@ public abstract class GamePiece {
         Determines if the sequence of moves is legal for a monkey piece. Verifies that the piece attempting to perform 
         more than one move is a monkey.
     */
-    public boolean performMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GameBoard congoBoard) throws Exception {
+    public void performMove(ArrayList<Integer> destRow, ArrayList<Integer> destCol, GameBoard congoBoard) throws Exception {
         /* Method determines if the sequence of moves are legal for this piece */
         /* It also checks which GamePieces the owner of this piece has in the river at the beginning of the turn.
         If any of the player's river dwellers other than crocodile are still in the river upon completion of the turn,
@@ -250,7 +250,6 @@ public abstract class GamePiece {
 
             /* now check if any river dwelling pieces are still in the river and need to drown and be captured */
             congoBoard.drownRiverDwellers(riverDwellers);
-            return true;
         }
         else throw new Exception("Invalid move!");
     }
