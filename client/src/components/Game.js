@@ -52,7 +52,6 @@ class Game extends Component {
         this.logOut = this.logOut.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
         this.updateSearchResult = this.updateSearchResult.bind(this);
-
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
     }
@@ -84,13 +83,10 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "errorInvalidMove": alert(update.message); break;
+            case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
-            case "errorInvalidRegistration": alert(update.errorMessage); break;
             case "loginSuccess": this.updateLogin(update); break;
-            case "errorInvalidLogin": alert(update.errorMessage); break;
             case "logoutSuccess": this.updateLogin(update); break;
-            case "logoutFailure": alert(update.errorMessage); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
@@ -141,7 +137,7 @@ class Game extends Component {
 
     sendObject(obj){ this.connection.send(JSON.stringify(obj)); }
 
-    logOut() { this.sendObject(attemptLogout) }
+    logOut() { this.sendObject(attemptLogout); }
 
     isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 

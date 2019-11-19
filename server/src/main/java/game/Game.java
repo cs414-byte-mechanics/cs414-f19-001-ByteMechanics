@@ -44,14 +44,14 @@ public class Game {
         dbHandler.saveGameState(matchID, gameBoard.getBoardForDatabase());
     }
     
-    public String[][] getBoard(){
+    public String[][] getBoard() throws Exception {
         return gameBoard.getBoardForDatabase();
     }
 
     public GameBoard getGameBoard() {return gameBoard;}
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
-    public boolean processMove(int[] desiredMove, GameBoard congoGame){ // OK -- move this to Game instead of perfprm move
+    public void processMove(int[] desiredMove, GameBoard congoGame) throws Exception { // OK -- move this to Game instead of perfprm move
         ArrayList<Integer> movesRow = new ArrayList<>();
         ArrayList<Integer> movesCol = new ArrayList<>();
 
@@ -71,10 +71,8 @@ public class Game {
                 movesRow.add(row);
             }
 
-            return (piece.performMove(movesRow, movesCol, congoGame));
+            piece.performMove(movesRow, movesCol, congoGame);
         }
-
-        return false;
     }
 
 }

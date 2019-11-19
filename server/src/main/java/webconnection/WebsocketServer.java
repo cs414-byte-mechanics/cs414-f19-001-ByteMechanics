@@ -70,7 +70,8 @@ public class WebsocketServer extends WebSocketServer {
         String updateJSON = "";
 
         try {
-            updateJSON = gson.toJson(update, Update.class);
+            if(update.communicationType == "error") updateJSON = gson.toJson(update, ServerError.class);
+            else updateJSON = gson.toJson(update, Update.class);
             client.send(updateJSON);
         }catch(Exception e) {
             System.err.println("Unable to send client the update!\nReason: " + e);

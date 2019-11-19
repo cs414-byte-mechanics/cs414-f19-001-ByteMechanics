@@ -22,7 +22,7 @@ public class PawnTest {
     }
 
     @Test
-    public void testPawnP1Move(){
+    public void testPawnP1Move() throws Exception {
         /*Start with initial board and test is Player 1 */
         PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][0];
 
@@ -47,7 +47,7 @@ public class PawnTest {
     }
 
     @Test
-    public void pawn1MoveTest(){
+    public void pawn1MoveTest() throws Exception {
 
         PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][5];
         GamePiece[][] congoBoard = congoGame.board;
@@ -80,7 +80,7 @@ public class PawnTest {
     }
 
     @Test
-    public void pawnMoveTest(){
+    public void pawnMoveTest() throws Exception {
 
         GamePiece[][] congoBoard = congoGame.board;
 
@@ -119,7 +119,7 @@ public class PawnTest {
     }
 
     @Test
-    public void testPawn2SimpleMove(){
+    public void testPawn2SimpleMove() throws Exception {
 
         /*Start with initial board and test is Player2 */
         PawnPiece Pawn1P2 = (PawnPiece) congoGame.board[5][0];
@@ -161,7 +161,7 @@ public class PawnTest {
     }
 
     @Test
-    public void pawn2Test(){
+    public void pawn2Test() throws Exception {
 
         PawnPiece Pawn2P2 = (PawnPiece) congoGame.board[5][2];
         PawnPiece Pawn3P2 = (PawnPiece) congoGame.board[5][3];
@@ -264,7 +264,7 @@ public class PawnTest {
 //    }
 
     @Test
-    public void moveOneStepStraightForward(){
+    public void moveOneStepStraightForward() throws Exception {
         /* move player 1's pawn one step straight or diagonally forward */
         GamePiece pawn1 = congoGame.getGamePiece(1,6);
         GamePiece[][] congoBoard = congoGame.board;
@@ -286,7 +286,7 @@ public class PawnTest {
     }
 
     @Test
-    public void moveOneStepsStraightBackward() {
+    public void moveOneStepsStraightBackward() throws Exception {
         GamePiece[][] congoBoard = congoGame.board;
 
         /* for player1 - move One step backward*/
@@ -306,7 +306,7 @@ public class PawnTest {
     }
 
     @Test
-    public void moveOneTwoStepsStraightBackwardP2() {
+    public void moveOneTwoStepsStraightBackwardP2() throws Exception {
         GamePiece[][] congoBoard = congoGame.board;
 
         /* for player2 - move One step backward*/
@@ -321,7 +321,7 @@ public class PawnTest {
     }
 
     @Test
-    public void moveTwoStepsStraightBackward() {
+    public void moveTwoStepsStraightBackward() throws Exception {
         GamePiece[][] congoBoard = congoGame.board;
 
         /* for player1 */
@@ -345,7 +345,7 @@ public class PawnTest {
     }
 
     @Test
-    public void superPawnMoveSide(){
+    public void superPawnMoveSide() throws Exception {
 
         GamePiece[][] congoBoard = congoGame.board;
 

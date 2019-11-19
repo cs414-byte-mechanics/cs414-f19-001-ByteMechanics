@@ -8,7 +8,6 @@ public class UpdateFactory
 {
     private DatabaseHandler db;
     private GameBoard congoGame;
-    private String communicationType;
     private GameBoard gameBoard;
     private Game game;
     private boolean moveSucceeded ;
@@ -41,20 +40,7 @@ public class UpdateFactory
         }
     }
 
-    /* helper routine to fill out message field with proper message*/
-    private String constructMessage(String communicationType, Update update) {
-        switch (communicationType){
-            case "updateBoard": return  "The player's move was valid and the board has been updated";
-            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
-            case "endMatch": return "Lion is captured, Game is Over!";
-
-            default:
-                System.err.println("Message has not been constructed!!");
-                return null;
-        }
-    }
-
-    private String updateTurn(Update update, Action action){
+    private String updateTurn(Update update, Action action) {
         if (update.communicationType == "updateBoard")
             if (update.whoseTurn == action.playerOneName)
                 update.whoseTurn = action.playerTwoName;
@@ -65,7 +51,7 @@ public class UpdateFactory
         return update.whoseTurn;
     }
 
-    private String findWinner(String communicationType, Update update, int currLocation) {
+    private String findWinner(String communicationType, Update update, int currLocation) throws Exception {
         String winner = null;
         int activePlayer;
 
@@ -83,59 +69,33 @@ public class UpdateFactory
         return winner;
     }
 
-    private Update wrapUpResponse(Update update, Action action, String communicationType)
-    {
-        update.communicationType = communicationType;
-        update.communicationVersion = 0;
-        update.matchID = action.matchID ;
-        update.playerName = action.playerName ;
-        update.pieceID =  action.pieceID ;
-
-        /* fill out board, turn and message filed */
-        update.updatedBoard = congoGame.getBoardForDatabase();
-        update.whoseTurn = updateTurn(update, action);
-        update.message = constructMessage(communicationType, update);
-
-        /* find who is winner*/
-        update.winnerName = action.playerName = findWinner(communicationType, update, action.desiredMoves[0]); /*this might need to be replace with action.playerName later*/
-
-        return update;
-    }
-
     private Update buildUpdateBoard(Action action) {
         try {
             Game game = new Game();
-//            game.loadExistingGame(action);
             Update update = new Update();
-
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
             boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist)
-                moveSucceeded = game.processMove(action.desiredMoves, congoGame);
-//            else //need to alert that opponent's lion does not exist !!!!!
+            if (lionExist) game.processMove(action.desiredMoves, congoGame);
+            else throw new Exception("Opponent's lion does not exist");
+            /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
+            lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
 
-            if (moveSucceeded == true) { /* if move is valid/legal */
-                /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
-                lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-                if (lionExist)  /*lion is not captured, so we need to return updated board back to client */
-                    communicationType = "updateBoard";
+            update.communicationType = lionExist ? "updateBoard" : "endMatch";
+            update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+            update.matchID = action.matchID;
+            update.playerName = action.playerName ;
+            update.pieceID =  action.pieceID ;
+            update.updatedBoard = congoGame.getBoardForDatabase();
+            update.whoseTurn = updateTurn(update, action);
 
-                if (!lionExist)  /* move is valid/legal, but lion is captured, so we need to terminate game (GAME OVER)*/
-                    communicationType = "endMatch";
-            }
-            else /* move isn't valid, so we return error message */
-                communicationType = "errorInvalidMove";
+            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[0]); /*this might need to be replace with action.playerName later*/
 
-            wrapUpResponse(update, action, communicationType);
             return update;
 
         } catch (Exception e){
-            Update update = new Update();
-            update.communicationType = "ErrorInvalidMove";
-            update.message = "GameBoard not found! Unable to make move";
-
-            System.err.println("Game cannot be fetched");
-            return update;
+            e.printStackTrace();
+            ServerError error = new ServerError(102, e.getMessage());
+            return error;
         }
     }
 
@@ -146,14 +106,14 @@ public class UpdateFactory
             update.communicationType = "registrationSuccess";
             update.userEmail = action.userEmail;
             update.userName = action.userName;
-            update.message = "User account has been successfully created.";
+            update.statusMessage = "User account has been successfully created.";
 
             return update;
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update
-            return null;
+            ServerError error = new ServerError(101, e.getMessage());
+            return error;
         }
     }
 
@@ -168,15 +128,15 @@ public class UpdateFactory
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update "errorInvalidRegistration"
-            return null;
+            ServerError error = new ServerError(100, e.getMessage());
+            return error;
         }
     }
 
     private Update buildLogoutSuccess(Action action) {
         Update update = new Update();
         update.communicationType = "logoutSuccess";
-        update.message = "User has successfully logged out.";
+        update.statusMessage = "User has successfully logged out.";
         return update;
     }
 
@@ -193,7 +153,7 @@ public class UpdateFactory
             return update;
         } catch(Exception e){
             System.err.println("New match cannot be created");
-            return null;
+            return new ServerError(-1, e.getMessage());
         }
 
     }

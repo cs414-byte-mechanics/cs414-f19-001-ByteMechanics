@@ -22,9 +22,9 @@ public class ServerErrorTest
     public void testEmptyServerError()
     {
         String testJSON = "" +
-                "{\"objectType\": \"\"," +
+                "{\"communicationType\": \"\"," +
                 "\"errorCode\": \"\"," +
-                "\"errorMessage\": \"\"}";
+                "\"statusMessage\": \"\"}";
 
         testError0 = new ServerError();
 
@@ -42,21 +42,19 @@ public class ServerErrorTest
     public void testFullServerError()
     {
         String testJSON = "" +
-                "{\"objectType\": \"ServerError\"," +
+                "{\"communicationType\": \"error\"," +
                 "\"errorCode\": \"100\"," +
-                "\"errorMessage\": \"Invalid password\"}";
-
-        testError0 = new ServerError();
+                "\"statusMessage\": \"Invalid password\"}";
 
         try {
             testError0 =  gson.fromJson(testJSON, ServerError.class);
-        }catch(Exception e) {}
+            System.out.println("\ntest0:\n" + testError0);
+        }catch(Exception e) {
+            System.out.println(e);
+        }
 
-        testError1 = new ServerError();
-
-        testError1.objectType = "ServerError";
-        testError1.errorCode = 100;
-        testError1.errorMessage = "Invalid password";
+        testError1 = new ServerError(100, "Invalid password");
+        System.out.println("\ntest1:\n" + testError1);
 
         assertEquals(testError0,testError1);
 
@@ -66,9 +64,9 @@ public class ServerErrorTest
     public void partiallyFilledServerError()
     {
         String testJSON = "" +
-                "{\"objectType\": \"\"," +
+                "{\"communicationType\": \"error\"," +
                 "\"errorCode\": \"100\"," +
-                "\"errorMessage\": \"Invalid password\"}";
+                "\"statusMessage\": \"\"}";
 
         testError0 = new ServerError();
 
@@ -76,11 +74,7 @@ public class ServerErrorTest
             testError0 =  gson.fromJson(testJSON, ServerError.class);
         }catch(Exception e) {}
 
-        testError1 = new ServerError();
-
-        testError1.objectType = "";
-        testError1.errorCode = 100;
-        testError1.errorMessage = "Invalid password";
+        testError1 = new ServerError(100, "");
 
         assertEquals(testError0,testError1);
 

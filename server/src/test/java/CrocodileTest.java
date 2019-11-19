@@ -24,7 +24,7 @@ public class CrocodileTest {
     }
 
     @Test
-    public void testCrocSimpleMoveValidate() {
+    public void testCrocSimpleMoveValidate() throws Exception {
         /*Start with initial board and test if Player 1 crocodile can move from (0,5) to (1,4) */
         CrocodilePiece croc1 = (CrocodilePiece) congoGame.getGamePiece(0,5);
 
@@ -49,8 +49,8 @@ public class CrocodileTest {
         assertTrue(croc1.ValidateMove(3,3,congoGame.board) == false);  /* move diagonally back to river? */
     }
 
-    @Test
-    public void testCrocPerformBlockedMove() {
+    @Test(expected = Exception.class)
+    public void testCrocPerformBlockedMove() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -59,11 +59,11 @@ public class CrocodileTest {
         CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(6,5);
         movesRow.add(4);
         movesCol.add(5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == false);
+        croc.performMove(movesRow, movesCol, congoGame);
     }
 
     @Test
-    public void testCrocPerformMoveWithNoCapture() {
+    public void testCrocPerformMoveWithNoCapture() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -76,7 +76,7 @@ public class CrocodileTest {
         congoGame.movePiece(1,4,2,4);
         movesRow.add(1);
         movesCol.add(4);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == true);
+        croc.performMove(movesRow, movesCol, congoGame);
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(0,5) == null);
         /* check that GamePiece got updated correctly */
@@ -85,7 +85,7 @@ public class CrocodileTest {
     }
 
     @Test
-    public void testCrocPerformMoveWithCapture() {
+    public void testCrocPerformMoveWithCapture() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -101,7 +101,7 @@ public class CrocodileTest {
 
         movesRow.add(3);
         movesCol.add(5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == true);
+        croc.performMove(movesRow, movesCol, congoGame);
         /* check that source location of crocodile is now empty */
         assertTrue(congoGame.getGamePiece(6,5) == null);
         /* check that GamePiece got updated correctly */
@@ -109,8 +109,8 @@ public class CrocodileTest {
         assertTrue(croc.column == 5);
     }
 
-    @Test
-    public void testCrocMovesTowardRiver() {
+    @Test(expected = Exception.class)
+    public void testCrocMovesTowardRiverFailure() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -120,29 +120,67 @@ public class CrocodileTest {
         /* move pawn out of the way across the river */
         movesRow.add(4);
         movesCol.add(4);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,3);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,2);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         /* move crocodile diagonally out of its home row */
         movesRow.set(0,5);
         movesCol.set(0,5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
+        /* make sure that crocodile can't move multiple squares beyond the river */
+        movesRow.set(0,2);
+        movesCol.set(0,5);
+        croc.performMove(movesRow, movesCol, congoGame);
+    }
+    @Test
+    public void testCrocMovesTowardRiver() throws Exception {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        /* Start with initial board and test if Player 2 crocodile can move from (6,5) to other squares along that file */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(6,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(5,5);  /* pawn in front of crocodile */
+        /* move pawn out of the way across the river */
+        movesRow.add(4);
+        movesCol.add(4);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        movesRow.set(0,3);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        movesRow.set(0,2);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        /* move crocodile diagonally out of its home row */
+        movesRow.set(0,5);
+        movesCol.set(0,5);
+        croc.performMove(movesRow, movesCol, congoGame);
         assertTrue(congoGame.getGamePiece(6,5) == null); /* check that original board square of croc is empty now */
         /* make sure that crocodile can't move multiple squares beyond the river */
         movesRow.set(0,2);
         movesCol.set(0,5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == false);
         /* but it can move into the river if path is clear */
         movesRow.set(0,3);
         movesCol.set(0,5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         assertTrue(croc.inRiver());
     }
 
+    @Test(expected = Exception.class)
+    public void testCrocDrowningFailure() throws Exception {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        /* Start with initial board and test if Player 1 crocodile can move from (0,5) to (3,5) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0, 5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1, 5);  /* pawn in front of crocodile */
+        /* attempt to move croc to river but it will fail since pawn is blocking the move */
+        movesRow.add(3);
+        movesCol.add(5);
+        croc.performMove(movesRow, movesCol, congoGame);
+    }
+
     @Test
-    public void testCrocDrowning() {
+    public void testCrocDrowning() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -152,32 +190,45 @@ public class CrocodileTest {
         /* attempt to move croc to river but it will fail since pawn is blocking the move */
         movesRow.add(3);
         movesCol.add(5);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == false);
         /* now move pawn out of the way across the river */
         movesRow.set(0,2);
         movesCol.set(0,5);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,3);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,4);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,5);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));  /* this will actually be a capture of opponent's pawn */
+        pawn.performMove(movesRow, movesCol, congoGame);  /* this will actually be a capture of opponent's pawn */
         /* then move croc to river */
         movesRow.set(0,3);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         assertTrue(croc.inRiver());
 
         /* now move another pawn piece and make sure crocodile doesn't drown */
         PawnPiece pawn2 = (PawnPiece) congoGame.getGamePiece(1,0);
         movesRow.set(0,2);
         movesCol.set(0,0);
-        assertTrue(pawn2.performMove(movesRow, movesCol, congoGame));
+        pawn2.performMove(movesRow, movesCol, congoGame);
         assertTrue(croc.inRiver());
     }
 
+    @Test(expected = Exception.class)
+    public void testCrocMoveInRiverFailure() throws Exception {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        /* Start with initial board and test if Player 1 crocodile can move from (0,5) to (3,5) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0, 5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1, 4);
+        /* first try to capture player's own pawn on diagonal path */
+        movesRow.add(1);
+        movesCol.add(4);
+        croc.performMove(movesRow, movesCol, congoGame);
+    }
+
     @Test
-    public void testCrocMoveInRiver() {
+    public void testCrocMoveInRiver() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -187,38 +238,37 @@ public class CrocodileTest {
         /* first try to capture player's own pawn on diagonal path */
         movesRow.add(1);
         movesCol.add(4);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == false);
         /* move pawn out of the way (across the river) so it is not blocking */
         movesRow.set(0,2);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,3);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         movesRow.set(0,4);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
+        pawn.performMove(movesRow, movesCol, congoGame);
         /* now attempt to move crocodile diagonally again */
         movesRow.set(0,1);
         movesCol.set(0,4);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         /* now move to river */
         movesRow.set(0,3);
         movesCol.set(0,4);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         /* then move along river */
         movesRow.set(0,3);
         movesCol.set(0,0);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         assertTrue(croc.inRiver());
         /* now move to other end of river */
         movesRow.set(0,3);
         movesCol.set(0,6);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
+        croc.performMove(movesRow, movesCol, congoGame);
         assertTrue(croc.inRiver());
         /* check to make sure we have a crocodile piece on the board in (3,6) at end of river */
         assertTrue(congoGame.getGamePiece(3,6) instanceof CrocodilePiece);
     }
 
-    @Test
-    public void testCrocMoveDiagToRiver() {
+    @Test(expected = Exception.class)
+    public void testCrocMoveDiagToRiverFailure() throws Exception {
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
         ArrayList<Integer> movesCol = new ArrayList<Integer>();
 
@@ -228,24 +278,41 @@ public class CrocodileTest {
         /* first move pawn out of the way - across the river*/
         movesRow.add(2);
         movesCol.add(4);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
         movesRow.set(0,3);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
         movesRow.set(0,4);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));
         /* now crocodile out of home row with a diagonal move */
         movesRow.set(0,1);
         movesCol.set(0,4);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame));
         /* now try moving to river along a diagonal path */
         movesRow.set(0,3);
         movesCol.set(0,2);
-        assertTrue(croc.performMove(movesRow, movesCol, congoGame) == false);
+        croc.performMove(movesRow, movesCol, congoGame);
+    }
 
+    @Test
+    public void testCrocMoveDiagToRiver() throws Exception {
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+
+        /* Start with initial board and test if Player 1 crocodile can't move from (0,5) to (3,2) in the river */
+        CrocodilePiece croc = (CrocodilePiece) congoGame.getGamePiece(0,5);
+        PawnPiece pawn = (PawnPiece) congoGame.getGamePiece(1,4);
+        /* first move pawn out of the way - across the river*/
+        movesRow.add(2);
+        movesCol.add(4);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        movesRow.set(0,3);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        movesRow.set(0,4);
+        pawn.performMove(movesRow, movesCol, congoGame);
+        /* now crocodile out of home row with a diagonal move */
+        movesRow.set(0,1);
+        movesCol.set(0,4);
+        croc.performMove(movesRow, movesCol, congoGame);
     }
 
     //@Test
-    public void testCrocArray2StepCapture() {
+    public void testCrocArray2StepCapture() throws Exception {
         /* Start with initialized board */
         /* tests to make sure crocodile captures 1 piece like a rook towards the river */
         GamePiece myCroc = congoGame.getGamePiece(0,5);
@@ -260,12 +327,12 @@ public class CrocodileTest {
         movesRow.add(2);
         movesCol.add(5);
 
-        assertTrue(myCroc.performMove(movesRow, movesCol, congoGame) == false);  /* fails since it's blocked by myPawn */
+        myCroc.performMove(movesRow, movesCol, congoGame);  /* fails since it's blocked by myPawn */
 
  //       assertTrue(congoGame.getGamePiece(2,5) != null);  /* opponentPawn is on board */
         /* move myPawn out of the way to enable capture move */
         congoGame.movePiece(myPawn, 2, 4);
-        assertTrue(myCroc.performMove(movesRow, movesCol, congoGame));  /* cleared path to opponentPawn so move succeeds */
+        myCroc.performMove(movesRow, movesCol, congoGame);  /* cleared path to opponentPawn so move succeeds */
         assertTrue(congoGame.getGamePiece(0,5) == null);  /* crocodile has moved and left square empty */
         assertTrue(congoGame.getGamePiece(2,5) instanceof CrocodilePiece);  /* opponentPawn has been captured */
 
