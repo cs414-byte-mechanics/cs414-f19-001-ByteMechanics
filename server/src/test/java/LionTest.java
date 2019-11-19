@@ -23,7 +23,7 @@ public class LionTest {
     }
 
     @Test/*Added by Fari -- test for lion valid move */
-    public void testLionSimpleMove(){
+    public void testLionSimpleMove() throws Exception {
 
         LionPiece lionP1 = (LionPiece) congoGame.board[0][3];
         LionPiece lionP2 = (LionPiece) congoGame.board[6][3];

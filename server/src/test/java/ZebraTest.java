@@ -24,14 +24,14 @@ public class ZebraTest {
     }
 
     @Test
-    public void testZebraSimpleMove() {
+    public void testZebraSimpleMove() throws Exception {
         /*Start with initial board and test if Player 1 zebra can move from (0,6) to (2,5) */
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(0,6);
         assertTrue(zebra.ValidateMove(2,5,congoGame.board) == true);
     }
 
     @Test
-    public void testZebraBlockedMove() {
+    public void testZebraBlockedMove() throws Exception {
         /* Start with initial board and put Crocodile at row 2, col 3 to block move */
         /* Test if Player 1 zebra move from (0,6) to (2,5) is blocked */
         GamePiece[][] congoBoard = congoGame.board;
@@ -41,7 +41,7 @@ public class ZebraTest {
     }
 
     @Test
-    public void testZebraMove3Fail() {
+    public void testZebraMove3Fail() throws Exception {
         /* Start with initial board and test is Player 1 zebra can move from (0,6) to (3,6) */
         /* This move is illegal for Zebra */
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(0,6);
@@ -57,7 +57,7 @@ public class ZebraTest {
         ZebraPiece zebra = (ZebraPiece) congoGame.getGamePiece(6,6);
         movesRow.add(4);
         movesCol.add(5);
-        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == true);
+        zebra.performMove(movesRow, movesCol, congoGame);
         /* check that source location is now empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra and it's not captured */
@@ -82,7 +82,7 @@ public class ZebraTest {
         movesRow.add(4);
         movesCol.add(5);
         assertTrue(zebra.ValidateMove(4, 5, congoGame.board) == true);
-        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == true);
+        zebra.performMove(movesRow, movesCol, congoGame);
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(6,6) == null);
         /* check that player array of pieces has zebra */
@@ -134,7 +134,7 @@ public class ZebraTest {
         movesRow.add(5);
         movesCol.add(4);
         assertTrue(zebra.ValidateMove(5, 4, congoGame.board) == false);
-        assertTrue(zebra.performMove(movesRow, movesCol, congoGame) == false);  /* can't move since pawn is blocking */
+        zebra.performMove(movesRow, movesCol, congoGame);  /* can't move since pawn is blocking */
     }
 
     @Test
@@ -153,7 +153,7 @@ public class ZebraTest {
         congoGame.movePiece(pawn, 5, 4);
 
         assertTrue(zebra.ValidateMove(5, 4, congoGame.board));
-        assertTrue(zebra.performMove(movesRow, movesCol, congoGame));  /* now can move since pawn is opponent's */
+        zebra.performMove(movesRow, movesCol, congoGame);  /* now can move since pawn is opponent's */
         assertTrue(congoGame.getGamePiece(6, 6) == null);  /* zebra has moved */
     }
 

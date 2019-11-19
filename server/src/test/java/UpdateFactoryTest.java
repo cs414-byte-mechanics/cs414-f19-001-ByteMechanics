@@ -143,7 +143,7 @@ public class UpdateFactoryTest
 
     /* Fari: this test wrap up an errorInvalidMove response for invalid move and send back to client  */
     @Test
-    public void ErrorInvalidMoveResponseTest()  {
+    public void ErrorInvalidMoveResponseTest() throws Exception {
 
         Action action = new Action();
 
@@ -198,7 +198,7 @@ public class UpdateFactoryTest
     }
 
     @Test
-    public void activePlayerTest(){
+    public void activePlayerTest() throws Exception {
 
         int[] desiredMoves = new int[]{12, 22};
         String[][] board = congoGame.getBoardForDatabase();
@@ -211,7 +211,7 @@ public class UpdateFactoryTest
     }
 
     @Test
-    public void lionInCastle(){
+    public void lionInCastle() throws Exception {
         int[] desiredMoves = new int[]{12, 22};
         String[][] board = congoGame.getBoardForDatabase();
 
@@ -224,7 +224,7 @@ public class UpdateFactoryTest
     }
 
     @Test
-    public void lionExist(){
+    public void lionExist() throws Exception {
         // board
         String[][] board = congoGame.getBoardForDatabase();
 

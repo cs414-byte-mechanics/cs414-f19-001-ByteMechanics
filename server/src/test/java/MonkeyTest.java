@@ -24,7 +24,7 @@ public class MonkeyTest {
     }
 
     @Test
-    public void testMonkeyMove() {
+    public void testMonkeyMove() throws Exception {
         /* Start with initial board */
         MonkeyPiece monkey1 = (MonkeyPiece) congoGame.getGamePiece(0,1);
         ArrayList<Integer> movesRow = new ArrayList<Integer>();
@@ -58,7 +58,7 @@ public class MonkeyTest {
     }
 
     @Test
-    public void testMonkeyCantJumpTwice() {
+    public void testMonkeyCantJumpTwice() throws Exception {
         /* Start with initialized board */
         /* tests to make sure we block move if piece is jumped twice */
         congoGame.movePiece(0,1,2,1);  /* initialize player's monkey to 2,1 */
@@ -99,7 +99,7 @@ public class MonkeyTest {
 
         GamePiece monkey = congoGame.getGamePiece(0,1);
         GamePiece pawn = congoGame.getGamePiece(1,2);
-        assertTrue(monkey.performMove(movesRow, movesCol, congoGame));  /* this should jump and capture the pawn */
+        monkey.performMove(movesRow, movesCol, congoGame);  /* this should jump and capture the pawn */
         assertTrue(congoGame.getGamePiece(0,1) == null);  /* monkey has moved and left square empty */
         assertTrue(congoGame.getGamePiece(2,3) instanceof MonkeyPiece);  /* monkey is now in square 2,3 */
         assertTrue(congoGame.getGamePiece(1,2) == null);  /* pawn has been captured */
@@ -107,7 +107,7 @@ public class MonkeyTest {
     }
 
     //@Test
-    public void testMonkeyDoubleJumpDrown() {
+    public void testMonkeyDoubleJumpDrown() throws Exception {
         /* Start with initial board */
         /* tests to make sure monkey captures 2 pieces along river but drowns at end of the turn */
         GamePiece monkey = congoGame.getGamePiece(6,1);
@@ -160,12 +160,12 @@ public class MonkeyTest {
         GamePiece pawn = congoGame.getGamePiece(5, 1);
         movesRow.set(0,4);
         movesCol.set(0,1);
-        assertTrue(pawn.performMove(movesRow, movesCol, congoGame));  /* this should move pawn forward 1 step */
+        pawn.performMove(movesRow, movesCol, congoGame);  /* this should move pawn forward 1 step */
         /* now monkey can move forward to empty space */
         movesRow.set(0,5);
         movesCol.set(0,1);
         assertTrue(monkey.ValidateMove(movesRow, movesCol, congoGame.board));
-        assertTrue(monkey.performMove(movesRow, movesCol, congoGame));
+        monkey.performMove(movesRow, movesCol, congoGame);
         assertTrue(congoGame.getGamePiece(6,1) == null);  /* monkey has moved and left square empty */
         assertTrue(congoGame.getGamePiece(5,1) instanceof MonkeyPiece);  /* monkey is now in square 5,1 */
         assertTrue(congoGame.getGamePiece(4,1) instanceof PawnPiece);  /* pawn has been moved */
