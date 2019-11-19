@@ -52,7 +52,6 @@ class Game extends Component {
         this.logOut = this.logOut.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
         this.updateSearchResult = this.updateSearchResult.bind(this);
-
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
     }
@@ -138,7 +137,7 @@ class Game extends Component {
 
     sendObject(obj){ this.connection.send(JSON.stringify(obj)); }
 
-    logOut() { this.sendObject(attemptLogout) }
+    logOut() { this.sendObject(attemptLogout); }
 
     isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 
