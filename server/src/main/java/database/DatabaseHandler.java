@@ -117,6 +117,7 @@ public class DatabaseHandler {
     }
 
     public void sendGameInvitation(Action action) throws Exception {
+        if(action.invitationFrom.equals(action.invitationTo)) throw new Exception("User cannot invite self");
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         String invColTo = "invitations_sent_to";
         String invColFrom = "received_invitations_from";
