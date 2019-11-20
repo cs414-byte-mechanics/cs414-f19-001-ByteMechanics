@@ -1,0 +1,53 @@
+@import "./variables";
+
+#invitations {
+  .page_title, .form_input, .btn {
+    display:flex;
+    align-items: baseline;
+    label {
+      margin-right:auto;
+      min-width: 80px;
+      font-size: 17px;
+      text-align: right;
+      padding-right: 8px;
+    }
+    input {
+      margin-left:auto;
+      margin-bottom: 15px;
+      height: 25px;
+    }
+  }
+  .btn {
+    display:block;
+    background-color: $backgroundColor;
+    text-align:center;
+    border: 0px;
+    &:hover {
+      background-color: darken($backgroundColor, 20%);
+    }
+  }
+
+  #search {
+     display: flex;
+     * {
+       margin: 5px;
+     }
+   }
+  #searchResults {
+    display: flex;
+    flex-direction: column;
+    .result {
+      display: flex;
+      height: 40px;
+      margin: 5px;
+      * {
+        margin-right: 10px;
+      }
+
+    }
+  }
+
+}
+
+
+
