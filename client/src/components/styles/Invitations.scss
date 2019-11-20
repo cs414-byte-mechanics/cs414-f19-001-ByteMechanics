@@ -1,51 +1,75 @@
 @import "./variables";
 
 #invitations {
-  .page_title, .form_input, .btn {
-    display:flex;
-    align-items: baseline;
-    label {
-      margin-right:auto;
-      min-width: 80px;
-      font-size: 17px;
-      text-align: right;
-      padding-right: 8px;
-    }
-    input {
-      margin-left:auto;
-      margin-bottom: 15px;
-      height: 25px;
-    }
-  }
+
   .btn {
-    display:block;
     background-color: $backgroundColor;
     text-align:center;
     border: 0px;
+    height: 30px;
     &:hover {
       background-color: darken($backgroundColor, 20%);
     }
   }
+  #viewsearch {
+    display:flex;
+  }
 
-  #search {
-     display: flex;
-     * {
-       margin: 5px;
-     }
-   }
-  #searchResults {
-    display: flex;
-    flex-direction: column;
-    .result {
+  #search, #invites {
+    //max-width: 300px;
+    margin: 25px auto;
+    #subtitle {
+      font-size: 25px;
+      margin-bottom: 15px;
+      border-bottom: $backgroundColor 3px solid;
+    }
+    #search_input {
       display: flex;
-      height: 40px;
-      margin: 5px;
       * {
-        margin-right: 10px;
+        height:30px;
+        margin: 3px;
       }
-
+      .btn {
+        font-size:15px;
+        padding:4px 8px;
+      }
+    }
+    #searchResults {
+      display: flex;
+      flex-direction: column;
+      width:300px;
+      max-width: 300px;
+      max-height: 200px;
+      overflow-y:scroll;
+      p {
+        font-size: 14px;
+        margin:4px;
+      }
+      .result {
+        display: flex;
+        justify-content: space-between;
+        margin:3px;
+        height: 30px;
+        background-color: darken($foregroundColor, 10%);
+        font-size: 15px;
+        p {
+          margin:auto 10px;
+        }
+        .invite_button {
+          float: right;
+          margin:auto 25px auto auto;
+          font-size:18px;
+          transition: .3s;
+          cursor: pointer;
+          color: darken($backgroundColor, 30%);
+          &:hover {
+            color: darken($backgroundColor, 40%);
+          }
+        }
+      }
     }
   }
+
 
 }
 
