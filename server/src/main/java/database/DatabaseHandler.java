@@ -62,22 +62,17 @@ public class DatabaseHandler {
         return rs.getString("username");
     }
 
-    public String searchUser(Action action) throws Exception {
+    public String[] searchUser(Action action) throws Exception {
 
-        ResultSet rs = null;
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement search = con.createStatement();
+        ResultSet rs = search.executeQuery(Query.createSearchUserQuery(action));
 
-        try {
-            Connection con = DriverManager.getConnection(database, USER, PASSWORD);
-            Statement search = con.createStatement();
-            rs = search.executeQuery(Query.createSearchUserQuery(action));
-        } catch(Exception e) {return "user not found";}
-
-        if (!rs.next()) {
-            return "user not found";
+        ArrayList<String> users = new ArrayList<String>();
+        while (rs.next()) {
+            users.add(rs.getString("username"));
         }
-        else {
-            return "user found";
-        }
+        return Arrays.asList(users.toArray()).toArray(new String[0]);
     }
 
     /**

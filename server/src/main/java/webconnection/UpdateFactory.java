@@ -182,18 +182,9 @@ public class UpdateFactory
         Update update = new Update();
         update.communicationType = "searchResult";
         update.userName= action.userName;
-        String databaseSearchResult = "";
-
         try {
-            databaseSearchResult = db.searchUser(action);
+            update.searchResults = db.searchUser(action);
         } catch(Exception e) {}
-
-        if (databaseSearchResult.equals("user not found")) {
-            update.userFound = false;
-        }
-        else {
-            update.userFound = true;
-        }
 
         return update;
     }
