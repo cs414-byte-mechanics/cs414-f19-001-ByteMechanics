@@ -2,6 +2,7 @@ import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/Invitations.scss'
 import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
+import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
 
 class Invitations extends React.Component {
 
@@ -10,6 +11,9 @@ class Invitations extends React.Component {
 
         this.submitSearchString = this.submitSearchString.bind(this);
         this.sendGameInvite = this.sendGameInvite.bind(this);
+        this.updateSearchString = this.updateSearchString.bind(this);
+        this.renderSearchInputs = this.renderSearchInputs.bind(this);
+        this.listenForEnter = this.listenForEnter.bind(this);
 
         this.state = {
           searchString: ''
@@ -20,12 +24,15 @@ class Invitations extends React.Component {
         return (
           <div id="invitations">
             {this.renderText()}
-            <p/>
-            <Row>{this.renderSearchBox()}</Row>
-            <p/>
-            <Row>{this.renderInvitePlayer()}</Row>
-            <p/>
-            <Row>{this.renderInviteStatus()}</Row>
+            <div id="viewsearch">
+                <div id="invites">
+                    <div id="subtitle">Current Invitations</div>
+                </div>
+                <div id="search">
+                    {this.renderSearchInputs()}
+                    {this.renderInvitePlayer()}
+                </div>
+            </div>
           </div>
         );
     }
@@ -46,24 +53,23 @@ class Invitations extends React.Component {
         );
     }
 
-    renderSearchBox() {
+    listenForEnter(event) {
+        if (event.keyCode === 13)
+            this.submitSearchString(event);
+    }
+
+    renderSearchInputs() {
         return (
           <div>
               <div>
-                <Label>Search for a User to Invite</Label>
-                <div id="search">
-                    <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Search for a user..." onChange={event => this.updateSearchString(event)}/>
-                    {this.renderSearchButton()}
+                <div id="subtitle">Search for a User to Invite</div>
+                <div id="search_input">
+                    <Input type="search" placeholder="Search for a user..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
+                    <Button onClick={this.submitSearchString}>Search</Button>
                 </div>
               </div>
 
           </div>
-        );
-    }
-
-    renderSearchButton() {
-        return (
-          <Button onClick={this.submitSearchString}>Search</Button>
         );
     }
 
@@ -77,65 +83,35 @@ class Invitations extends React.Component {
       if (this.state.searchString !== "") {
         let searchObject = {
           communicationType: "searchUser",
-          userName: this.state.searchString
+          userName: this.state.searchString,
+          playerName: this.props.userName
         };
         this.props.sendObject(searchObject);
       }
     }
 
     renderInvitePlayer() {
-        console.log(this.props.searchResult)
         let list = []
         this.props.searchResult.forEach(user => {
             list.push(
-                <div className="result">
+                <div className="result" key={user}>
                   <p>{user}</p>
-                  <Button onClick={this.sendGameInvite}>Invite Player</Button>
+                  <Invite className="invite_button" onClick={()=>{this.sendGameInvite(user)}}/>
                 </div>
             )
-
         });
         return(
             <div id="searchResults">
-                {list}
+                {list.length > 0 ? list : <p>No users found</p>}
             </div>
         );
     }
 
-    renderInviteStatus() {
-      console.log(this.props.invitationSentStatus.statusMessage);
-      if (this.props.showInvitationSentStatus) {
-        if (this.props.invitationSentStatus.invitationSent) {
-          return(
-            <Col>
-              <div><p>An invitation was successfully sent to {this.props.searchResult.userName}!</p></div>
-            </Col>
-          );
-        }
-        else {
-          if (this.props.invitationSentStatus.statusMessage === "java.lang.Exception: duplicate invitation") {
-            return (
-              <Col>
-                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}! An Invitation from {this.props.searchResult.userName} has already been sent or received!</p></div>
-              </Col>
-            );
-          }
-          else {
-            return (
-              <Col>
-                <div><p>Was not able to send an invitation to {this.props.searchResult.userName}!</p></div>
-              </Col>
-            );
-          }
-        }
-      }
-    }
-
-    sendGameInvite() {
+    sendGameInvite(userName) {
       let inviteObject = {
         communicationType: "sendInvitation",
         invitationFrom: this.props.userName,
-        invitationTo: this.props.searchResult.userName
+        invitationTo: userName
       };
       this.props.sendObject(inviteObject);
       this.setState({showInvitePlayer: false});

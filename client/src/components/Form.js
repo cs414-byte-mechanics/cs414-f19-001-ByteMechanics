@@ -11,6 +11,7 @@ class Form extends React.Component {
         }
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.updateTextField = this.updateTextField.bind(this);
+        this.listenForEnter = this.listenForEnter.bind(this);
     }
     handleFormSubmit(){
         this.props.sendToServer(this.state.registerUser);
@@ -21,6 +22,10 @@ class Form extends React.Component {
         this.setState(state);
     }
 
+    listenForEnter(event) {
+        if (event.keyCode === 13)
+            this.handleFormSubmit(event);
+    }
     render () {
         return (
 
@@ -33,7 +38,7 @@ class Form extends React.Component {
                             return (
                                 <div className="form_input">
                                     <Label for={field}>{field.replace("user", "")}: </Label>
-                                    <Input type={type} key={field} onChange={(event)=>{this.updateTextField(field, event.target.value)}}/>
+                                    <Input type={type} key={field} onChange={(event)=>{this.updateTextField(field, event.target.value)}} onKeyDown={this.listenForEnter}/>
                                 </div>
                             );}
                         )}

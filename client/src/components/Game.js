@@ -30,18 +30,7 @@ class Game extends Component {
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
           ],
-          searchResult: [],
-
-          showInvitationSentStatus: false,
-
-          invitationSentStatus: {
-            communicationType: "",
-            invitationSent: false,
-            statusMessage: ""
-          },
-
-          showInvitePlayer: false
-
+          searchResult: []
         }
 
         this.connection = null;
@@ -80,7 +69,7 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "error" : alert(update.statusMessage);break
+            case "invitationSentStatus": case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
@@ -131,7 +120,7 @@ class Game extends Component {
         }
     }
 
-    sendObject(obj){ this.connection.send(JSON.stringify(obj)); }
+    sendObject(obj){ console.log(JSON.stringify(obj)); this.connection.send(JSON.stringify(obj)); }
 
     logOut() { this.sendObject(attemptLogout); }
 
