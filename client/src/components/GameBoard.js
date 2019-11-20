@@ -12,8 +12,8 @@ class GameBoard extends Component {
             requestMove: {
                 "communicationType": "requestMoves",
                 "communicationVersion": 1,
-                "matchID": "",
-                "playerName": "",
+                "matchID": this.props.match_id,
+                "playerName": this.props.playerName,
                 "pieceID" : "",
                 "desiredMoves": [],
                 "playerOneName": this.props.player1,
@@ -30,6 +30,8 @@ class GameBoard extends Component {
 
     //send move to server for validation and completion
     confirmSelection() {
+        console.log("Send move request player " + this.state.requestMove.playerName);
+        console.log("Send move request moves " + this.state.requestMove.desiredMoves);
         this.props.send(this.state.requestMove);
         this.clearSelection();
     }
@@ -94,8 +96,8 @@ class GameBoard extends Component {
         //state.requestMove[state.selectionType].push([i, j]);
         let encodeLocation = i * 10 + j;
         state.requestMove[state.selectionType].push(encodeLocation);
-        console.log(state.requestMove[state.selectionType]);
         this.setState(state);
+        console.log(state.requestMove);
     }
 
     //basic logical determinations for pieces

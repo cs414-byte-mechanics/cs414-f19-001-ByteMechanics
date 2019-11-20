@@ -7,17 +7,20 @@ import java.util.ArrayList;
 public class UpdateFactory
 {
     private DatabaseHandler db;
-    private GameBoard congoGame;
-    private String communicationType;
+    //private GameBoard congoGame;
+    //private String communicationType;
     private GameBoard gameBoard;
     private Game game;
-    private boolean moveSucceeded ;
 
     public UpdateFactory() {
 
         db = new DatabaseHandler();
-        congoGame = new GameBoard();
-        congoGame.initialize();
+       //congoGame = new GameBoard();
+        // congoGame.initialize();
+        //temporarily starting a game in the server until the client is ready to handle it
+        game = new Game();
+        gameBoard = game.getGameBoard();
+        gameBoard.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -54,15 +57,17 @@ public class UpdateFactory
         }
     }
 
-    private String updateTurn(Update update, Action action){
-        if (update.communicationType == "updateBoard")
-            if (update.whoseTurn == action.playerOneName)
-                update.whoseTurn = action.playerTwoName;
+    private void updateTurn(Update update, Action action){
+        String nextPlayer;
+        if (update.communicationType.compareTo("updateBoard") == 0) {
+            /* swap which player is taking a turn next */
+            nextPlayer = (action.playerName.compareTo(action.playerOneName) == 0) ? action.playerTwoName : action.playerOneName;
+        }
+        else  /* move did not succeed or game ended so it is the same player's turn again.*/
+            nextPlayer = action.playerName;
 
-            if (update.whoseTurn == action.playerTwoName)
-                update.whoseTurn = action.playerOneName;
-
-        return update.whoseTurn;
+        update.whoseTurn = nextPlayer;
+        update.playerName = nextPlayer;
     }
 
     private String findWinner(String communicationType, Update update, int currLocation) {
@@ -71,7 +76,7 @@ public class UpdateFactory
 
         if (communicationType == "endMatch") {
 //            activePlayer = congoGame.findActivePlayer(update.updatedBoard, currLocation);
-            GamePiece piece = congoGame.getGamePiece(currLocation/10, currLocation%10);
+            GamePiece piece = gameBoard.getGamePiece(currLocation/10, currLocation%10);
             activePlayer = piece.player;
 
             if (activePlayer == 1)
@@ -85,15 +90,17 @@ public class UpdateFactory
 
     private Update wrapUpResponse(Update update, Action action, String communicationType)
     {
+        System.out.println(action.toString());
         update.communicationType = communicationType;
         update.communicationVersion = 0;
         update.matchID = action.matchID ;
-        update.playerName = action.playerName ;
+        //update.playerName = action.playerName ;
         update.pieceID =  action.pieceID ;
 
         /* fill out board, turn and message filed */
-        update.updatedBoard = congoGame.getBoardForDatabase();
-        update.whoseTurn = updateTurn(update, action);
+        update.updatedBoard = gameBoard.getBoardForDatabase();
+        updateTurn(update, action);
+        System.out.println("Whose turn next- "+update.whoseTurn);
         update.message = constructMessage(communicationType, update);
 
         /* find who is winner*/
@@ -103,20 +110,30 @@ public class UpdateFactory
     }
 
     private Update buildUpdateBoard(Action action) {
+        boolean moveSucceeded ;
+        boolean sequenceCorrect;
+        String communicationType = "";
+
         try {
-            Game game = new Game();
+            //Game game = new Game();
 //            game.loadExistingGame(action);
             Update update = new Update();
 
+            System.out.println("Action "+action.toString());
+            System.out.println(gameBoard.toString());
+//            sequenceCorrect = game.moveSequenceCorrect(action, gameBoard, action.desiredMoves[0]);
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
-            boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist)
-                moveSucceeded = game.processMove(action.desiredMoves, congoGame);
+//            boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
+//            if (lionExist)
+//                moveSucceeded = game.processMove(action.desiredMoves, gameBoard);
 //            else //need to alert that opponent's lion does not exist !!!!!
 
-            if (moveSucceeded == true) { /* if move is valid/legal */
+            //if (moveSucceeded == true) {
+            //if (sequenceCorrect && moveSucceeded) { /* if move is valid/legal */
+            if (game.moveSequenceCorrect(action, gameBoard, action.desiredMoves[0]) &&
+                    game.processMove(action.desiredMoves, gameBoard))       {
                 /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
-                lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
+                boolean lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
                 if (lionExist)  /*lion is not captured, so we need to return updated board back to client */
                     communicationType = "updateBoard";
 
@@ -127,6 +144,7 @@ public class UpdateFactory
                 communicationType = "errorInvalidMove";
 
             wrapUpResponse(update, action, communicationType);
+            //game.saveMatchState(Integer.parseInt(action.matchID), update.whoseTurn);
             return update;
 
         } catch (Exception e){

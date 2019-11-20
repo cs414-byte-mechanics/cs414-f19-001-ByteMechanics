@@ -32,16 +32,8 @@ public class Game {
         gameBoard.loadGame(board);
     }
     
-//    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
-//        int pieceCol = pieceLocation % 10;
-//        int pieceRow = pieceLocation /10;
-//        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
-//
-//        return pieceToMove.performMove(destRows, destCols, gameBoard);
-//    }
-    
-    public void saveMatchState(int matchID) throws Exception {
-        dbHandler.saveGameState(matchID, gameBoard.getBoardForDatabase());
+    public void saveMatchState(int matchID, String nextPlayer) throws Exception {
+        dbHandler.saveGameState(matchID, nextPlayer, gameBoard.getBoardForDatabase());
     }
     
     public String[][] getBoard(){
@@ -77,4 +69,19 @@ public class Game {
         return false;
     }
 
+
+    public boolean moveSequenceCorrect(Action action, GameBoard board, int location){
+        /* which player moved the piece */
+        int activePlayer = (action.playerName.compareTo(action.playerOneName) == 0) ? 1 : 2;
+        /* which player owns the piece to be moved */
+        try {
+            int pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
+            return (activePlayer == pieceOwner);
+        }
+        catch (Exception e){
+            /* catch when there is no piece on the board */
+            /* then this is not a valid sequence of moves for either player */
+            return false;
+        }
+    }
 }

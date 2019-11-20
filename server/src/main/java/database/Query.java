@@ -35,6 +35,10 @@ public class Query {
         return "UPDATE matches SET board = \"" + boardToString(board) + "\" WHERE match_id = " + matchID + ";";
    }
 
+   public static String createUpdateGameNextTurnQuery(int matchID, String nextPlayer){
+        return "UPDATE matched SET next_turn = \"" + nextPlayer + "\" WHERE match_id = " + matchID + ";";
+   }
+
    public static String createSearchUserQuery(Action action) {
         return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
    }

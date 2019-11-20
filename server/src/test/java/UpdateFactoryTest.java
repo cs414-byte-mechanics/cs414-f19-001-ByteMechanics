@@ -200,16 +200,16 @@ public class UpdateFactoryTest
     }
 
     @Test
-    public void activePlayerTest(){
+    public void findPieceOwner(){
 
         int[] desiredMoves = new int[]{12, 22};
         String[][] board = congoGame.getBoardForDatabase();
 
-        assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 1);
+        assertEquals(congoGame.findPieceOwner(board, desiredMoves[0]), 1);
 //        System.out.println(congoGame);
 
         desiredMoves = new int[]{53,43};
-        assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 2);
+        assertEquals(congoGame.findPieceOwner(board, desiredMoves[0]), 2);
     }
 
     @Test

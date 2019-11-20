@@ -113,12 +113,14 @@ public class DatabaseHandler {
         return board;
     }
     
-    public void saveGameState(int matchID, String[][] board) throws Exception {
+    public void saveGameState(int matchID, String nextPlayer, String[][] board) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement saveGame = con.createStatement();
         int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
-        
         if (rowsAffected < 1) throw new Exception("Game state was not saved in database.");
+
+        rowsAffected = saveGame.executeUpdate(Query.createUpdateGameNextTurnQuery(matchID,nextPlayer));
+        if (rowsAffected < 1) throw new Exception("Next player was not saved in database.");
     }
 
     public void sendGameInvitation(Action action) throws Exception {

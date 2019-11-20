@@ -106,7 +106,7 @@ public class MonkeyTest {
      //   assertTrue(pawn.checkCaptured());  /* piece has been marked captured */
     }
 
-    //@Test
+    @Test
     public void testMonkeyDoubleJumpDrown() {
         /* Start with initial board */
         /* tests to make sure monkey captures 2 pieces along river but drowns at end of the turn */
@@ -128,6 +128,7 @@ public class MonkeyTest {
         movesRow.add(3);
         movesCol.add(5);
 
+        assertTrue(monkey.performMove(movesRow, movesCol, congoGame));  /* this should jump and capture 2 pieces */
         assertTrue(congoGame.getGamePiece(3,1) == null);  /* monkey has moved and left square empty */
         assertTrue(congoGame.getGamePiece(3,5) == null);  /* monkey should have drown */
 //        assertTrue(congoGame.getGamePiece(3,2) == null);  /* pawn1 has been captured */

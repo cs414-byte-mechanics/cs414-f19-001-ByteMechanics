@@ -30,7 +30,7 @@ public class DatabaseHandlerTest {
         Game game = new Game();
         game.createNewGame(action);
    }
-   /* -- function performMove in Game class is deleted, therefore this test won't be functional
+   /* -- function performMove in Game class is deleted, therefore this test won't be functional */
    //@Test
    public void testSaveGameState() throws Exception {
         Action action = new Action();
@@ -39,14 +39,16 @@ public class DatabaseHandlerTest {
         
         Game game = new Game();
         game.loadExistingGame(action);
-        ArrayList<Integer> destRows = new ArrayList<>();
-        ArrayList<Integer> destCols = new ArrayList<>();
-        destRows.add(2);
-        destCols.add(1);
+        int[] moves = {21};
+//        ArrayList<Integer> destRows = new ArrayList<>();
+//        ArrayList<Integer> destCols = new ArrayList<>();
+//        destRows.add(2);
+//        destCols.add(1);
 
-        game.performMove(11, destRows, destCols);
-        game.saveMatchState(10);
-   }*/
+//        game.performMove(11, destRows, destCols);
+        game.processMove(moves, game.getGameBoard());
+        game.saveMatchState(10, "nextPlayer");
+   }
    
     //@Test
    public void testRetrieveGameInfo() throws Exception {
