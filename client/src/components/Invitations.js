@@ -1,14 +1,15 @@
 import React from 'react';
 import Dashboard from "./Dashboard";
+import './styles/Invitations.scss'
 import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
 
 class Invitations extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
-      this.submitSearchString = this.submitSearchString.bind(this);
-      this.sendGameInvite = this.sendGameInvite.bind(this);
+        this.submitSearchString = this.submitSearchString.bind(this);
+        this.sendGameInvite = this.sendGameInvite.bind(this);
 
         this.state = {
           searchString: ''
@@ -17,7 +18,7 @@ class Invitations extends React.Component {
 
     render () {
         return (
-          <div>
+          <div id="invitations">
             {this.renderText()}
             <p/>
             <Row>{this.renderSearchBox()}</Row>
@@ -31,49 +32,38 @@ class Invitations extends React.Component {
 
     renderText() {
         return (
-          <div id="invitations">
+          <div id="title">
               View your game invitations and invite other players here!
           </div>
         );
     }
 
-    renderSearchBox() {
-        return (
-          <div>
-          <Col>
-            <Label>Search for a User to Invite</Label>
-            <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Enter the name of the user..." onChange={event => this.updateSearchString(event)}/>
-          </Col>
-          <Col>
-            {this.renderSearchButton()}
-          </Col>
-          </div>
-        );
-    }
+
 
     renderSearchButton() {
         return (
-          <Button color="info" onClick={this.submitSearchString}>Search</Button>
+          <Button onClick={this.submitSearchString}>Search</Button>
         );
     }
 
     renderSearchBox() {
         return (
           <div>
-          <Col>
-            <Label>Search for a User to Invite</Label>
-            <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Enter the name of the user..." onChange={event => this.updateSearchString(event)}/>
-          </Col>
-          <Col>
-            {this.renderSearchButton()}
-          </Col>
+              <div>
+                <Label>Search for a User to Invite</Label>
+                <div id="search">
+                    <Input type="searchBox" name="searchBox" id="userSearchBox" placeholder="Search for a user..." onChange={event => this.updateSearchString(event)}/>
+                    {this.renderSearchButton()}
+                </div>
+              </div>
+
           </div>
         );
     }
 
     renderSearchButton() {
         return (
-          <Button color="info" onClick={this.submitSearchString}>Search</Button>
+          <Button onClick={this.submitSearchString}>Search</Button>
         );
     }
 
@@ -94,27 +84,22 @@ class Invitations extends React.Component {
     }
 
     renderInvitePlayer() {
-      if (this.props.showInvitePlayer) {
-        if (this.props.searchResult.userFound && this.props.showInvitePlayer) {
-          return (
-            <Col>
-              <div>
-                <p>{this.props.searchResult.userName} has been found!</p>
-                <Button color= "info" onClick={this.sendGameInvite}>Invite Player</Button>
-              </div>
-            </Col>
+        console.log(this.props.searchResult)
+        let list = []
+        this.props.searchResult.forEach(user => {
+            list.push(
+                <div className="result">
+                  <p>{user}</p>
+                  <Button onClick={this.sendGameInvite}>Invite Player</Button>
+                </div>
+            )
+
+        });
+        return(
+            <div id="searchResults">
+                {list}
+            </div>
         );
-        } else {
-          return (
-            <Col>
-              <div><p>{this.props.searchResult.userName} wasn't found!</p></div>
-            </Col>
-          );
-        }
-      }
-      else {
-        return
-      }
     }
 
     renderInviteStatus() {

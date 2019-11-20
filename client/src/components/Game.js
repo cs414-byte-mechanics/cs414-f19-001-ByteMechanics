@@ -30,10 +30,7 @@ class Game extends Component {
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
           ],
-          searchResult: {
-            userName: "",
-            userFound: false
-          },
+          searchResult: [],
 
           showInvitationSentStatus: false,
 
@@ -85,8 +82,7 @@ class Game extends Component {
             case "registrationSuccess": this.updateLogin(update); break;
             case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
-            case "loginSuccess": this.updateLogin(update); break;
-            case "logoutSuccess": this.updateLogin(update); break;
+            case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
@@ -94,7 +90,7 @@ class Game extends Component {
 
     updateLogin(update) {
         let new_login_state = update.communicationType === "logoutSuccess" ? {} : update;
-        this.setState({logIn: new_login_state}, ()=>{console.log("success")});
+        this.setState({logIn: new_login_state});
         this.setCookie(new_login_state);
         window.location.href = "/";
     }
@@ -142,9 +138,7 @@ class Game extends Component {
     isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 
     updateSearchResult(update) {
-      this.setState({searchResult: update});
-      this.setState({showInvitePlayer: true});
-      this.setState({showInvitationSentStatus: false});
+      this.setState({searchResult: update.searchResults});
     }
 
     updateInvitationSentStatus(update) {
