@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ViewGames extends Component {
+class ViewGames extends React.Component {
     //This class needs to:
         //Get all the games from the server - hard code for now and do later (maybe this is sent back when they've sucessfully logged in?)
         //Store information in state for now
@@ -12,7 +12,7 @@ class ViewGames extends Component {
     constructor(props){
         super(props)
         this.state={
-            games=[
+            games: [
                 {
                     date: "yesterday",
                     opponent: "amrictor",
