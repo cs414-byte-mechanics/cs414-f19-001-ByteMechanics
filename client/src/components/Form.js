@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Label, Input } from 'reactstrap';
-import Game from './Game';
 import './styles/Form.scss';
 //Used for Log in and Registration
 class Form extends React.Component {
@@ -14,6 +13,18 @@ class Form extends React.Component {
         this.listenForEnter = this.listenForEnter.bind(this);
     }
     handleFormSubmit(){
+        let patterns = {
+            userName: /[A-Za-z0-9]{0,15}/,
+            userEmail: /[A-Za-z0-9_\-.]{0,15}@[A-Za-z0-9_\-.]{0,15}\.[A-Za-z0-9_\-.]/,
+            userPassword: /[A-Za-z0-9]*/
+        }
+        Object.keys(this.state.registerUser).forEach(key => {
+            console.log(typeof this.state.registerUser[key])
+            if (typeof this.state.registerUser[key] == "string" && !this.state.registerUser[key].match(patterns[key])) {
+                alert("Please ensure that you have entered a valid email and your username does not exceed 15 characters.")
+            }
+        });
+
         this.props.sendToServer(this.state.registerUser);
     }
     updateTextField(key, value) {
