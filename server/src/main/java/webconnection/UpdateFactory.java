@@ -88,7 +88,7 @@ public class UpdateFactory
             update.updatedBoard = congoGame.getBoardForDatabase();
             update.whoseTurn = updateTurn(update, action);
 
-            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[0]); /*this might need to be replace with action.playerName later*/
+            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[1]); /*this might need to be replace with action.playerName later*/
 
             return update;
 
