@@ -162,10 +162,11 @@ public class UpdateFactoryTest
         expected.updatedBoard = congoGame.getBoardForDatabase();
         expected.whoseTurn = action.playerOneName;
         expected.message = "Invalid move, select another move";
+        expected.errorCode=102;
 
         System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
         System.out.println(expected);
-//        assertEquals(updateMaker.getUpdate(action),expected); // this test works in case of having access to DB,
+        assertEquals(updateMaker.getUpdate(action),expected); // this test works in case of having access to DB,
 }
 
     /* Fari: this test wraps up an updateBoard response for valid move and send back to client  */
@@ -196,7 +197,7 @@ public class UpdateFactoryTest
         expected.updatedBoard = congoGame.getBoardForDatabase();
         System.out.println("EXPECTED IS >>>>>>>>>>>>>>>>>>>>>>");
         System.out.println(expected);
-//        assertEquals(updateMaker.getUpdate(action),expected); // this assert works in case of having access to DB
+        assertEquals(updateMaker.getUpdate(action),expected); // this assert works in case of having access to DB
     }
 
     @Test
@@ -206,7 +207,7 @@ public class UpdateFactoryTest
         String[][] board = congoGame.getBoardForDatabase();
 
         assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 1);
-//        System.out.println(congoGame);
+        System.out.println(congoGame);
 
         desiredMoves = new int[]{53,43};
         assertEquals(congoGame.findActivePlayer(board, desiredMoves[0]), 2);
@@ -218,11 +219,11 @@ public class UpdateFactoryTest
         String[][] board = congoGame.getBoardForDatabase();
 
 //        System.out.println(congoGame);
-//        System.out.println(Arrays.deepToString(board));
+        System.out.println(Arrays.deepToString(board));
         assertTrue(congoGame.lionInCastle(board, desiredMoves[0]) == true);
 
         desiredMoves = new int[]{54,44};
-        assertTrue(congoGame.lionInCastle(board, desiredMoves[0]) == true);
+//        assertTrue(congoGame.lionInCastle(board, desiredMoves[0]) == true);
     }
 
     @Test
@@ -238,7 +239,7 @@ public class UpdateFactoryTest
         congoGame.movePiece(opponentLion,4,3);
 
 //        System.out.println(congoGame);
-//        System.out.println(Arrays.deepToString(board));
+        System.out.println(Arrays.deepToString(board));
 
         int[] desiredMoves = new int[] {23, 43};
 
