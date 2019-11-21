@@ -182,18 +182,9 @@ public class UpdateFactory
         Update update = new Update();
         update.communicationType = "searchResult";
         update.userName= action.userName;
-        String databaseSearchResult = "";
-
         try {
-            databaseSearchResult = db.searchUser(action);
+            update.searchResults = db.searchUser(action);
         } catch(Exception e) {}
-
-        if (databaseSearchResult.equals("user not found")) {
-            update.userFound = false;
-        }
-        else {
-            update.userFound = true;
-        }
 
         return update;
     }
@@ -201,16 +192,12 @@ public class UpdateFactory
     private Update buildInvitationSentStatus(Action action) {
         Update update = new Update();
         update.communicationType = "invitationSentStatus";
+        update.statusMessage = "Invitation sent to " + action.invitationTo + "!";
         try {
             db.sendGameInvitation(action);
         } catch(Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            update.invitationSent = false;
-            update.statusMessage = e.toString();
-            return update;
+            return new ServerError(-1, e.getMessage());
         }
-        update.invitationSent = true;
         return update;
     }
 }
