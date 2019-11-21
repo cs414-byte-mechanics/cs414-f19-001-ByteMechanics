@@ -73,22 +73,31 @@ public class UpdateFactory
         try {
             Game game = new Game();
             Update update = new Update();
+
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
             boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist) game.processMove(action.desiredMoves, congoGame);
-            else throw new Exception("Opponent's lion does not exist");
+            if (lionExist)
+            {
+//                System.out.println("Lion exist before move ");
+                game.processMove(action.desiredMoves, congoGame);
+            }
+            else
+                throw new Exception("Opponent's lion does not exist");
+
             /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
             lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-
+//            System.out.println(" Lion is alive after move ?" + lionExist);
             update.communicationType = lionExist ? "updateBoard" : "endMatch";
+//            System.out.println("communication type is " + update.communicationType);
             update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+//            System.out.println(" message is " + update.statusMessage );
             update.matchID = action.matchID;
             update.playerName = action.playerName ;
             update.pieceID =  action.pieceID ;
             update.updatedBoard = congoGame.getBoardForDatabase();
             update.whoseTurn = updateTurn(update, action);
 
-            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[0]); /*this might need to be replace with action.playerName later*/
+            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[1]); /*this might need to be replace with action.playerName later*/
 
             return update;
 
