@@ -247,16 +247,21 @@ public class GameBoard{
 
         /* Find first active player*/
         activePlayer = findActivePlayer(board, pieceCurrentLocation);
+//        System.out.println("Active player is player" + activePlayer );
 
         /* based on the player, we define opponent's castle bound */
         if (activePlayer == 1) {
             opponentCastleBound = new int[]{4, 6};
-            lionPieceId = "L"; }
+            lionPieceId = "L";
+        }
 
         if (activePlayer ==2) {
             opponentCastleBound = new int[]{0, 2};
-            lionPieceId="l";}
+            lionPieceId="l";
+        }
 
+//        System.out.println("opponents castle bound" + Arrays.toString(opponentCastleBound));
+//        System.out.println("opponent lion pieceId is "+ lionPieceId);
         return lionExist(opponentCastleBound, lionPieceId, board);
     }
 
