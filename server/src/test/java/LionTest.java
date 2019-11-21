@@ -61,5 +61,22 @@ public class LionTest {
         assertTrue(lionP2.ValidateMove(5,3, congoGame.board) == false);
     }
 
+    @Test
+    public void captureLionByOtherLionTets() throws Exception {
 
+        GamePiece[][] congoBoard = congoGame.board;
+//        System.out.println(congoGame.toString());
+
+        LionPiece lionP1 = (LionPiece) congoGame.board[0][3];
+        LionPiece lionP2 = (LionPiece) congoGame.board[6][3];
+
+        congoGame.movePiece(1,3,2,4);
+        congoGame.movePiece(5,3,4,4);
+//        System.out.println(congoGame.toString());
+
+        assertTrue(lionP1.ValidateMove(6, 3, congoBoard) == true);
+        congoGame.movePiece(0,3,6,3);
+        System.out.println(congoGame.toString());
+
+    }
 }
