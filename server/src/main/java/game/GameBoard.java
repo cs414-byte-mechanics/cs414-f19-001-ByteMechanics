@@ -246,7 +246,7 @@ public class GameBoard{
         String lionPieceId = null;
 
         /* Find first active player*/
-        activePlayer = findActivePlayer(board, pieceCurrentLocation);
+        activePlayer = findPieceOwner(board, pieceCurrentLocation);
 
         /* based on the player, we define opponent's castle bound */
         if (activePlayer == 1) {
@@ -260,16 +260,25 @@ public class GameBoard{
         return lionExist(opponentCastleBound, lionPieceId, board);
     }
 
-    public int findActivePlayer(String[][] board, int pieceCurrentLocation){
+    public static int getRow(int location){
+        return location/10;
+    }
+
+    public static int getCol(int location){
+        return location % 10;
+    }
+
+    public int findPieceOwner(String[][] board, int pieceCurrentLocation){
         /* extract piece current location's row and column*/
-        int col = pieceCurrentLocation % 10;
-        int row = (pieceCurrentLocation - col) /10 ;
+        int col = getCol(pieceCurrentLocation);
+        int row = getRow(pieceCurrentLocation);
 
         /* specify who is active player - lower case letters belongs to player 1*/
         if ( board[row][col] != null && Character.isLowerCase(board[row][col].charAt(0)))
             return 1 ;
         else
             return 2 ;
+
     }
 
     public boolean lionExist(int[] opponentCastleBound, String lionPieceId, String[][] board){
@@ -287,4 +296,5 @@ public class GameBoard{
 
         return found;
     }
+
 }

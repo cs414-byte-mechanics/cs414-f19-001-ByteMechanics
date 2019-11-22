@@ -17,8 +17,10 @@ class Game extends Component {
       
         this.state = {
           logIn: {},
-          player1: ["CongoKate"],
-          player2: ["JungleJoe"],
+          player1: ["ajeske"],
+          player2: ["arictor"],
+          next_turn: ["ajeske"],
+          match_id: ["1"],
           games: [
             [
               ["g", "m", "e", "l", "e", "c", "z"],
@@ -87,7 +89,10 @@ class Game extends Component {
     updateBoard(update){
         let state = this.state;
         state.games = [update.updatedBoard];
+        state.next_turn = [update.whoseTurn];
         this.setState(state);
+        console.log("game board " + this.state.games);
+        console.log("next_turn " + this.state.next_turn);
     }
 
     setCookie(logIn, exdays=0) {
@@ -136,6 +141,7 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
+
     render(){
 
         return(
@@ -171,8 +177,9 @@ class Game extends Component {
                         />
                         <Route
                             path="/game"
-                            render={(props) => <GameBoard game={this.state.games[0]} player1={this.state.player1[0]}
-                                                          player2={this.state.player2[0]} send={this.sendObject}/>}
+                            render={(props) => <GameBoard game={this.state.games[0]} playerName = {this.state.next_turn[0]}
+                                                            player1={this.state.player1[0]} player2={this.state.player2[0]}
+                                                            match_id={this.state.match_id[0]} send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>

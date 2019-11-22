@@ -28,4 +28,51 @@ public class GameTest {
         Game game = new Game();
         game.loadExistingGame(action);
    }
+
+    @Test
+    public void testMoveSequenceCorrectPlayer1() throws Exception {
+        Action action = new Action();
+        action.playerOneName = "Sue";
+        game.setActivePlayer("Sue");
+
+        game.getGameBoard().initialize();
+        int location = 16;  //player 1 CAN move pawn initially in second row
+        assertTrue(game.moveSequenceCorrect(action, game, location));
+    }
+
+    @Test
+    public void testMoveSequenceCorrectPlayer2() throws Exception {
+        Action action = new Action();
+        action.playerOneName = "Sue";
+        game.setActivePlayer("Joe");
+
+        game.getGameBoard().initialize();
+        int location = 56;  //player 2 CAN move pawn initially in fifth row
+        assertTrue(game.moveSequenceCorrect(action, game, location));
+    }
+
+    @Test(expected = Exception.class)
+    public void testMoveSequenceCorrectNullPiece() throws Exception {
+        Action action = new Action();
+        action.playerOneName = "Sue";
+        game.setActivePlayer("Joe");
+
+        game.getGameBoard().initialize();
+        int location = 33;  //no player can move a piece that isn't there
+
+        /* try to move non-existent piece to see if exception is thrown */
+        game.moveSequenceCorrect(action, game, location);
+
+    }
+
+    @Test
+    public void testMoveSequenceCorrectWrongSeq() throws Exception {
+        Action action = new Action();
+        action.playerOneName = "Sue";
+        game.setActivePlayer("Joe");
+
+        game.getGameBoard().initialize();
+        int location = 14;  //this is player's piece
+        assertTrue(game.moveSequenceCorrect(action, game, location) == false);
+    }
 }

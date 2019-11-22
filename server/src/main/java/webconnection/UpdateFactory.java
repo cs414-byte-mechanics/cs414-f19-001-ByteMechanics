@@ -7,16 +7,9 @@ import java.util.ArrayList;
 public class UpdateFactory
 {
     private DatabaseHandler db;
-    private GameBoard congoGame;
-    private GameBoard gameBoard;
-    private Game game;
-    private boolean moveSucceeded ;
 
     public UpdateFactory() {
-
         db = new DatabaseHandler();
-        congoGame = new GameBoard();
-        congoGame.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -40,24 +33,26 @@ public class UpdateFactory
         }
     }
 
-    private String updateTurn(Update update, Action action) {
-        if (update.communicationType == "updateBoard")
-            if (update.whoseTurn == action.playerOneName)
-                update.whoseTurn = action.playerTwoName;
+    private void updateTurn(Update update, Action action, Game game){
+        String nextPlayer;
+        if (update.communicationType.compareTo("updateBoard") == 0) {
+            /* swap which player is taking a turn next otherwise leave things unchanged */
+            nextPlayer = (game.getActivePlayer().compareTo(action.playerOneName) == 0) ? action.playerTwoName : action.playerOneName;
 
-            if (update.whoseTurn == action.playerTwoName)
-                update.whoseTurn = action.playerOneName;
+            update.whoseTurn = nextPlayer;
+            update.playerName = nextPlayer;
+            game.setActivePlayer(nextPlayer);
 
-        return update.whoseTurn;
+        }
     }
 
-    private String findWinner(String communicationType, Update update, int currLocation) throws Exception {
+    private String findWinner(String communicationType, Update update, int currLocation, GameBoard gameBoard) throws Exception {
         String winner = null;
         int activePlayer;
 
         if (communicationType == "endMatch") {
 //            activePlayer = congoGame.findActivePlayer(update.updatedBoard, currLocation);
-            GamePiece piece = congoGame.getGamePiece(currLocation/10, currLocation%10);
+            GamePiece piece = gameBoard.getGamePiece(currLocation/10, currLocation%10);
             activePlayer = piece.player;
 
             if (activePlayer == 1)
@@ -70,26 +65,36 @@ public class UpdateFactory
     }
 
     private Update buildUpdateBoard(Action action) {
+
         try {
+
             Game game = new Game();
+            game.loadExistingGame(action);
+            GameBoard gameBoard = game.getGameBoard();
             Update update = new Update();
+
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
-            boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-            if (lionExist) game.processMove(action.desiredMoves, congoGame);
+            boolean lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
+            if (!(game.moveSequenceCorrect(action, game, action.desiredMoves[0]))) {
+                throw new Exception(game.getActivePlayer() + " should be making a move");
+            }
+            if (lionExist) game.processMove(action.desiredMoves, gameBoard);
             else throw new Exception("Opponent's lion does not exist");
             /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
-            lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
+            lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
 
             update.communicationType = lionExist ? "updateBoard" : "endMatch";
             update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
             update.matchID = action.matchID;
             update.playerName = action.playerName ;
             update.pieceID =  action.pieceID ;
-            update.updatedBoard = congoGame.getBoardForDatabase();
-            update.whoseTurn = updateTurn(update, action);
+            update.updatedBoard = gameBoard.getBoardForDatabase();
+            updateTurn(update, action, game);
 
-            update.winnerName = action.playerName = findWinner(update.communicationType, update, action.desiredMoves[1]); /*this might need to be replace with action.playerName later*/
+            update.winnerName = action.playerName = findWinner(update.communicationType, update,action.desiredMoves[1],
+                                                               game.getGameBoard()); /*this might need to be replace with action.playerName later*/
 
+            game.saveMatchState(Integer.parseInt(action.matchID));
             return update;
 
         } catch (Exception e){

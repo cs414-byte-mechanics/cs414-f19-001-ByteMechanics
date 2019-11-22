@@ -12,8 +12,8 @@ class GameBoard extends Component {
             requestMove: {
                 "communicationType": "requestMoves",
                 "communicationVersion": 1,
-                "matchID": "",
-                "playerName": "",
+                "matchID": this.props.match_id,
+                "playerName": this.props.playerName,
                 "pieceID" : "",
                 "desiredMoves": [],
                 "playerOneName": this.props.player1,
@@ -30,6 +30,8 @@ class GameBoard extends Component {
 
     //send move to server for validation and completion
     confirmSelection() {
+        console.log("Send move request player " + this.state.requestMove.playerName);
+        console.log("Send move request moves " + this.state.requestMove.desiredMoves);
         this.props.send(this.state.requestMove);
         this.clearSelection();
     }
@@ -52,9 +54,7 @@ class GameBoard extends Component {
 
     //select a piece or move
     select(i,j){
-        //prevent selection of current space 
-//        if(this.state.requestMove.pieceID[0]===i && this.state.requestMove.pieceID[1]===j) return;
-        //if(this.state.requestMove.pieceID===(i * 10 + j)) return;
+        //prevent selection of current space
         if(this.state.pieceLocation===(i * 10 + j)) return;
         
         //make selection
@@ -63,9 +63,11 @@ class GameBoard extends Component {
 
         //after selecting a piece, change modes to select the piece's move
         if(this.state.selectionType=="pieceID" && this.props.game[i][j].length>0) this.changeSelectionType("desiredMoves");
+        console.log("select: playerName "+this.state.requestMove.playerName);
     }
     selectPiece(i, j) {
         let state = this.state;
+        console.log("selectPiece1 playerName "+this.state.requestMove.playerName);
 //        state.requestMove['pieceID'] = [i, j];
 
         let encodeLocation = i * 10 + j;
@@ -74,6 +76,7 @@ class GameBoard extends Component {
         state.pieceLocation = encodeLocation;
         state.requestMove.desiredMoves.push(encodeLocation);
         this.setState(state);
+        console.log("selectPiece2 playerName "+this.state.requestMove.playerName);
     }
     selectMove(i, j) {
         //prevent pieces other than monkey from taking multiple moves
@@ -94,8 +97,9 @@ class GameBoard extends Component {
         //state.requestMove[state.selectionType].push([i, j]);
         let encodeLocation = i * 10 + j;
         state.requestMove[state.selectionType].push(encodeLocation);
-        console.log(state.requestMove[state.selectionType]);
         this.setState(state);
+        console.log("selectMove playerName "+this.state.requestMove.playerName);
+        console.log(state.requestMove);
     }
 
     //basic logical determinations for pieces
@@ -123,6 +127,27 @@ class GameBoard extends Component {
         return `piece ${this.state.selectionType} ${this.isInRiver(i,j)}${this.isInCastle(i,j)} ${this.isSelected(i,j)} ${this.player(i, j)}`
     }
 
+    //generate icon & message to indicate which player's move is expected next
+    generateMoveIndicator(nextPlayer, thisPlayer){
+        if (nextPlayer === thisPlayer){
+            if (thisPlayer === this.state.requestMove.playerOneName){
+                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}'s move</p>
+            }
+            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}'s move</p>
+        }
+        return;
+    }
+
+    //generate icon & message to indicate which player's move is expected next
+    generateMoveNote(nextPlayer, player1, player2){
+        if (nextPlayer === player1){
+            return <p><>&#x1f334;</>{player1}'s move</p>
+        }
+        if (nextPlayer === player2){
+            return <p><>&#x1f333;</>{player2}'s move</p>
+        }
+        return;
+    }
 
     render(){
         //map piece ids to unicode icons
@@ -144,14 +169,20 @@ class GameBoard extends Component {
         }
 
         //generate board from game state array
-        let board = 
+        let board =
             <div className="board">
+                <div className="player1">
+                    {this.generateMoveIndicator(this.props.playerName, this.state.requestMove.playerOneName)}
+                </div>
                 {this.props.game.map((row, i)=>
                     <div className="board_row">{row.map((piece, j)=>
                         <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}>{pieces[piece]}</div>
                         )}
                     </div>
                 )}
+                <div className="player2">
+                    {this.generateMoveIndicator(this.props.playerName, this.state.requestMove.playerTwoName)}
+                </div>
             </div>
         
         //action buttons

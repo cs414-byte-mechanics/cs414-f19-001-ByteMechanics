@@ -31,6 +31,19 @@ These `npm` scripts are mapped to common actions in one directory for convenienc
  2. In the terminal from where you are starting the server, enter the command `export TUNNEL=<local-port>` on Linux or `set TUNNEL=<local-port>` on Windows.
     * Replace <local-port> with the same port you used above.
  3. Start the server. It should now be able to communicate with the database.
+ 
+# To modify database content
+1. Client is currently setup to run matchID 1.  You can change this by editing the Game.js file and changing the matchID field in state.    
+    * match_id: ["1"],
+    
+2. To reset a game to the initial board state use the following command in our database.  You need 21 spaces in this for the middle 3 rows.
+    *  UPDATE matches SET board='gmeleczppppppp                     PPPPPPPGMELECZ' WHERE match_id=1;
+    
+3. To set the player whose turn it is next use a similar command to this.
+    * UPDATE matches SET next_turn='ajeske' WHERE match_id=1;
+
+4. To view the database contents after you've changed it -
+    * SELECT * from matches;
 
 # Contributors
 This project is for CS414: Introduction to Object Oriented Design at Colorado State University. Group members include Aislinn Jeske, Abigail Rictor, Farzaneh Kadkhodaie, Marylou Nash, and Zach Klausner.

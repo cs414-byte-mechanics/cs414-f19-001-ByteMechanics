@@ -18,6 +18,8 @@ public class DatabaseHandler {
     public DatabaseHandler() {
         String tunnel = System.getenv("TUNNEL");
         if (tunnel != null) {
+            System.out.println("Using tunnel to dB");
+            System.out.println(tunnel.toString());
             database = "jdbc:mysql://localhost:" + tunnel.trim() + "/bytemechanics";
         }
         else {
@@ -107,13 +109,29 @@ public class DatabaseHandler {
         }
         return board;
     }
+
+    /**
+     @return player whose move is next
+     */
+    public String retrieveActivePlayerInfo(Action action) throws Exception {
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement gameInfo = con.createStatement();
+        ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
+
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+
+        String activePlayer = results.getString("next_turn");
+        return activePlayer;
+    }
     
-    public void saveGameState(int matchID, String[][] board) throws Exception {
+    public void saveGameState(int matchID, String nextPlayer, String[][] board) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement saveGame = con.createStatement();
         int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
-        
         if (rowsAffected < 1) throw new Exception("Game state was not saved in database.");
+
+        rowsAffected = saveGame.executeUpdate(Query.createUpdateGameNextTurnQuery(matchID,nextPlayer));
+        if (rowsAffected < 1) throw new Exception("Next player was not saved in database.");
     }
 
     public void sendGameInvitation(Action action) throws Exception {

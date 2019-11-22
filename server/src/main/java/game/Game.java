@@ -7,6 +7,7 @@ import java.util.*;
 public class Game {
     private DatabaseHandler dbHandler;
     private GameBoard gameBoard;
+    private String activePlayer;
     
     public Game(){
         dbHandler = new DatabaseHandler();
@@ -30,18 +31,13 @@ public class Game {
         
         //load game with that matchID from database
         gameBoard.loadGame(board);
+
+        //get active player that should make the next move
+        activePlayer = dbHandler.retrieveActivePlayerInfo(action);
     }
     
-//    public boolean performMove(int pieceLocation, ArrayList<Integer> destRows, ArrayList<Integer> destCols){
-//        int pieceCol = pieceLocation % 10;
-//        int pieceRow = pieceLocation /10;
-//        GamePiece pieceToMove = gameBoard.getGamePiece(pieceRow, pieceCol);
-//
-//        return pieceToMove.performMove(destRows, destCols, gameBoard);
-//    }
-    
     public void saveMatchState(int matchID) throws Exception {
-        dbHandler.saveGameState(matchID, gameBoard.getBoardForDatabase());
+        dbHandler.saveGameState(matchID, this.getActivePlayer(), gameBoard.getBoardForDatabase());
     }
     
     public String[][] getBoard() throws Exception {
@@ -49,6 +45,10 @@ public class Game {
     }
 
     public GameBoard getGameBoard() {return gameBoard;}
+
+    public String getActivePlayer() {return activePlayer;}
+
+    public void setActivePlayer(String player) {activePlayer = player;}
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
     public void processMove(int[] desiredMove, GameBoard congoGame) throws Exception { // OK -- move this to Game instead of perfprm move
@@ -75,4 +75,21 @@ public class Game {
         }
     }
 
+
+    public boolean moveSequenceCorrect(Action action, Game game, int location) throws Exception{
+        /* which player moved the piece */
+        String whoseTurn = game.getActivePlayer();
+        GameBoard board = game.getGameBoard();
+        int activePlayer = (whoseTurn.compareTo(action.playerOneName) == 0) ? 1 : 2;
+        /* which player owns the piece to be moved */
+        try {
+            int pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
+            return (activePlayer == pieceOwner);
+        }
+        catch (Exception e){
+            /* catch when there is no piece on the board */
+            /* then this is not a valid sequence of moves for either player */
+            throw new Exception("Player moving a non-existant game piece.");
+        }
+    }
 }
