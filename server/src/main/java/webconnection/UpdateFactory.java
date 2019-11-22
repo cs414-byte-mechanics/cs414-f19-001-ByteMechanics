@@ -7,20 +7,9 @@ import java.util.ArrayList;
 public class UpdateFactory
 {
     private DatabaseHandler db;
-    //private GameBoard congoGame;
-    //private String communicationType;
-    private GameBoard gameBoard;
-    private Game game;
 
     public UpdateFactory() {
-
         db = new DatabaseHandler();
-       //congoGame = new GameBoard();
-        // congoGame.initialize();
-        //temporarily starting a game in the server until the client is ready to handle it
-        game = new Game();
-        gameBoard = game.getGameBoard();
-        gameBoard.initialize();
     }
 
     public Update getUpdate(Action action) {
@@ -44,33 +33,20 @@ public class UpdateFactory
         }
     }
 
-    /* helper routine to fill out message field with proper message*/
-    private String constructMessage(String communicationType, Update update) {
-        switch (communicationType){
-            case "updateBoard": return  "The player's move was valid and the board has been updated";
-            case "errorInvalidMove": update.errorCode= 102; return ServerError.getErrorMessage(update.errorCode);
-            case "endMatch": return "Lion is captured, Game is Over!";
-
-            default:
-                System.err.println("Message has not been constructed!!");
-                return null;
-        }
-    }
-
-    private void updateTurn(Update update, Action action){
+    private void updateTurn(Update update, Action action, Game game){
         String nextPlayer;
         if (update.communicationType.compareTo("updateBoard") == 0) {
-            /* swap which player is taking a turn next */
-            nextPlayer = (action.playerName.compareTo(action.playerOneName) == 0) ? action.playerTwoName : action.playerOneName;
-        }
-        else  /* move did not succeed or game ended so it is the same player's turn again.*/
-            nextPlayer = action.playerName;
+            /* swap which player is taking a turn next otherwise leave things unchanged */
+            nextPlayer = (game.getActivePlayer().compareTo(action.playerOneName) == 0) ? action.playerTwoName : action.playerOneName;
 
-        update.whoseTurn = nextPlayer;
-        update.playerName = nextPlayer;
+            update.whoseTurn = nextPlayer;
+            update.playerName = nextPlayer;
+            game.setActivePlayer(nextPlayer);
+
+        }
     }
 
-    private String findWinner(String communicationType, Update update, int currLocation) {
+    private String findWinner(String communicationType, Update update, int currLocation, GameBoard gameBoard) throws Exception {
         String winner = null;
         int activePlayer;
 
@@ -88,72 +64,43 @@ public class UpdateFactory
         return winner;
     }
 
-    private Update wrapUpResponse(Update update, Action action, String communicationType)
-    {
-        System.out.println(action.toString());
-        update.communicationType = communicationType;
-        update.communicationVersion = 0;
-        update.matchID = action.matchID ;
-        //update.playerName = action.playerName ;
-        update.pieceID =  action.pieceID ;
-
-        /* fill out board, turn and message filed */
-        update.updatedBoard = gameBoard.getBoardForDatabase();
-        updateTurn(update, action);
-        System.out.println("Whose turn next- "+update.whoseTurn);
-        update.message = constructMessage(communicationType, update);
-
-        /* find who is winner*/
-        update.winnerName = action.playerName = findWinner(communicationType, update, action.desiredMoves[0]); /*this might need to be replace with action.playerName later*/
-
-        return update;
-    }
-
     private Update buildUpdateBoard(Action action) {
-        boolean moveSucceeded ;
-        boolean sequenceCorrect;
-        String communicationType = "";
 
         try {
-            //Game game = new Game();
-//            game.loadExistingGame(action);
+
+            Game game = new Game();
+            game.loadExistingGame(action);
+            GameBoard gameBoard = game.getGameBoard();
             Update update = new Update();
 
-            System.out.println("Action "+action.toString());
-            System.out.println(gameBoard.toString());
-//            sequenceCorrect = game.moveSequenceCorrect(action, gameBoard, action.desiredMoves[0]);
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
-//            boolean lionExist = congoGame.lionInCastle(congoGame.getBoardForDatabase(), action.desiredMoves[0]);
-//            if (lionExist)
-//                moveSucceeded = game.processMove(action.desiredMoves, gameBoard);
-//            else //need to alert that opponent's lion does not exist !!!!!
-
-            //if (moveSucceeded == true) {
-            //if (sequenceCorrect && moveSucceeded) { /* if move is valid/legal */
-            if (game.moveSequenceCorrect(action, gameBoard, action.desiredMoves[0]) &&
-                    game.processMove(action.desiredMoves, gameBoard))       {
-                /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
-                boolean lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
-                if (lionExist)  /*lion is not captured, so we need to return updated board back to client */
-                    communicationType = "updateBoard";
-
-                if (!lionExist)  /* move is valid/legal, but lion is captured, so we need to terminate game (GAME OVER)*/
-                    communicationType = "endMatch";
+            boolean lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
+            if (!(game.moveSequenceCorrect(action, game, action.desiredMoves[0]))) {
+                throw new Exception(game.getActivePlayer() + " should be making a move");
             }
-            else /* move isn't valid, so we return error message */
-                communicationType = "errorInvalidMove";
+            if (lionExist) game.processMove(action.desiredMoves, gameBoard);
+            else throw new Exception("Opponent's lion does not exist");
+            /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
+            lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
 
-            wrapUpResponse(update, action, communicationType);
-            //game.saveMatchState(Integer.parseInt(action.matchID), update.whoseTurn);
+            update.communicationType = lionExist ? "updateBoard" : "endMatch";
+            update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+            update.matchID = action.matchID;
+            update.playerName = action.playerName ;
+            update.pieceID =  action.pieceID ;
+            update.updatedBoard = gameBoard.getBoardForDatabase();
+            updateTurn(update, action, game);
+
+            update.winnerName = action.playerName = findWinner(update.communicationType, update,action.desiredMoves[0],
+                                                               game.getGameBoard()); /*this might need to be replace with action.playerName later*/
+
+            game.saveMatchState(Integer.parseInt(action.matchID));
             return update;
 
         } catch (Exception e){
-            Update update = new Update();
-            update.communicationType = "ErrorInvalidMove";
-            update.message = "GameBoard not found! Unable to make move";
-
-            System.err.println("Game cannot be fetched");
-            return update;
+            e.printStackTrace();
+            ServerError error = new ServerError(102, e.getMessage());
+            return error;
         }
     }
 
@@ -164,14 +111,14 @@ public class UpdateFactory
             update.communicationType = "registrationSuccess";
             update.userEmail = action.userEmail;
             update.userName = action.userName;
-            update.message = "User account has been successfully created.";
+            update.statusMessage = "User account has been successfully created.";
 
             return update;
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update
-            return null;
+            ServerError error = new ServerError(101, e.getMessage());
+            return error;
         }
     }
 
@@ -186,15 +133,15 @@ public class UpdateFactory
 
         } catch (Exception e){
             System.out.println(e);
-            //Return error update "errorInvalidRegistration"
-            return null;
+            ServerError error = new ServerError(100, e.getMessage());
+            return error;
         }
     }
 
     private Update buildLogoutSuccess(Action action) {
         Update update = new Update();
         update.communicationType = "logoutSuccess";
-        update.message = "User has successfully logged out.";
+        update.statusMessage = "User has successfully logged out.";
         return update;
     }
 
@@ -211,7 +158,7 @@ public class UpdateFactory
             return update;
         } catch(Exception e){
             System.err.println("New match cannot be created");
-            return null;
+            return new ServerError(-1, e.getMessage());
         }
 
     }

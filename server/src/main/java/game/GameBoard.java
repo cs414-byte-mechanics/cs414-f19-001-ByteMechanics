@@ -23,7 +23,7 @@ public class GameBoard{
         placePiecesForPlayer(2);
     }
     
-    public String[][] getBoardForDatabase(){
+    public String[][] getBoardForDatabase() throws Exception {
         String[][] stringBoard = new String[NUM_ROWS][NUM_COLUMNS];
     
         for(int row = 0; row < NUM_ROWS; row++){
@@ -43,7 +43,7 @@ public class GameBoard{
     /**
     Returns a visual represenation of the state of the board
     */
-    public String toString(){
+    public String toString() {
         String row = "";
         String boardStr = "--------------\n";
         String playPiece;
@@ -52,10 +52,15 @@ public class GameBoard{
             row = "|";
             for (int j = 0; j < NUM_COLUMNS; j++){
                 /* traverse all columns in this row to see what pieces are on the board */
-                GamePiece piece = getGamePiece(i,j);
-                playPiece = (piece == null) ? " " : piece.pieceIDString();
+                try {
+                    GamePiece piece = getGamePiece(i,j);
+                    playPiece = (piece == null) ? " " : piece.pieceIDString();
 
-                row = row + playPiece + "|";
+                    row = row + playPiece + "|";
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
             }
             row = row + "\n";
             row = row + "--------------\n";
@@ -111,11 +116,11 @@ public class GameBoard{
     @param row of position
     @param col of position
     */
-    public GamePiece getGamePiece(int row, int col){
+    public GamePiece getGamePiece(int row, int col) throws Exception {
         if(inBounds(row, col)){
             return board[row][col];
         }
-        else return null;
+        else throw new Exception("Game piece not found at (" + row + ", " + col + ")");
     }
 
     /**
@@ -147,7 +152,7 @@ public class GameBoard{
     Finds all the pieces the given player has in the river (crocodile is excluded)
     @param player whose turn it is (either 1 or 2)
     */
-    public ArrayList<GamePiece> getRiverDwellers(int activePlayer){
+    public ArrayList<GamePiece> getRiverDwellers(int activePlayer) throws Exception {
         ArrayList<GamePiece> riverDwellers = new ArrayList<GamePiece>();
 
         for (int i = 0; i < NUM_COLUMNS; i++){
@@ -208,7 +213,7 @@ public class GameBoard{
     @param row of square to move to
     @param col of square to move to
     */
-    public void movePiece(int fromRow, int fromCol, int toRow, int toCol){
+    public void movePiece(int fromRow, int fromCol, int toRow, int toCol) throws Exception {
         GamePiece movingPiece = getGamePiece(fromRow,fromCol);
 
         movePiece(movingPiece, toRow, toCol);
@@ -222,7 +227,7 @@ public class GameBoard{
     Checks if the pawn needs to be declared a super pawn
     @param piece to check for super pawn
     */
-    public void checkForSuperPawn(GamePiece piece){
+    public void checkForSuperPawn(GamePiece piece) {
         //If the pawn reaches the other side of the board, it's a super pawn
         if ( (piece.getPlayer() == 1 && piece.getRow() == 6 ) || (piece.getPlayer() == 2 && piece.getRow() == 0 )) {
             PawnPiece pawn = (PawnPiece) piece;
@@ -230,7 +235,7 @@ public class GameBoard{
         }
     }
 
-    public void capturePiece(GamePiece pieceToBeCaptured){
+    public void capturePiece(GamePiece pieceToBeCaptured) {
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
 

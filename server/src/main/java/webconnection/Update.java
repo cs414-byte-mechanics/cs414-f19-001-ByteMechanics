@@ -4,17 +4,16 @@ import java.util.Arrays;
 
 public class Update {
 
-    public String objectType = "Update";
     public String communicationType;
-    public int communicationVersion;
     public String matchID;
     public String playerName;
     public String pieceID;
     public String[][] updatedBoard;
     public String whoseTurn;
-    public String message;
     public String userName;
     public String userEmail;
+    public String statusMessage;
+
     public String[][] initialBoard;
     public String matchBeginTime;
     public String invitationFrom;
@@ -24,27 +23,23 @@ public class Update {
     public String winnerName;
     public String loserName;
     public String matchEndTime;
-    public String statusMessage;
+
     public boolean userFound;
     public boolean invitationSent;
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
 
-    public int errorCode;
 
     @Override
     public String toString() {
 
-        String stringRepresentation = "objectType: " + this.objectType + "\n"
-                                    + "communicationType: " + this.communicationType + "\n"
-                                    + "communicationVersion: " + this.communicationVersion + "\n"
+        String stringRepresentation = "communicationType: " + this.communicationType + "\n"
                                     + "matchID: " + this.matchID + "\n"
                                     + "playerName: " + this.playerName + "\n"
                                     + "pieceID: " + this.pieceID + "\n"
                                     + "updatedBoard: " + Arrays.deepToString(this.updatedBoard) + "\n"
                                     + "whoseTurn: " + this.whoseTurn + "\n"
-                                    + "successMessage: " + this.message + "\n"
                                     + "userName: " + this.userName + "\n"
                                     + "userEmail: " + this.userEmail + "\n"
                                     + "initialBoard: " + Arrays.deepToString(this.initialBoard) + "\n"
@@ -61,8 +56,7 @@ public class Update {
                                     + "invitationSent: " + this.invitationSent + "\n"
                                     + "invitation: " + Arrays.deepToString(this.invitations) + "\n"
                                     + "matchesInProgress: " + Arrays.deepToString(this.matchesInProgress) + "\n"
-                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n"
-                                    + "errorCode: " + this.errorCode + "\n";
+                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n";
 
         return stringRepresentation;
 

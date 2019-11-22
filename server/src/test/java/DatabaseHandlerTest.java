@@ -47,7 +47,7 @@ public class DatabaseHandlerTest {
 
 //        game.performMove(11, destRows, destCols);
         game.processMove(moves, game.getGameBoard());
-        game.saveMatchState(10, "nextPlayer");
+        game.saveMatchState(10);
    }
    
     //@Test

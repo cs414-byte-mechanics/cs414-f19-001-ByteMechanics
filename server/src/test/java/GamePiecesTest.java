@@ -22,7 +22,7 @@ public class GamePiecesTest {
     }
 
     @Test
-    public void testCrocInRiver(){
+    public void testCrocInRiver() throws Exception {
         /* Start with initial board and test if crocodile is in river */
         GamePiece[][] congoBoard = congoGame.board;
         CrocodilePiece croc1 = (CrocodilePiece) congoBoard[0][5];
@@ -35,7 +35,7 @@ public class GamePiecesTest {
     }
 
     @Test
-    public void testMoveTowardRiver(){
+    public void testMoveTowardRiver() throws Exception {
         /* Start with initial */
         GamePiece[][] congoBoard = congoGame.board;
         CrocodilePiece croc1 = (CrocodilePiece) congoBoard[0][5];
@@ -60,7 +60,7 @@ public class GamePiecesTest {
     }
 
     @Test
-    public void testclearPath() {
+    public void testclearPath() throws Exception {
         /* Start with initial board */
         CrocodilePiece croc1 = (CrocodilePiece) congoGame.board[0][5];
 
@@ -115,7 +115,7 @@ public class GamePiecesTest {
     }
 
     @Test
-    public void testclearPathHorizontal() {
+    public void testclearPathHorizontal() throws Exception {
         /* Start with initial board */
         /* test horizontal */
         GiraffePiece giraffe = (GiraffePiece) congoGame.board[6][0];  /* player 2's giraffe */

@@ -54,7 +54,6 @@ class Game extends Component {
         this.logOut = this.logOut.bind(this);
         this.isLoggedIn = this.isLoggedIn.bind(this);
         this.updateSearchResult = this.updateSearchResult.bind(this);
-
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
     }
@@ -86,13 +85,10 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "errorInvalidMove": alert(update.message); break;
+            case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
-            case "errorInvalidRegistration": alert(update.errorMessage); break;
             case "loginSuccess": this.updateLogin(update); break;
-            case "errorInvalidLogin": alert(update.errorMessage); break;
             case "logoutSuccess": this.updateLogin(update); break;
-            case "logoutFailure": alert(update.errorMessage); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
@@ -110,7 +106,8 @@ class Game extends Component {
         state.games = [update.updatedBoard];
         state.next_turn = [update.whoseTurn];
         this.setState(state);
-        console.log("next_turn " + state.next_turn);
+        console.log("game board " + this.state.games);
+        console.log("next_turn " + this.state.next_turn);
     }
 
     setCookie(logIn, exdays=0) {
@@ -145,7 +142,7 @@ class Game extends Component {
 
     sendObject(obj){ this.connection.send(JSON.stringify(obj)); }
 
-    logOut() { this.sendObject(attemptLogout) }
+    logOut() { this.sendObject(attemptLogout); }
 
     isLoggedIn(){ return JSON.stringify(this.state.logIn)!=="{}"; }
 
@@ -160,6 +157,7 @@ class Game extends Component {
       this.setState({showInvitationSentStatus: true});
       this.setState({showInvitePlayer: true});
     }
+
 
     render(){
 

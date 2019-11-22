@@ -123,7 +123,6 @@ public class WebsocketServerTest {
 
         String testJSON = "{\"objectType\": \"\"," +
                            "\"communicationType\": \"\"," +
-                           "\"communicationVersion\": 0," +
                            "\"matchID\": \"\"," +
                            "\"playerName\": \"\"," +
                            "\"pieceID\": \"\"," +
@@ -136,7 +135,7 @@ public class WebsocketServerTest {
                            "\"invitationFrom\": \"\"," +
                            "\"invitationTo\": \"\"," +
                            "\"invitationTime\": \"\"," +
-                            "\"playerQuitting\": \"\"}";
+                           "\"playerQuitting\": \"\"}";
 
         Action correctResult = new Action();
 
@@ -167,7 +166,6 @@ public class WebsocketServerTest {
 
         String testJSON = "{\"objectType\": \"Action\"," +
                 "\"communicationType\": \"requestMove\"," +
-                "\"communicationVersion\": 1," +
                 "\"matchID\": \"\"," +
                 "\"playerName\": \"JohnDoe\"," +
                 "\"pieceID\": \"m\"," +
@@ -186,7 +184,6 @@ public class WebsocketServerTest {
 
         correctResult.objectType = "Action";
         correctResult.communicationType = "requestMove";
-        correctResult.communicationVersion = 1;
         correctResult.matchID = "";
         correctResult.playerName = "JohnDoe";
         correctResult.pieceID = "m";
@@ -218,7 +215,6 @@ public class WebsocketServerTest {
 
 //        testUpdate.objectType = "TestObjectType";
         testUpdate.communicationType = "TestCommunicationType";
-        testUpdate.communicationVersion = 7;
         testUpdate.matchID = "TestMatchID";
         testUpdate.playerName = "TestPlayerName";
         testUpdate.pieceID = "E";
@@ -228,7 +224,7 @@ public class WebsocketServerTest {
         testUpdate.updatedBoard[1][0] = "3";
         testUpdate.updatedBoard[1][1] = "4";
         testUpdate.whoseTurn = "TestWhoseTurn";
-        testUpdate.message = "TestSuccessMessage";
+        testUpdate.statusMessage = "TestSuccessMessage";
         testUpdate.userName = "TestUserName";
         testUpdate.userEmail = "TestUserEmail";
         testUpdate.initialBoard = new String[2][2];
@@ -268,7 +264,7 @@ public class WebsocketServerTest {
                 + "\"pieceID\":\"E\","
                 + "\"updatedBoard\":[[1,2],[3,4]],"
                 + "\"whoseTurn\":\"TestWhoseTurn\","
-                + "\"successMessage\":\"TestSuccessMessage\","
+                + "\"statusMessage\":\"TestSuccessMessage\","
                 + "\"userName\":\"TestUserName\","
                 + "\"userEmail\":\"TestUserEmail\","
                 + "\"initialBoard\":[[5,6],[7,8]],"
@@ -295,7 +291,6 @@ public class WebsocketServerTest {
 
         Update testUpdate = new Update();
 
-        testUpdate.communicationVersion = 7;
         testUpdate.matchID = "TestMatchID";
         testUpdate.playerName = "TestPlayerName";
         testUpdate.pieceID = "c";
@@ -305,7 +300,7 @@ public class WebsocketServerTest {
         testUpdate.updatedBoard[1][0] = "3";
         testUpdate.updatedBoard[1][1] = "4";
         testUpdate.whoseTurn = "TestWhoseTurn";
-        testUpdate.message = "TestSuccessMessage";
+        testUpdate.statusMessage = "TestSuccessMessage";
         testUpdate.matchBeginTime = "TestMatchBeginTime";
         testUpdate.endCondition = "TestEndCondition";
         testUpdate.winnerName = "TestWinnerName";
@@ -319,7 +314,6 @@ public class WebsocketServerTest {
 
         String correctJSON = "{\"objectType\":null,"
                 + "\"communicationType\":null,"
-                + "\"communicationVersion\":7,"
                 + "\"matchID\":\"TestMatchID\","
                 + "\"playerName\":\"TestPlayerName\","
                 + "\"pieceID\":\"c\","
@@ -354,13 +348,12 @@ public class WebsocketServerTest {
 
         String correctJSON = "{\"objectType\":null,"
                 + "\"communicationType\":null,"
-                + "\"communicationVersion\":0,"
                 + "\"matchID\":null,"
                 + "\"playerName\":null,"
                 + "\"pieceID\":null,"
                 + "\"updatedBoard\":null,"
                 + "\"whoseTurn\":null,"
-                + "\"successMessage\":null,"
+                + "\"statusMessage\":null,"
                 + "\"userName\":null,"
                 + "\"userEmail\":null,"
                 + "\"initialBoard\":null,"

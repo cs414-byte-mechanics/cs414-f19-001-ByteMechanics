@@ -26,17 +26,17 @@ public class Query {
         return "INSERT INTO matches (board, next_turn, p1, p2, start) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName
                 + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP);";
    }
-   
-   public static String createRetrieveGameQuery(Action action){
+
+    public static String createRetrieveGameQuery(Action action){
         return "SELECT * FROM matches WHERE match_id=\"" + action.matchID + "\";";
-   }
+    }
    
    public static String createUpdateGameStateQuery(int matchID, String[][] board){
         return "UPDATE matches SET board = \"" + boardToString(board) + "\" WHERE match_id = " + matchID + ";";
    }
 
    public static String createUpdateGameNextTurnQuery(int matchID, String nextPlayer){
-        return "UPDATE matched SET next_turn = \"" + nextPlayer + "\" WHERE match_id = " + matchID + ";";
+        return "UPDATE matches SET next_turn = \"" + nextPlayer + "\" WHERE match_id = " + matchID + ";";
    }
 
    public static String createSearchUserQuery(Action action) {

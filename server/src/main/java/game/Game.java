@@ -7,6 +7,7 @@ import java.util.*;
 public class Game {
     private DatabaseHandler dbHandler;
     private GameBoard gameBoard;
+    private String activePlayer;
     
     public Game(){
         dbHandler = new DatabaseHandler();
@@ -30,20 +31,27 @@ public class Game {
         
         //load game with that matchID from database
         gameBoard.loadGame(board);
+
+        //get active player that should make the next move
+        activePlayer = dbHandler.retrieveActivePlayerInfo(action);
     }
     
-    public void saveMatchState(int matchID, String nextPlayer) throws Exception {
-        dbHandler.saveGameState(matchID, nextPlayer, gameBoard.getBoardForDatabase());
+    public void saveMatchState(int matchID) throws Exception {
+        dbHandler.saveGameState(matchID, this.getActivePlayer(), gameBoard.getBoardForDatabase());
     }
     
-    public String[][] getBoard(){
+    public String[][] getBoard() throws Exception {
         return gameBoard.getBoardForDatabase();
     }
 
     public GameBoard getGameBoard() {return gameBoard;}
 
+    public String getActivePlayer() {return activePlayer;}
+
+    public void setActivePlayer(String player) {activePlayer = player;}
+
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
-    public boolean processMove(int[] desiredMove, GameBoard congoGame){ // OK -- move this to Game instead of perfprm move
+    public void processMove(int[] desiredMove, GameBoard congoGame) throws Exception { // OK -- move this to Game instead of perfprm move
         ArrayList<Integer> movesRow = new ArrayList<>();
         ArrayList<Integer> movesCol = new ArrayList<>();
 
@@ -63,16 +71,16 @@ public class Game {
                 movesRow.add(row);
             }
 
-            return (piece.performMove(movesRow, movesCol, congoGame));
+            piece.performMove(movesRow, movesCol, congoGame);
         }
-
-        return false;
     }
 
 
-    public boolean moveSequenceCorrect(Action action, GameBoard board, int location){
+    public boolean moveSequenceCorrect(Action action, Game game, int location) throws Exception{
         /* which player moved the piece */
-        int activePlayer = (action.playerName.compareTo(action.playerOneName) == 0) ? 1 : 2;
+        String whoseTurn = game.getActivePlayer();
+        GameBoard board = game.getGameBoard();
+        int activePlayer = (whoseTurn.compareTo(action.playerOneName) == 0) ? 1 : 2;
         /* which player owns the piece to be moved */
         try {
             int pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
@@ -81,7 +89,7 @@ public class Game {
         catch (Exception e){
             /* catch when there is no piece on the board */
             /* then this is not a valid sequence of moves for either player */
-            return false;
+            throw new Exception("Player moving a non-existant game piece.");
         }
     }
 }
