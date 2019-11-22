@@ -40,7 +40,7 @@ public class Query {
    }
 
    public static String createSearchUserQuery(Action action) {
-        return "SELECT * FROM users WHERE username = \"" + action.userName + "\";";
+        return "SELECT * FROM users WHERE username LIKE \"%" + action.userName + "%\" AND username != \"" + action.playerName +"\";";
    }
 
    public static String createGetCurrentInvitationsOrTimesQuery(String colName, String userName) {
