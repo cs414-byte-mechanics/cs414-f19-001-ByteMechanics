@@ -76,6 +76,7 @@ class Game extends Component {
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
+            case "endMatch" : this.endMatch(update); break;
         }
     }
 
@@ -91,8 +92,16 @@ class Game extends Component {
         state.games = [update.updatedBoard];
         state.next_turn = [update.whoseTurn];
         this.setState(state);
-        console.log("game board " + this.state.games);
-        console.log("next_turn " + this.state.next_turn);
+    }
+
+    endMatch(update){
+        let state = this.state;
+        state.games = [update.updatedBoard];
+        switch(update.endCondition) {
+            case "won" : alert(update.statusMessage + "\n" + update.winnerName + "has won the game"); break;
+            case "quit" : alert(update.statusMessage + "\n" + update.playerQuitting + "has quit the game"); break;
+        }
+        this.setState(state);
     }
 
     setCookie(logIn, exdays=0) {
