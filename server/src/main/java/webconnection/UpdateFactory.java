@@ -2,8 +2,6 @@ package webconnection;
 import database.*;
 import Game.*;
 
-import java.util.ArrayList;
-
 public class UpdateFactory
 {
     private DatabaseHandler db;
@@ -46,56 +44,44 @@ public class UpdateFactory
         }
     }
 
-    private String findWinner(String communicationType, Update update, int currLocation, GameBoard gameBoard) throws Exception {
-        String winner = null;
-        int activePlayer;
-
-        if (communicationType == "endMatch") {
-//            activePlayer = congoGame.findActivePlayer(update.updatedBoard, currLocation);
-            GamePiece piece = gameBoard.getGamePiece(currLocation/10, currLocation%10);
-            activePlayer = piece.player;
-
-            if (activePlayer == 1)
-                winner= "playerOne";
-
-            if (activePlayer == 2)
-                winner= "playerTwo";
-        }
-        return winner;
-    }
-
     private Update buildUpdateBoard(Action action) {
-
         try {
-
+            boolean lionExist;
             Game game = new Game();
             game.loadExistingGame(action);
             GameBoard gameBoard = game.getGameBoard();
             Update update = new Update();
 
-            /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
-            boolean lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
             if (!(game.moveSequenceCorrect(action, game, action.desiredMoves[0]))) {
-                throw new Exception(game.getActivePlayer() + " should be making a move");
-            }
-            if (lionExist) game.processMove(action.desiredMoves, gameBoard);
-            else throw new Exception("Opponent's lion does not exist");
-            /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
+                throw new Exception(game.getActivePlayer() + " should be making a move"); }
+
+            /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
             lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
+            if (lionExist){
+                try
+                {
+                    game.processMove(action.desiredMoves, gameBoard);
 
-            update.communicationType = lionExist ? "updateBoard" : "endMatch";
-            update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
-            update.matchID = action.matchID;
-            update.playerName = action.playerName ;
-            update.pieceID =  action.pieceID ;
-            update.updatedBoard = gameBoard.getBoardForDatabase();
-            updateTurn(update, action, game);
+                    /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
+                    lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[1]);
+                    update.communicationType = lionExist ? "updateBoard" : "endMatch";
+                    update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+                    update.matchID = action.matchID;
+                    update.playerName = action.playerName ;
+                    update.pieceID =  action.pieceID ;
+                    update.updatedBoard = gameBoard.getBoardForDatabase();
+                    updateTurn(update, action, game);
 
-            update.winnerName = action.playerName = findWinner(update.communicationType, update,action.desiredMoves[1],
-                                                               game.getGameBoard()); /*this might need to be replace with action.playerName later*/
-
-            game.saveMatchState(Integer.parseInt(action.matchID));
-            return update;
+                    update.winnerName = action.playerName = game.getActivePlayer(); /*this might need to be replace with action.playerName later*/
+                    game.saveMatchState(Integer.parseInt(action.matchID));
+                    return update;
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    ServerError error = new ServerError(102, e.getMessage());
+                    return error; }}
+            else
+                throw new Exception("Game Is Over - Opponent's Lion is Captured");
 
         } catch (Exception e){
             e.printStackTrace();
