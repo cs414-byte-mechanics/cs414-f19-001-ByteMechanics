@@ -66,6 +66,7 @@ public class UpdateFactory
                     lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[1]); /* at this point, move is performed, so piece location is updated and is desired[1]. */
                     update.communicationType = lionExist ? "updateBoard" : "endMatch";
                     update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
+                    update.endCondition = lionExist ? null : "won";
                     update.matchID = action.matchID;
                     update.playerName = action.playerName ;
                     update.pieceID =  action.pieceID ;
