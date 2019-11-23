@@ -56,14 +56,14 @@ public class UpdateFactory
                 throw new Exception(game.getActivePlayer() + " should be making a move"); }
 
             /** At this point we track if opponent's lion is in castle, and in this case we can still play and perform move and keep playing, otherwise lion is captured and keep playing does not make sense!!!!*/
-            lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]);
+            lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[0]); /* because we have not performed move yet, so piece's location is desired[0] */
             if (lionExist){
                 try
                 {
                     game.processMove(action.desiredMoves, gameBoard);
 
                     /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
-                    lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[1]);
+                    lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[1]); /* at this point, move is performed, so piece location is updated and is desired[1]. */
                     update.communicationType = lionExist ? "updateBoard" : "endMatch";
                     update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
                     update.matchID = action.matchID;
