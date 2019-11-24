@@ -206,6 +206,7 @@ send the updated board to the clients so that they can display it so the players
   "matchID": "",
   "playerName": "",
   "pieceID": "G",
+  "endCondition": ["active", "won", "quit"],
   "updatedBoard": [][],
   "whoseTurn": ""
 }

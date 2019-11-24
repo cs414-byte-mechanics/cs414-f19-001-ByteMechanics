@@ -32,6 +32,7 @@ class Game extends Component {
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
           ],
+          status: "active",
           searchResult: []
         }
 
@@ -94,16 +95,10 @@ class Game extends Component {
         this.setState(state);
     }
 
-    displayEndGameMessage(update){
-        switch(update.endCondition) {
-            case "won" : alert(update.statusMessage); break;
-            case "quit" : alert(update.statusMessage); break;
-        }
-    }
-
     endMatch(update){
         let state = this.state;
         state.games = [update.updatedBoard];
+        state.status = update.endCondition;
         this.setState(state);
     }
 
@@ -191,7 +186,8 @@ class Game extends Component {
                             path="/game"
                             render={(props) => <GameBoard game={this.state.games[0]} playerName = {this.state.next_turn[0]}
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
-                                                            match_id={this.state.match_id[0]} send={this.sendObject}/>}
+                                                            match_id={this.state.match_id[0]} status={this.state.status}
+                                                            send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>

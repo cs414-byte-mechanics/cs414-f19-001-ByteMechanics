@@ -62,13 +62,12 @@ class GameBoard extends Component {
         else this.selectMove(i,j);
 
         //after selecting a piece, change modes to select the piece's move
-        if(this.state.selectionType=="pieceID" && this.props.game[i][j].length>0) this.changeSelectionType("desiredMoves");
+        if(this.state.selectionType==="pieceID" && this.props.game[i][j].length>0) this.changeSelectionType("desiredMoves");
         console.log("select: playerName "+this.state.requestMove.playerName);
     }
     selectPiece(i, j) {
         let state = this.state;
         console.log("selectPiece1 playerName "+this.state.requestMove.playerName);
-//        state.requestMove['pieceID'] = [i, j];
 
         let encodeLocation = i * 10 + j;
         //get alphanumeric representation of piece
@@ -80,21 +79,17 @@ class GameBoard extends Component {
     }
     selectMove(i, j) {
         //prevent pieces other than monkey from taking multiple moves
-        //let piece = this.state.requestMove.pieceID;
         let piece = this.state.pieceLocation;
         let col = piece % 10;
         let row = (piece - col)/10;
 
-//        if(this.props.game[piece[0]][piece[1]]!=='M' && this.state.requestMove['desiredMoves'].length>=1) return;
         console.log(this.props.game);
         console.log(row);
         console.log(col);
         console.log(this.props.game[row][col]);
-        //if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=1) return;
         if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
-        //state.requestMove[state.selectionType].push([i, j]);
         let encodeLocation = i * 10 + j;
         state.requestMove[state.selectionType].push(encodeLocation);
         this.setState(state);
@@ -110,16 +105,14 @@ class GameBoard extends Component {
         return (2<=j && j<=4 && !this.isInRiver(i,j)) ? "castle" : ""
     }
     isSelected(i, j) {
-        //let piece = this.state.requestMove.pieceID;
         let pieceLoc = this.state.pieceLocation;
         let moves = this.state.requestMove.desiredMoves;
-        let numMoves = moves.length;
+        //let numMoves = moves.length;
         let moveLoc = i * 10 + j;
-        //return `${(i===piece[0] && j===piece[1]) ? "selected" : ""}${(moves.find((move)=>move[0]==i &&move[1]==j)) ? "move" : ""}`
-        return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move==moveLoc) && (pieceLoc!=moveLoc)) ? "move" : ""}`
+        return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move===moveLoc) && (pieceLoc!==moveLoc)) ? "move" : ""}`
     }
     player(i, j) {
-        return this.props.game[i][j] != this.props.game[i][j].toUpperCase() ? "one" : "two"
+        return this.props.game[i][j] !== this.props.game[i][j].toUpperCase() ? "one" : "two"
     }
 
     //generate classes for styling
@@ -127,26 +120,35 @@ class GameBoard extends Component {
         return `piece ${this.state.selectionType} ${this.isInRiver(i,j)}${this.isInCastle(i,j)} ${this.isSelected(i,j)} ${this.player(i, j)}`
     }
 
+    generateMessage(){
+        switch(this.props.status) {
+            case "won": return " won!  Game over!";
+            case "quit": return " quit.  Game halted!";
+            default : return "'s move";
+        }
+    }
+
     //generate icon & message to indicate which player's move is expected next
-    generateMoveIndicator(nextPlayer, thisPlayer){
+    generateGameStatusMessage(nextPlayer, thisPlayer){
         if (nextPlayer === thisPlayer){
             if (thisPlayer === this.state.requestMove.playerOneName){
-                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}'s move</p>
+                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}{this.generateMessage()}</p>
             }
-            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}'s move</p>
+            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}</p>
         }
         return;
     }
 
-    //generate icon & message to indicate which player's move is expected next
-    generateMoveNote(nextPlayer, player1, player2){
-        if (nextPlayer === player1){
-            return <p><>&#x1f334;</>{player1}'s move</p>
+    generateClearMoveButton(){
+        if (this.props.status === "active"){
+            return <Button onClick={this.clearSelection}>Clear Move</Button>
         }
-        if (nextPlayer === player2){
-            return <p><>&#x1f333;</>{player2}'s move</p>
+    }
+
+    generateConfirmMoveButton(){
+        if (this.props.status === "active"){
+            return <Button onClick={this.confirmSelection}>Confirm Move</Button>
         }
-        return;
     }
 
     render(){
@@ -172,7 +174,7 @@ class GameBoard extends Component {
         let board =
             <div className="board">
                 <div className="player1">
-                    {this.generateMoveIndicator(this.props.playerName, this.state.requestMove.playerOneName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerOneName)}
                 </div>
                 {this.props.game.map((row, i)=>
                     <div className="board_row">{row.map((piece, j)=>
@@ -181,15 +183,15 @@ class GameBoard extends Component {
                     </div>
                 )}
                 <div className="player2">
-                    {this.generateMoveIndicator(this.props.playerName, this.state.requestMove.playerTwoName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerTwoName)}
                 </div>
             </div>
         
         //action buttons
         let buttons =
             <div className="buttons">
-                <Button onClick={this.clearSelection}>Clear Move</Button>
-                <Button onClick={this.confirmSelection}>Confirm Move</Button>
+                {this.generateClearMoveButton()}
+                {this.generateConfirmMoveButton()}
             </div>
 
         return (
