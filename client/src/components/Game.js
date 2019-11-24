@@ -94,13 +94,16 @@ class Game extends Component {
         this.setState(state);
     }
 
+    displayEndGameMessage(update){
+        switch(update.endCondition) {
+            case "won" : alert(update.statusMessage); break;
+            case "quit" : alert(update.statusMessage); break;
+        }
+    }
+
     endMatch(update){
         let state = this.state;
         state.games = [update.updatedBoard];
-        switch(update.endCondition) {
-            case "won" : alert(update.statusMessage + "\n" + update.winnerName + "has won the game"); break;
-            case "quit" : alert(update.statusMessage + "\n" + update.playerQuitting + "has quit the game"); break;
-        }
         this.setState(state);
     }
 
