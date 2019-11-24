@@ -1,4 +1,5 @@
 import React from 'react';
+import ViewGames from "./ViewGames";
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -9,6 +10,7 @@ class Dashboard extends React.Component {
         return (
             <div id="dash">
                 Hi {this.props.userName}! Access your games and options here.
+                <ViewGames/>
             </div>
         );
     }
