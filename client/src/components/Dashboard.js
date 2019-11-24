@@ -9,7 +9,7 @@ class Dashboard extends React.Component {
     render () {
         return (
             <div id="dash">
-                Hi {this.props.userName}! Access your games and options here.
+                Hi {this.props.userName}! Access your games or invite a friend to play!
                 <ViewGames/>
             </div>
         );

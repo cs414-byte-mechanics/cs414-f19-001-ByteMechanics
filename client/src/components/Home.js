@@ -10,10 +10,8 @@ class Home extends React.Component {
     render () {
         return (
             <div id="home">
-                {this.props.isLoggedIn()
-                    ? <Dashboard userName={this.props.userName}/>
-                    : <ViewGames/> //"Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
-                }
+
+                <Dashboard userName={this.props.userName}/>
             </div>
         );
     }

@@ -12,21 +12,24 @@ class ViewGames extends React.Component {
         super(props)
         this.state={
             username: "ajeske",
-            matchesInProgress: [
+            games: [
                 {
                     matchID: "123",
+                    matchBeginTime: "yesterday",
                     opponentName: "amrictor",
                     whoseTurn: "amrictor",
                     board: []
                 },
                 {
                     matchID: "234",
+                    matchBeginTime: "yesterday",
                     opponentName: "fari",
                     whoseTurn: "ajeske",
                     board: []
                 },
                 {
                     matchID: "345",
+                    matchBeginTime: "yesterday",
                     opponentName: "zach",
                     whoseTurn: "ajeske",
                     board: []
@@ -38,7 +41,7 @@ class ViewGames extends React.Component {
     }
     
     determineTurn(matchID){
-        let game = this.state.matchesInProgress.find(object => object.matchID === matchID)
+        let game = this.state.games.find(object => object.matchID === matchID)
         if(game.whoseTurn === this.state.username){
             return "Your turn!"
         } else {
@@ -49,9 +52,10 @@ class ViewGames extends React.Component {
     render(){
         let currentGames = 
             <div id="currentGames">
-                { this.state.matchesInProgress.map((singleGame)=> 
+                { this.state.games.map((singleGame)=> 
                     <Card>
-                        <CardTitle>Game vs. {singleGame.opponent}</CardTitle>
+                        <CardTitle>Game vs. {singleGame.opponentName}</CardTitle>
+                        <CardText>Game started: {singleGame.matchBeginTime}</CardText>
                         <CardText>{this.determineTurn(singleGame.matchID)}</CardText>
                         <Button>Resume</Button>
                     </Card>

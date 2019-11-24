@@ -32,7 +32,8 @@ class Game extends Component {
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
           ],
-          searchResult: []
+          searchResult: [],
+          matchesInProgres: []
         }
 
         this.connection = null;
@@ -73,10 +74,15 @@ class Game extends Component {
             case "registrationSuccess": this.updateLogin(update); break;
             case "invitationSentStatus": case "error" : alert(update.statusMessage);break
             case "updateBoard": this.updateBoard(update); break;
-            case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
+            case "loginSuccess": this.updateLogin(update); this.updateCurrentGames(update); break;
+            case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
         }
+    }
+    
+    updateCurrentGames(update){
+        this.setState({matchesInProgres : update.matchesInProgres})
     }
 
     updateLogin(update) {
