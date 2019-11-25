@@ -54,6 +54,9 @@ class GameBoard extends Component {
 
     //select a piece or move
     select(i,j){
+        //only allow any item to be selected if game is active - i.e. not in "win" or "quit" state
+        if (this.props.status != "active") return;
+
         //prevent selection of current space
         if(this.state.pieceLocation===(i * 10 + j)) return;
         
