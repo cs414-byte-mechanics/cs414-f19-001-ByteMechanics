@@ -123,8 +123,22 @@ public class DatabaseHandler {
         String activePlayer = results.getString("next_turn");
         return activePlayer;
     }
+
+    /**
+     @return winner
+     */
+    public String retrieveWinnerInfo(Action action) throws Exception {
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement gameInfo = con.createStatement();
+        ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
+
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+
+        String winner = results.getString("winner");
+        return winner;
+    }
     
-    public void saveGameState(int matchID, String nextPlayer, String[][] board) throws Exception {
+    public void saveGameState(int matchID, String nextPlayer, String[][] board, String winner) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement saveGame = con.createStatement();
         int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
@@ -132,6 +146,10 @@ public class DatabaseHandler {
 
         rowsAffected = saveGame.executeUpdate(Query.createUpdateGameNextTurnQuery(matchID,nextPlayer));
         if (rowsAffected < 1) throw new Exception("Next player was not saved in database.");
+
+        rowsAffected = saveGame.executeUpdate(Query.createUpdateGameWinnerQuery(matchID,winner));
+        if (rowsAffected < 1) throw new Exception("Winner was not saved in database.");
+
     }
 
     public void sendGameInvitation(Action action) throws Exception {

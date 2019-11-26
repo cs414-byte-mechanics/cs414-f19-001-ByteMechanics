@@ -41,8 +41,11 @@ These `npm` scripts are mapped to common actions in one directory for convenienc
     
 3. To set the player whose turn it is next use a similar command to this.
     * UPDATE matches SET next_turn='ajeske' WHERE match_id=1;
+    
+4. If someone wins the game, the winner field will also be altered.  To reset that use this command -
+    * UPDATE matches SET winner=NULL WHERE match_id=1;
 
-4. To view the database contents after you've changed it -
+5. To view the database contents after you've changed it -
     * SELECT * from matches;
 
 # Contributors

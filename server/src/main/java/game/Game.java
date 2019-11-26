@@ -8,6 +8,7 @@ public class Game {
     private DatabaseHandler dbHandler;
     private GameBoard gameBoard;
     private String activePlayer;
+    private String winningPlayer;
     
     public Game(){
         dbHandler = new DatabaseHandler();
@@ -34,10 +35,12 @@ public class Game {
 
         //get active player that should make the next move
         activePlayer = dbHandler.retrieveActivePlayerInfo(action);
+        //get winning player
+        winningPlayer = dbHandler.retrieveWinnerInfo(action);
     }
     
     public void saveMatchState(int matchID) throws Exception {
-        dbHandler.saveGameState(matchID, this.getActivePlayer(), gameBoard.getBoardForDatabase());
+        dbHandler.saveGameState(matchID, this.getActivePlayer(), gameBoard.getBoardForDatabase(), this.getWinningPlayer());
     }
     
     public String[][] getBoard() throws Exception {
@@ -49,6 +52,10 @@ public class Game {
     public String getActivePlayer() {return activePlayer;}
 
     public void setActivePlayer(String player) {activePlayer = player;}
+
+    public String getWinningPlayer() {return winningPlayer;}
+
+    public void setWinningPlayer(String winner) {winningPlayer = winner;}
 
     /* this function extract desired move and validate that the move from current location to destination is valid or no */
     public void processMove(int[] desiredMove, GameBoard congoGame) throws Exception { // OK -- move this to Game instead of perfprm move

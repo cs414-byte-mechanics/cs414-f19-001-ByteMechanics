@@ -39,7 +39,11 @@ public class Query {
         return "UPDATE matches SET next_turn = \"" + nextPlayer + "\" WHERE match_id = " + matchID + ";";
    }
 
-   public static String createSearchUserQuery(Action action) {
+   public static String createUpdateGameWinnerQuery(int matchID, String winner){
+       return "UPDATE matches SET winner = \"" + winner + "\" WHERE match_id = " + matchID + ";";
+   }
+
+    public static String createSearchUserQuery(Action action) {
         return "SELECT * FROM users WHERE username LIKE \"%" + action.userName + "%\" AND username != \"" + action.playerName +"\";";
    }
 

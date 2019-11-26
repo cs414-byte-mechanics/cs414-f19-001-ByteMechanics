@@ -32,6 +32,7 @@ class Game extends Component {
               ["G", "M", "E", "L", "E", "C", "Z"]
             ]
           ],
+          status: "active",
           searchResult: []
         }
 
@@ -76,6 +77,7 @@ class Game extends Component {
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
+            case "endMatch" : this.endMatch(update); break;
         }
     }
 
@@ -91,8 +93,13 @@ class Game extends Component {
         state.games = [update.updatedBoard];
         state.next_turn = [update.whoseTurn];
         this.setState(state);
-        console.log("game board " + this.state.games);
-        console.log("next_turn " + this.state.next_turn);
+    }
+
+    endMatch(update){
+        let state = this.state;
+        state.games = [update.updatedBoard];
+        state.status = update.endCondition;
+        this.setState(state);
     }
 
     setCookie(logIn, exdays=0) {
@@ -179,7 +186,8 @@ class Game extends Component {
                             path="/game"
                             render={(props) => <GameBoard game={this.state.games[0]} playerName = {this.state.next_turn[0]}
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
-                                                            match_id={this.state.match_id[0]} send={this.sendObject}/>}
+                                                            match_id={this.state.match_id[0]} status={this.state.status}
+                                                            send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>
