@@ -172,7 +172,7 @@ class Game extends Component {
                         <Route
                             exact
                             path="/"
-                            render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName}/>}
+                            render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName} logOut={this.logOut} sendToServer={this.sendObject}/>}
                         />
                         <Route
                             path="/register"
