@@ -10,7 +10,7 @@ class Home extends React.Component {
         return (
             <div id="home">
                 {this.props.isLoggedIn()
-                    ? <Dashboard userName={this.props.userName}/>
+                    ? <Dashboard userName={this.props.userName} logOut={this.props.logOut} sendToServer={this.props.sendToServer}/>
                     : "Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
                 }
             </div>
