@@ -20,7 +20,7 @@ public class UpdateFactory
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
             case "quitMatch": return this.buildEndMatch();
-            case "unregisterUser": return null;
+            case "unregisterUser": return this.unregisterUser(action);
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
@@ -92,6 +92,24 @@ public class UpdateFactory
         } catch (Exception e){
             e.printStackTrace();
             ServerError error = new ServerError(102, e.getMessage());
+            return error;
+        }
+    }
+
+    private Update unregisterUser(Action action) {
+        try {
+            db.unregisterUser(action);
+            Update update = new Update();
+            update.communicationType = "unregistrationSuccess";
+            update.userEmail = action.userEmail;
+            update.userName = action.userName;
+            update.statusMessage = "User account has been unregistered.";
+
+            return update;
+
+        } catch (Exception e){
+            System.out.println(e);
+            ServerError error = new ServerError(101, e.getMessage());
             return error;
         }
     }
