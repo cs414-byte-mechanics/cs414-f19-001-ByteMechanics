@@ -131,14 +131,11 @@ public class UpdateFactoryTest
     {
         Action action = new Action();
         action.communicationType = "quitMatch";
+        action.playerQuitting = "aislinn";
+        action.matchID = "11";
         Update expected = new Update();
         expected.communicationType = "endMatch";
-        expected.matchID = "dummy_match_ID";
-        expected.endCondition = "quit";
-        expected.winnerName = "player1";
-        expected.loserName = "player2";
-        expected.matchEndTime = "dummy_end_time";
-        assertEquals(updateMaker.getUpdate(action),expected);
+        assertEquals(updateMaker.getUpdate(action).communicationType,expected.communicationType);
     }
 
     /* Fari: this test wrap up an errorInvalidMove response for invalid move and send back to client  */
