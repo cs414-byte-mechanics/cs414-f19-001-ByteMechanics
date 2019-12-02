@@ -40,7 +40,7 @@ public class Query {
    }
 
    public static String createUpdateGameWinnerQuery(int matchID, String winner){
-       return "UPDATE matches SET winner = \"" + winner + "\", status = \"finished\" WHERE match_id = " + matchID + ";";
+       return "UPDATE matches SET winner = \"" + winner + "\", status = \"finished\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
    }
 
     public static String createSearchUserQuery(Action action) {
@@ -56,7 +56,7 @@ public class Query {
    }
     
     public static String createAbandonGameQuery(String matchID, String winner){
-        return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\" WHERE match_id = " + matchID + ";";
+        return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
     }
    
    public static String boardToString(String[][] board){
