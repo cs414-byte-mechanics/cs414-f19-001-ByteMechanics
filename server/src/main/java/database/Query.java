@@ -23,7 +23,7 @@ public class Query {
    
    public static String createAddNewGameQuery(Action action, String[][] board){
    
-        return "INSERT INTO matches (board, next_turn, p1, p2, start, status) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName
+        return "INSERT INTO matches (board, p1, p2, start, status) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName
                 + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\");";
    }
 
