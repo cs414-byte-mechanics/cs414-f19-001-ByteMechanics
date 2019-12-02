@@ -40,7 +40,7 @@ public class Query {
    }
 
    public static String createUpdateGameWinnerQuery(int matchID, String winner){
-       return "UPDATE matches SET winner = \"" + winner + "\" WHERE match_id = " + matchID + ";";
+       return "UPDATE matches SET winner = \"" + winner + "\", status = \"finished\" WHERE match_id = " + matchID + ";";
    }
 
     public static String createSearchUserQuery(Action action) {
