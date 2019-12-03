@@ -278,4 +278,31 @@ public class DatabaseHandler {
         return invitationLists;
     }
 
+    
+    public String abandonActiveGame(Action action) throws Exception {
+        //Retrieve game info to get the player that didn't abandon
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement retrieveGame = con.createStatement();
+        ResultSet results = retrieveGame.executeQuery(Query.createRetrieveGameQuery(action));
+
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        
+        String playerOne = results.getString("p1");
+        String playerTwo = results.getString("p2");
+        String winner = "";
+        
+        if(playerOne.equals(action.playerQuitting)){
+            winner = playerTwo;
+        } else {
+            winner = playerOne;
+        }
+        
+        //Set the player to be the winner and flag the game as abandoned
+        Connection con2 = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement abandonGame = con2.createStatement();
+        abandonGame.executeQuery(Query.createAbandonGameQuery(action.matchID, winner));
+        
+        return winner;
+    }
+
 } 

@@ -21,7 +21,7 @@ public class UpdateFactory
             case "requestBeginNewMatch": return this.createNewMatch(action);
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
-            case "quitMatch": return this.buildEndMatch();
+            case "quitMatch": return this.abandonGame(action);
             case "unregisterUser": return this.unregisterUser(action);
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
@@ -184,15 +184,22 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildEndMatch() {
-        Update update = new Update();
-        update.communicationType = "endMatch";
-        update.matchID = "dummy_match_ID";
-        update.endCondition = "quit";
-        update.winnerName = "player1";
-        update.loserName = "player2";
-        update.matchEndTime = "dummy_end_time";
-        return update;
+    private Update abandonGame(Action action) {
+        try {
+            Update update = new Update();
+            update.communicationType = "endMatch";
+            update.matchID = action.matchID;
+            update.endCondition = "quit";
+            update.winnerName = db.abandonActiveGame(action);
+            update.loserName = action.playerQuitting;
+            //We get the match end time in the database, but we can figure this out
+            update.matchEndTime = "dummy_end_time";
+            return update;
+        } catch(Exception e){
+            System.out.println(e);
+            ServerError error = new ServerError(104, e.getMessage());
+            return error;
+        }
     }
 
     private Update buildSearchResult(Action action) {

@@ -102,6 +102,7 @@ List of error codes:
 * 101 = Username not found when attempting a login
 * 102 = Invalid move
 * 103 = Player not found in search (in search for who to invite)
+* 104 = Player cannot abandon game (due to invalid matchID or player name)
 
 List of communication types for `Action`:
 
