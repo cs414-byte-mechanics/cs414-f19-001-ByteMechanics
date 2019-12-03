@@ -20,7 +20,7 @@ public class DatabaseHandlerTest {
         dbh = new DatabaseHandler();
     }
    
-   //@Test
+//    @Test
    public void testCreateNewGame() throws Exception {
         Action action = new Action();
         action.communicationType = "requestBeginNewMatch";
