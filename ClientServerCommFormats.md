@@ -75,7 +75,12 @@ Here is the structure for each of the four objects:
   "invitationTimes",
   "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
-  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
+  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",
+                            "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...],
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
 }
 ```
 ## ServerError
@@ -97,6 +102,7 @@ List of error codes:
 * 101 = Username not found when attempting a login
 * 102 = Invalid move
 * 103 = Player not found in search (in search for who to invite)
+* 104 = Player cannot abandon game (due to invalid matchID or player name)
 
 List of communication types for `Action`:
 
@@ -110,7 +116,8 @@ List of communication types for `Action`:
 * attemptLogin
 * searchUser
 * searchGames
-* requestGameStatus
+* requestGameLoad
+* getUserInvsLists
 
 List of communication types for `Update`
 
@@ -124,7 +131,7 @@ List of communication types for `Update`
 * searchGamesResults
 * loadInvitations
 * invitationSentStatus
-* gameStatus
+* sendUserInvsLists
 
 
 List of communication types for `ServerError`:
@@ -566,13 +573,32 @@ This communication type will be used to communicate to the server that a player 
 
 ```javascript
 {
-  "communicationType": "requestGameStatus",
+  "communicationType": "requestGameLoad",
   "communicationVersion": 1,
   "matchID": "",
 }
 ```
 
+## getUserInvsLists
 
+```javascript
+
+{
+    "communicationType": "getUserInvsLists",
+    "userName": "name of user"
+}
+````
+
+## sendUserInvsLists
+
+```javascript
+{
+  "communicationType": "sendUserInvsLists",
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
+}
 
 # Update History
 ## Sprint 1
@@ -587,6 +613,7 @@ This communication type will be used to communicate to the server that a player 
 * 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
+* 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

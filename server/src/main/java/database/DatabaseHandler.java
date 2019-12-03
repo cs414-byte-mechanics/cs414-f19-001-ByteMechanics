@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
 import java.util.Date;
@@ -263,4 +264,75 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    public ArrayList<List<String>> getInvitationLists(Action action) throws Exception {
+
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+
+        List<String> sentToNames = new ArrayList<>();
+        List<String> sentToTimes = new ArrayList<>();
+        List<String> receivedFromNames = new ArrayList<>();
+        List<String> receivedFromTimes = new ArrayList<>();
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
+
+        try {
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
+            sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+        }catch(Exception e) {sentToNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+            receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+        }catch(Exception e) {receivedFromNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
+            sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+        }catch(Exception e) {sentToTimes.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+            receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+        }catch(Exception e) {receivedFromTimes.add("EMPTY");}
+
+        invitationLists.add(sentToNames);
+        invitationLists.add(sentToTimes);
+        invitationLists.add(receivedFromNames);
+        invitationLists.add(receivedFromTimes);
+
+        return invitationLists;
+    }
+
+    
+    public String abandonActiveGame(Action action) throws Exception {
+        //Retrieve game info to get the player that didn't abandon
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement retrieveGame = con.createStatement();
+        ResultSet results = retrieveGame.executeQuery(Query.createRetrieveGameQuery(action));
+
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        
+        String playerOne = results.getString("p1");
+        String playerTwo = results.getString("p2");
+        String winner = "";
+        
+        if(playerOne.equals(action.playerQuitting)){
+            winner = playerTwo;
+        } else {
+            winner = playerOne;
+        }
+        
+        //Set the player to be the winner and flag the game as abandoned
+        Connection con2 = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement abandonGame = con2.createStatement();
+        abandonGame.executeQuery(Query.createAbandonGameQuery(action.matchID, winner));
+        
+        return winner;
+    }
+
 } 
