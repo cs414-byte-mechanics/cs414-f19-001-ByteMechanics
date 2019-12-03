@@ -6,8 +6,7 @@ public class PawnPiece extends GamePiece {
     public boolean superPawn  ;
 
     /* initial constructor*/
-    public PawnPiece(){
-    }
+    public PawnPiece(){ }
 
     public PawnPiece(int row, int col, int player){
         super(row, col, player);
@@ -16,7 +15,11 @@ public class PawnPiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "p" : "P";
+        GameBoard congoGame = new GameBoard();
+        if (this.superPawn){
+            return (player == 1) ? "s" : "S";}
+        else
+            return (player == 1) ? "p" : "P";
     }
 
     /*helper routine to check sideAway move*/
