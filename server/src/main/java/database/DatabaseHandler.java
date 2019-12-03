@@ -4,6 +4,7 @@ import java.sql.*;
 import webconnection.*;
 import Game.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
 
@@ -233,6 +234,50 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    public ArrayList<List<String>> getInvitationLists(Action action) throws Exception {
+
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+
+        List<String> sentToNames = new ArrayList<>();
+        List<String> sentToTimes = new ArrayList<>();
+        List<String> receivedFromNames = new ArrayList<>();
+        List<String> receivedFromTimes = new ArrayList<>();
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
+
+        try {
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
+            sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+        }catch(Exception e) {sentToNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+            receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+        }catch(Exception e) {receivedFromNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
+            sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+        }catch(Exception e) {sentToTimes.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+            receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+        }catch(Exception e) {receivedFromTimes.add("EMPTY");}
+
+        invitationLists.add(sentToNames);
+        invitationLists.add(sentToTimes);
+        invitationLists.add(receivedFromNames);
+        invitationLists.add(receivedFromTimes);
+
+        return invitationLists;
+    }
+
     
     public String abandonActiveGame(Action action) throws Exception {
         //Retrieve game info to get the player that didn't abandon
@@ -259,4 +304,5 @@ public class DatabaseHandler {
         
         return winner;
     }
+
 } 

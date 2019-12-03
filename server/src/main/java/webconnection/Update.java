@@ -1,6 +1,8 @@
 package webconnection;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Update {
 
@@ -30,6 +32,10 @@ public class Update {
     public String[][] invitations;
     public Object[][] matchesInProgress;
     public String[][] matchesCompleted;
+    public List<String> sentToNames;
+    public List<String> sentToTimes;
+    public List<String> receivedFromNames;
+    public List<String> receivedFromTimes;
 
 
     @Override
@@ -56,7 +62,11 @@ public class Update {
                                     + "invitationSent: " + this.invitationSent + "\n"
                                     + "invitation: " + Arrays.deepToString(this.invitations) + "\n"
                                     + "matchesInProgress: " + Arrays.deepToString(this.matchesInProgress) + "\n"
-                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n";
+                                    + "matchesCompleted: " + Arrays.deepToString(this.matchesCompleted) + "\n"
+                                    + "sentToNames: " + this.sentToNames + "\n"
+                                    + "sentToTimes: " + this.sentToTimes + "\n"
+                                    + "receivedFromNames" + this.receivedFromNames + "\n"
+                                    + "receivedFromTimes" + this.receivedFromTimes;
 
         return stringRepresentation;
 

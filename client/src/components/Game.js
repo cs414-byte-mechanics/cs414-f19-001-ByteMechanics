@@ -33,7 +33,13 @@ class Game extends Component {
             ]
           ],
           status: "active",
-          searchResult: []
+          searchResult: [],
+          invitationLists: {
+            sentToNames: [],
+            sentToTimes: [],
+            receivedFromNames: [],
+            receivedFromTimes: []
+          }
         }
 
         this.connection = null;
@@ -43,6 +49,7 @@ class Game extends Component {
         this.updateSearchResult = this.updateSearchResult.bind(this);
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
+        this.setInvitationsLists = this.setInvitationsLists.bind(this);
     }
 
     componentDidMount() {
@@ -78,6 +85,7 @@ class Game extends Component {
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
             case "endMatch" : this.endMatch(update); break;
+            case "sendUserInvsLists" : this.setInvitationsLists(update);break
         }
     }
 
@@ -148,6 +156,15 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
+    setInvitationsLists(update) {
+      let newInvitationLists = {
+        sentToNames: update.sentToNames,
+        sentToTimes: update.sentToTimes,
+        receivedFromNames: update.receivedFromNames,
+        receivedFromTimes: update.receivedFromTimes
+      };
+      this.setState({invitationLists: newInvitationLists});
+    }
 
     render(){
 
@@ -166,7 +183,7 @@ class Game extends Component {
                                                           showInvitePlayer={this.state.showInvitePlayer}
                                                           invitationSentStatus={this.state.invitationSentStatus}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
-
+                                                          invitationLists={this.state.invitationLists}
                           />}
                         />
                         <Route
