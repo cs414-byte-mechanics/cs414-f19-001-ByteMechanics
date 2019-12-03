@@ -250,17 +250,25 @@ public class DatabaseHandler {
         String invColTimeTo = "invitations_sent_times";
         String invColTimeFrom = "invitations_received_times";
 
-        String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
-        sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+        try {
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
+            sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+        }catch(Exception e) {sentToNames.add("EMPTY");}
 
-        String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
-        receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+        try {
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+            receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+        }catch(Exception e) {receivedFromNames.add("EMPTY");}
 
-        String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
-        sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+        try {
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
+            sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+        }catch(Exception e) {sentToTimes.add("EMPTY");}
 
-        String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
-        receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+        try {
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+            receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+        }catch(Exception e) {receivedFromTimes.add("EMPTY");}
 
         invitationLists.add(sentToNames);
         invitationLists.add(sentToTimes);

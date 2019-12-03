@@ -1,7 +1,7 @@
 import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/Invitations.scss'
-import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
+import {ButtonGroup, Input, Button, Table, Card, CardBody, CardTitle} from 'reactstrap';
 import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
 
 class Invitations extends React.Component {
@@ -15,9 +15,11 @@ class Invitations extends React.Component {
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
+        this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
 
         this.state = {
-          searchString: ''
+          searchString: '',
+          showRefreshInvs: false
         };
 
     }
@@ -30,7 +32,11 @@ class Invitations extends React.Component {
             <div id="viewsearch">
                 <div id="invites">
                     <div id="subtitle">Current Invitations</div>
-                  <Button onClick={this.getInvitationsReceived}>View Invitations</Button>
+                  {this.renderInviteDisplayButton()}
+                  <p></p>
+                  {this.renderSentToInvitationsTable()}
+                  <p></p>
+                  {this.renderReceivedFromInvitationsTable()}
                 </div>
                 <div id="search">
                     {this.renderSearchInputs()}
@@ -119,7 +125,21 @@ class Invitations extends React.Component {
       this.setState({showInvitePlayer: false});
     }
 
+    renderInviteDisplayButton() {
+      if (this.state.showRefreshInvs) {
+        return (
+          <Button onClick={this.getInvitationsReceived}>Refresh Invitations</Button>
+        );
+      }
+      else {
+        return (
+          <Button onClick={this.getInvitationsReceived}>View Invitations</Button>
+        );
+      }
+    }
+
     getInvitationsReceived() {
+      this.setState({showRefreshInvs: true})
       let getUserInvsLists = {
         communicationType: "getUserInvsLists",
         userName: this.props.userName
@@ -128,11 +148,86 @@ class Invitations extends React.Component {
   }
 
   renderSentToInvitationsTable() {
+      let toNames = this.props.invitationLists.sentToNames;
+      if (toNames.length > 0 && toNames[0] !== "EMPTY") {
+        return(
+          <Card className="card_condensed">
+            <CardBody>
+              <CardTitle>Sent Invitations</CardTitle>
+            <Table size="sm" className="table_condensed">
+              <thead>
+              <tr>
+                <th>Sent To</th>
+                <th>Time Sent</th>
+              </tr>
+              </thead>
+              <tbody>{this.renderSentToTableRows()}</tbody>
+            </Table>
+            </CardBody>
+          </Card>
+        );
+      }
+  }
 
+  renderSentToTableRows() {
+      let rows = [];
+      let namesList = this.props.invitationLists.sentToNames;
+      let timesList = this.props.invitationLists.sentToTimes;
+      for (let i = 0; i < namesList.length; i++) {
+        rows.push(
+          <tr>
+            <td>{namesList[i]}</td>
+            <td>{this.convertToDate(timesList[i])}</td>
+          </tr>)
+      }
+      return rows;
   }
 
   renderReceivedFromInvitationsTable() {
+      let fromNames = this.props.invitationLists.receivedFromNames;
+    if (fromNames.length > 0 && fromNames[0] !== "EMPTY") {
+      return(
+        <Card className="card_condensed">
+          <CardBody>
+            <CardTitle>Received Invitations</CardTitle>
+            <Table size="sm" className="table_condensed">
+              <thead>
+              <tr>
+                <th>Received From</th>
+                <th>Time Received</th>
+              </tr>
+              </thead>
+              <tbody>{this.renderReceivedFromTableRows()}</tbody>
+            </Table>
+          </CardBody>
+        </Card>
+      );
+    }
+  }
 
+  renderReceivedFromTableRows() {
+    let rows = [];
+    let namesList = this.props.invitationLists.receivedFromNames;
+    let timesList = this.props.invitationLists.receivedFromTimes;
+    for (let i = 0; i < namesList.length; i++) {
+      rows.push(
+        <tr>
+          <td>{namesList[i]}</td>
+          <td>{this.convertToDate(timesList[i])}</td>
+          <td>
+            <ButtonGroup>
+              <Button id="accept" className="button_accept">Accept</Button>
+              <Button id="reject" className="button_reject">Reject</Button>
+            </ButtonGroup>
+          </td>
+        </tr>)
+    }
+    return rows;
+  }
+
+  convertToDate(timeMilli) {
+      let date = new Date(parseInt(timeMilli,10));
+      return date.toString().substring(0,23);
   }
 
 }
