@@ -45,7 +45,19 @@ public class Query {
 
     public static String createSearchUserQuery(Action action) {
         return "SELECT * FROM users WHERE username LIKE \"%" + action.userName + "%\" AND username != \"" + action.playerName +"\";";
-   }
+    }
+
+    public static String createSearchGamesQuery(Action action) {
+        if (action.playerTwoName.compareTo("") == 0) {
+            return "SELECT * FROM matches WHERE winner is NULL AND " +
+                    "(p1 = \"" + action.userName + "\" OR p2 = \"" + action.userName + "\");";
+        }
+        else{
+            return "SELECT * FROM matches WHERE winner is NULL AND " +
+                    "((p1 = \"" + action.userName + "\" OR p2 = \"" + action.userName + "\") AND " +
+                    "(p1 = \"" + action.playerTwoName + "\" OR p2 = \"" + action.playerTwoName + "\"));";
+        }
+    }
 
    public static String createGetCurrentInvitationsOrTimesQuery(String colName, String userName) {
         return "SELECT " + colName + " from users where username = \"" + userName + "\";";

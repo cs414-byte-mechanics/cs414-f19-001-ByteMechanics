@@ -3,10 +3,15 @@ package database;
 import java.sql.*;
 import webconnection.*;
 import Game.*;
+
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
+import java.util.Date;
 
 //NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
 
@@ -78,6 +83,31 @@ public class DatabaseHandler {
         }
         con.close();
         return Arrays.asList(users.toArray()).toArray(new String[0]);
+    }
+
+    public String[] searchGames(Action action) throws Exception {
+        String dateString = "";
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement search = con.createStatement();
+        ResultSet rs = search.executeQuery(Query.createSearchGamesQuery(action));
+
+        ArrayList<String> matches = new ArrayList<String>();
+        while (rs.next()) {
+            String player1 = rs.getString("p1");
+            String player2 = rs.getString("p2");
+            String opponent = (player1.compareTo(action.userName) == 0) ? player2 : player1;
+
+            Timestamp timestamp = rs.getTimestamp("start");
+            if (timestamp != null){
+                Date date = new java.util.Date(timestamp.getTime());
+                LocalDate ldate = LocalDate.from(date.toInstant().atZone(ZoneOffset.UTC));
+                dateString = DateTimeFormatter.ISO_DATE.format(ldate);
+            }
+
+            matches.add(Integer.toString(rs.getInt("match_id")) + "," + opponent + "," + dateString);
+        }
+        return Arrays.asList(matches.toArray()).toArray(new String[0]);
     }
 
     /**

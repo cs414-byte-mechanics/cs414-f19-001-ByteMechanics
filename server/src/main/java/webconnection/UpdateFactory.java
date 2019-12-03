@@ -27,6 +27,7 @@ public class UpdateFactory
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
             case "sendInvitation": return this.buildInvitationSentStatus(action);
+            case "searchGames": return this.buildSearchGamesResult(action);
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             default:
                 System.err.println("Invalid action communication type.");
@@ -208,6 +209,17 @@ public class UpdateFactory
         update.userName= action.userName;
         try {
             update.searchResults = db.searchUser(action);
+        } catch(Exception e) {}
+
+        return update;
+    }
+
+    private Update buildSearchGamesResult(Action action) {
+        Update update = new Update();
+        update.communicationType = "searchGamesResult";
+        update.userName= action.userName;
+        try {
+            update.searchResults = db.searchGames(action);
         } catch(Exception e) {}
 
         return update;
