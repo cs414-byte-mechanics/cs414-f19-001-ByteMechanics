@@ -41,8 +41,7 @@ class Game extends Component {
             sentToTimes: [],
             receivedFromNames: [],
             receivedFromTimes: []
-          },
-          showRefreshInvs: false
+          }
         }
 
         this.connection = null;
@@ -54,8 +53,6 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
-        // this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
-
     }
 
     componentDidMount() {
@@ -189,16 +186,6 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
-    // getInvitationsReceived() {
-    //     console.log("something");
-    //     this.setState({showRefreshInvs: true})
-    //     let getUserInvsLists = {
-    //         communicationType: "getUserInvsLists",
-    //         userName: this.state.logIn.userName
-    //     };
-    //     this.sendObject(getUserInvsLists);
-    // }
-
     setInvitationsLists(update) {
       let newInvitationLists = {
         sentToNames: update.sentToNames,
@@ -208,9 +195,6 @@ class Game extends Component {
       };
       this.setState({invitationLists: newInvitationLists});
     }
-
-
-
 
     render(){
 
@@ -234,8 +218,7 @@ class Game extends Component {
                                                     invitationLists={this.state.invitationLists}
                                                     gamesResults={this.state.searchGames}
                                                     showRefreshInvs={this.state.showRefreshInvs}
-
-                                />}
+                                                />}
                         />
                         <Route
                             path="/register"
@@ -250,7 +233,7 @@ class Game extends Component {
                             render={(props) => <GameBoard {...props} game={this.state.games[0]} playerName = {this.state.next_turn[0]}
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
                                                             match_id={this.state.match_id[0]} status={this.state.status}
-                                                            send={this.sendObject}/>}
+                                                            userName={this.state.logIn.userName} send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>

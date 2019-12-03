@@ -52,6 +52,7 @@ class GameBoard extends Component {
             matchID: this.props.match.params.matchID,
             pieceID: this.state.requestMove.pieceID,
             desiredMoves: this.state.requestMove.desiredMoves,
+            userName: this.props.userName,
             playerName: this.props.playerName,
             playerOneName: this.props.player1,
             playerTwoName: this.props.player2
