@@ -170,7 +170,11 @@ class GameBoard extends Component {
             'm': <>&#x1F435;</>,
             'e': <>&#x1F418;</>,
             'c': <>&#x1f40a;</>,
-            'z': <>&#129427;</>
+            'z': <>&#129427;</>,
+
+            /*Added for superPawn*/
+            's': <>&#127809;</>, // maple leaf
+            'S': <>&#127810;</>
         }
 
         //generate board from game state array

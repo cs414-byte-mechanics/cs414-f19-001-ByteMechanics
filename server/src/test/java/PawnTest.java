@@ -364,6 +364,55 @@ public class PawnTest {
 
         assertTrue(myPawn.ValidateMove(6, 4, congoBoard) == true);
         assertTrue(myPawn.ValidateMove(6, 2, congoBoard) == true);
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        /* attempt to perform invalid move to (5,3) */
+        movesRow.add(6);
+        movesCol.add(4);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+        System.out.println(congoGame);
+
+    }
+
+    @Test
+    public void testSuperPawnMoveSide() throws Exception{
+        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece myPawn = congoGame.getGamePiece(1,5);
+
+        ArrayList<Integer> movesRow = new ArrayList<Integer>();
+        ArrayList<Integer> movesCol = new ArrayList<Integer>();
+        /* attempt to perform invalid move to (5,3) */
+        movesRow.add(2);
+        movesCol.add(5);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesRow.set(0,3);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesRow.set(0,4);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesRow.set(0,5);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesRow.set(0,6);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesCol.set(0,6) ;
+        myPawn.performMove(movesRow, movesCol, congoGame);
+//        System.out.println(congoGame);
+        movesRow.set(0,6);
+        movesCol.set(0,5) ;
+        myPawn.performMove(movesRow, movesCol, congoGame);
+        assertTrue(myPawn.ValidateMove(5, 5, congoBoard) == true);
+
+        movesCol.set(0,4) ;
+        myPawn.performMove(movesRow, movesCol, congoGame);
+
+        movesCol.set(0,3);
+        myPawn.performMove(movesRow, movesCol, congoGame);
+//        System.out.println(congoGame);
     }
 
     @Test
@@ -374,5 +423,48 @@ public class PawnTest {
     @Test
     public void testCapture(){
 
+    }
+
+    @Test
+    public void superPawnChangeIconPlayer1() throws Exception{
+        String[][] board = congoGame.getBoardForDatabase();
+
+        /* initialize pawn and convert it from gamePiece to pawnPiece in order to have access to superPawn flag*/
+        GamePiece pawn =  congoGame.getGamePiece(1,3);
+        PawnPiece myPawn = (PawnPiece) pawn;
+
+        /* make pawn as a superPawn*/
+        congoGame.movePiece(myPawn, 6,2 );
+        congoGame.checkForSuperPawn(myPawn);
+        assertEquals(myPawn.superPawn , true);
+
+        /*update array*/
+        board = congoGame.getBoardForDatabase();
+//        System.out.println(congoGame);
+//        System.out.println("First move"+Arrays.deepToString(board));
+
+        GamePiece pawn2 =  congoGame.getGamePiece(1,4);
+        congoGame.movePiece(pawn2, 2,4);
+//        System.out.println(congoGame);
+        board = congoGame.getBoardForDatabase();
+//        System.out.println("2nd move"+Arrays.deepToString(board));
+    }
+
+    @Test
+    public void superPawnChangeIconPlayer2() throws Exception{
+        String[][] board = congoGame.getBoardForDatabase();
+
+        /* initialize pawn and convert it from gamePiece to pawnPiece in order to have access to superPawn flag*/
+        GamePiece pawn =  congoGame.getGamePiece(5,6);
+        PawnPiece myPawn = (PawnPiece) pawn;
+
+        /* make pawn as a superPawn*/
+        congoGame.movePiece(myPawn, 0,1);
+        congoGame.checkForSuperPawn(myPawn);
+        assertEquals(myPawn.superPawn , true);
+
+        board = congoGame.getBoardForDatabase();
+//        System.out.println(congoGame);
+//        System.out.println(Arrays.deepToString(board));
     }
 }
