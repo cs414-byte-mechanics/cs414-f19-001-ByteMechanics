@@ -23,6 +23,7 @@ class Header extends React.Component {
             </div>
             <div id="menu">
                 {this.displayInvitations()}
+                {this.displayMyGames()}
                 <a className="nav-link" href="/">Home</a>
                 {logInOut}
             </div>
@@ -35,6 +36,13 @@ class Header extends React.Component {
         if (this.props.isLoggedIn())
         {
             return (<a className="nav-link" href="/invitations">Invitations</a>);
+        }
+    }
+
+    displayMyGames(){
+        if (this.props.isLoggedIn())
+        {
+            return (<a className="nav-link" href="/mygames">My Games</a>);
         }
     }
 

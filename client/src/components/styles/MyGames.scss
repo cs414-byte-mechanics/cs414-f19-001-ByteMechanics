@@ -1,14 +1,6 @@
 @import "./variables";
 
-#invitations {
-
-  .table_condensed{
-    font-size: 15px;
-  }
-
-  .card_condensed{
-    font-size: 20px;
-  }
+#mygames {
 
   .btn {
     background-color: $backgroundColor;
@@ -23,7 +15,7 @@
     display:flex;
   }
 
-  #search, #invites {
+  #search, #games {
     //max-width: 300px;
     margin: 25px auto;
     #subtitle {

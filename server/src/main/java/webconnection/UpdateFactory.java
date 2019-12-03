@@ -1,6 +1,8 @@
 package webconnection;
 import database.*;
 import Game.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UpdateFactory
 {
@@ -19,12 +21,14 @@ public class UpdateFactory
             case "requestBeginNewMatch": return this.createNewMatch(action);
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
-            case "quitMatch": return this.buildEndMatch();
+            case "quitMatch": return this.abandonGame(action);
             case "unregisterUser": return this.unregisterUser(action);
             case "attemptLogin": return this.logIn(action);
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
             case "sendInvitation": return this.buildInvitationSentStatus(action);
+            case "searchGames": return this.buildSearchGamesResult(action);
+            case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -181,15 +185,22 @@ public class UpdateFactory
         return update;
     }
 
-    private Update buildEndMatch() {
-        Update update = new Update();
-        update.communicationType = "endMatch";
-        update.matchID = "dummy_match_ID";
-        update.endCondition = "quit";
-        update.winnerName = "player1";
-        update.loserName = "player2";
-        update.matchEndTime = "dummy_end_time";
-        return update;
+    private Update abandonGame(Action action) {
+        try {
+            Update update = new Update();
+            update.communicationType = "endMatch";
+            update.matchID = action.matchID;
+            update.endCondition = "quit";
+            update.winnerName = db.abandonActiveGame(action);
+            update.loserName = action.playerQuitting;
+            //We get the match end time in the database, but we can figure this out
+            update.matchEndTime = "dummy_end_time";
+            return update;
+        } catch(Exception e){
+            System.out.println(e);
+            ServerError error = new ServerError(104, e.getMessage());
+            return error;
+        }
     }
 
     private Update buildSearchResult(Action action) {
@@ -198,6 +209,17 @@ public class UpdateFactory
         update.userName= action.userName;
         try {
             update.searchResults = db.searchUser(action);
+        } catch(Exception e) {}
+
+        return update;
+    }
+
+    private Update buildSearchGamesResult(Action action) {
+        Update update = new Update();
+        update.communicationType = "searchGamesResult";
+        update.userName= action.userName;
+        try {
+            update.searchResults = db.searchGames(action);
         } catch(Exception e) {}
 
         return update;
@@ -214,4 +236,21 @@ public class UpdateFactory
         }
         return update;
     }
+
+    private Update buildSendUserInvsLists(Action action) {
+        Update update = new Update();
+        update.communicationType = "sendUserInvsLists";
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+        try {
+            invitationLists = db.getInvitationLists(action);
+        } catch(Exception e) {
+            return new ServerError(-1, e.getMessage());
+        }
+        update.sentToNames = invitationLists.get(0);
+        update.sentToTimes = invitationLists.get(1);
+        update.receivedFromNames = invitationLists.get(2);
+        update.receivedFromTimes = invitationLists.get(3);
+        return update;
+    }
+
 }

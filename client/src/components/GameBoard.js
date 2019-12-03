@@ -26,6 +26,22 @@ class GameBoard extends Component {
         this.confirmSelection = this.confirmSelection.bind(this);
         this.selectPiece = this.selectPiece.bind(this);
         this.selectMove = this.selectMove.bind(this);
+        this.getGameStatus = this.getGameStatus.bind(this);
+    }
+
+    getGameStatus(){
+        setTimeout(() => {
+            let searchObject = {
+                communicationType: "requestGameLoad",
+                communicationVersion: this.state.requestMove.communicationVersion,
+                matchID: this.props.match_id
+            };
+            this.props.send(searchObject);
+        }, 1500)
+        }
+
+    componentDidMount(){
+        this.getGameStatus();
     }
 
     //send move to server for validation and completion

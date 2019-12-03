@@ -75,7 +75,12 @@ Here is the structure for each of the four objects:
   "invitationTimes",
   "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
-  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
+  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",
+                            "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...],
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
 }
 ```
 ## ServerError
@@ -97,6 +102,7 @@ List of error codes:
 * 101 = Username not found when attempting a login
 * 102 = Invalid move
 * 103 = Player not found in search (in search for who to invite)
+* 104 = Player cannot abandon game (due to invalid matchID or player name)
 
 List of communication types for `Action`:
 
@@ -109,6 +115,9 @@ List of communication types for `Action`:
 * unregisterUser
 * attemptLogin
 * searchUser
+* searchGames
+* requestGameLoad
+* getUserInvsLists
 
 List of communication types for `Update`
 
@@ -119,8 +128,10 @@ List of communication types for `Update`
 * endMatch
 * loginSuccess
 * searchResults
+* searchGamesResults
 * loadInvitations
 * invitationSentStatus
+* sendUserInvsLists
 
 
 List of communication types for `ServerError`:
@@ -510,6 +521,24 @@ This communication type will be sent by the server when communicating with clien
 * `communicationType` is a string "searUsers" identifying the action type
 * `playerName` is the name of the user who the client is searching for
 
+
+## searchGames
+
+This communication type will be sent from clients to the server. It will be sent by the client when a user wants to search and display information about their games.
+
+```javascript
+{
+  "communicationType": "searchGames",
+  "communicationVersion": 1,
+  "userName": "name of user"
+  "playerTwoName": "opponent's name"
+}
+```
+
+* `communicationType` is a string "searchGames" identifying the action type to search for info on user's games
+* `userName` is the name of the user who's games we are searching for
+* `playerTwoName` is the optional name of the opponent.  If this string is empty, all of the user's game are returned.  If it contains a value, only games matching the opponent's name are returned.
+
 ## searchResult
 
 ```javascript
@@ -521,6 +550,55 @@ This communication type will be sent by the server when communicating with clien
 ```
 * `communicationType` is a string "searchResults identifying the update type
 * `userFound` is a boolean specifying whether or not the user was found in the database
+
+## searchGamesResult
+
+This communication type will be sent from the server to the client in response to a "searchGames" message initiated by the client.
+
+```javascript
+{
+  "communicationType": "searchGamesResult",
+  "communicationVersion": 1,
+  "userName": "name of user",
+  "searchResults": "array containing one entry with info per each game"
+}
+```
+* `communicationType` is a string "searchResults identifying the update type
+* `userName` is a string containing the name of player in all the games
+* `searchResults` is an array of strings.  Each string represents a different game and contains 3 comma separated values.  The first is the matchID, the second is the opponent's name and the third is the start date of the game.  Example: ["22,fari,2019-11-30", "23,arictor,2019-11-30", "24,zach,2019-11-30"]
+
+## requestGameLoad
+
+This communication type will be used to communicate to the server that a player wishes to load a specific game.  The server will respond to this by returning an updateBoard communication.
+
+```javascript
+{
+  "communicationType": "requestGameLoad",
+  "communicationVersion": 1,
+  "matchID": "",
+}
+```
+
+## getUserInvsLists
+
+```javascript
+
+{
+    "communicationType": "getUserInvsLists",
+    "userName": "name of user"
+}
+````
+
+## sendUserInvsLists
+
+```javascript
+{
+  "communicationType": "sendUserInvsLists",
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
+}
 
 # Update History
 ## Sprint 1
@@ -535,6 +613,7 @@ This communication type will be sent by the server when communicating with clien
 * 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
+* 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

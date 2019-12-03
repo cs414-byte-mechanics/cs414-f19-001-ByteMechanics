@@ -3,9 +3,15 @@ package database;
 import java.sql.*;
 import webconnection.*;
 import Game.*;
+
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
+import java.util.Date;
 
 //NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
 
@@ -37,10 +43,11 @@ public class DatabaseHandler {
         } else {
             throw new Exception("User already in system.");
         }
+        con.close();
     }
 
     public void unregisterUser(Action action) throws Exception {
-    
+
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement unregisterUser = con.createStatement();
         int rowsAffected = unregisterUser.executeUpdate(Query.createUnregisterUser(action));
@@ -60,7 +67,7 @@ public class DatabaseHandler {
         ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
 
         if (!rs.next()) throw new Exception("No user exists with this email and password.");
-
+        con.close();
         return rs.getString("username");
     }
 
@@ -74,32 +81,60 @@ public class DatabaseHandler {
         while (rs.next()) {
             users.add(rs.getString("username"));
         }
+        con.close();
         return Arrays.asList(users.toArray()).toArray(new String[0]);
     }
 
+    public String[] searchGames(Action action) throws Exception {
+        String dateString = "";
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement search = con.createStatement();
+        ResultSet rs = search.executeQuery(Query.createSearchGamesQuery(action));
+
+        ArrayList<String> matches = new ArrayList<String>();
+        while (rs.next()) {
+            String player1 = rs.getString("p1");
+            String player2 = rs.getString("p2");
+            String opponent = (player1.compareTo(action.userName) == 0) ? player2 : player1;
+
+            Timestamp timestamp = rs.getTimestamp("start");
+            if (timestamp != null){
+                Date date = new java.util.Date(timestamp.getTime());
+                LocalDate ldate = LocalDate.from(date.toInstant().atZone(ZoneOffset.UTC));
+                dateString = DateTimeFormatter.ISO_DATE.format(ldate);
+            }
+
+            matches.add(Integer.toString(rs.getInt("match_id")) + "," + opponent + "," + dateString);
+        }
+        return Arrays.asList(matches.toArray()).toArray(new String[0]);
+    }
+
     /**
-    @return matchID of game
-    */
+     @return matchID of game
+     */
     public int addNewGame(Action action, String[][] board) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement addNewGame = con.createStatement();
         int matchID = addNewGame.executeUpdate(Query.createAddNewGameQuery(action, board), Statement.RETURN_GENERATED_KEYS);
+        con.close();
         return matchID;
     }
-    
+
     /**
-    @return board state of game
-    */
+     @return board state of game
+     */
     public String[][] retrieveGameInfo(Action action) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
-        
+        con.close();
+
         if (!results.next()) throw new Exception("No game exists with this match ID.");
-        
+
         String boardAsString = results.getString("board");
         String[][] board = new String[GameBoard.NUM_ROWS][GameBoard.NUM_COLUMNS];
-        
+
         int index = 0;
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[i].length; j++){
@@ -117,6 +152,7 @@ public class DatabaseHandler {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
+        con.close();
 
         if (!results.next()) throw new Exception("No game exists with this match ID.");
 
@@ -131,17 +167,19 @@ public class DatabaseHandler {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
+        con.close();
 
         if (!results.next()) throw new Exception("No game exists with this match ID.");
 
         String winner = results.getString("winner");
         return winner;
     }
-    
+
     public void saveGameState(int matchID, String nextPlayer, String[][] board, String winner) throws Exception {
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement saveGame = con.createStatement();
         int rowsAffected = saveGame.executeUpdate(Query.createUpdateGameStateQuery(matchID, board));
+
         if (rowsAffected < 1) throw new Exception("Game state was not saved in database.");
 
         rowsAffected = saveGame.executeUpdate(Query.createUpdateGameNextTurnQuery(matchID,nextPlayer));
@@ -150,6 +188,7 @@ public class DatabaseHandler {
         rowsAffected = saveGame.executeUpdate(Query.createUpdateGameWinnerQuery(matchID,winner));
         if (rowsAffected < 1) throw new Exception("Winner was not saved in database.");
 
+        con.close();
     }
 
     public void sendGameInvitation(Action action) throws Exception {
@@ -174,6 +213,7 @@ public class DatabaseHandler {
         String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.invitationTo);
         setInvitationsOrTimes(con, invColTimeFrom, currentInvitationsTimesFrom, action.invitationTo, currentTime);
 
+        con.close();
     }
 
     public String getCurrentInvitationsOrTimes(Connection con, String colName, String invitationsOf) throws Exception {
@@ -214,13 +254,9 @@ public class DatabaseHandler {
             throw new Exception("Duplicate invitation");
         }
 
-        try {
-            Statement updateCurrentInvsOrTimes = con.createStatement();
-            ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, addToInvitationsListOf));
+        Statement updateCurrentInvsOrTimes = con.createStatement();
+        ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, addToInvitationsListOf));
 
-        } catch(Exception e) {
-            throw e;
-        }
     }
 
     public boolean duplicateInvitation(String currentInvitations, String newInvitation) {
@@ -233,4 +269,76 @@ public class DatabaseHandler {
         }
         return false;
     }
-} 
+
+    public ArrayList<List<String>> getInvitationLists(Action action) throws Exception {
+
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+
+        List<String> sentToNames = new ArrayList<>();
+        List<String> sentToTimes = new ArrayList<>();
+        List<String> receivedFromNames = new ArrayList<>();
+        List<String> receivedFromTimes = new ArrayList<>();
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
+
+        try {
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
+            sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+        }catch(Exception e) {sentToNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+            receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+        }catch(Exception e) {receivedFromNames.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
+            sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+        }catch(Exception e) {sentToTimes.add("EMPTY");}
+
+        try {
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+            receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+        }catch(Exception e) {receivedFromTimes.add("EMPTY");}
+
+        con.close();
+        invitationLists.add(sentToNames);
+        invitationLists.add(sentToTimes);
+        invitationLists.add(receivedFromNames);
+        invitationLists.add(receivedFromTimes);
+
+        return invitationLists;
+    }
+
+
+    public String abandonActiveGame(Action action) throws Exception {
+        //Retrieve game info to get the player that didn't abandon
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement retrieveGame = con.createStatement();
+        ResultSet results = retrieveGame.executeQuery(Query.createRetrieveGameQuery(action));
+
+        if (!results.next()) throw new Exception("No game exists with this match ID.");
+
+        String playerOne = results.getString("p1");
+        String playerTwo = results.getString("p2");
+        String winner = "";
+
+        if(playerOne.equals(action.playerQuitting)){
+            winner = playerTwo;
+        } else {
+            winner = playerOne;
+        }
+
+        //Set the player to be the winner and flag the game as abandoned
+        Connection con2 = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement abandonGame = con2.createStatement();
+        abandonGame.executeQuery(Query.createAbandonGameQuery(action.matchID, winner));
+        con.close();
+
+        return winner;
+    }
+}

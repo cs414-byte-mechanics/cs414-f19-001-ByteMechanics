@@ -8,6 +8,7 @@ import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
 import Invitations from "./Invitations";
+import MyGames from"./MyGames";
 
 class Game extends Component {
     constructor(props){
@@ -33,7 +34,14 @@ class Game extends Component {
             ]
           ],
           status: "active",
-          searchResult: []
+          searchResult: [],
+          searchGames: [],
+          invitationLists: {
+            sentToNames: [],
+            sentToTimes: [],
+            receivedFromNames: [],
+            receivedFromTimes: []
+          }
         }
 
         this.connection = null;
@@ -43,6 +51,8 @@ class Game extends Component {
         this.updateSearchResult = this.updateSearchResult.bind(this);
         this.setCookie = this.setCookie.bind(this);
         this.checkCookie = this.checkCookie.bind(this);
+        this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
+        this.setInvitationsLists = this.setInvitationsLists.bind(this);
     }
 
     componentDidMount() {
@@ -78,7 +88,13 @@ class Game extends Component {
             case "searchResult": this.updateSearchResult(update); break;
             case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
             case "endMatch" : this.endMatch(update); break;
+            case "searchGamesResult": this.updateSearchGamesResult(update); break;
+            case "sendUserInvsLists" : this.setInvitationsLists(update);break
         }
+    }
+
+    updateSearchGamesResult(update) {
+        this.setState({searchGames: update.searchResults});
     }
 
     updateLogin(update) {
@@ -148,6 +164,15 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
+    setInvitationsLists(update) {
+      let newInvitationLists = {
+        sentToNames: update.sentToNames,
+        sentToTimes: update.sentToTimes,
+        receivedFromNames: update.receivedFromNames,
+        receivedFromTimes: update.receivedFromTimes
+      };
+      this.setState({invitationLists: newInvitationLists});
+    }
 
     render(){
 
@@ -166,8 +191,16 @@ class Game extends Component {
                                                           showInvitePlayer={this.state.showInvitePlayer}
                                                           invitationSentStatus={this.state.invitationSentStatus}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
-
+                                                          invitationLists={this.state.invitationLists}
                           />}
+                        />
+                        <Route
+                            exact
+                            path="/mygames"
+                            render={(props) => <MyGames isLoggedIn={this.isLoggedIn}
+                                                        userName={this.state.logIn.userName}
+                                                        gamesResults={this.state.searchGames}
+                                                        sendObject={this.sendObject}/>}
                         />
                         <Route
                             exact
