@@ -1,6 +1,8 @@
 package webconnection;
 import database.*;
 import Game.*;
+
+import org.java_websocket.WebSocket;
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.*;
@@ -8,24 +10,27 @@ import java.sql.*;
 public class UpdateFactory
 {
     private DatabaseHandler db;
+    private WebsocketServer wss;
 
-    public UpdateFactory() {
-        db = new DatabaseHandler();
+    public UpdateFactory(WebsocketServer wss) {
+        this.db = new DatabaseHandler();
+        this.wss = wss;
     }
 
-    public Update getUpdate(Action action) {
+    public Update getUpdate(Action action, WebSocket conn) {
         //decide which update to construct given the type of action sent from the client
         switch(action.communicationType)
         {
             case "requestMoves": return this.buildUpdateBoard(action);
+//            case "requestUpdate": return this.buildUpdateBoard(action);
             case "registerUser": return this.registerUser(action);
             case "requestBeginNewMatch": return this.createNewMatch(action);
             case "invitation": return this.buildInvitation();
             case "invitationResponse": return null;
             case "quitMatch": return this.abandonGame(action);
             case "unregisterUser": return this.unregisterUser(action);
-            case "attemptLogin": return this.logIn(action);
-            case "attemptLogout": return this.buildLogoutSuccess(action);
+            case "attemptLogin": return this.logIn(action, conn);
+            case "attemptLogout": return this.logOut(action);
             case "searchUser": return this.buildSearchResult(action);
             case "sendInvitation": return this.buildInvitationSentStatus(action);
             case "searchGames": return this.buildSearchGamesResult(action);
@@ -72,6 +77,7 @@ public class UpdateFactory
 
                     /** after performing valid move, we need to check if lion is till in castle or it is captured?*/
                     lionExist = gameBoard.lionInCastle(gameBoard.getBoardForDatabase(), action.desiredMoves[1]); /* at this point, move is performed, so piece location is updated and is desired[1]. */
+                    update.recipients = new String[] {action.playerOneName, action.playerTwoName};
                     update.communicationType = lionExist ? "updateBoard" : "endMatch";
                     update.statusMessage = lionExist ? "The player's move was valid and the board has been updated" : "Lion is captured, Game is Over!";
                     update.endCondition = lionExist ? "active" : "won";
@@ -141,13 +147,14 @@ public class UpdateFactory
         }
     }
 
-    private Update logIn(Action action) {
+    private Update logIn(Action action, WebSocket conn) {
         try {
             Update update = new Update();
             update.userName = db.attemptLogin(action);
             update.userEmail = action.userEmail;
             update.communicationType = "loginSuccess";
 
+            wss.addSession(update.userName, conn);
             return update;
 
         } catch (Exception e){
@@ -157,10 +164,11 @@ public class UpdateFactory
         }
     }
 
-    private Update buildLogoutSuccess(Action action) {
+    private Update logOut(Action action) {
         Update update = new Update();
         update.communicationType = "logoutSuccess";
         update.statusMessage = "User has successfully logged out.";
+        wss.removeSession(action.userName);
         return update;
     }
 
