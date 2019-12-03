@@ -1,6 +1,8 @@
 package webconnection;
 import database.*;
 import Game.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UpdateFactory
 {
@@ -25,6 +27,7 @@ public class UpdateFactory
             case "attemptLogout": return this.buildLogoutSuccess(action);
             case "searchUser": return this.buildSearchResult(action);
             case "sendInvitation": return this.buildInvitationSentStatus(action);
+            case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -214,4 +217,21 @@ public class UpdateFactory
         }
         return update;
     }
+
+    private Update buildSendUserInvsLists(Action action) {
+        Update update = new Update();
+        update.communicationType = "sendUserInvsLists";
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+        try {
+            invitationLists = db.getInvitationLists(action);
+        } catch(Exception e) {
+            return new ServerError(-1, e.getMessage());
+        }
+        update.sentToNames = invitationLists.get(0);
+        update.sentToTimes = invitationLists.get(1);
+        update.receivedFromNames = invitationLists.get(2);
+        update.receivedFromTimes = invitationLists.get(3);
+        return update;
+    }
+
 }

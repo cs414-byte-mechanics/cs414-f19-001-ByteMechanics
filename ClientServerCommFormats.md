@@ -75,7 +75,12 @@ Here is the structure for each of the four objects:
   "invitationTimes",
   "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
-  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",                          "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...]
+  "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",
+                            "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...],
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
 }
 ```
 ## ServerError
@@ -109,6 +114,7 @@ List of communication types for `Action`:
 * unregisterUser
 * attemptLogin
 * searchUser
+* getUserInvsLists
 
 List of communication types for `Update`
 
@@ -121,6 +127,7 @@ List of communication types for `Update`
 * searchResults
 * loadInvitations
 * invitationSentStatus
+* sendUserInvsLists
 
 
 List of communication types for `ServerError`:
@@ -522,6 +529,27 @@ This communication type will be sent by the server when communicating with clien
 * `communicationType` is a string "searchResults identifying the update type
 * `userFound` is a boolean specifying whether or not the user was found in the database
 
+## getUserInvsLists
+
+```javascript
+
+{
+    "communicationType": "getUserInvsLists",
+    "userName": "name of user"
+}
+````
+
+## sendUserInvsLists
+
+```javascript
+{
+  "communicationType": "sendUserInvsLists",
+  "sentToNames": [],
+  "sentToTimes": [],
+  "receivedFromNames": [],
+  "receivedFromTimes": []
+}
+
 # Update History
 ## Sprint 1
 * 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
@@ -535,6 +563,7 @@ This communication type will be sent by the server when communicating with clien
 * 11/1/2019 zachklau added searchResults, searchUser, and added userFound field to Update.
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
+* 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

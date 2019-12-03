@@ -4,6 +4,7 @@ import java.sql.*;
 import webconnection.*;
 import Game.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
 
@@ -233,4 +234,40 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    public ArrayList<List<String>> getInvitationLists(Action action) throws Exception {
+
+        ArrayList<List<String>> invitationLists = new ArrayList<>();
+
+        List<String> sentToNames = new ArrayList<>();
+        List<String> sentToTimes = new ArrayList<>();
+        List<String> receivedFromNames = new ArrayList<>();
+        List<String> receivedFromTimes = new ArrayList<>();
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
+
+        String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.userName);
+        sentToNames = Arrays.asList(currentInvitationsTo.split(","));
+
+        String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+        receivedFromNames = Arrays.asList(currentInvitationsFrom.split(","));
+
+        String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.userName);
+        sentToTimes = Arrays.asList(currentInvitationsTimesTo.split(","));
+
+        String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+        receivedFromTimes = Arrays.asList(currentInvitationsTimesFrom.split(","));
+
+        invitationLists.add(sentToNames);
+        invitationLists.add(sentToTimes);
+        invitationLists.add(receivedFromNames);
+        invitationLists.add(receivedFromTimes);
+
+        return invitationLists;
+    }
+
 } 

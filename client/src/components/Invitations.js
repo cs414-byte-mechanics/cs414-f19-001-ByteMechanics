@@ -14,19 +14,23 @@ class Invitations extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
+        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
 
         this.state = {
           searchString: ''
         };
+
     }
 
     render () {
+
         return (
           <div id="invitations">
             {this.renderText()}
             <div id="viewsearch">
                 <div id="invites">
                     <div id="subtitle">Current Invitations</div>
+                  <Button onClick={this.getInvitationsReceived}>View Invitations</Button>
                 </div>
                 <div id="search">
                     {this.renderSearchInputs()}
@@ -44,8 +48,6 @@ class Invitations extends React.Component {
           </div>
         );
     }
-
-
 
     renderSearchButton() {
         return (
@@ -116,6 +118,23 @@ class Invitations extends React.Component {
       this.props.sendObject(inviteObject);
       this.setState({showInvitePlayer: false});
     }
+
+    getInvitationsReceived() {
+      let getUserInvsLists = {
+        communicationType: "getUserInvsLists",
+        userName: this.props.userName
+      };
+      this.props.sendObject(getUserInvsLists);
+  }
+
+  renderSentToInvitationsTable() {
+
+  }
+
+  renderReceivedFromInvitationsTable() {
+
+  }
+
 }
 
 export default Invitations;
