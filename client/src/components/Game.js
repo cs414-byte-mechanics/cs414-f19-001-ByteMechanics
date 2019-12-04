@@ -41,7 +41,8 @@ class Game extends Component {
             sentToTimes: [],
             receivedFromNames: [],
             receivedFromTimes: []
-          }
+          },
+          showRefreshInvs: false
         }
 
         this.connection = null;
@@ -53,6 +54,8 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
+        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
+
     }
 
     componentDidMount() {
@@ -82,14 +85,14 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "invitationSentStatus": case "error" : alert(update.statusMessage);break
+            case "invitationSentStatus": case "error" : alert(update.statusMessage); this.updateInvitationSentStatus(update); break;
             case "updateBoard": this.updateBoard(update); break;
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
-            case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
+            case "inviteRejectStatus": this.handleInviteRejectUpdate(update);break;
         }
     }
 
@@ -162,6 +165,7 @@ class Game extends Component {
       this.setState({invitationSentStatus: update});
       this.setState({showInvitationSentStatus: true});
       this.setState({showInvitePlayer: true});
+      this.getInvitationsReceived();
     }
 
     setInvitationsLists(update) {
@@ -172,6 +176,19 @@ class Game extends Component {
         receivedFromTimes: update.receivedFromTimes
       };
       this.setState({invitationLists: newInvitationLists});
+    }
+
+  getInvitationsReceived() {
+    this.setState({showRefreshInvs: true})
+    let getUserInvsLists = {
+      communicationType: "getUserInvsLists",
+      userName: this.state.logIn.userName
+    };
+    this.sendObject(getUserInvsLists);
+  }
+
+    handleInviteRejectUpdate(update) {
+      this.getInvitationsReceived();
     }
 
     render(){
@@ -192,6 +209,8 @@ class Game extends Component {
                                                           invitationSentStatus={this.state.invitationSentStatus}
                                                           showInvitationSentStatus={this.state.showInvitationSentStatus}
                                                           invitationLists={this.state.invitationLists}
+                                                          getInvitationsReceived={this.getInvitationsReceived}
+                                                          showRefreshInvs={this.state.showRefreshInvs}
                           />}
                         />
                         <Route

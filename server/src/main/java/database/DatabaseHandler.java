@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.lang.Long;
 import java.util.Date;
-
+import java.lang.String;
 //NOTE: see the project README for being able to connect to the database from off-campus or when not on a CS lab machine
 
 public class DatabaseHandler {
@@ -341,4 +341,68 @@ public class DatabaseHandler {
 
         return winner;
     }
+
+    public void removeInvitation(Action action) throws Exception {
+
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        String invColTo = "invitations_sent_to";
+        String invColFrom = "received_invitations_from";
+        String invColTimeTo = "invitations_sent_times";
+        String invColTimeFrom = "invitations_received_times";
+
+        try {
+            String currentInvitationsTo = getCurrentInvitationsOrTimes(con, invColTo, action.invitationFrom);
+
+            List<String> currentInvitationsToList = Arrays.asList(currentInvitationsTo.split(","));
+            int timeIndexInvTo = currentInvitationsToList.indexOf(action.userName);
+
+            deleteInvitationOrTime(con, invColTo, currentInvitationsTo, action.invitationFrom, action.userName, false, -1);
+
+            String currentInvitationsFrom = getCurrentInvitationsOrTimes(con, invColFrom, action.userName);
+
+            List<String> currentInvitationsFromList = Arrays.asList(currentInvitationsFrom.split(","));
+            int timeIndexInvFrom = currentInvitationsFromList.indexOf(action.invitationFrom);
+
+            deleteInvitationOrTime(con, invColFrom, currentInvitationsFrom, action.userName, action.invitationFrom, false, -1);
+
+            String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(con, invColTimeTo, action.invitationFrom);
+            deleteInvitationOrTime(con, invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, action.userName, true, timeIndexInvTo);
+
+            String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(con, invColTimeFrom, action.userName);
+            deleteInvitationOrTime(con, invColTimeFrom, currentInvitationsTimesFrom, action.userName, action.invitationFrom, true, timeIndexInvFrom);
+
+        } catch(Exception e) {
+            System.out.println(e.toString());
+            throw e;
+        }
+
+        con.close();
+
+    }
+
+    public void deleteInvitationOrTime(Connection con, String colName, String currentInvitationsOrTimes, String removeFromInvitationsListOf, String invitingOrInvited, boolean isTime, int timeIndex) throws Exception {
+        try {
+            List<String> updatedListTemp = Arrays.asList(currentInvitationsOrTimes.split(","));
+            ArrayList<String> updatedList = new ArrayList<>(updatedListTemp);
+
+            if (isTime) {
+                updatedList.remove(timeIndex);
+            } else {
+                updatedList.remove(updatedList.indexOf(invitingOrInvited));
+            }
+
+            String updated = String.join(",", updatedList);
+
+            Statement updateCurrentInvsOrTimes = con.createStatement();
+
+            if (updatedList.size() == 0) {
+                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateNullInvitationsOrTimesQuery(colName, removeFromInvitationsListOf));
+            }
+            else {
+                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, removeFromInvitationsListOf));
+            }
+        } catch(Exception e) {throw e;}
+
+    }
+
 }
