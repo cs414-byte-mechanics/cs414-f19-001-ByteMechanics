@@ -109,8 +109,14 @@ class MyGames extends React.Component {
         console.log(" after set match ID " + this.state.matchID);
     }
     
-    abandonGame(){
-        alert("are you sure you want to abandon?")
+    abandonGame(matchID){
+      let abandonObject = {
+        communicationType: "quitMatch",
+        matchID: matchID,
+        playerQuitting: this.props.userName
+      }
+     this.props.sendObject(abandonObject)
+     alert("Game sucessfully abandoned")
     }
 
 //return <tr><td><a className="nav-link" href="/game">{data_array[0]}</a></td><td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
@@ -121,7 +127,7 @@ class MyGames extends React.Component {
         console.log(games);
         return this.props.gamesResults.map((data) => {
             let data_array = data.split(',');
-            return <tr><td><Button onClick={e => this.abandonGame()}><>&#x1F5D1;</></Button></td>
+            return <tr><td><Button onClick={e => this.abandonGame(data_array[0])}><>&#x1F5D1;</></Button></td>
                     <td>{data_array[1]}</td><td>{data_array[2]}</td>
                     <td><Button onClick={e => this.playGame(data_array[0])}>Play</Button></td></tr>
         })
