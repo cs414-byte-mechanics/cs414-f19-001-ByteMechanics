@@ -66,6 +66,10 @@ public class Query {
    public static String createUpdateInvitationsOrTimesQuery(String colName, String updatedInvitationsOrTimes, String userName) {
         return "UPDATE users SET " + colName + " = \"" + updatedInvitationsOrTimes + "\" WHERE username = \"" + userName + "\";";
    }
+
+    public static String createUpdateNullInvitationsOrTimesQuery(String colName, String userName) {
+        return "UPDATE users SET " + colName + " = NULL WHERE username = \"" + userName + "\";";
+    }
     
     public static String createAbandonGameQuery(String matchID, String winner){
         return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";

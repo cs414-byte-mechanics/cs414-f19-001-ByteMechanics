@@ -58,7 +58,7 @@ Here is the structure for each of the four objects:
   "pieceID": "m",
   "updatedBoard": [][],
   "whoseTurn": "",
-  "successMessage": "The player's move was valid and the board has been updated",
+  "statussMessage": "The player's move was valid and the board has been updated",
   "userName": "",
   "userEmail": "",
   "initialBoard": [][],
@@ -73,7 +73,6 @@ Here is the structure for each of the four objects:
   "userFound",
   "invitationsFrom",
   "invitationTimes",
-  "invitations": [{"invitationFrom": "", "invitationTime": ""}, {"invitationFrom": "", "invitationTime": ""}, ...]
   "matchesInProgress": [{"matchID: "", "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, {"matchID: "",                             "gameBoard": [][], "opponentName": "", "whoseTurn": "", "matchBeginTime": ""}, ...],
   "matchesCompleted": [{"matchID: "", "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, {"matchID: "",
                             "opponentName": "", "matchBeginTime": "", "matchWinner": "", "matchEndTime": ""}, ...],
@@ -133,6 +132,7 @@ List of communication types for `Update`
 * loadInvitations
 * invitationSentStatus
 * sendUserInvsLists
+* inviteRejectStatus
 
 
 List of communication types for `ServerError`:
@@ -612,8 +612,16 @@ This communication type will be used to communicate to the server that a player 
 }
 ```
 
+## inviteRejectStatus
+```javascript
+{
+  "communicationType": "inviteRejectStatus",
+  "statusMessage": "invitation rejection completed"
+  
+}
+```
+
 # Update History
-## Sprint 1
 * 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
 * 9/22/2019 zachklau renamed GameIP to ClientServerCommFormat.
 * 9/22/2019 zachklau consolidated communication types into four objects to be sent and recieved: Action, Update, ClientError, and ServerError
@@ -626,7 +634,7 @@ This communication type will be used to communicate to the server that a player 
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
 * 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
-* 12/3/2019 zachklau added rejectInvite
+* 12/3/2019 zachklau added rejectInvite, inviteRejectStatus
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

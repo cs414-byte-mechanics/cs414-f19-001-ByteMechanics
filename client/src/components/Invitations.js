@@ -14,13 +14,11 @@ class Invitations extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
-        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
         this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
         this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
 
         this.state = {
           searchString: '',
-          showRefreshInvs: false
         };
 
     }
@@ -127,26 +125,17 @@ class Invitations extends React.Component {
     }
 
     renderInviteDisplayButton() {
-      if (this.state.showRefreshInvs) {
+      if (this.props.showRefreshInvs) {
         return (
-          <Button onClick={this.getInvitationsReceived}>Refresh Invitations</Button>
+          <Button onClick={this.props.getInvitationsReceived}>Refresh Invitations</Button>
         );
       }
       else {
         return (
-          <Button onClick={this.getInvitationsReceived}>View Invitations</Button>
+          <Button onClick={this.props.getInvitationsReceived}>View Invitations</Button>
         );
       }
     }
-
-    getInvitationsReceived() {
-      this.setState({showRefreshInvs: true})
-      let getUserInvsLists = {
-        communicationType: "getUserInvsLists",
-        userName: this.props.userName
-      };
-      this.props.sendObject(getUserInvsLists);
-  }
 
   renderSentToInvitationsTable() {
       let toNames = this.props.invitationLists.sentToNames;
@@ -164,6 +153,15 @@ class Invitations extends React.Component {
               </thead>
               <tbody>{this.renderSentToTableRows()}</tbody>
             </Table>
+            </CardBody>
+          </Card>
+        );
+      }
+      else if (this.props.showRefreshInvs) {
+        return (
+          <Card className="card_condensed">
+            <CardBody>
+              <CardTitle>No sent invitations to show</CardTitle>
             </CardBody>
           </Card>
         );
@@ -200,6 +198,15 @@ class Invitations extends React.Component {
               </thead>
               <tbody>{this.renderReceivedFromTableRows()}</tbody>
             </Table>
+          </CardBody>
+        </Card>
+      );
+    }
+    else if (this.props.showRefreshInvs) {
+      return (
+        <Card className="card_condensed">
+          <CardBody>
+            <CardTitle>No received invitations to show</CardTitle>
           </CardBody>
         </Card>
       );

@@ -395,8 +395,8 @@ public class DatabaseHandler {
 
             Statement updateCurrentInvsOrTimes = con.createStatement();
 
-            if (updatedList.size() == 1) {
-                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, "NULL", removeFromInvitationsListOf));
+            if (updatedList.size() == 0) {
+                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateNullInvitationsOrTimesQuery(colName, removeFromInvitationsListOf));
             }
             else {
                 ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, removeFromInvitationsListOf));
