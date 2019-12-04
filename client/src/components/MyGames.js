@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/MyGames.scss'
 import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
-import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
+import { FaTrashAlt as Trash, FaPlay as Play} from 'react-icons/fa'
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import GameBoard from './GameBoard.js'
 
@@ -127,9 +127,10 @@ class MyGames extends React.Component {
         console.log(games);
         return this.props.gamesResults.map((data) => {
             let data_array = data.split(',');
-            return <tr><td><Button onClick={e => this.abandonGame(data_array[0])}><>&#x1F5D1;</></Button></td>
+            return <tr>
                     <td>{data_array[1]}</td><td>{data_array[2]}</td>
-                    <td><Button onClick={e => this.playGame(data_array[0])}>Play</Button></td></tr>
+                    <td><Play onClick={e => this.playGame(data_array[0])}/></td>
+                    <td><Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
         })
     }
 

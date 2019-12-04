@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/Invitations.scss'
 import {ButtonGroup, Input, Button, Table, Card, CardBody, CardTitle} from 'reactstrap';
-import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
+import { FaEnvelopeOpenText as Invite, FaCheck as Accept, FaTimes as Reject} from 'react-icons/fa'
 
 class Invitations extends React.Component {
 
