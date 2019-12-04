@@ -74,6 +74,10 @@ public class Query {
     public static String createAbandonGameQuery(String matchID, String winner){
         return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
     }
+    
+    public static String createGetGameInfoQuery(String matchID){
+        return "SELECT board, p1, p2, next_turn FROM matches WHERE match_id = " + matchID + ";";
+    }
    
    public static String boardToString(String[][] board){
         String boardAsString = "";

@@ -30,6 +30,7 @@ public class UpdateFactory
             case "searchGames": return this.buildSearchGamesResult(action);
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             case "rejectInvite": return this.buildInviteRejectStatus(action);
+            case "requestGameLoad": return this.retrieveSingleGame(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -263,6 +264,15 @@ public class UpdateFactory
             return new ServerError(-1, "Error in trying to reject invitation.");
         }
         update.statusMessage = "invite rejection complete";
+        return update;
+    }
+    
+    private Update retrieveSingleGame(Action action){
+        
+        Update update = new Update();
+        
+        
+        
         return update;
     }
 
