@@ -29,6 +29,7 @@ public class UpdateFactory
             case "sendInvitation": return this.buildInvitationSentStatus(action);
             case "searchGames": return this.buildSearchGamesResult(action);
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
+            case "rejectInvite": return this.buildInvitationRejection(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -250,6 +251,18 @@ public class UpdateFactory
         update.sentToTimes = invitationLists.get(1);
         update.receivedFromNames = invitationLists.get(2);
         update.receivedFromTimes = invitationLists.get(3);
+        return update;
+    }
+
+    private Update buildInvitationRejection(Action action) {
+        Update update = new Update();
+
+        try {
+            db.removeInvitation(action);
+        } catch(Exception e) {
+            return new ServerError(-1, "Error in trying to reject invitation.");
+        }
+
         return update;
     }
 

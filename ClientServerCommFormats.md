@@ -118,6 +118,7 @@ List of communication types for `Action`:
 * searchGames
 * requestGameLoad
 * getUserInvsLists
+* rejectInvite
 
 List of communication types for `Update`
 
@@ -599,6 +600,17 @@ This communication type will be used to communicate to the server that a player 
   "receivedFromNames": [],
   "receivedFromTimes": []
 }
+````
+
+## rejectInvite
+
+```javascript
+{
+  "communicationType": "rejectInvite",
+  "userName": "name of user",
+  "invitationFrom": "name of user who sent invitation"
+}
+```
 
 # Update History
 ## Sprint 1
@@ -614,6 +626,7 @@ This communication type will be used to communicate to the server that a player 
 * 11/1/2019 zahklau added searchResults, searchUser, and added userFound field to Update.
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
 * 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
+* 12/3/2019 zachklau added rejectInvite
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

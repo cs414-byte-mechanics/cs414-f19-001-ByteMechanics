@@ -16,6 +16,7 @@ class Invitations extends React.Component {
         this.listenForEnter = this.listenForEnter.bind(this);
         this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
         this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
+        this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
 
         this.state = {
           searchString: '',
@@ -217,7 +218,7 @@ class Invitations extends React.Component {
           <td>
             <ButtonGroup>
               <Button id="accept" className="button_accept">Accept</Button>
-              <Button id="reject" className="button_reject">Reject</Button>
+              <Button id="reject" className="button_reject" onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}>Reject</Button>
             </ButtonGroup>
           </td>
         </tr>)
@@ -228,6 +229,15 @@ class Invitations extends React.Component {
   convertToDate(timeMilli) {
       let date = new Date(parseInt(timeMilli,10));
       return date.toString().substring(0,23);
+  }
+
+  handleRejectInvitationButtonClick(invitationFrom) {
+    let rejectInvite = {
+      communicationType: "rejectInvite",
+      userName: this.props.userName,
+      invitationFrom: invitationFrom
+    };
+    this.props.sendObject(rejectInvite);
   }
 
 }
