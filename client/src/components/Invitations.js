@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/Invitations.scss'
 import {ButtonGroup, Input, Button, Table, Card, CardBody, CardTitle} from 'reactstrap';
-import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
+import { FaEnvelopeOpenText as Invite, FaCheck as Accept, FaTimes as Reject} from 'react-icons/fa'
 
 class Invitations extends React.Component {
 
@@ -224,8 +224,8 @@ class Invitations extends React.Component {
           <td>{this.convertToDate(timesList[i])}</td>
           <td>
             <ButtonGroup>
-              <Button id="accept" className="button_accept">Accept</Button>
-              <Button id="reject" className="button_reject" onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}>Reject</Button>
+              <Accept id="accept"/>
+              <Reject onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}/>
             </ButtonGroup>
           </td>
         </tr>)

@@ -2,9 +2,10 @@ import React from 'react';
 import Dashboard from "./Dashboard";
 import './styles/MyGames.scss'
 import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
-import { FaEnvelopeOpenText as Invite } from 'react-icons/fa'
+import { FaTrashAlt as Trash, FaPlay as Play} from 'react-icons/fa'
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import GameBoard from './GameBoard.js'
+import Confirm from './Confirm.js'
 
 class MyGames extends React.Component {
 
@@ -16,6 +17,7 @@ class MyGames extends React.Component {
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.goToGamePage = this.goToGamePage.bind(this);
+        this.abandonGame = this.abandonGame.bind(this);
 
         this.state = {
           searchString: '',
@@ -107,17 +109,32 @@ class MyGames extends React.Component {
 //        this.setState({matchID: id});
         console.log(" after set match ID " + this.state.matchID);
     }
+    
+    abandonGame(matchID){
+      let abandonObject = {
+        communicationType: "quitMatch",
+        matchID: matchID,
+        playerQuitting: this.props.userName
+      }
+     this.props.sendObject(abandonObject)
+     alert("Game sucessfully abandoned")
+    }
 
 //return <tr><td><a className="nav-link" href="/game">{data_array[0]}</a></td><td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
 //            return <tr><td><div onClick={e => this.playGame(data_array[0])}>{data_array[0]}</div></td>
 //                        <td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
 
+//                     <Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
+
     renderTableData(games){
         console.log(games);
         return this.props.gamesResults.map((data) => {
             let data_array = data.split(',');
-            return <tr><td>{data_array[1]}</td><td>{data_array[2]}</td>
-                    <td><Button onClick={e => this.playGame(data_array[0])}>Play</Button></td></tr>
+            return <tr>
+                    <td>{data_array[1]}</td><td>{data_array[2]}</td>
+                    <td><Play onClick={e => this.playGame(data_array[0])}/></td>
+                    <td><Confirm onClick={e => this.abandonGame(data_array[0])} button=<Trash/> reason="abandon"/></td></tr>
+
         })
     }
 
