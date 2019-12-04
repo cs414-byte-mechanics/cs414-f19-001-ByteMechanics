@@ -224,8 +224,8 @@ class Invitations extends React.Component {
           <td>{this.convertToDate(timesList[i])}</td>
           <td>
             <ButtonGroup>
-              <Button id="accept" className="button_accept">Accept</Button>
-              <Button id="reject" className="button_reject" onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}>Reject</Button>
+              <Accept id="accept"/>
+              <Reject onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}/>
             </ButtonGroup>
           </td>
         </tr>)
