@@ -285,6 +285,7 @@ public class UpdateFactory
                 }
             }
             
+            update.communicationType = "singleGameInfo";
             update.updatedBoard = board;
             update.matchID = action.matchID;
             update.whoseTurn = results.getString("next_turn");
