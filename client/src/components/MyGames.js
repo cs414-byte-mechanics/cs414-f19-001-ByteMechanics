@@ -16,6 +16,7 @@ class MyGames extends React.Component {
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.goToGamePage = this.goToGamePage.bind(this);
+        this.abandonGame = this.abandonGame.bind(this);
 
         this.state = {
           searchString: '',
@@ -107,6 +108,10 @@ class MyGames extends React.Component {
 //        this.setState({matchID: id});
         console.log(" after set match ID " + this.state.matchID);
     }
+    
+    abandonGame(){
+        alert("are you sure you want to abandon?")
+    }
 
 //return <tr><td><a className="nav-link" href="/game">{data_array[0]}</a></td><td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
 //            return <tr><td><div onClick={e => this.playGame(data_array[0])}>{data_array[0]}</div></td>
@@ -116,7 +121,8 @@ class MyGames extends React.Component {
         console.log(games);
         return this.props.gamesResults.map((data) => {
             let data_array = data.split(',');
-            return <tr><td>{data_array[1]}</td><td>{data_array[2]}</td>
+            return <tr><td><Button onClick={e => this.abandonGame()}><>&#x1F5D1;</></Button></td>
+                    <td>{data_array[1]}</td><td>{data_array[2]}</td>
                     <td><Button onClick={e => this.playGame(data_array[0])}>Play</Button></td></tr>
         })
     }
