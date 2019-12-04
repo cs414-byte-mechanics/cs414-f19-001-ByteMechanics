@@ -5,6 +5,7 @@ import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropd
 import { FaTrashAlt as Trash, FaPlay as Play} from 'react-icons/fa'
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import GameBoard from './GameBoard.js'
+import Confirm from './Confirm.js'
 
 class MyGames extends React.Component {
 
@@ -123,6 +124,8 @@ class MyGames extends React.Component {
 //            return <tr><td><div onClick={e => this.playGame(data_array[0])}>{data_array[0]}</div></td>
 //                        <td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
 
+//                     <Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
+
     renderTableData(games){
         console.log(games);
         return this.props.gamesResults.map((data) => {
@@ -130,7 +133,8 @@ class MyGames extends React.Component {
             return <tr>
                     <td>{data_array[1]}</td><td>{data_array[2]}</td>
                     <td><Play onClick={e => this.playGame(data_array[0])}/></td>
-                    <td><Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
+                    <td><Confirm onClick={e => this.abandonGame(data_array[0])} button=<Trash/> reason="abandon"/></td></tr>
+
         })
     }
 
