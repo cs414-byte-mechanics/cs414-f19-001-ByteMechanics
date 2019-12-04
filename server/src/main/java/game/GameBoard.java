@@ -83,7 +83,6 @@ public class GameBoard{
     */
     public void loadGame(String[][] boardFromDatabase){
         //If the character is lower case, it's player 1
-        
         for(int i = 0; i < NUM_ROWS; i++){
             for(int j = 0; j < NUM_COLUMNS; j++){
                 int player;
@@ -114,7 +113,7 @@ public class GameBoard{
         } else if(pieceID == 'p' || pieceID == 'P'){
             return new PawnPiece(row, col, player);
         } else if (pieceID =='s' || pieceID == 'S'){
-            return new PawnPiece(row, col, player); // this line has problem
+            return new PawnPiece(row, col, player);
         } else {
             return null;
         }
@@ -213,7 +212,7 @@ public class GameBoard{
             board[startingRow][startingCol] = null;
 
             if(board[row][col]  instanceof PawnPiece){
-                checkForSuperPawn(piece);
+                checkForSuperPawn(board[row][col]);
             }
         }
     }
@@ -228,11 +227,13 @@ public class GameBoard{
     */
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol) throws Exception {
         GamePiece movingPiece = getGamePiece(fromRow,fromCol);
-
         movePiece(movingPiece, toRow, toCol);
         
         if(movingPiece instanceof PawnPiece){
             checkForSuperPawn(movingPiece);
+
+//        if(getGamePiece(toRow,toCol) instanceof PawnPiece){
+//            checkForSuperPawn(getGamePiece(toRow,toCol));
         }
     }
     

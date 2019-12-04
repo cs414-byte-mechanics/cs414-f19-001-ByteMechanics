@@ -3,19 +3,21 @@ package Game;
 public class PawnPiece extends GamePiece {
 
     // every pawn can be promoted as a superPawn / can cross river 
-    public boolean superPawn  ;
+    public boolean superPawn ;
 
     /* initial constructor*/
     public PawnPiece(){ }
 
     public PawnPiece(int row, int col, int player){
         super(row, col, player);
-        superPawn = false;
-//        this.crossedRiver = false;
+        superPawn = false ;
+
+//        String piece = (this.superPawn == true) ? "s" : "p";
+//        this.pieceID = (this.player == 1) ? piece : piece.toUpperCase();
     }
 
     public String pieceIDString(){
-        GameBoard congoGame = new GameBoard();
+//        GameBoard congoGame = new GameBoard();
         if (this.superPawn){
             return (player == 1) ? "s" : "S";}
         else
