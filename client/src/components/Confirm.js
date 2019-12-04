@@ -24,7 +24,7 @@ class Confirm extends React.Component {
                 <ModalHeader toggle={this.toggleModal}>Confirm {this.props.reason}</ModalHeader>
                 <ModalBody>Are you sure you want to {this.props.reason}?</ModalBody>
                 <ModalFooter>
-                <Button onClick={this.props.onClick}>Yes</Button>{' '}
+                <Button onClick={()=>{this.props.onClick(); this.toggleModal();}}>Yes</Button>{' '}
                 <Button onClick={this.toggleModal}>No</Button>
                 </ModalFooter>
             </Modal>
