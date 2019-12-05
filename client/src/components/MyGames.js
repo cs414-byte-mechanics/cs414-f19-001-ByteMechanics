@@ -40,13 +40,6 @@ class MyGames extends React.Component {
         this.getGames();
     }
 
-
-    renderSearchButton() {
-        return (
-          <Button onClick={this.submitSearchString}>Search</Button>
-        );
-    }
-
     listenForEnter(event) {
         if (event.keyCode === 13)
             this.submitSearchString(event);
@@ -74,13 +67,6 @@ class MyGames extends React.Component {
           playerTwoName: this.state.searchString
         };
         this.props.sendObject(searchObject);
-    }
-
-    renderTableHeader() {
-        let header = ["Opponent", "Started"]
-        return header.map((title) => {
-            return <th>{title}</th>
-        })
     }
 
     goToGamePage(){
