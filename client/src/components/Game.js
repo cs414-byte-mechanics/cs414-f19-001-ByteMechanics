@@ -111,6 +111,7 @@ class Game extends Component {
         let state = this.state;
         state.games = [update.updatedBoard];
         state.next_turn = [update.whoseTurn];
+        state.match_id = [update.matchID];
         this.setState(state);
     }
 
@@ -235,8 +236,8 @@ class Game extends Component {
                             render={(props) => <Form {...props} title="Log in" action={attemptLogin} isLoggedIn={this.isLoggedIn} sendToServer={this.sendObject}/>}
                         />
                         <Route
-                            path="/game"
-                            render={(props) => <GameBoard game={this.state.games[0]} playerName = {this.state.next_turn[0]}
+                            path="/game/:matchID"
+                            render={(props) => <GameBoard {...props} game={this.state.games[0]} playerName = {this.state.next_turn[0]}
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
                                                             match_id={this.state.match_id[0]} status={this.state.status}
                                                             send={this.sendObject}/>}

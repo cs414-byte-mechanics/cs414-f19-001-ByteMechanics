@@ -12,7 +12,7 @@ class GameBoard extends Component {
             requestMove: {
                 "communicationType": "requestMoves",
                 "communicationVersion": 1,
-                "matchID": this.props.match_id,
+                "matchID": this.props.match.params.matchID,
                 "playerName": this.props.playerName,
                 "pieceID" : "",
                 "desiredMoves": [],
@@ -41,6 +41,7 @@ class GameBoard extends Component {
         }
 
     componentDidMount(){
+        console.log("Get game status");
         this.getGameStatus();
     }
 

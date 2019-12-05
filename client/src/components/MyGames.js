@@ -100,12 +100,15 @@ class MyGames extends React.Component {
 
     goToGamePage(){
         console.log("match ID " + this.state.matchID);
-        window.location.href = "/game";
+//        window.location.href = "/game/"+this.state.matchID;
     }
 
     playGame(id){
         console.log("id " + id);
-        this.setState({matchID: id},this.goToGamePage());
+//        window.location.href = "/game/"+id;
+//        window.open(`/game/${id}`);
+        this.props.matchID = id;
+//        this.setState({matchID: id},this.goToGamePage());
 //        this.setState({matchID: id});
         console.log(" after set match ID " + this.state.matchID);
     }
@@ -125,6 +128,7 @@ class MyGames extends React.Component {
 //                        <td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
 
 //                     <Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
+//                    <td><Play href={"/game/"+data_array[0]} onClick={e => this.playGame(data_array[0])}/></td>
 
     renderTableData(games){
         console.log(games);
@@ -132,7 +136,7 @@ class MyGames extends React.Component {
             let data_array = data.split(',');
             return <tr>
                     <td>{data_array[1]}</td><td>{data_array[2]}</td>
-                    <td><Play onClick={e => this.playGame(data_array[0])}/></td>
+                    <td><Play href={"/game/"+data_array[0]} onClick={e => this.playGame(data_array[0])}/></td>
                     <td><Confirm onClick={e => this.abandonGame(data_array[0])} button=<Trash/> reason="abandon"/></td></tr>
 
         })
