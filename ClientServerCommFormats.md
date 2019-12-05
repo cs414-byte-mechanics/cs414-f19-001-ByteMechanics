@@ -102,6 +102,7 @@ List of error codes:
 * 102 = Invalid move
 * 103 = Player not found in search (in search for who to invite)
 * 104 = Player cannot abandon game (due to invalid matchID or player name)
+* 105 = Game information cannot be retrieved
 
 List of communication types for `Action`:
 
@@ -577,6 +578,20 @@ This communication type will be used to communicate to the server that a player 
   "communicationType": "requestGameLoad",
   "communicationVersion": 1,
   "matchID": "",
+}
+```
+
+## singleGameInfo
+
+This communication type is a response to `requestGameLoad`
+
+```javascript
+{
+    "communicationType" : "singleGameInfo",
+    "matchID" : "match ID of game",
+    "players" : ["player1", "player2"],
+    "board" : [][],
+    "whoseTurn" : "player1 or player2"
 }
 ```
 

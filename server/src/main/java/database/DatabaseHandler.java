@@ -314,7 +314,6 @@ public class DatabaseHandler {
         return invitationLists;
     }
 
-
     public String abandonActiveGame(Action action) throws Exception {
         //Retrieve game info to get the player that didn't abandon
         Connection con = DriverManager.getConnection(database, USER, PASSWORD);
@@ -403,6 +402,12 @@ public class DatabaseHandler {
             }
         } catch(Exception e) {throw e;}
 
+    }
+    
+    public ResultSet getGameInfo(String matchID) throws Exception {
+        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
+        Statement gameInfo = con.createStatement();
+        return gameInfo.executeQuery(Query.createGetGameInfoQuery(matchID));
     }
 
 }
