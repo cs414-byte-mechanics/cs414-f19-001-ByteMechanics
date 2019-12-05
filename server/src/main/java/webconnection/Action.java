@@ -20,6 +20,7 @@ public class Action {
   public String invitationTo;
   public String invitationTime;
   public String playerQuitting;
+  public String status;
 
   @Override
   public String toString() {
@@ -39,7 +40,9 @@ public class Action {
                                   + "invitationFrom: " + this.invitationFrom + "\n"
                                   + "invitationTo: " + this.invitationTo + "\n"
                                   + "invitationTime: " + this.invitationTime + "\n"
-                                  + "playerQuitting: " + this.playerQuitting;
+                                  + "playerQuitting: " + this.playerQuitting + "\n"
+                                  + "status: " + this.status;
+
     return stringRepresentation;
 
   }
