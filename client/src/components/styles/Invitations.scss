@@ -11,21 +11,22 @@
   }
 
   .btn {
-    background-color: $backgroundColor;
+    background-color: $buttonColor;
     text-align:center;
     border: 0px;
     height: 30px;
     &:hover {
-      background-color: darken($backgroundColor, 20%);
+      background-color: $buttonHoverColor;
     }
   }
   #viewsearch {
     display:flex;
+    flex-wrap: wrap;
   }
 
   #search, #invites {
     //max-width: 300px;
-    margin: 25px auto;
+    margin: 20px;
     #subtitle {
       font-size: 25px;
       margin-bottom: 15px;
@@ -45,8 +46,6 @@
     #searchResults {
       display: flex;
       flex-direction: column;
-      width:300px;
-      max-width: 300px;
       max-height: 200px;
       overflow-y:scroll;
       p {
