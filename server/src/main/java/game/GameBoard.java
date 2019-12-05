@@ -130,7 +130,7 @@ public class GameBoard{
         /* places all pieces on one side of the board for a specific player */
         int animalRow = (player == 1) ? 0 : 6;
         int pawnRow = (player == 1) ? 1 : 5;
-        char pieceID= (player == 1) ? 'p' : 'P'; // added
+        char pieceID= (player == 1) ? 'p' : 'P';
 
         /* Create and setup animal game pieces for player */
         board[animalRow][0] = new GiraffePiece(animalRow, 0, player);
@@ -143,7 +143,7 @@ public class GameBoard{
 
         /* need to initialize all pawns */
         for (int i =0; i<=6; i++){
-            board[pawnRow][i] = new PawnPiece(pawnRow, i, player, pieceID); // added
+            board[pawnRow][i] = new PawnPiece(pawnRow, i, player, pieceID);
         }
     }
 
