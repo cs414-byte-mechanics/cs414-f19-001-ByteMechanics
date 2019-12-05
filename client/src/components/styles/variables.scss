@@ -1,2 +1,4 @@
 $backgroundColor: #b8cca9;
 $foregroundColor: #f5f5f5;
+$buttonColor: darken($backgroundColor, 20%);
+$buttonHoverColor: darken($backgroundColor, 40%);
