@@ -151,9 +151,11 @@ class GameBoard extends Component {
     generateGameStatusMessage(nextPlayer, thisPlayer){
         if (nextPlayer === thisPlayer){
             if (thisPlayer === this.state.requestMove.playerOneName){
-                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}{this.generateMessage()}</p>
+//                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}{this.generateMessage()}</p>
+                return <p><>&#127810;</>{this.state.requestMove.playerOneName}{this.generateMessage()}<>&#x1f334;</></p>
             }
-            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}</p>
+//            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}</p>
+            else return <p><>&#127809;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}<>&#x1f333;</></p>
         }
         return;
     }
@@ -173,20 +175,24 @@ class GameBoard extends Component {
     render(){
         //map piece ids to unicode icons
         const pieces = {
-            'P': <>&#x1f333;</>,
+            'P': <>&#127809;</>,
             'L': <>&#x1f981;</>,
             'G': <>&#x1f992;</>,
             'M': <>&#128018;</>,
             'E': <>&#x1F418;</>,
             'C': <>&#x1f40a;</>,
             'Z': <>&#129427;</>,
-            'p': <>&#x1f334;</>,
+            'p': <>&#127810;</>,
             'l': <>&#x1f981;</>,
             'g': <>&#x1f992;</>,
             'm': <>&#x1F435;</>,
             'e': <>&#x1F418;</>,
             'c': <>&#x1f40a;</>,
-            'z': <>&#129427;</>
+            'z': <>&#129427;</>,
+
+            /*Added for superPawn*/
+            's': <>&#x1f334;</>,
+            'S': <>&#x1f333;</>
         }
 
         //generate board from game state array

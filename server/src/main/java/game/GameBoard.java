@@ -31,17 +31,15 @@ public class GameBoard{
                 GamePiece piece = getGamePiece(row, col);
                 if(piece == null){
                     stringBoard[row][col] = " ";
-                } else {
-                    stringBoard[row][col] = piece.pieceIDString();
+                }else{
+                    stringBoard[row][col] = piece.pieceIDString(); }
                 }
             }
-        }
-        
         return stringBoard;
     }
     
     /**
-    Returns a visual represenation of the state of the board
+    Returns a visual representation of the state of the board
     */
     public String toString() {
         String row = "";
@@ -76,7 +74,6 @@ public class GameBoard{
     */
     public void loadGame(String[][] boardFromDatabase){
         //If the character is lower case, it's player 1
-        
         for(int i = 0; i < NUM_ROWS; i++){
             for(int j = 0; j < NUM_COLUMNS; j++){
                 int player;
@@ -105,7 +102,9 @@ public class GameBoard{
         } else if(pieceID == 'm' || pieceID == 'M'){
             return new MonkeyPiece(row, col, player);
         } else if(pieceID == 'p' || pieceID == 'P'){
-            return new PawnPiece(row, col, player);
+            return new PawnPiece(row, col, player, pieceID);
+        } else if (pieceID =='s' || pieceID == 'S'){
+            return new PawnPiece(row, col, player, pieceID);
         } else {
             return null;
         }
@@ -131,6 +130,7 @@ public class GameBoard{
         /* places all pieces on one side of the board for a specific player */
         int animalRow = (player == 1) ? 0 : 6;
         int pawnRow = (player == 1) ? 1 : 5;
+        char pieceID= (player == 1) ? 'p' : 'P';
 
         /* Create and setup animal game pieces for player */
         board[animalRow][0] = new GiraffePiece(animalRow, 0, player);
@@ -143,10 +143,9 @@ public class GameBoard{
 
         /* need to initialize all pawns */
         for (int i =0; i<=6; i++){
-            board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
+            board[pawnRow][i] = new PawnPiece(pawnRow, i, player, pieceID);
         }
     }
-
 
     /**
     Finds all the pieces the given player has in the river (crocodile is excluded)
@@ -202,6 +201,10 @@ public class GameBoard{
             piece.column = col;
             board[row][col] = piece;
             board[startingRow][startingCol] = null;
+
+            if(board[row][col]  instanceof PawnPiece){
+                checkForSuperPawn(board[row][col]);
+            }
         }
     }
 
@@ -215,7 +218,6 @@ public class GameBoard{
     */
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol) throws Exception {
         GamePiece movingPiece = getGamePiece(fromRow,fromCol);
-
         movePiece(movingPiece, toRow, toCol);
         
         if(movingPiece instanceof PawnPiece){
@@ -246,16 +248,22 @@ public class GameBoard{
         String lionPieceId = null;
 
         /* Find first active player*/
-        activePlayer = findPieceOwner(board, pieceCurrentLocation);
+        try {
+            activePlayer = findPieceOwner(board, pieceCurrentLocation);
 
-        /* based on the player, we define opponent's castle bound */
-        if (activePlayer == 1) {
-            opponentCastleBound = new int[]{4, 6};
-            lionPieceId = "L"; }
+            /* based on the player, we define opponent's castle bound */
+            if (activePlayer == 1) {
+                opponentCastleBound = new int[]{4, 6};
+                lionPieceId = "L";
+            }
 
-        if (activePlayer ==2) {
-            opponentCastleBound = new int[]{0, 2};
-            lionPieceId="l";}
+            if (activePlayer == 2) {
+                opponentCastleBound = new int[]{0, 2};
+                lionPieceId = "l";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return lionExist(opponentCastleBound, lionPieceId, board);
     }
@@ -268,17 +276,18 @@ public class GameBoard{
         return location % 10;
     }
 
-    public int findPieceOwner(String[][] board, int pieceCurrentLocation){
+    public int findPieceOwner(String[][] board, int pieceCurrentLocation) throws Exception{
         /* extract piece current location's row and column*/
         int col = getCol(pieceCurrentLocation);
         int row = getRow(pieceCurrentLocation);
 
         /* specify who is active player - lower case letters belongs to player 1*/
-        if ( board[row][col] != null && Character.isLowerCase(board[row][col].charAt(0)))
-            return 1 ;
+        if ( board[row][col] != null )
+        {
+            return (Character.isLowerCase(board[row][col].charAt(0)))  ? 1:2 ;
+        }
         else
-            return 2 ;
-
+            throw new Exception("Player does not exist!");
     }
 
     public boolean lionExist(int[] opponentCastleBound, String lionPieceId, String[][] board){
