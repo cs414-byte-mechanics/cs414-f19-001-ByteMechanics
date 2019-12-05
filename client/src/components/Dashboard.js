@@ -24,7 +24,10 @@ class Dashboard extends React.Component {
     render () {
         return (
             <div id="dash">
-                <p>Hi <b>{this.props.userName}</b>! Access your games and options here.</p>
+                <div className="header">
+                    <p >Hi <b>{this.props.userName}</b>! Access your games and options here.</p>
+                    <Confirm className="delete" onClick={this.unregisterUser} reason="Delete Account" button=<a className="delete">Delete Account</a>/>
+                </div>
                 <div id="features">
                     <MyGames isLoggedIn={this.props.isLoggedIn}
                              userName={this.props.userName}
@@ -44,7 +47,6 @@ class Dashboard extends React.Component {
                     />
                 </div>
 
-                <Confirm className="delete" onClick={this.unregisterUser} reason="Delete Account" button=<a className="delete">Delete account</a>/>
             </div>
         );
     }
