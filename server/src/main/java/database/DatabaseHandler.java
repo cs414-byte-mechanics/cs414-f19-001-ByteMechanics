@@ -332,20 +332,20 @@ public class DatabaseHandler  {
             List<String> currentInvitationsToList = Arrays.asList(currentInvitationsTo.split(","));
             int timeIndexInvTo = currentInvitationsToList.indexOf(action.userName);
 
-            deleteInvitationOrTime(con, invColTo, currentInvitationsTo, action.invitationFrom, action.userName, false, -1);
+            deleteInvitationOrTime(invColTo, currentInvitationsTo, action.invitationFrom, action.userName, false, -1);
 
             String currentInvitationsFrom = getCurrentInvitationsOrTimes(invColFrom, action.userName);
 
             List<String> currentInvitationsFromList = Arrays.asList(currentInvitationsFrom.split(","));
             int timeIndexInvFrom = currentInvitationsFromList.indexOf(action.invitationFrom);
 
-            deleteInvitationOrTime(con, invColFrom, currentInvitationsFrom, action.userName, action.invitationFrom, false, -1);
+            deleteInvitationOrTime(invColFrom, currentInvitationsFrom, action.userName, action.invitationFrom, false, -1);
 
             String currentInvitationsTimesTo = getCurrentInvitationsOrTimes(invColTimeTo, action.invitationFrom);
-            deleteInvitationOrTime(con, invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, action.userName, true, timeIndexInvTo);
+            deleteInvitationOrTime(invColTimeTo, currentInvitationsTimesTo, action.invitationFrom, action.userName, true, timeIndexInvTo);
 
             String currentInvitationsTimesFrom = getCurrentInvitationsOrTimes(invColTimeFrom, action.userName);
-            deleteInvitationOrTime(con, invColTimeFrom, currentInvitationsTimesFrom, action.userName, action.invitationFrom, true, timeIndexInvFrom);
+            deleteInvitationOrTime(invColTimeFrom, currentInvitationsTimesFrom, action.userName, action.invitationFrom, true, timeIndexInvFrom);
 
         } catch(Exception e) {
             System.out.println(e.toString());
@@ -354,7 +354,7 @@ public class DatabaseHandler  {
 
     }
 
-    public void deleteInvitationOrTime(Connection con, String colName, String currentInvitationsOrTimes, String removeFromInvitationsListOf, String invitingOrInvited, boolean isTime, int timeIndex) throws Exception {
+    public void deleteInvitationOrTime(String colName, String currentInvitationsOrTimes, String removeFromInvitationsListOf, String invitingOrInvited, boolean isTime, int timeIndex) throws Exception {
         try {
             List<String> updatedListTemp = Arrays.asList(currentInvitationsOrTimes.split(","));
             ArrayList<String> updatedList = new ArrayList<>(updatedListTemp);
@@ -380,7 +380,6 @@ public class DatabaseHandler  {
     }
     
     public ResultSet getGameInfo(String matchID) throws Exception {
-        Connection con = DriverManager.getConnection(database, USER, PASSWORD);
         Statement gameInfo = con.createStatement();
         return gameInfo.executeQuery(Query.createGetGameInfoQuery(matchID));
     }
