@@ -27,14 +27,13 @@ class MyGames extends React.Component {
     }
 
     getGames(){
-        setTimeout(() => {
-            let searchObject = {
-                communicationType: "searchGames",
-                userName: this.props.userName,
-                playerTwoName: ""
-            };
-            this.props.sendObject(searchObject);
-        }, 1500)
+        let searchObject = {
+            communicationType: "searchGames",
+            userName: this.props.userName,
+            playerTwoName: ""
+        };
+        this.props.sendObject(searchObject);
+
     }
 
     componentDidMount(){
@@ -123,7 +122,7 @@ class MyGames extends React.Component {
             <div id="mygames">
                 <div id="wrapper">
                     <div id="games">
-                        <div id="subtitle">Games in Progress</div>
+                        <div id="subtitle">My Games</div>
                         {this.renderSearchInputs()}
                         <div id="game_data">
                             {this.renderTableData(this.props.gamesResults)}

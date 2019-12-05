@@ -14,28 +14,27 @@ class Invitations extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
-        this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
+        // this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
         this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
+        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
         this.state = {
           searchString: '',
         };
 
 
     }
-    // componentDidMount(){
-    //     console.log(this.props);
-    //     this.props.getInvitationsReceived();
-    // }
-    //
-    // getInvitationsReceived() {
-    //     console.log("something");
-    //     // this.setState({showRefreshInvs: true})
-    //     let getUserInvsLists = {
-    //         communicationType: "getUserInvsLists",
-    //         userName: this.props.userName
-    //     };
-    //     this.props.sendObject(getUserInvsLists);
-    // }
+    componentDidMount(){
+        console.log(this.props);
+        this.getInvitationsReceived();
+    }
+
+    getInvitationsReceived() {
+        let getUserInvsLists = {
+            communicationType: "getUserInvsLists",
+            userName: this.props.userName
+        };
+        this.props.sendObject(getUserInvsLists);
+    }
 
 
     render () {
@@ -46,7 +45,6 @@ class Invitations extends React.Component {
               <div id="viewsearch">
                 <div id="invites">
                     <div id="subtitle">Current Invitations</div>
-                    {this.renderInviteDisplayButton()}
                     {this.renderSentToInvitationsTable()}
                     {this.renderReceivedFromInvitationsTable()}
                 </div>
@@ -126,21 +124,22 @@ class Invitations extends React.Component {
         invitationTo: userName
       };
       this.props.sendObject(inviteObject);
+      this.getInvitationsReceived()
       this.setState({showInvitePlayer: false});
     }
 
-    renderInviteDisplayButton() {
-      if (this.props.showRefreshInvs) {
-        return (
-          <Button onClick={this.props.getInvitationsReceived}>Refresh Invitations</Button>
-        );
-      }
-      else {
-        return (
-          <Button onClick={this.props.getInvitationsReceived}>View Invitations</Button>
-        );
-      }
-    }
+    // renderInviteDisplayButton() {
+    //   if (this.props.showRefreshInvs) {
+    //     return (
+    //       <Button onClick={this.getInvitationsReceived}>Refresh Invitations</Button>
+    //     );
+    //   }
+    //   else {
+    //     return (
+    //       <Button onClick={this.getInvitationsReceived}>View Invitations</Button>
+    //     );
+    //   }
+    // }
 
   renderSentToInvitationsTable() {
       let toNames = this.props.invitationLists.sentToNames;
@@ -250,6 +249,7 @@ class Invitations extends React.Component {
       invitationFrom: invitationFrom
     };
     this.props.sendObject(rejectInvite);
+    this.getInvitationsReceived();
   }
 
 }
