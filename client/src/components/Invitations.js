@@ -16,40 +16,46 @@ class Invitations extends React.Component {
         this.listenForEnter = this.listenForEnter.bind(this);
         this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
         this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
-
         this.state = {
           searchString: '',
         };
 
+
     }
+    // componentDidMount(){
+    //     console.log(this.props);
+    //     this.props.getInvitationsReceived();
+    // }
+    //
+    // getInvitationsReceived() {
+    //     console.log("something");
+    //     // this.setState({showRefreshInvs: true})
+    //     let getUserInvsLists = {
+    //         communicationType: "getUserInvsLists",
+    //         userName: this.props.userName
+    //     };
+    //     this.props.sendObject(getUserInvsLists);
+    // }
+
 
     render () {
+        console.log(this.props);
 
         return (
           <div id="invitations">
-            {this.renderText()}
-            <div id="viewsearch">
+              <div id="viewsearch">
                 <div id="invites">
                     <div id="subtitle">Current Invitations</div>
-                  {this.renderInviteDisplayButton()}
-                  <p></p>
-                  {this.renderSentToInvitationsTable()}
-                  <p></p>
-                  {this.renderReceivedFromInvitationsTable()}
+                    {this.renderInviteDisplayButton()}
+                    {this.renderSentToInvitationsTable()}
+                    {this.renderReceivedFromInvitationsTable()}
                 </div>
                 <div id="search">
+                    <div id="subtitle">Invite a friend to play!</div>
                     {this.renderSearchInputs()}
                     {this.renderInvitePlayer()}
                 </div>
             </div>
-          </div>
-        );
-    }
-
-    renderText() {
-        return (
-          <div id="title">
-              View your game invitations and invite other players here!
           </div>
         );
     }
@@ -69,7 +75,6 @@ class Invitations extends React.Component {
         return (
           <div>
               <div>
-                <div id="subtitle">Search for a User to Invite</div>
                 <div id="search_input">
                     <Input type="search" placeholder="Search for a user..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
                     <Button onClick={this.submitSearchString}>Search</Button>
@@ -183,7 +188,7 @@ class Invitations extends React.Component {
   }
 
   renderReceivedFromInvitationsTable() {
-      let fromNames = this.props.invitationLists.receivedFromNames;
+    let fromNames = this.props.invitationLists.receivedFromNames;
     if (fromNames.length > 0 && fromNames[0] !== "EMPTY") {
       return(
         <Card className="card_condensed">

@@ -11,6 +11,7 @@ class MyGames extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(props);
 
         this.submitSearchString = this.submitSearchString.bind(this);
         this.updateSearchString = this.updateSearchString.bind(this);
@@ -40,15 +41,6 @@ class MyGames extends React.Component {
         this.getGames();
     }
 
-    renderText() {
-        return (
-          <div id="title">
-              View your games in progress and select one to play!
-          </div>
-        );
-    }
-
-
 
     renderSearchButton() {
         return (
@@ -63,16 +55,10 @@ class MyGames extends React.Component {
 
     renderSearchInputs() {
         return (
-          <div>
-              <div>
-                <div id="subtitle">Search your active games</div>
-                <div id="search_input">
-                    <Input type="search" placeholder="Filter on opponent..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
-                    <Button onClick={this.submitSearchString}>Search</Button>
-                </div>
-              </div>
-
-          </div>
+            <div id="search_input">
+                <Input type="search" placeholder="Filter on opponent..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
+                <Button onClick={this.submitSearchString}>Search</Button>
+            </div>
         );
     }
 
@@ -99,15 +85,11 @@ class MyGames extends React.Component {
     }
 
     goToGamePage(){
-        console.log("match ID " + this.state.matchID);
         window.location.href = "/game";
     }
 
     playGame(id){
-        console.log("id " + id);
         this.setState({matchID: id},this.goToGamePage());
-//        this.setState({matchID: id});
-        console.log(" after set match ID " + this.state.matchID);
     }
     
     abandonGame(matchID){
@@ -120,42 +102,32 @@ class MyGames extends React.Component {
      alert("Game sucessfully abandoned")
     }
 
-//return <tr><td><a className="nav-link" href="/game">{data_array[0]}</a></td><td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
-//            return <tr><td><div onClick={e => this.playGame(data_array[0])}>{data_array[0]}</div></td>
-//                        <td>{data_array[1]}</td><td>{data_array[2]}</td></tr>
-
-//                     <Trash onClick={e => this.abandonGame(data_array[0])}/></td></tr>
-
     renderTableData(games){
-        console.log(games);
-        return this.props.gamesResults.map((data) => {
-            let data_array = data.split(',');
-            return <tr>
-                    <td>{data_array[1]}</td><td>{data_array[2]}</td>
-                    <td><Play onClick={e => this.playGame(data_array[0])}/></td>
-                    <td><Confirm onClick={e => this.abandonGame(data_array[0])} button=<Trash/> reason="abandon"/></td></tr>
+        if(this.props.gamesResults.length===0) return (<p>No matches found</p>);
 
+        return this.props.gamesResults.map((data) => {
+        let data_array = data.split(',');
+        return (
+            <div className="result">
+                <p><b>{data_array[1]}</b></p><p>Last updated {data_array[2]}</p>
+                <div className="game_buttons">
+                    <Play title="Play" className="game_buttons" onClick={e => this.playGame(data_array[0])}/>
+                    <Confirm title="Abandon" className="game_buttons" onClick={e => this.abandonGame(data_array[0])} button=<Trash className="game_buttons"/> reason="Abandon Game"/>
+                </div>
+            </div>);
         })
     }
 
     render () {
         return (
             <div id="mygames">
-                {this.renderText()}
-                <div id="viewsearch">
+                <div id="wrapper">
                     <div id="games">
                         <div id="subtitle">Games in Progress</div>
-                        <div id="game_data">
-                        <table id='activeGames'>
-                            <tbody>
-                                <tr>{this.renderTableHeader()}</tr>
-                                {this.renderTableData(this.props.gamesResults)}
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>
-                    <div id="search">
                         {this.renderSearchInputs()}
+                        <div id="game_data">
+                            {this.renderTableData(this.props.gamesResults)}
+                        </div>
                     </div>
                 </div>
             </div>

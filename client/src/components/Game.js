@@ -168,6 +168,16 @@ class Game extends Component {
       this.getInvitationsReceived();
     }
 
+    getInvitationsReceived() {
+        console.log("something");
+        this.setState({showRefreshInvs: true})
+        let getUserInvsLists = {
+            communicationType: "getUserInvsLists",
+            userName: this.state.logIn.userName
+        };
+        this.sendObject(getUserInvsLists);
+    }
+
     setInvitationsLists(update) {
       let newInvitationLists = {
         sentToNames: update.sentToNames,
@@ -178,14 +188,6 @@ class Game extends Component {
       this.setState({invitationLists: newInvitationLists});
     }
 
-  getInvitationsReceived() {
-    this.setState({showRefreshInvs: true})
-    let getUserInvsLists = {
-      communicationType: "getUserInvsLists",
-      userName: this.state.logIn.userName
-    };
-    this.sendObject(getUserInvsLists);
-  }
 
     handleInviteRejectUpdate(update) {
       this.getInvitationsReceived();
@@ -195,36 +197,27 @@ class Game extends Component {
 
         return(
             <div id="Application">
-                <Header sendObject={this.sendObject} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
+                <Header sendObject={this.sendObject} userName={this.state.logIn.userName} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
                 <div id="page_container">
                     <Switch location={window.location}>
                         <Route
-                          exact
-                          path="/invitations"
-                          render={(props) => <Invitations isLoggedIn={this.isLoggedIn}
-                                                          userName={this.state.logIn.userName}
-                                                          sendObject={this.sendObject}
-                                                          searchResult={this.state.searchResult}
-                                                          showInvitePlayer={this.state.showInvitePlayer}
-                                                          invitationSentStatus={this.state.invitationSentStatus}
-                                                          showInvitationSentStatus={this.state.showInvitationSentStatus}
-                                                          invitationLists={this.state.invitationLists}
-                                                          getInvitationsReceived={this.getInvitationsReceived}
-                                                          showRefreshInvs={this.state.showRefreshInvs}
-                          />}
-                        />
-                        <Route
-                            exact
-                            path="/mygames"
-                            render={(props) => <MyGames isLoggedIn={this.isLoggedIn}
-                                                        userName={this.state.logIn.userName}
-                                                        gamesResults={this.state.searchGames}
-                                                        sendObject={this.sendObject}/>}
-                        />
-                        <Route
                             exact
                             path="/"
-                            render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName} logOut={this.logOut} sendToServer={this.sendObject}/>}
+                            render={(props) => <Home
+                                                    isLoggedIn={this.isLoggedIn}
+                                                    userName={this.state.logIn.userName}
+                                                    logOut={this.logOut}
+                                                    sendObject={this.sendObject}
+                                                    searchResult={this.state.searchResult}
+                                                    showInvitePlayer={this.state.showInvitePlayer}
+                                                    invitationSentStatus={this.state.invitationSentStatus}
+                                                    showInvitationSentStatus={this.state.showInvitationSentStatus}
+                                                    invitationLists={this.state.invitationLists}
+                                                    getInvitationsReceived={this.getInvitationsReceived}
+                                                    gamesResults={this.state.searchGames}
+                                                    showRefreshInvs={this.state.showRefreshInvs}
+
+                                />}
                         />
                         <Route
                             path="/register"
