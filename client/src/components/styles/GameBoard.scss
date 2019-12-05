@@ -30,26 +30,48 @@ $playerTwoColor: blue;
         display: flex;
         flex-wrap:nowrap;
         .piece {
+            padding:8px;
             font-size:30px;
             background: $boardColor;
+            outline: black 1px solid;
             display: flex;
             justify-content: center;
             align-items: center;
             width: 80px;
             height: 80px;
-            outline: black 1px solid;
             transition: .2s;
             cursor: pointer;
-            &.one {
-                text-shadow: 2px 2px $playerOneColor;
+            &.player {
+                span {
+                    height:100%;
+                    -moz-border-radius: 50%; /* or 50% */
+                    border-radius: 50%; /* or 50% */
+                    border: darken($boardColor, 30%) 7px solid;
+                }
             }
-            &.two {
-                text-shadow: 2px 2px $playerTwoColor;
-            }
+
             &.river {
+
+                &.player {
+                    span {
+                        height:100%;
+                        -moz-border-radius: 50%; /* or 50% */
+                        border-radius: 50%; /* or 50% */
+                        border: darken($riverColor, 30%) 7px solid;
+                    }
+                }
                 background: $riverColor;
             }
             &.castle {
+                &.player {
+                    span {
+
+                        height:100%;
+                        -moz-border-radius: 50%; /* or 50% */
+                        border-radius: 50%; /* or 50% */
+                        border: darken($castleColor, 30%) 7px solid;
+                    }
+                }
                 background: $castleColor;
             }
             &.selected {

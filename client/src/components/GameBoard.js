@@ -130,7 +130,11 @@ class GameBoard extends Component {
         return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move===moveLoc) && (pieceLoc!==moveLoc)) ? "move" : ""}`
     }
     player(i, j) {
-        return this.props.game[i][j] !== this.props.game[i][j].toUpperCase() ? "one" : "two"
+        let isPlayer1 = this.props.username === this.state.requestMove.playerOneName
+        if(this.props.game[i][j].length===0) return ""
+        if(this.props.game[i][j] === this.props.game[i][j].toLowerCase() && isPlayer1) return "player"
+        else if(this.props.game[i][j] === this.props.game[i][j].toUpperCase() && !isPlayer1) return "player"
+
     }
 
     //generate classes for styling
@@ -192,15 +196,17 @@ class GameBoard extends Component {
             'S': <>&#x1f333;</>
         }
 
+        let isPlayer1 = this.props.username === this.state.requestMove.playerOneName
+        let boardArray = (isPlayer1) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
         //generate board from game state array
         let board =
             <div className="board">
                 <div className="player1">
                     {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 </div>
-                {this.props.game.map((row, i)=>
+                {boardArray.map((row, i)=>
                     <div className="board_row">{row.map((piece, j)=>
-                        <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}>{pieces[piece]}</div>
+                        <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
                         )}
                     </div>
                 )}
