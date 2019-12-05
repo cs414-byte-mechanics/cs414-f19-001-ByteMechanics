@@ -28,27 +28,18 @@ public class GameBoard{
     
         for(int row = 0; row < NUM_ROWS; row++){
             for(int col = 0; col < NUM_COLUMNS; col++){
-
                 GamePiece piece = getGamePiece(row, col);
                 if(piece == null){
                     stringBoard[row][col] = " ";
-                }
-                else {
-                    stringBoard[row][col] = piece.pieceIDString();
-                    if ((piece instanceof PawnPiece) ) {
-                        PawnPiece pawn = (PawnPiece) piece ;
-                        checkForSuperPawn(pawn);
-                        if (pawn.superPawn == true)
-                            stringBoard[row][col] = (Character.isLowerCase((pawn.pieceIDString()).charAt(0)))? "s" : "S";
-                        }
-                    }
+                }else{
+                    stringBoard[row][col] = piece.pieceIDString(); }
                 }
             }
         return stringBoard;
     }
     
     /**
-    Returns a visual represenation of the state of the board
+    Returns a visual representation of the state of the board
     */
     public String toString() {
         String row = "";
@@ -111,9 +102,9 @@ public class GameBoard{
         } else if(pieceID == 'm' || pieceID == 'M'){
             return new MonkeyPiece(row, col, player);
         } else if(pieceID == 'p' || pieceID == 'P'){
-            return new PawnPiece(row, col, player);
+            return new PawnPiece(row, col, player, pieceID);
         } else if (pieceID =='s' || pieceID == 'S'){
-            return new PawnPiece(row, col, player);
+            return new PawnPiece(row, col, player, pieceID);
         } else {
             return null;
         }
@@ -139,6 +130,7 @@ public class GameBoard{
         /* places all pieces on one side of the board for a specific player */
         int animalRow = (player == 1) ? 0 : 6;
         int pawnRow = (player == 1) ? 1 : 5;
+        char pieceID= (player == 1) ? 'p' : 'P'; // added
 
         /* Create and setup animal game pieces for player */
         board[animalRow][0] = new GiraffePiece(animalRow, 0, player);
@@ -151,10 +143,9 @@ public class GameBoard{
 
         /* need to initialize all pawns */
         for (int i =0; i<=6; i++){
-            board[pawnRow][i] = new PawnPiece(pawnRow, i, player);
+            board[pawnRow][i] = new PawnPiece(pawnRow, i, player, pieceID); // added
         }
     }
-
 
     /**
     Finds all the pieces the given player has in the river (crocodile is excluded)
@@ -231,9 +222,6 @@ public class GameBoard{
         
         if(movingPiece instanceof PawnPiece){
             checkForSuperPawn(movingPiece);
-
-//        if(getGamePiece(toRow,toCol) instanceof PawnPiece){
-//            checkForSuperPawn(getGamePiece(toRow,toCol));
         }
     }
     
@@ -253,16 +241,16 @@ public class GameBoard{
         board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
     }
 
-    public boolean lionInCastle(String[][] board, int pieceCurrentLocation) {
+    public boolean lionInCastle(String[][] board, int pieceCurrentLocation){
 
         int activePlayer;
         int[] opponentCastleBound = null;
         String lionPieceId = null;
-        Game game = new Game();
 
         /* Find first active player*/
         try {
             activePlayer = findPieceOwner(board, pieceCurrentLocation);
+
             /* based on the player, we define opponent's castle bound */
             if (activePlayer == 1) {
                 opponentCastleBound = new int[]{4, 6};

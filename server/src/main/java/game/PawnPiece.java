@@ -8,16 +8,12 @@ public class PawnPiece extends GamePiece {
     /* initial constructor*/
     public PawnPiece(){ }
 
-    public PawnPiece(int row, int col, int player){
+    public PawnPiece(int row, int col, int player, char pieceType){
         super(row, col, player);
-        superPawn = false ;
-
-//        String piece = (this.superPawn == true) ? "s" : "p";
-//        this.pieceID = (this.player == 1) ? piece : piece.toUpperCase();
+        superPawn = ((pieceType == 'p') || (pieceType == 'P')) ? false : true;
     }
 
     public String pieceIDString(){
-//        GameBoard congoGame = new GameBoard();
         if (this.superPawn){
             return (player == 1) ? "s" : "S";}
         else
