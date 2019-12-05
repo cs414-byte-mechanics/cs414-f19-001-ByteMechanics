@@ -106,8 +106,7 @@ class MyGames extends React.Component {
     playGame(id){
         console.log("id " + id);
 //        window.location.href = "/game/"+id;
-//        window.open(`/game/${id}`);
-        this.props.matchID = id;
+        window.open(`/game/${id}`);
 //        this.setState({matchID: id},this.goToGamePage());
 //        this.setState({matchID: id});
         console.log(" after set match ID " + this.state.matchID);

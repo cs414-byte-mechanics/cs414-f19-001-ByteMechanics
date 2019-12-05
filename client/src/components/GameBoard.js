@@ -34,7 +34,7 @@ class GameBoard extends Component {
             let searchObject = {
                 communicationType: "requestGameLoad",
                 communicationVersion: this.state.requestMove.communicationVersion,
-                matchID: this.props.match_id
+                matchID: this.props.match.params.matchID
             };
             this.props.send(searchObject);
         }, 1500)
