@@ -18,11 +18,11 @@ class Confirm extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={this.props.className} title={this.props.title}>
             <div onClick={this.toggleModal}>{this.props.button}</div>
             <Modal isOpen={this.state.open} toggle={this.toggleModal}>
                 <ModalHeader toggle={this.toggleModal}>Confirm {this.props.reason}</ModalHeader>
-                <ModalBody>Are you sure you want to {this.props.reason}?</ModalBody>
+                <ModalBody>Are you sure you want to {this.props.reason.toLowerCase()}?</ModalBody>
                 <ModalFooter>
                 <Button onClick={()=>{this.props.onClick(); this.toggleModal();}}>Yes</Button>{' '}
                 <Button onClick={this.toggleModal}>No</Button>
