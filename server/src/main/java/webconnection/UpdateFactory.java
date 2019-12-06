@@ -32,6 +32,7 @@ public class UpdateFactory
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             case "rejectInvite": return this.buildInviteRejectStatus(action);
             case "requestGameLoad": return this.retrieveSingleGame(action);
+            case "acceptInvite": return this.buildInviteAcceptStatus(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -303,4 +304,7 @@ public class UpdateFactory
             return new ServerError(105, "Game information cannot be retrieved");
         }
     }
+
+
+
 }
