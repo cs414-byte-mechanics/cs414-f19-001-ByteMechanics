@@ -223,10 +223,7 @@ public class UpdateFactory
         update.userName= action.userName;
         try {
             update.searchResults = db.searchGames(action);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ServerError(-1, e.getMessage());
-        }
+        } catch(Exception e) {}
 
         return update;
     }

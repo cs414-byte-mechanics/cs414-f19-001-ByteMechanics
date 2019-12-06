@@ -23,7 +23,7 @@ public class Query {
    
    public static String createAddNewGameQuery(Action action, String[][] board){
    
-        return "INSERT INTO matches (board, p1, p2, start, status) VALUES (\"" + boardToString(board) + "\", \""
+        return "INSERT INTO matches (board, p1, p2, start, status) VALUES (\"" + boardToString(board) + "\", \"" + action.playerOneName
                 + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\");";
    }
 
@@ -49,15 +49,13 @@ public class Query {
 
     public static String createSearchGamesQuery(Action action) {
         if (action.playerTwoName.compareTo("") == 0) {
-            return "SELECT * FROM matches WHERE " +
-                    "(p1 LIKE \"%" + action.userName + "%\" OR p2 LIKE \"%" + action.userName + "%\")"
-                    + (action.status.equals("All") ? ";" : " AND status = \"" + action.status.toLowerCase() + "\";");
+            return "SELECT * FROM matches WHERE winner is NULL AND " +
+                    "(p1 = \"" + action.userName + "\" OR p2 = \"" + action.userName + "\");";
         }
         else{
-            return "SELECT * FROM matches WHERE " +
-                    "((p1 LIKE \"%" + action.userName + "%\" AND p2 LIKE \"%" + action.playerTwoName + "%\") OR " +
-                    "(p1 LIKE \"%" + action.playerTwoName + "%\" AND p2 LIKE \"%" + action.userName + "%\"))"
-                    + (action.status.equals("All") ? ";" : " AND status = \"" + action.status.toLowerCase() + "\";");
+            return "SELECT * FROM matches WHERE winner is NULL AND " +
+                    "((p1 = \"" + action.userName + "\" OR p2 = \"" + action.userName + "\") AND " +
+                    "(p1 = \"" + action.playerTwoName + "\" OR p2 = \"" + action.playerTwoName + "\"));";
         }
     }
 

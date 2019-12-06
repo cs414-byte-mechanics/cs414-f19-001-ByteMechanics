@@ -4,39 +4,25 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-
   #features {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
     * {
       flex: 1 1 auto;
     }
   }
+
 }
-.header {
-  margin: 0px auto;
-  p {
-    margin: 5px 0px;
-  }
-}
+
 .delete {
-  background-color: lighten($backgroundColor, 15%);
-  font-weight:bold;
-  width:auto;
-  margin:auto 3px;
-  font-size: 15px;
+  margin-top:auto;
+  font-size: 18px;
   text-decoration: underline;
   cursor: pointer;
-  color: darken($backgroundColor, 30%);
-  * {
-    transition: .1s;
-  }
+  color: darken($backgroundColor, 25%);
+  transition: .2s;
   &:hover {
-    * {
-      background-color: darken($backgroundColor, 5%);
-      color: darken($backgroundColor, 35%)
-    }
+    color: darken($backgroundColor, 35%)
   }
 }
