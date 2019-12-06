@@ -7,6 +7,7 @@ import java.util.List;
 public class Update {
 
     public String communicationType;
+    public String[] recipients;
     public String matchID;
     public String playerName;
     public String pieceID;

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Col, Row } from 'reactstrap';
-import { Switch, Route, withRouter, Link } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import Home from './Home.js'
 import GameBoard from './GameBoard.js'
 import Form from './Form.js'
 import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
-import Invitations from "./Invitations";
-import MyGames from"./MyGames";
 
 class Game extends Component {
     constructor(props){
@@ -22,17 +19,7 @@ class Game extends Component {
           player2: ["player2"],
           next_turn: ["player1"],
           match_id: ["1"],
-          games: [
-            [
-              ["g", "m", "e", "l", "e", "c", "z"],
-              ["p", "p", "p", "p", "p", "p", "p"],
-              ["", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", ""],
-              ["P", "P", "P", "P", "P", "P", "P"],
-              ["G", "M", "E", "L", "E", "C", "Z"]
-            ]
-          ],
+          games: [[]],
           status: "active",
           searchResult: [],
           searchGames: [],
@@ -41,8 +28,7 @@ class Game extends Component {
             sentToTimes: [],
             receivedFromNames: [],
             receivedFromTimes: []
-          },
-          showRefreshInvs: false
+          }
         }
 
         this.connection = null;
@@ -54,8 +40,6 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
-        // this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
-
     }
 
     componentDidMount() {
@@ -63,15 +47,14 @@ class Game extends Component {
         this.connection = new WebSocket('ws://localhost:4444');
         this.connection.onopen = function () {
           console.log('Connected!');
-        }.bind(this);
+        }
 
         this.connection.onerror = function (error) {
           console.log('WebSocket Error: ' + error);
           alert("Cannot reach server!")
-        }.bind(this);
+        }
     
         this.connection.onmessage = function (e) {
-          console.log('Server: ' + e.data);
           let update = JSON.parse(e.data);
           this.handleUpdate(update)
         }.bind(this);
@@ -85,7 +68,8 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "invitationSentStatus": case "error" : alert(update.statusMessage); this.updateInvitationSentStatus(update); break;
+            case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
+            case "error" : alert(update.statusMessage); if(update.errorCode===105) window.location.href = "/"; break;
             case "updateBoard": this.updateBoard(update); break;
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
@@ -93,6 +77,7 @@ class Game extends Component {
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
             case "inviteAcceptStatus": break;
+            default: break;
         }
     }
 
@@ -160,13 +145,12 @@ class Game extends Component {
             setTimeout(
                 function () {
                     if (self.connection.readyState === 1) {
-                        console.log("Connection is made")
                         if (callback != null){
-                            console.log("Client: " + JSON.stringify(obj));
+                            obj.userName = self.state.logIn.userName;
                             callback();
                         }
                     } else {
-                        console.log("wait for connection...")
+
                         waitForSocketConnection(callback);
                     }
 
@@ -189,16 +173,6 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
-    // getInvitationsReceived() {
-    //     console.log("something");
-    //     this.setState({showRefreshInvs: true})
-    //     let getUserInvsLists = {
-    //         communicationType: "getUserInvsLists",
-    //         userName: this.state.logIn.userName
-    //     };
-    //     this.sendObject(getUserInvsLists);
-    // }
-
     setInvitationsLists(update) {
       let newInvitationLists = {
         sentToNames: update.sentToNames,
@@ -208,9 +182,6 @@ class Game extends Component {
       };
       this.setState({invitationLists: newInvitationLists});
     }
-
-
-
 
     render(){
 
@@ -234,8 +205,7 @@ class Game extends Component {
                                                     invitationLists={this.state.invitationLists}
                                                     gamesResults={this.state.searchGames}
                                                     showRefreshInvs={this.state.showRefreshInvs}
-
-                                />}
+                                                />}
                         />
                         <Route
                             path="/register"
@@ -250,7 +220,7 @@ class Game extends Component {
                             render={(props) => <GameBoard {...props} game={this.state.games[0]} playerName = {this.state.next_turn[0]}
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
                                                             match_id={this.state.match_id[0]} status={this.state.status}
-                                                            send={this.sendObject}/>}
+                                                            userName={this.state.logIn.userName} send={this.sendObject}/>}
                         />
                     </Switch>
                 </div>

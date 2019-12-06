@@ -87,15 +87,20 @@ public class Game {
         String whoseTurn = game.getActivePlayer();
         GameBoard board = game.getGameBoard();
         int activePlayer = (whoseTurn.compareTo(action.playerOneName) == 0) ? 1 : 2;
+        int requestingPlayer = (action.userName.compareTo(action.playerOneName) == 0) ? 1 : 2;
+
         /* which player owns the piece to be moved */
+        int pieceOwner;
         try {
-            int pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
-            return (activePlayer == pieceOwner);
+            pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
         }
         catch (Exception e){
             /* catch when there is no piece on the board */
             /* then this is not a valid sequence of moves for either player */
             throw new Exception("Player moving a non-existant game piece.");
         }
+        if(pieceOwner!=requestingPlayer) throw new Exception("Player cannot move opponent's pieces.");
+        return (activePlayer == pieceOwner);
+
     }
 }

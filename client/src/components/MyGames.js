@@ -42,7 +42,7 @@ class MyGames extends React.Component {
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value}, ()=>{console.log(this.state)})
+        this.setState({status: event.target.value})
     }
     renderSearchInputs() {
         return (
@@ -89,7 +89,7 @@ class MyGames extends React.Component {
         return this.props.gamesResults.map((data) => {
         let data_array = data.split(',');
         return (
-            <div className="result">
+            <div className="result" key={data_array[0]}>
                 <p><b>{data_array[1]}</b></p><p><i>{data_array[2]}</i></p><p>Last updated {data_array[3]}</p>
                 <div className="game_buttons">
                     <Confirm title="Abandon" className="game_buttons" onClick={e => this.abandonGame(data_array[0])} button=<Trash className="game_buttons"/> reason="Abandon Game"/>

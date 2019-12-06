@@ -33,6 +33,7 @@ public class GameTest {
     public void testMoveSequenceCorrectPlayer1() throws Exception {
         Action action = new Action();
         action.playerOneName = "Sue";
+        action.userName = "Sue";
         game.setActivePlayer("Sue");
 
         game.getGameBoard().initialize();
@@ -44,6 +45,7 @@ public class GameTest {
     public void testMoveSequenceCorrectPlayer2() throws Exception {
         Action action = new Action();
         action.playerOneName = "Sue";
+        action.userName = "Joe";
         game.setActivePlayer("Joe");
 
         game.getGameBoard().initialize();
@@ -55,6 +57,7 @@ public class GameTest {
     public void testMoveSequenceCorrectNullPiece() throws Exception {
         Action action = new Action();
         action.playerOneName = "Sue";
+        action.userName = "Joe";
         game.setActivePlayer("Joe");
 
         game.getGameBoard().initialize();
@@ -69,6 +72,7 @@ public class GameTest {
     public void testMoveSequenceCorrectWrongSeq() throws Exception {
         Action action = new Action();
         action.playerOneName = "Sue";
+        action.userName = "Sue";
         game.setActivePlayer("Joe");
 
         game.getGameBoard().initialize();

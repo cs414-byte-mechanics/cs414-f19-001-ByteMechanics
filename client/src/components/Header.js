@@ -2,9 +2,6 @@ import React from 'react';
 import { GiLion as CongoIcon } from 'react-icons/gi'
 
 class Header extends React.Component {
-    constructor(props){
-        super(props);
-    }
 
     render () {
         let logInOut =

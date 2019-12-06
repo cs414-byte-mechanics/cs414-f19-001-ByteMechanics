@@ -22,13 +22,14 @@ public class UpdateFactoryTest
 {
     WebsocketServer wss;
     WebSocket dummyClient;
-    UpdateFactory updateMaker = new UpdateFactory();
+    UpdateFactory updateMaker;
     GameBoard congoGame;
 
 
     @Before
     public void initialize() {
         wss = new WebsocketServer();
+        updateMaker = new UpdateFactory(wss);
         congoGame = new GameBoard();
         congoGame.initialize();
 
@@ -87,7 +88,7 @@ public class UpdateFactoryTest
         expected.updatedBoard[0][0] = "1";
         expected.updatedBoard[0][1] = "2";
         expected.whoseTurn = "opponent";
-        assertEquals(updateMaker.getUpdate(action),expected);
+        assertEquals(updateMaker.getUpdate(action, dummyClient),expected);
     }
 
     //implement once we are able to connect to database from off campus
@@ -110,7 +111,7 @@ public class UpdateFactoryTest
         expected.initialBoard[0][1] = "2";
         expected.whoseTurn = "opponent";
         expected.matchBeginTime = "dummy_match_begin_time";
-        assertEquals(updateMaker.getUpdate(action),expected);
+        assertEquals(updateMaker.getUpdate(action, dummyClient),expected);
     }
 
     @Test
@@ -123,7 +124,7 @@ public class UpdateFactoryTest
         expected.invitationFrom = "player1";
         expected.invitationTo = "player2";
         expected.invitationTime = "dummy_time";
-        assertEquals(updateMaker.getUpdate(action),expected);
+        assertEquals(updateMaker.getUpdate(action, dummyClient),expected);
     }
 
 //     @Test
@@ -135,7 +136,7 @@ public class UpdateFactoryTest
         action.matchID = "11";
         Update expected = new Update();
         expected.communicationType = "endMatch";
-        assertEquals(updateMaker.getUpdate(action).communicationType,expected.communicationType);
+        assertEquals(updateMaker.getUpdate(action, dummyClient).communicationType,expected.communicationType);
     }
 
     /* Fari: this test wrap up an errorInvalidMove response for invalid move and send back to client  */

@@ -30,15 +30,15 @@ class GameBoard extends Component {
     }
 
     getGameStatus(){
-        setTimeout(() => {
-            let searchObject = {
-                communicationType: "requestGameLoad",
-                communicationVersion: this.state.requestMove.communicationVersion,
-                matchID: this.props.match.params.matchID
-            };
-            this.props.send(searchObject);
-        }, 1500)
-        }
+        let searchObject = {
+            communicationType: "requestGameLoad",
+            userName: this.props.userName,
+            communicationVersion: this.state.requestMove.communicationVersion,
+            matchID: this.props.match.params.matchID
+        };
+        this.props.send(searchObject);
+
+    }
 
     componentDidMount(){
         this.getGameStatus();
@@ -52,6 +52,7 @@ class GameBoard extends Component {
             matchID: this.props.match.params.matchID,
             pieceID: this.state.requestMove.pieceID,
             desiredMoves: this.state.requestMove.desiredMoves,
+            userName: this.props.userName,
             playerName: this.props.playerName,
             playerOneName: this.props.player1,
             playerTwoName: this.props.player2
@@ -78,7 +79,7 @@ class GameBoard extends Component {
     //select a piece or move
     select(i,j){
         //only allow any item to be selected if game is active - i.e. not in "win" or "quit" state
-        if (this.props.status != "active") return;
+        if (this.props.status !== "active") return;
 
         //prevent selection of current space
         if(this.state.pieceLocation===(i * 10 + j)) return;
@@ -129,7 +130,12 @@ class GameBoard extends Component {
         return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move===moveLoc) && (pieceLoc!==moveLoc)) ? "move" : ""}`
     }
     player(i, j) {
-        return this.props.game[i][j] !== this.props.game[i][j].toUpperCase() ? "one" : "two"
+        let isPlayer1 = this.props.userName === this.props.player1
+        let isPlayer2 = this.props.userName === this.props.player2
+
+        if(this.props.game[i][j].trim()==="") return ""
+        if(this.props.game[i][j] === this.props.game[i][j].toLowerCase() && isPlayer1) return "player"
+        else if(this.props.game[i][j] === this.props.game[i][j].toUpperCase() && isPlayer2) return "player"
     }
 
     //generate classes for styling
@@ -169,6 +175,8 @@ class GameBoard extends Component {
     }
 
     render(){
+        if(this.props.game.length===0)
+            return "Loading..."
         //map piece ids to unicode icons
         const pieces = {
             'P': <>&#127809;</>,
@@ -191,15 +199,16 @@ class GameBoard extends Component {
             'S': <>&#x1f333;</>
         }
 
+        let boardArray = (true) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
         //generate board from game state array
         let board =
             <div className="board">
                 <div className="player1">
                     {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 </div>
-                {this.props.game.map((row, i)=>
-                    <div className="board_row">{row.map((piece, j)=>
-                        <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}>{pieces[piece]}</div>
+                {boardArray.map((row, i)=>
+                    <div key={i} className="board_row">{row.map((piece, j)=>
+                        <div key={i+"_"+j} className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
                         )}
                     </div>
                 )}

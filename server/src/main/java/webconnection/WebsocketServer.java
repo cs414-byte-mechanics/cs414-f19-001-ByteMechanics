@@ -1,7 +1,8 @@
 package webconnection;
 
 import java.net.InetSocketAddress;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.java_websocket.handshake.ClientHandshake;
@@ -14,19 +15,24 @@ import database.*;
 public class WebsocketServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
-    private Set<WebSocket> conns;
+    private HashMap<String, WebSocket> conns;
     private static Gson gson = new GsonBuilder().create();
   
-    UpdateFactory updateFactory = new UpdateFactory();
+    UpdateFactory updateFactory = new UpdateFactory(this);
 
     public WebsocketServer() {
         super(new InetSocketAddress(TCP_PORT));
-        conns = new HashSet<>();
+        conns = new HashMap<>();
+    }
+    public void addSession(String username, WebSocket conn) {
+        conns.put(username, conn);
+    }
+    public void removeSession(String username) {
+        conns.remove(username);
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        conns.add(conn);
         System.out.println("New connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
@@ -38,7 +44,9 @@ public class WebsocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         Action clientAction = handleClientAction(message);
-        sendUpdateToClient(conn, updateFactory.getUpdate(clientAction));
+        System.out.println(message);
+        conns.put(clientAction.userName, conn);
+        sendUpdateToClient(conn, updateFactory.getUpdate(clientAction, conn));
     }
 
     @Override
@@ -46,7 +54,6 @@ public class WebsocketServer extends WebSocketServer {
         ex.printStackTrace();
         if (conn != null) {
             System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
-            conns.remove(conn);
         }
         else System.out.println("ERROR: Connection does not exist");
     }
@@ -60,6 +67,7 @@ public class WebsocketServer extends WebSocketServer {
             System.err.println("Unable to parse client action into object!\nReason: " + e);
         }
 
+
         return action;
 
     }
@@ -71,13 +79,31 @@ public class WebsocketServer extends WebSocketServer {
         try {
             if(update.communicationType == "error") updateJSON = gson.toJson(update, ServerError.class);
             else updateJSON = gson.toJson(update, Update.class);
-            client.send(updateJSON);
+            if(update.recipients != null) {
+                for (Map.Entry<String, WebSocket> entry : conns.entrySet()) {
+                    System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+                }
+                for(String user:update.recipients) {
+                    System.out.println("Sending update to " + user);
+
+                    try {
+                        conns.get(user).send(updateJSON);
+                    }
+                    catch(Exception e) {
+                        System.err.println("Unable to send recipient the update!\nReason: " + e);
+                        e.printStackTrace();
+                    }
+                }
+            }
+            else client.send(updateJSON);
         }catch(Exception e) {
             System.err.println("Unable to send client the update!\nReason: " + e);
+            e.printStackTrace();
         }
 
         return updateJSON;
 
     }
+
 
 }
