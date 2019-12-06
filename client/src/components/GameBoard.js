@@ -79,7 +79,7 @@ class GameBoard extends Component {
     //select a piece or move
     select(i,j){
         //only allow any item to be selected if game is active - i.e. not in "win" or "quit" state
-        if (this.props.status !== "active") return;
+        if (this.props.status !== "active" || this.props.userName !== this.props.playerName) return;
 
         //prevent selection of current space
         if(this.state.pieceLocation===(i * 10 + j)) return;
@@ -153,23 +153,24 @@ class GameBoard extends Component {
 
     //generate icon & message to indicate which player's move is expected next
     generateGameStatusMessage(nextPlayer, thisPlayer){
-        if (nextPlayer === thisPlayer){
+
+        {if (nextPlayer === thisPlayer){
             if (thisPlayer === this.props.player1){
-                return <p><>&#127810;</>{this.props.player1}{this.generateMessage()}<>&#x1f334;</></p>
+                return <div className="player1"><p><>&#127810;</><b>{this.props.player1}</b>{this.generateMessage()}<>&#x1f334;</></p></div>
             }
-            else return <p><>&#127809;</>{this.props.player2}{this.generateMessage()}<>&#x1f333;</></p>
-        }
+            else return <div className="player2"><p><>&#127809;</><b>{this.props.player2}</b>{this.generateMessage()}<>&#x1f333;</></p></div>
+        }}
         return;
     }
 
     generateClearMoveButton(){
-        if (this.props.status === "active"){
+        if (this.props.status === "active" && this.props.userName === this.props.playerName){
             return <Button onClick={this.clearSelection}>Clear Move</Button>
         }
     }
 
     generateConfirmMoveButton(){
-        if (this.props.status === "active"){
+        if (this.props.status === "active" && this.props.userName === this.props.playerName){
             return <Button onClick={this.confirmSelection}>Confirm Move</Button>
         }
     }
@@ -202,19 +203,17 @@ class GameBoard extends Component {
         let boardArray = (true) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
         //generate board from game state array
         let board =
-            <div className="board">
-                <div className="player1">
-                    {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
-                </div>
+            <div>
+
+                <div className="board">
                 {boardArray.map((row, i)=>
                     <div key={i} className="board_row">{row.map((piece, j)=>
                         <div key={i+"_"+j} className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
                         )}
                     </div>
                 )}
-                <div className="player2">
-                    {this.generateGameStatusMessage(this.props.playerName, this.props.player2)}
                 </div>
+
             </div>
         
         //action buttons
@@ -226,7 +225,9 @@ class GameBoard extends Component {
 
         return (
             <div id="gameboard">
+                {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 {board}
+                {this.generateGameStatusMessage(this.props.playerName, this.props.player2)}
                 {buttons}
             </div>
         );
