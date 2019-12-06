@@ -54,7 +54,6 @@ public class WebsocketServer extends WebSocketServer {
     public Action handleClientAction(String message) {
 
         Action action = new Action();
-
         try {
             action =  gson.fromJson(message, Action.class);
         }catch(Exception e) {

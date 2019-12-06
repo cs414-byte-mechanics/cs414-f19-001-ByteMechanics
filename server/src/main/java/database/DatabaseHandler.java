@@ -27,8 +27,6 @@ public class DatabaseHandler  {
     public DatabaseHandler() {
         String tunnel = System.getenv("TUNNEL");
         if (tunnel != null) {
-            System.out.println("Using tunnel to dB");
-            System.out.println(tunnel.toString());
             database = "jdbc:mysql://localhost:" + tunnel.trim() + "/bytemechanics";
         }
         else {
