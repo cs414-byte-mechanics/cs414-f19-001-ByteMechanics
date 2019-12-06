@@ -23,8 +23,8 @@ public class Query {
    
    public static String createAddNewGameQuery(Action action, String[][] board){
    
-        return "INSERT INTO matches (board, p1, p2, start, status) VALUES (\"" + boardToString(board) + "\", \""
-                + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\");";
+        return "INSERT INTO matches (board, p1, p2, start, status, next_turn) VALUES (\"" + boardToString(board) + "\", \""
+                + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\"" + ", \"" + action.playerOneName + "\");";
    }
 
     public static String createRetrieveGameQuery(Action action){
@@ -40,7 +40,7 @@ public class Query {
    }
 
    public static String createUpdateGameWinnerQuery(int matchID, String winner){
-       return "UPDATE matches SET winner = \"" + winner + "\", status = \"finished\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
+       return "UPDATE matches SET winner = \"" + winner + "\", status = \"finished\", endTime = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
    }
 
     public static String createSearchUserQuery(Action action) {
@@ -74,7 +74,7 @@ public class Query {
     }
     
     public static String createAbandonGameQuery(String matchID, String winner){
-        return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\", end = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
+        return "UPDATE matches SET status = \"abandoned\", winner = \" " + winner + "\", endTime = CURRENT_TIMESTAMP WHERE match_id = " + matchID + ";";
     }
     
     public static String createGetGameInfoQuery(String matchID){
