@@ -15,7 +15,6 @@ public class Game {
         gameBoard = new GameBoard();
     }
 
-
     public int createNewGame(Action action) throws Exception {
         //Initialize board and pieces
         gameBoard.initialize();
