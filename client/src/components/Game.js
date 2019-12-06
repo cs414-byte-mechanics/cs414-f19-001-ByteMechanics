@@ -92,6 +92,7 @@ class Game extends Component {
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
+            case "inviteAcceptStatus": break;
         }
     }
 

@@ -15,6 +15,7 @@ class Invitations extends React.Component {
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
+        this.handleAcceptInvitationButtonClick = this.handleAcceptInvitationButtonClick.bind(this);
         this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
         this.state = {
           searchString: '',
@@ -201,7 +202,7 @@ class Invitations extends React.Component {
             <td><i>{this.convertToDate(timesList[i])}</i></td>
           <td>
             <ButtonGroup>
-              <Accept className="action_button"/>
+              <Accept className="action_button" onClick={() => this.handleAcceptInvitationButtonClick(namesList[i])}/>
               <Reject className="action_button" onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}/>
             </ButtonGroup>
           </td>
@@ -223,6 +224,16 @@ class Invitations extends React.Component {
     };
     this.props.sendObject(rejectInvite);
     this.getInvitationsReceived();
+  }
+
+  handleAcceptInvitationButtonClick(invitationFrom) {
+      let acceptInvite = {
+        communicationType: "acceptInvite",
+        userName: this.props.userName,
+        invitationFrom: invitationFrom
+      };
+      this.props.sendObject(acceptInvite);
+      this.getInvitationsReceived();
   }
 
 }
