@@ -305,6 +305,27 @@ public class UpdateFactory
         }
     }
 
-
+   private Update buildInviteAcceptStatus(Action action) {
+        Update update = new Update();
+        Action createGameAction = new Action();
+        createGameAction.communicationType = "requestBeginNewMatch";
+        createGameAction.playerOneName = action.userName;
+        createGameAction.playerTwoName = action.invitationFrom;
+        try {
+            this.createNewMatch(createGameAction);
+        } catch(Exception e) {
+            System.err.println("New match cannot be created");
+            return new ServerError(-1, "Error in creating new game.");
+        }
+        try  {
+            db.removeInvitation(action);
+        } catch (Exception e) {
+            System.err.println("Error in removing invitation");
+            return new ServerError(-1, "Error in accepting invitation");
+        }
+        update.communicationType = "inviteAcceptStatus";
+        update.statusMessage = "invitation acceptance completed";
+        return update;
+   }
 
 }
