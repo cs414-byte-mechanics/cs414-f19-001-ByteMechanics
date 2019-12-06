@@ -83,8 +83,6 @@ public class WebsocketServer extends WebSocketServer {
                 for (Map.Entry<String, WebSocket> entry : conns.entrySet()) {
                     System.out.println(entry.getKey() + ":" + entry.getValue().toString());
                 }
-
-
                 for(String user:update.recipients) {
                     System.out.println("Sending update to " + user);
 

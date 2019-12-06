@@ -306,7 +306,9 @@ public class UpdateFactory
             update.playerName = results.getString("next_turn");
             update.playerOneName = results.getString("p1");
             update.playerTwoName = results.getString("p2");
-            
+
+            if(!(action.userName.equals(update.playerOneName) || action.userName.equals(update.playerTwoName))) throw new Exception();
+
             return update;
         
         } catch(Exception e){
