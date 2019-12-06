@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Col, Row } from 'reactstrap';
-import { Switch, Route, withRouter, Link } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import Home from './Home.js'
 import GameBoard from './GameBoard.js'
 import Form from './Form.js'
 import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
-import Invitations from "./Invitations";
-import MyGames from"./MyGames";
 
 class Game extends Component {
     constructor(props){
@@ -22,17 +19,7 @@ class Game extends Component {
           player2: ["player2"],
           next_turn: ["player1"],
           match_id: ["1"],
-          games: [
-            [
-              ["g", "m", "e", "l", "e", "c", "z"],
-              ["p", "p", "p", "p", "p", "p", "p"],
-              ["", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", ""],
-              ["P", "P", "P", "P", "P", "P", "P"],
-              ["G", "M", "E", "L", "E", "C", "Z"]
-            ]
-          ],
+          games: [[]],
           status: "active",
           searchResult: [],
           searchGames: [],
@@ -60,15 +47,14 @@ class Game extends Component {
         this.connection = new WebSocket('ws://localhost:4444');
         this.connection.onopen = function () {
           console.log('Connected!');
-        }.bind(this);
+        }
 
         this.connection.onerror = function (error) {
           console.log('WebSocket Error: ' + error);
           alert("Cannot reach server!")
-        }.bind(this);
+        }
     
         this.connection.onmessage = function (e) {
-          console.log('Server: ' + e.data);
           let update = JSON.parse(e.data);
           this.handleUpdate(update)
         }.bind(this);
@@ -82,7 +68,8 @@ class Game extends Component {
     handleUpdate(update) {
         switch(update.communicationType) {
             case "registrationSuccess": this.updateLogin(update); break;
-            case "invitationSentStatus": case "error" : alert(update.statusMessage); this.updateInvitationSentStatus(update); break;
+            case "invitationSentStatus": this.updateInvitationSentStatus(update); break;
+            case "error" : alert(update.statusMessage); if(update.errorCode===105) window.location.href = "/"; break;
             case "updateBoard": this.updateBoard(update); break;
             case "loginSuccess": case "logoutSuccess": this.updateLogin(update); break;
             case "searchResult": this.updateSearchResult(update); break;
@@ -90,6 +77,7 @@ class Game extends Component {
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
             case "inviteAcceptStatus": break;
+            default: break;
         }
     }
 
@@ -157,13 +145,12 @@ class Game extends Component {
             setTimeout(
                 function () {
                     if (self.connection.readyState === 1) {
-                        console.log("Connection is made")
                         if (callback != null){
-                            console.log("Client: " + JSON.stringify(obj));
+                            obj.userName = self.state.logIn.userName;
                             callback();
                         }
                     } else {
-                        console.log("wait for connection...")
+
                         waitForSocketConnection(callback);
                     }
 

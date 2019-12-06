@@ -30,15 +30,15 @@ class GameBoard extends Component {
     }
 
     getGameStatus(){
-        setTimeout(() => {
-            let searchObject = {
-                communicationType: "requestGameLoad",
-                communicationVersion: this.state.requestMove.communicationVersion,
-                matchID: this.props.match.params.matchID
-            };
-            this.props.send(searchObject);
-        }, 1500)
-        }
+        let searchObject = {
+            communicationType: "requestGameLoad",
+            userName: this.props.userName,
+            communicationVersion: this.state.requestMove.communicationVersion,
+            matchID: this.props.match.params.matchID
+        };
+        this.props.send(searchObject);
+
+    }
 
     componentDidMount(){
         this.getGameStatus();
@@ -79,7 +79,7 @@ class GameBoard extends Component {
     //select a piece or move
     select(i,j){
         //only allow any item to be selected if game is active - i.e. not in "win" or "quit" state
-        if (this.props.status != "active") return;
+        if (this.props.status !== "active") return;
 
         //prevent selection of current space
         if(this.state.pieceLocation===(i * 10 + j)) return;
@@ -130,11 +130,12 @@ class GameBoard extends Component {
         return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move===moveLoc) && (pieceLoc!==moveLoc)) ? "move" : ""}`
     }
     player(i, j) {
-        let isPlayer1 = this.props.username === this.state.requestMove.playerOneName
-        if(this.props.game[i][j].length===0) return ""
-        if(this.props.game[i][j] === this.props.game[i][j].toLowerCase() && isPlayer1) return "player"
-        else if(this.props.game[i][j] === this.props.game[i][j].toUpperCase() && !isPlayer1) return "player"
+        let isPlayer1 = this.props.userName === this.props.player1
+        let isPlayer2 = this.props.userName === this.props.player2
 
+        if(this.props.game[i][j].trim()==="") return ""
+        if(this.props.game[i][j] === this.props.game[i][j].toLowerCase() && isPlayer1) return "player"
+        else if(this.props.game[i][j] === this.props.game[i][j].toUpperCase() && isPlayer2) return "player"
     }
 
     //generate classes for styling
@@ -174,6 +175,8 @@ class GameBoard extends Component {
     }
 
     render(){
+        if(this.props.game.length===0)
+            return "Loading..."
         //map piece ids to unicode icons
         const pieces = {
             'P': <>&#127809;</>,
@@ -196,8 +199,7 @@ class GameBoard extends Component {
             'S': <>&#x1f333;</>
         }
 
-        let isPlayer1 = this.props.username === this.state.requestMove.playerOneName
-        let boardArray = (isPlayer1) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
+        let boardArray = (true) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
         //generate board from game state array
         let board =
             <div className="board">
@@ -205,8 +207,8 @@ class GameBoard extends Component {
                     {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 </div>
                 {boardArray.map((row, i)=>
-                    <div className="board_row">{row.map((piece, j)=>
-                        <div className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
+                    <div key={i} className="board_row">{row.map((piece, j)=>
+                        <div key={i+"_"+j} className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
                         )}
                     </div>
                 )}
