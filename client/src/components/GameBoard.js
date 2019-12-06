@@ -46,9 +46,7 @@ class GameBoard extends Component {
 
     //send move to server for validation and completion
     confirmSelection() {
-        console.log("Send move request player " + this.state.requestMove.playerName);
-        console.log("Send move request moves " + this.state.requestMove.desiredMoves);
-        this.props.send(this.state.requestMove);
+        this.props.send(Object.assign({}, this.state.requestMove));
         this.clearSelection();
     }
 
@@ -82,11 +80,9 @@ class GameBoard extends Component {
 
         //after selecting a piece, change modes to select the piece's move
         if(this.state.selectionType==="pieceID" && this.props.game[i][j].length>0) this.changeSelectionType("desiredMoves");
-        console.log("select: playerName "+this.state.requestMove.playerName);
     }
     selectPiece(i, j) {
         let state = this.state;
-        console.log("selectPiece1 playerName "+this.state.requestMove.playerName);
 
         let encodeLocation = i * 10 + j;
         //get alphanumeric representation of piece
@@ -94,26 +90,18 @@ class GameBoard extends Component {
         state.pieceLocation = encodeLocation;
         state.requestMove.desiredMoves.push(encodeLocation);
         this.setState(state);
-        console.log("selectPiece2 playerName "+this.state.requestMove.playerName);
     }
     selectMove(i, j) {
         //prevent pieces other than monkey from taking multiple moves
         let piece = this.state.pieceLocation;
         let col = piece % 10;
         let row = (piece - col)/10;
-
-        console.log(this.props.game);
-        console.log(row);
-        console.log(col);
-        console.log(this.props.game[row][col]);
         if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
         let encodeLocation = i * 10 + j;
         state.requestMove[state.selectionType].push(encodeLocation);
         this.setState(state);
-        console.log("selectMove playerName "+this.state.requestMove.playerName);
-        console.log(state.requestMove);
     }
 
     //basic logical determinations for pieces

@@ -158,7 +158,7 @@ class Game extends Component {
                     if (self.connection.readyState === 1) {
                         console.log("Connection is made")
                         if (callback != null){
-                            console.log("Calling callback")
+                            console.log("Client: " + JSON.stringify(obj));
                             callback();
                         }
                     } else {
@@ -169,8 +169,6 @@ class Game extends Component {
                 }, 5); // wait 5 milisecond for the connection...
         }
         waitForSocketConnection(() => self.connection.send(JSON.stringify(obj)));
-        // console.log(JSON.stringify(obj));
-        // this.connection.send(JSON.stringify(obj));
     }
 
     logOut() { this.sendObject(attemptLogout); }
