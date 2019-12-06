@@ -28,8 +28,6 @@ public class DatabaseHandler  {
     public DatabaseHandler() {
         String tunnel = System.getenv("TUNNEL");
         if (tunnel != null) {
-            System.out.println("Using tunnel to dB");
-            System.out.println(tunnel.toString());
             database = "jdbc:mysql://localhost:" + tunnel.trim() + "/bytemechanics";
         }
         else {
@@ -92,7 +90,7 @@ public class DatabaseHandler  {
             String player1 = rs.getString("p1");
             String player2 = rs.getString("p2");
             String opponent = (player1.compareTo(action.userName) == 0) ? player2 : player1;
-
+            String status = rs.getString("status");
             Timestamp timestamp = rs.getTimestamp("start");
             if (timestamp != null){
                 Date date = new java.util.Date(timestamp.getTime());
@@ -100,7 +98,7 @@ public class DatabaseHandler  {
                 dateString = DateTimeFormatter.ISO_DATE.format(ldate);
             }
 
-            matches.add(Integer.toString(rs.getInt("match_id")) + "," + opponent + "," + dateString);
+            matches.add(Integer.toString(rs.getInt("match_id")) + "," + opponent + "," + status + "," + dateString);
         }
         return Arrays.asList(matches.toArray()).toArray(new String[0]);
     }

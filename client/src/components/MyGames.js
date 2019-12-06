@@ -1,27 +1,24 @@
 import React from 'react';
-import Dashboard from "./Dashboard";
 import './styles/MyGames.scss'
-import {Form, FormGroup, Label, Input, Button, InputGroup, InputGroupButtonDropdown, Row, Col} from 'reactstrap';
+import {Input, Button, UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { FaTrashAlt as Trash, FaPlay as Play} from 'react-icons/fa'
-import { Switch, Route, withRouter, Link } from "react-router-dom";
-import GameBoard from './GameBoard.js'
 import Confirm from './Confirm.js'
 
 class MyGames extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
-
-        this.submitSearchString = this.submitSearchString.bind(this);
+        this.getGames = this.getGames.bind(this);
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.abandonGame = this.abandonGame.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
 
         this.state = {
-          searchString: '',
-          matchID: 1
+            searchString: '',
+            status: 'In Progress',
+            matchID: 1
         };
     }
 
@@ -29,10 +26,10 @@ class MyGames extends React.Component {
         let searchObject = {
             communicationType: "searchGames",
             userName: this.props.userName,
-            playerTwoName: ""
+            playerTwoName: this.state.searchString,
+            status: this.state.status,
         };
         this.props.sendObject(searchObject);
-
     }
 
     componentDidMount(){
@@ -41,14 +38,26 @@ class MyGames extends React.Component {
 
     listenForEnter(event) {
         if (event.keyCode === 13)
-            this.submitSearchString(event);
+            this.getGames();
     }
 
+    updateStatus(event) {
+        this.setState({status: event.target.value}, ()=>{console.log(this.state)})
+    }
     renderSearchInputs() {
         return (
             <div id="search_input">
                 <Input type="search" placeholder="Filter on opponent..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
-                <Button onClick={this.submitSearchString}>Search</Button>
+                <UncontrolledButtonDropdown>
+                    <DropdownToggle caret> {this.state.status === '' ? "Games Status" : this.state.status} </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem value="In Progress" onClick={this.updateStatus}>In Progress</DropdownItem>
+                        <DropdownItem value="Finished" onClick={this.updateStatus}>Finished</DropdownItem>
+                        <DropdownItem value="Abandoned" onClick={this.updateStatus}>Abandoned</DropdownItem>
+                        <DropdownItem value="All" onClick={this.updateStatus}>All</DropdownItem>
+                    </DropdownMenu>
+                </UncontrolledButtonDropdown>
+                <Button onClick={this.getGames}>Search</Button>
             </div>
         );
     }
@@ -59,14 +68,7 @@ class MyGames extends React.Component {
       });
     }
 
-    submitSearchString() {
-        let searchObject = {
-          communicationType: "searchGames",
-          userName: this.props.userName,
-          playerTwoName: this.state.searchString
-        };
-        this.props.sendObject(searchObject);
-    }
+
 
     playGame(id){
         window.open(`/game/${id}`);
@@ -88,10 +90,10 @@ class MyGames extends React.Component {
         let data_array = data.split(',');
         return (
             <div className="result">
-                <p><b>{data_array[1]}</b></p><p>Last updated {data_array[2]}</p>
+                <p><b>{data_array[1]}</b></p><p><i>{data_array[2]}</i></p><p>Last updated {data_array[3]}</p>
                 <div className="game_buttons">
-                    <Play title="Play" className="game_buttons" onClick={e => this.playGame(data_array[0])}/>
                     <Confirm title="Abandon" className="game_buttons" onClick={e => this.abandonGame(data_array[0])} button=<Trash className="game_buttons"/> reason="Abandon Game"/>
+                    <Play title="Play" className="game_buttons" onClick={e => this.playGame(data_array[0])}/>
                 </div>
             </div>);
         })

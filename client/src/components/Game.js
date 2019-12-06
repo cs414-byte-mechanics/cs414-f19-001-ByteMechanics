@@ -92,6 +92,7 @@ class Game extends Component {
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
+            case "inviteAcceptStatus": break;
         }
     }
 
@@ -161,7 +162,7 @@ class Game extends Component {
                     if (self.connection.readyState === 1) {
                         console.log("Connection is made")
                         if (callback != null){
-                            console.log("Client: " + JSON.stringify(obj))
+                            console.log("Client: " + JSON.stringify(obj));
                             callback();
                         }
                     } else {

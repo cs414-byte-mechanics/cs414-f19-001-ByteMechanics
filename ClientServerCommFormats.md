@@ -625,6 +625,24 @@ This communication type will be used to communicate to the server that a player 
   
 }
 ```
+## acceptInvite
+
+```javascript
+{
+  "communicationType": "acceptInvite",
+  "userName": "name of user",
+  "invitationFrom": "name of user who sent invitation"
+}
+````
+
+## inviteAcceptStatus
+
+```javascript
+{
+  "communicationType": "inviteAcceptStatus",
+  "statusMessage": "invitation acceptance completed"
+}
+```
 
 # Update History
 * 9/16/2019 zachklau finished adding first set/version of GameIP objects. 
@@ -640,6 +658,7 @@ This communication type will be used to communicate to the server that a player 
 * 11/2/2019 zachklau removed invitation and added sendInvitation and loadInvitations
 * 12/2/2019 zachklau added getInvsLists and sendUserInvsLists
 * 12/3/2019 zachklau added rejectInvite, inviteRejectStatus
+* 12/5/2019 zachklau added acceptInvite, inviteAcceptStatus
 
 # Notes
 * The intial set of objects is based off the user description of the desired system in P1.pdf. They are meant to represent interactions discussed in this description.

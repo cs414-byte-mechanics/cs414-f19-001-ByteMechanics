@@ -32,6 +32,7 @@ public class UpdateFactory
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             case "rejectInvite": return this.buildInviteRejectStatus(action);
             case "requestGameLoad": return this.retrieveSingleGame(action);
+            case "acceptInvite": return this.buildInviteAcceptStatus(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -225,7 +226,10 @@ public class UpdateFactory
         update.userName= action.userName;
         try {
             update.searchResults = db.searchGames(action);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ServerError(-1, e.getMessage());
+        }
 
         return update;
     }
@@ -301,4 +305,28 @@ public class UpdateFactory
             return new ServerError(105, "Game information cannot be retrieved");
         }
     }
+
+   private Update buildInviteAcceptStatus(Action action) {
+        Update update = new Update();
+        Action createGameAction = new Action();
+        createGameAction.communicationType = "requestBeginNewMatch";
+        createGameAction.playerOneName = action.userName;
+        createGameAction.playerTwoName = action.invitationFrom;
+        try {
+            this.createNewMatch(createGameAction);
+        } catch(Exception e) {
+            System.err.println("New match cannot be created");
+            return new ServerError(-1, "Error in creating new game.");
+        }
+        try  {
+            db.removeInvitation(action);
+        } catch (Exception e) {
+            System.err.println("Error in removing invitation");
+            return new ServerError(-1, "Error in accepting invitation");
+        }
+        update.communicationType = "inviteAcceptStatus";
+        update.statusMessage = "invitation acceptance completed";
+        return update;
+   }
+
 }

@@ -19,7 +19,7 @@
 
   }
   #games {
-    margin:20px;
+    margin:5px 20px;
     #subtitle {
       font-size: 25px;
       margin-bottom: 15px;
@@ -30,6 +30,31 @@
       * {
         height:30px;
         margin: 3px;
+      }
+      .btn-group {
+        margin:0px;
+        .dropdown-menu {
+          margin:0px;
+          padding: 0px;
+          height:auto;
+          width:auto;
+          border-radius: 0px 5px 5px ;
+          .dropdown-item {
+            font-size: 14px;
+            box-sizing:border-box;
+            height:auto;
+            margin: 0px;
+            padding: 3px;
+            overflow: hidden;
+            &:active {
+              color:black;
+              font-weight: 600;
+            }
+            &:hover {
+              background: darken($foregroundColor, 5%);
+            }
+          }
+        }
       }
       .btn {
         font-size:15px;
@@ -49,18 +74,18 @@
         display: flex;
         justify-content: space-between;
         margin:3px;
-        min-height: 30px;
+        padding:5px;
         background-color: darken($foregroundColor, 10%);
         font-size: 15px;
         p {
           margin:auto 10px;
         }
-        .game_buttons {
-          display:flex;
-          justify-content: flex-end;
 
-          //float: right;
-          margin:auto 10px auto auto;
+        .game_buttons {
+          flex-shrink: 0;
+          float:right;
+          margin:auto 10px;
+          white-space: nowrap;
           font-size:18px;
           transition: .3s;
           cursor: pointer;
