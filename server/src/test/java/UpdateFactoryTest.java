@@ -241,13 +241,15 @@ public class UpdateFactoryTest
         ArrayList<Integer> movesCol = new ArrayList<>();
         movesRow.add(4);
         movesCol.add(3);
+
         //before move and capture , opponent lion is in castle
         assertTrue(congoGame.lionInCastle(board, desiredMoves[1]) == true);
+
         myLion.performMove(movesRow, movesCol, congoGame);
         /*update array*/
         board = congoGame.getBoardForDatabase();
+//        System.out.println(Arrays.deepToString(board));
 
-//        System.out.println(congoGame);
         int[] opponentCastleBound= new int[] {4,6};
 
         /* after move lion is not castle*/

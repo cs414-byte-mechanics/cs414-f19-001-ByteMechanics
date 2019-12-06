@@ -1,5 +1,6 @@
 import React from 'react';
 import Dashboard from "./Dashboard";
+import MyGames from "./MyGames";
 
 class Home extends React.Component {
     constructor(props){
@@ -10,7 +11,20 @@ class Home extends React.Component {
         return (
             <div id="home">
                 {this.props.isLoggedIn()
-                    ? <Dashboard userName={this.props.userName} logOut={this.props.logOut} sendToServer={this.props.sendToServer}/>
+                    ? <Dashboard
+                        userName={this.props.userName}
+                        logOut={this.props.logOut}
+                        isLoggedIn={this.props.isLoggedIn}
+                        gamesResults={this.props.gamesResults}
+                        sendObject={this.props.sendObject}
+                        searchResult={this.props.searchResult}
+                        showInvitePlayer={this.props.showInvitePlayer}
+                        invitationSentStatus={this.props.invitationSentStatus}
+                        showInvitationSentStatus={this.props.showInvitationSentStatus}
+                        invitationLists={this.props.invitationLists}
+                        getInvitationsReceived={this.props.getInvitationsReceived}
+                        showRefreshInvs={this.props.showRefreshInvs}
+                    />
                     : "Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
                 }
             </div>

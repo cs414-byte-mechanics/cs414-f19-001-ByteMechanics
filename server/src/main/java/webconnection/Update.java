@@ -15,6 +15,8 @@ public class Update {
     public String userName;
     public String userEmail;
     public String statusMessage;
+    public String playerOneName;
+    public String playerTwoName;
 
     public String[][] initialBoard;
     public String matchBeginTime;

@@ -18,9 +18,9 @@ class Game extends Component {
       
         this.state = {
           logIn: {},
-          player1: ["ajeske"],
-          player2: ["arictor"],
-          next_turn: ["ajeske"],
+          player1: ["player1"],
+          player2: ["player2"],
+          next_turn: ["player1"],
           match_id: ["1"],
           games: [
             [
@@ -54,7 +54,7 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
-        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
+        // this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
 
     }
 
@@ -92,7 +92,6 @@ class Game extends Component {
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
             case "sendUserInvsLists" : this.setInvitationsLists(update);break
-            case "inviteRejectStatus": this.handleInviteRejectUpdate(update);break;
         }
     }
 
@@ -112,6 +111,8 @@ class Game extends Component {
         state.games = [update.updatedBoard];
         state.next_turn = [update.whoseTurn];
         state.match_id = [update.matchID];
+        state.player1 = [update.playerOneName];
+        state.player2 = [update.playerTwoName];
         this.setState(state);
     }
 
@@ -152,7 +153,26 @@ class Game extends Component {
         }
     }
 
-    sendObject(obj){ console.log(JSON.stringify(obj)); this.connection.send(JSON.stringify(obj)); }
+    sendObject(obj){
+        let self = this;
+        function waitForSocketConnection(callback){
+            setTimeout(
+                function () {
+                    if (self.connection.readyState === 1) {
+                        console.log("Connection is made")
+                        if (callback != null){
+                            console.log("Client: " + JSON.stringify(obj))
+                            callback();
+                        }
+                    } else {
+                        console.log("wait for connection...")
+                        waitForSocketConnection(callback);
+                    }
+
+                }, 5); // wait 5 milisecond for the connection...
+        }
+        waitForSocketConnection(() => self.connection.send(JSON.stringify(obj)));
+    }
 
     logOut() { this.sendObject(attemptLogout); }
 
@@ -166,8 +186,17 @@ class Game extends Component {
       this.setState({invitationSentStatus: update});
       this.setState({showInvitationSentStatus: true});
       this.setState({showInvitePlayer: true});
-      this.getInvitationsReceived();
     }
+
+    // getInvitationsReceived() {
+    //     console.log("something");
+    //     this.setState({showRefreshInvs: true})
+    //     let getUserInvsLists = {
+    //         communicationType: "getUserInvsLists",
+    //         userName: this.state.logIn.userName
+    //     };
+    //     this.sendObject(getUserInvsLists);
+    // }
 
     setInvitationsLists(update) {
       let newInvitationLists = {
@@ -179,53 +208,33 @@ class Game extends Component {
       this.setState({invitationLists: newInvitationLists});
     }
 
-  getInvitationsReceived() {
-    this.setState({showRefreshInvs: true})
-    let getUserInvsLists = {
-      communicationType: "getUserInvsLists",
-      userName: this.state.logIn.userName
-    };
-    this.sendObject(getUserInvsLists);
-  }
 
-    handleInviteRejectUpdate(update) {
-      this.getInvitationsReceived();
-    }
+
 
     render(){
 
         return(
             <div id="Application">
-                <Header sendObject={this.sendObject} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
+                <Header sendObject={this.sendObject} userName={this.state.logIn.userName} isLoggedIn={this.isLoggedIn} logOut={this.logOut}/>
                 <div id="page_container">
                     <Switch location={window.location}>
                         <Route
-                          exact
-                          path="/invitations"
-                          render={(props) => <Invitations isLoggedIn={this.isLoggedIn}
-                                                          userName={this.state.logIn.userName}
-                                                          sendObject={this.sendObject}
-                                                          searchResult={this.state.searchResult}
-                                                          showInvitePlayer={this.state.showInvitePlayer}
-                                                          invitationSentStatus={this.state.invitationSentStatus}
-                                                          showInvitationSentStatus={this.state.showInvitationSentStatus}
-                                                          invitationLists={this.state.invitationLists}
-                                                          getInvitationsReceived={this.getInvitationsReceived}
-                                                          showRefreshInvs={this.state.showRefreshInvs}
-                          />}
-                        />
-                        <Route
-                            exact
-                            path="/mygames"
-                            render={(props) => <MyGames isLoggedIn={this.isLoggedIn}
-                                                        userName={this.state.logIn.userName}
-                                                        gamesResults={this.state.searchGames}
-                                                        sendObject={this.sendObject}/>}
-                        />
-                        <Route
                             exact
                             path="/"
-                            render={(props) => <Home isLoggedIn={this.isLoggedIn} userName={this.state.logIn.userName} logOut={this.logOut} sendToServer={this.sendObject}/>}
+                            render={(props) => <Home
+                                                    isLoggedIn={this.isLoggedIn}
+                                                    userName={this.state.logIn.userName}
+                                                    logOut={this.logOut}
+                                                    sendObject={this.sendObject}
+                                                    searchResult={this.state.searchResult}
+                                                    showInvitePlayer={this.state.showInvitePlayer}
+                                                    invitationSentStatus={this.state.invitationSentStatus}
+                                                    showInvitationSentStatus={this.state.showInvitationSentStatus}
+                                                    invitationLists={this.state.invitationLists}
+                                                    gamesResults={this.state.searchGames}
+                                                    showRefreshInvs={this.state.showRefreshInvs}
+
+                                />}
                         />
                         <Route
                             path="/register"

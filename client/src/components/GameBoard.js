@@ -41,22 +41,28 @@ class GameBoard extends Component {
         }
 
     componentDidMount(){
-        console.log("Get game status");
         this.getGameStatus();
     }
 
     //send move to server for validation and completion
     confirmSelection() {
-        console.log("Send move request player " + this.state.requestMove.playerName);
-        console.log("Send move request moves " + this.state.requestMove.desiredMoves);
-        this.props.send(this.state.requestMove);
+        let moveObject = {
+            communicationType: this.state.requestMove.communicationType,
+            communicationVersion: this.state.requestMove.communicationVersion,
+            matchID: this.props.match.params.matchID,
+            pieceID: this.state.requestMove.pieceID,
+            desiredMoves: this.state.requestMove.desiredMoves,
+            playerName: this.props.playerName,
+            playerOneName: this.props.player1,
+            playerTwoName: this.props.player2
+        };
+        this.props.send(moveObject);
         this.clearSelection();
     }
 
     //clear currently selected piece and move
     clearSelection() {
         let state = this.state;
-//        state.requestMove.pieceID = [];
         state.requestMove.pieceID = "";
         state.requestMove.desiredMoves = [];
         state.selectionType = "pieceID"
@@ -83,11 +89,9 @@ class GameBoard extends Component {
 
         //after selecting a piece, change modes to select the piece's move
         if(this.state.selectionType==="pieceID" && this.props.game[i][j].length>0) this.changeSelectionType("desiredMoves");
-        console.log("select: playerName "+this.state.requestMove.playerName);
     }
     selectPiece(i, j) {
         let state = this.state;
-        console.log("selectPiece1 playerName "+this.state.requestMove.playerName);
 
         let encodeLocation = i * 10 + j;
         //get alphanumeric representation of piece
@@ -95,7 +99,6 @@ class GameBoard extends Component {
         state.pieceLocation = encodeLocation;
         state.requestMove.desiredMoves.push(encodeLocation);
         this.setState(state);
-        console.log("selectPiece2 playerName "+this.state.requestMove.playerName);
     }
     selectMove(i, j) {
         //prevent pieces other than monkey from taking multiple moves
@@ -103,18 +106,12 @@ class GameBoard extends Component {
         let col = piece % 10;
         let row = (piece - col)/10;
 
-        console.log(this.props.game);
-        console.log(row);
-        console.log(col);
-        console.log(this.props.game[row][col]);
         if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
         let encodeLocation = i * 10 + j;
         state.requestMove[state.selectionType].push(encodeLocation);
         this.setState(state);
-        console.log("selectMove playerName "+this.state.requestMove.playerName);
-        console.log(state.requestMove);
     }
 
     //basic logical determinations for pieces
@@ -151,10 +148,10 @@ class GameBoard extends Component {
     //generate icon & message to indicate which player's move is expected next
     generateGameStatusMessage(nextPlayer, thisPlayer){
         if (nextPlayer === thisPlayer){
-            if (thisPlayer === this.state.requestMove.playerOneName){
-                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}{this.generateMessage()}</p>
+            if (thisPlayer === this.props.player1){
+                return <p><>&#127810;</>{this.props.player1}{this.generateMessage()}<>&#x1f334;</></p>
             }
-            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}</p>
+            else return <p><>&#127809;</>{this.props.player2}{this.generateMessage()}<>&#x1f333;</></p>
         }
         return;
     }
@@ -174,27 +171,31 @@ class GameBoard extends Component {
     render(){
         //map piece ids to unicode icons
         const pieces = {
-            'P': <>&#x1f333;</>,
+            'P': <>&#127809;</>,
             'L': <>&#x1f981;</>,
             'G': <>&#x1f992;</>,
             'M': <>&#128018;</>,
             'E': <>&#x1F418;</>,
             'C': <>&#x1f40a;</>,
             'Z': <>&#129427;</>,
-            'p': <>&#x1f334;</>,
+            'p': <>&#127810;</>,
             'l': <>&#x1f981;</>,
             'g': <>&#x1f992;</>,
             'm': <>&#x1F435;</>,
             'e': <>&#x1F418;</>,
             'c': <>&#x1f40a;</>,
-            'z': <>&#129427;</>
+            'z': <>&#129427;</>,
+
+            /*Added for superPawn*/
+            's': <>&#x1f334;</>,
+            'S': <>&#x1f333;</>
         }
 
         //generate board from game state array
         let board =
             <div className="board">
                 <div className="player1">
-                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerOneName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 </div>
                 {this.props.game.map((row, i)=>
                     <div className="board_row">{row.map((piece, j)=>
@@ -203,7 +204,7 @@ class GameBoard extends Component {
                     </div>
                 )}
                 <div className="player2">
-                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerTwoName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.props.player2)}
                 </div>
             </div>
         

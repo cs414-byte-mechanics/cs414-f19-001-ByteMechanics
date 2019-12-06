@@ -14,30 +14,38 @@ class Invitations extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
-        this.renderInviteDisplayButton = this.renderInviteDisplayButton.bind(this);
         this.handleRejectInvitationButtonClick = this.handleRejectInvitationButtonClick.bind(this);
-
+        this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
         this.state = {
           searchString: '',
         };
 
+
+    }
+    componentDidMount(){
+        this.getInvitationsReceived();
     }
 
-    render () {
+    getInvitationsReceived() {
+        let getUserInvitationsLists = {
+            communicationType: "getUserInvsLists",
+            userName: this.props.userName
+        };
+        this.props.sendObject(getUserInvitationsLists);
+    }
 
+
+    render () {
         return (
           <div id="invitations">
-            {this.renderText()}
             <div id="viewsearch">
                 <div id="invites">
                     <div id="subtitle">Current Invitations</div>
-                  {this.renderInviteDisplayButton()}
-                  <p></p>
-                  {this.renderSentToInvitationsTable()}
-                  <p></p>
-                  {this.renderReceivedFromInvitationsTable()}
+                    {this.renderSentToInvitationsTable()}
+                    {this.renderReceivedFromInvitationsTable()}
                 </div>
                 <div id="search">
+                    <div id="subtitle">Invite a friend to play!</div>
                     {this.renderSearchInputs()}
                     {this.renderInvitePlayer()}
                 </div>
@@ -46,19 +54,6 @@ class Invitations extends React.Component {
         );
     }
 
-    renderText() {
-        return (
-          <div id="title">
-              View your game invitations and invite other players here!
-          </div>
-        );
-    }
-
-    renderSearchButton() {
-        return (
-          <Button onClick={this.submitSearchString}>Search</Button>
-        );
-    }
 
     listenForEnter(event) {
         if (event.keyCode === 13)
@@ -69,7 +64,6 @@ class Invitations extends React.Component {
         return (
           <div>
               <div>
-                <div id="subtitle">Search for a User to Invite</div>
                 <div id="search_input">
                     <Input type="search" placeholder="Search for a user..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
                     <Button onClick={this.submitSearchString}>Search</Button>
@@ -103,7 +97,9 @@ class Invitations extends React.Component {
             list.push(
                 <div className="result" key={user}>
                   <p>{user}</p>
-                  <Invite className="invite_button" onClick={()=>{this.sendGameInvite(user)}}/>
+                <div className="invite_button">
+                    <Invite className="action_button" onClick={()=>{this.sendGameInvite(user)}}/>
+                </div>
                 </div>
             )
         });
@@ -121,20 +117,8 @@ class Invitations extends React.Component {
         invitationTo: userName
       };
       this.props.sendObject(inviteObject);
+      this.getInvitationsReceived()
       this.setState({showInvitePlayer: false});
-    }
-
-    renderInviteDisplayButton() {
-      if (this.props.showRefreshInvs) {
-        return (
-          <Button onClick={this.props.getInvitationsReceived}>Refresh Invitations</Button>
-        );
-      }
-      else {
-        return (
-          <Button onClick={this.props.getInvitationsReceived}>View Invitations</Button>
-        );
-      }
     }
 
   renderSentToInvitationsTable() {
@@ -142,7 +126,6 @@ class Invitations extends React.Component {
       if (toNames.length > 0 && toNames[0] !== "EMPTY") {
         return(
           <Card className="card_condensed">
-            <CardBody>
               <CardTitle>Sent Invitations</CardTitle>
             <Table size="sm" className="table_condensed">
               <thead>
@@ -153,16 +136,13 @@ class Invitations extends React.Component {
               </thead>
               <tbody>{this.renderSentToTableRows()}</tbody>
             </Table>
-            </CardBody>
           </Card>
         );
       }
       else if (this.props.showRefreshInvs) {
         return (
           <Card className="card_condensed">
-            <CardBody>
               <CardTitle>No sent invitations to show</CardTitle>
-            </CardBody>
           </Card>
         );
       }
@@ -176,38 +156,35 @@ class Invitations extends React.Component {
         rows.push(
           <tr>
             <td>{namesList[i]}</td>
-            <td>{this.convertToDate(timesList[i])}</td>
+              <td><i>{this.convertToDate(timesList[i])}</i></td>
           </tr>)
       }
       return rows;
   }
 
   renderReceivedFromInvitationsTable() {
-      let fromNames = this.props.invitationLists.receivedFromNames;
+    let fromNames = this.props.invitationLists.receivedFromNames;
     if (fromNames.length > 0 && fromNames[0] !== "EMPTY") {
       return(
         <Card className="card_condensed">
-          <CardBody>
             <CardTitle>Received Invitations</CardTitle>
             <Table size="sm" className="table_condensed">
               <thead>
               <tr>
                 <th>Received From</th>
                 <th>Time Received</th>
+                  <th></th>
               </tr>
               </thead>
               <tbody>{this.renderReceivedFromTableRows()}</tbody>
             </Table>
-          </CardBody>
         </Card>
       );
     }
-    else if (this.props.showRefreshInvs) {
+    else {
       return (
         <Card className="card_condensed">
-          <CardBody>
             <CardTitle>No received invitations to show</CardTitle>
-          </CardBody>
         </Card>
       );
     }
@@ -221,11 +198,11 @@ class Invitations extends React.Component {
       rows.push(
         <tr>
           <td>{namesList[i]}</td>
-          <td>{this.convertToDate(timesList[i])}</td>
+            <td><i>{this.convertToDate(timesList[i])}</i></td>
           <td>
             <ButtonGroup>
-              <Accept id="accept"/>
-              <Reject onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}/>
+              <Accept className="action_button"/>
+              <Reject className="action_button" onClick={() => this.handleRejectInvitationButtonClick(namesList[i])}/>
             </ButtonGroup>
           </td>
         </tr>)
@@ -245,6 +222,7 @@ class Invitations extends React.Component {
       invitationFrom: invitationFrom
     };
     this.props.sendObject(rejectInvite);
+    this.getInvitationsReceived();
   }
 
 }

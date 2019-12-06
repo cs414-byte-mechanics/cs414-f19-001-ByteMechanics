@@ -2,22 +2,24 @@
 
 #mygames {
 
+
   .btn {
-    background-color: $backgroundColor;
+    background-color: $buttonColor;
     text-align:center;
     border: 0px;
     height: 30px;
     &:hover {
-      background-color: darken($backgroundColor, 20%);
+      background-color: $buttonHoverColor;
     }
   }
-  #viewsearch {
-    display:flex;
-  }
 
-  #search, #games {
-    //max-width: 300px;
-    margin: 25px auto;
+  #wrapper {
+    margin:auto;
+    max-width: 600px;
+
+  }
+  #games {
+    margin:20px;
     #subtitle {
       font-size: 25px;
       margin-bottom: 15px;
@@ -34,11 +36,9 @@
         padding:4px 8px;
       }
     }
-    #searchResults {
+    #game_data {
       display: flex;
       flex-direction: column;
-      width:300px;
-      max-width: 300px;
       max-height: 200px;
       overflow-y:scroll;
       p {
@@ -49,21 +49,24 @@
         display: flex;
         justify-content: space-between;
         margin:3px;
-        height: 30px;
+        min-height: 30px;
         background-color: darken($foregroundColor, 10%);
         font-size: 15px;
         p {
           margin:auto 10px;
         }
-        .invite_button {
-          float: right;
-          margin:auto 25px auto auto;
+        .game_buttons {
+          display:flex;
+          justify-content: flex-end;
+
+          //float: right;
+          margin:auto 10px auto auto;
           font-size:18px;
           transition: .3s;
           cursor: pointer;
-          color: darken($backgroundColor, 30%);
+          color: $buttonColor;
           &:hover {
-            color: darken($backgroundColor, 40%);
+            color: $buttonHoverColor;
           }
         }
       }

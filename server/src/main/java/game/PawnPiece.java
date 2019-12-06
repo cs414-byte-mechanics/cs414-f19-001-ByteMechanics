@@ -3,20 +3,21 @@ package Game;
 public class PawnPiece extends GamePiece {
 
     // every pawn can be promoted as a superPawn / can cross river 
-    public boolean superPawn  ;
+    public boolean superPawn ;
 
     /* initial constructor*/
-    public PawnPiece(){
-    }
+    public PawnPiece(){ }
 
-    public PawnPiece(int row, int col, int player){
+    public PawnPiece(int row, int col, int player, char pieceType){
         super(row, col, player);
-        superPawn = false;
-//        this.crossedRiver = false;
+        superPawn = ((pieceType == 'p') || (pieceType == 'P')) ? false : true;
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "p" : "P";
+        if (this.superPawn){
+            return (player == 1) ? "s" : "S";}
+        else
+            return (player == 1) ? "p" : "P";
     }
 
     /*helper routine to check sideAway move*/

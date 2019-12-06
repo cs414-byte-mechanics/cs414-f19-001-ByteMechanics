@@ -3,6 +3,7 @@ import database.*;
 import Game.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.sql.*;
 
 public class UpdateFactory
 {
@@ -30,6 +31,7 @@ public class UpdateFactory
             case "searchGames": return this.buildSearchGamesResult(action);
             case "getUserInvsLists": return this.buildSendUserInvsLists(action);
             case "rejectInvite": return this.buildInviteRejectStatus(action);
+            case "requestGameLoad": return this.retrieveSingleGame(action);
             default:
                 System.err.println("Invalid action communication type.");
                 return new Update();
@@ -75,10 +77,12 @@ public class UpdateFactory
                     update.matchID = action.matchID;
                     update.playerName = action.playerName ;
                     update.pieceID =  action.pieceID ;
+                    update.playerOneName = action.playerOneName;
+                    update.playerTwoName = action.playerTwoName;
                     update.updatedBoard = gameBoard.getBoardForDatabase();
                     updateTurn(update, action, game);
 
-                    update.winnerName = action.playerName = game.getActivePlayer(); /*this might need to be replace with action.playerName later*/
+                    update.winnerName = (lionExist) ? "" : game.getActivePlayer();
                     if (update.endCondition.compareTo("won") == 0)
                         game.setWinningPlayer(update.winnerName);
 
@@ -265,5 +269,36 @@ public class UpdateFactory
         update.statusMessage = "invite rejection complete";
         return update;
     }
+    
+    private Update retrieveSingleGame(Action action){
+        try {
+            ResultSet results = db.getGameInfo(action.matchID);
+            if (!results.next()) return new ServerError(105, "No game exists with this match ID.");
 
+            Update update = new Update();
+            String boardAsString = results.getString("board");
+            String[][] board = new String[7][7];
+            
+            int index = 0;
+            for(int i = 0; i < board.length; i++){
+                for(int j = 0; j < board[i].length; j++){
+                    board[i][j] = Character.toString(boardAsString.charAt(index));
+                    index++;
+                }
+            }
+
+            update.communicationType = "updateBoard";
+            update.updatedBoard = board;
+            update.matchID = action.matchID;
+            update.whoseTurn = results.getString("next_turn");
+            update.playerName = results.getString("next_turn");
+            update.playerOneName = results.getString("p1");
+            update.playerTwoName = results.getString("p2");
+            
+            return update;
+        
+        } catch(Exception e){
+            return new ServerError(105, "Game information cannot be retrieved");
+        }
+    }
 }

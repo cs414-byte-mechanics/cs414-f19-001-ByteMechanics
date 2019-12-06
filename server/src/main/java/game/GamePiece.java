@@ -171,20 +171,6 @@ public abstract class GamePiece {
         }
     }
 
-    /**
-        Determines if the move to (destRow, destCol) is a legal move for this piece. Also provides drowning functionality
-     */
-//    public boolean performMove(int destRow, int destCol, GameBoard congoBoard) {
-//        int activePlayer = this.player;
-//        ArrayList<GamePiece> riverDwellers = congoBoard.getRiverDwellers(activePlayer);
-//
-//        if (ValidateMove(destRow, destCol, congoBoard.board)){
-//            congoBoard.movePiece(this.row, this.column, destRow, destCol);
-//            congoBoard.drownRiverDwellers(riverDwellers);
-//            return true;
-//        }
-//        else return false;
-//    }
 
     /* This routine executes a sequence of moves - mostly for Monkey right now.  Monkey can do a sequence of
     moves.  If there is another piece in the destination square of the move, then it is captured and removed from

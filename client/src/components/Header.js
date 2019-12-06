@@ -9,7 +9,7 @@ class Header extends React.Component {
     render () {
         let logInOut =
                 this.props.isLoggedIn()
-                ? <a className="nav-link right" href="/" onClick={this.props.logOut}>Log Out</a>
+                    ? <a className="nav-link right" href="/" onClick={this.props.logOut}>Log Out (<u>{this.props.userName}</u>)</a>
                 :   <>
                         <a className="nav-link right" href="/register">Register</a>
                         <a className="nav-link right" href="/login">Log In</a>
@@ -22,8 +22,6 @@ class Header extends React.Component {
                 <CongoIcon id="icon"/>
             </div>
             <div id="menu">
-                {this.displayInvitations()}
-                {this.displayMyGames()}
                 <a className="nav-link" href="/">Home</a>
                 {logInOut}
             </div>
@@ -31,20 +29,6 @@ class Header extends React.Component {
         );
     }
 
-    displayInvitations()
-    {
-        if (this.props.isLoggedIn())
-        {
-            return (<a className="nav-link" href="/invitations">Invitations</a>);
-        }
-    }
-
-    displayMyGames(){
-        if (this.props.isLoggedIn())
-        {
-            return (<a className="nav-link" href="/mygames">My Games</a>);
-        }
-    }
 
 
 }

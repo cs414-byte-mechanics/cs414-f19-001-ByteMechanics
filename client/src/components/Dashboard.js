@@ -2,10 +2,13 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import Invitations from "./Invitations";
 import "./styles/Dashboard.scss"
+import MyGames from "./MyGames";
+import Confirm from "./Confirm";
 
 class Dashboard extends React.Component {
     constructor(props){
         super(props);
+        console.log(props);
         this.state = {
             "communicationType": "unregisterUser",
             "userName": this.props.userName
@@ -14,17 +17,34 @@ class Dashboard extends React.Component {
     }
 
     unregisterUser() {
-        this.props.sendToServer(this.state);
+        this.props.sendObject(this.state);
         this.props.logOut();
     }
 
     render () {
         return (
             <div id="dash">
-                Hi {this.props.userName}! Access your games and options here.
-                <br/>
-                <a id="delete" title="Are you sure? Clicking this will delete your account forever!" onClick={this.unregisterUser} >Delete account</a>
+                <p>Hi <b>{this.props.userName}</b>! Access your games and options here.</p>
+                <div id="features">
+                    <MyGames isLoggedIn={this.props.isLoggedIn}
+                             userName={this.props.userName}
+                             gamesResults={this.props.gamesResults}
+                             sendObject={this.props.sendObject}
+                    />
+                    <Invitations isLoggedIn={this.props.isLoggedIn}
+                                 userName={this.props.userName}
+                                 sendObject={this.props.sendObject}
+                                 searchResult={this.props.searchResult}
+                                 showInvitePlayer={this.props.showInvitePlayer}
+                                 invitationSentStatus={this.props.invitationSentStatus}
+                                 showInvitationSentStatus={this.props.showInvitationSentStatus}
+                                 invitationLists={this.props.invitationLists}
+                                 getInvitationsReceived={this.getInvitationsReceived}
+                                 showRefreshInvs={this.props.showRefreshInvs}
+                    />
+                </div>
 
+                <Confirm className="delete" onClick={this.unregisterUser} reason="Delete Account" button=<a className="delete">Delete account</a>/>
             </div>
         );
     }
