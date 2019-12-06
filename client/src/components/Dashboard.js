@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'reactstrap';
 import Invitations from "./Invitations";
 import "./styles/Dashboard.scss"
 import MyGames from "./MyGames";
@@ -8,7 +7,6 @@ import Confirm from "./Confirm";
 class Dashboard extends React.Component {
     constructor(props){
         super(props);
-        console.log(props);
         this.state = {
             "communicationType": "unregisterUser",
             "userName": this.props.userName

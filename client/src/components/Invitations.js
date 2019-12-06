@@ -1,7 +1,6 @@
 import React from 'react';
-import Dashboard from "./Dashboard";
 import './styles/Invitations.scss'
-import {ButtonGroup, Input, Button, Table, Card, CardBody, CardTitle} from 'reactstrap';
+import {ButtonGroup, Input, Button, Table, Card, CardTitle} from 'reactstrap';
 import { FaEnvelopeOpenText as Invite, FaCheck as Accept, FaTimes as Reject} from 'react-icons/fa'
 
 class Invitations extends React.Component {
@@ -155,7 +154,7 @@ class Invitations extends React.Component {
       let timesList = this.props.invitationLists.sentToTimes;
       for (let i = 0; i < namesList.length; i++) {
         rows.push(
-          <tr>
+          <tr key={namesList[i]+"_"+i}>
             <td>{namesList[i]}</td>
               <td><i>{this.convertToDate(timesList[i])}</i></td>
           </tr>)
@@ -198,7 +197,7 @@ class Invitations extends React.Component {
     for (let i = 0; i < namesList.length; i++) {
       rows.push(
         <tr>
-          <td>{namesList[i]}</td>
+          <td key={namesList[i]+"_"+i}>{namesList[i]}</td>
             <td><i>{this.convertToDate(timesList[i])}</i></td>
           <td>
             <ButtonGroup>
