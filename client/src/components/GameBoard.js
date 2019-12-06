@@ -130,6 +130,7 @@ class GameBoard extends Component {
         return `${(pieceLoc===moveLoc) ? "selected" : ""}${(moves.find((move)=>move===moveLoc) && (pieceLoc!==moveLoc)) ? "move" : ""}`
     }
     player(i, j) {
+
         let isPlayer1 = this.props.userName === this.props.player1
         let isPlayer2 = this.props.userName === this.props.player2
 
@@ -152,15 +153,11 @@ class GameBoard extends Component {
     }
 
     //generate icon & message to indicate which player's move is expected next
-    generateGameStatusMessage(nextPlayer, thisPlayer){
-
-        {if (nextPlayer === thisPlayer){
-            if (thisPlayer === this.props.player1){
-                return <div className="player1"><p><>&#127810;</><b>{this.props.player1}</b>{this.generateMessage()}<>&#x1f334;</></p></div>
-            }
-            else return <div className="player2"><p><>&#127809;</><b>{this.props.player2}</b>{this.generateMessage()}<>&#x1f333;</></p></div>
-        }}
-        return;
+    generateGameStatusMessage(player){
+        return (this.props.playerName === player) &&
+        <div className="player1">
+            <p>&#127810;<b>{player}</b>{this.generateMessage()}&#x1f334;</p>
+        </div>
     }
 
     generateClearMoveButton(){
@@ -174,6 +171,12 @@ class GameBoard extends Component {
             return <Button onClick={this.confirmSelection}>Confirm Move</Button>
         }
     }
+
+    flipPieces(arr) {
+        if  (this.props.userName === this.props.player2) return arr;
+        else return arr.slice().reverse();
+    }
+
 
     render(){
         if(this.props.game.length===0)
@@ -200,18 +203,21 @@ class GameBoard extends Component {
             'S': <>&#x1f333;</>
         }
 
-        let boardArray = (true) ? this.props.game : this.props.game.map((row) => row.slice().reverse()).reverse()
         //generate board from game state array
         let board =
             <div>
 
                 <div className="board">
-                {boardArray.map((row, i)=>
-                    <div key={i} className="board_row">{row.map((piece, j)=>
-                        <div key={i+"_"+j} className={this.generatePieceClasses(i,j)} onClick={()=>this.select(i, j)}><span>{pieces[piece]}</span></div>
-                        )}
-                    </div>
-                )}
+                {this.flipPieces(this.props.game.map((row, i)=>
+                        <div key={i} className="board_row">
+                            {this.flipPieces(row.map((piece, j)=>
+                                    <div key={i+"_"+j}
+                                         className={this.generatePieceClasses(i,j)}
+                                         onClick={()=>this.select(i, j)}>
+                                            <span>{pieces[piece]}</span>
+                                    </div>))}
+                        </div>
+                ))}
                 </div>
 
             </div>
@@ -223,11 +229,14 @@ class GameBoard extends Component {
                 {this.generateConfirmMoveButton()}
             </div>
 
+        let opponent = (this.props.player1 !== this.props.userName) ? this.props.player1 : this.props.player2
+
         return (
             <div id="gameboard">
-                {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
+
+                {this.generateGameStatusMessage(opponent)}
                 {board}
-                {this.generateGameStatusMessage(this.props.playerName, this.props.player2)}
+                {this.generateGameStatusMessage(this.props.userName)}
                 {buttons}
             </div>
         );
