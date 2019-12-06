@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 $boardColor: #C9CEDA;
 $riverColor: #57A3D8;
 $castleColor: #809099;
@@ -7,15 +9,36 @@ $moveSelectionColor: red;
 
 $playerOneColor: red;
 $playerTwoColor: blue;
+.player1, .player2 {
+    background-color: $backgroundColor;
+    border: $buttonColor 4px solid;
+    p {
+        margin-bottom:5px;
+    }
+}
+.buttons {
+    .btn {
+        font-size:15px;
+        padding:4px 8px;
+        background-color: $buttonColor;
+        text-align:center;
+        border: 0px;
+        height: 30px;
+        &:hover {
+            background-color: $buttonHoverColor;
+        }
+    }
+}
+
 
 .board{
     p {
         margin: 0px;
     }
-    margin-bottom: 20px;
-    max-width:600px;
-    max-height:600px;
-    outline: black 2px solid;
+    margin: 7px 3px;
+    max-width:500px;
+    max-height:500px;
+    outline: black 4px solid;
     display: flex;
     flex-direction: column;
     * {
@@ -30,15 +53,15 @@ $playerTwoColor: blue;
         display: flex;
         flex-wrap:nowrap;
         .piece {
-            padding:8px;
-            font-size:30px;
+            padding:3px;
+            font-size:25px;
             background: $boardColor;
             outline: black 1px solid;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             transition: .2s;
             cursor: pointer;
             &.player {
@@ -46,7 +69,7 @@ $playerTwoColor: blue;
                     height:100%;
                     -moz-border-radius: 50%; /* or 50% */
                     border-radius: 50%; /* or 50% */
-                    border: darken($boardColor, 30%) 7px solid;
+                    border: darken($boardColor, 30%) 6px solid;
                 }
             }
 
