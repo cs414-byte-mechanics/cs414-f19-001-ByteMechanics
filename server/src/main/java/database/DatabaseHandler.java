@@ -4,6 +4,7 @@ import java.sql.*;
 import webconnection.*;
 import Game.*;
 
+import javax.lang.model.type.NullType;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -168,8 +169,10 @@ public class DatabaseHandler  {
         rowsAffected = saveGame.executeUpdate(Query.createUpdateGameNextTurnQuery(matchID,nextPlayer));
         if (rowsAffected < 1) throw new Exception("Next player was not saved in database.");
 
-        rowsAffected = saveGame.executeUpdate(Query.createUpdateGameWinnerQuery(matchID,winner));
-        if (rowsAffected < 1) throw new Exception("Winner was not saved in database.");
+        if (winner != null) {
+            rowsAffected = saveGame.executeUpdate(Query.createUpdateGameWinnerQuery(matchID, winner));
+            if (rowsAffected < 1) throw new Exception("Winner was not saved in database.");
+        }
 
     }
 

@@ -221,6 +221,8 @@ send the updated board to the clients so that they can display it so the players
   "pieceID": "G",
   "endCondition": ["active", "won", "quit"],
   "updatedBoard": [][],
+  "playerOneName": "",
+  "playerTwoName": "",
   "whoseTurn": ""
 }
 ```
@@ -231,6 +233,8 @@ send the updated board to the clients so that they can display it so the players
 * `playerName` is a string and will be the name of the player who made the valid move that updated the board.
 * `pieceID` is a string and will be the ID of the piece that the player moved.
 * `updatedBoard` is a 2D array with the information containing the new state of the Game board after the piece was moved.
+* `playerOneName` is a string containing the login name of the first player
+* `playerTwoName` is a string containing the login name of the second player
 * `whoseTurn` is a string and is the name of the player who is allowed to make the next move. In this case it will be the name of the player who did not make the most recent move.
 
 ## registerUser
@@ -571,27 +575,13 @@ This communication type will be sent from the server to the client in response t
 
 ## requestGameLoad
 
-This communication type will be used to communicate to the server that a player wishes to load a specific game.  The server will respond to this by returning an updateBoard communication.
+This communication type will be used to communicate to the server that a player wishes to load a specific game.  The server will respond to this by returning an `updateBoard` communication.
 
 ```javascript
 {
   "communicationType": "requestGameLoad",
   "communicationVersion": 1,
   "matchID": "",
-}
-```
-
-## singleGameInfo
-
-This communication type is a response to `requestGameLoad`
-
-```javascript
-{
-    "communicationType" : "singleGameInfo",
-    "matchID" : "match ID of game",
-    "players" : ["player1", "player2"],
-    "board" : [][],
-    "whoseTurn" : "player1 or player2"
 }
 ```
 

@@ -12,7 +12,7 @@ class GameBoard extends Component {
             requestMove: {
                 "communicationType": "requestMoves",
                 "communicationVersion": 1,
-                "matchID": this.props.match_id,
+                "matchID": this.props.match.params.matchID,
                 "playerName": this.props.playerName,
                 "pieceID" : "",
                 "desiredMoves": [],
@@ -34,7 +34,7 @@ class GameBoard extends Component {
             let searchObject = {
                 communicationType: "requestGameLoad",
                 communicationVersion: this.state.requestMove.communicationVersion,
-                matchID: this.props.match_id
+                matchID: this.props.match.params.matchID
             };
             this.props.send(searchObject);
         }, 1500)
@@ -46,14 +46,23 @@ class GameBoard extends Component {
 
     //send move to server for validation and completion
     confirmSelection() {
-        this.props.send(Object.assign({}, this.state.requestMove));
+        let moveObject = {
+            communicationType: this.state.requestMove.communicationType,
+            communicationVersion: this.state.requestMove.communicationVersion,
+            matchID: this.props.match.params.matchID,
+            pieceID: this.state.requestMove.pieceID,
+            desiredMoves: this.state.requestMove.desiredMoves,
+            playerName: this.props.playerName,
+            playerOneName: this.props.player1,
+            playerTwoName: this.props.player2
+        };
+        this.props.send(moveObject);
         this.clearSelection();
     }
 
     //clear currently selected piece and move
     clearSelection() {
         let state = this.state;
-//        state.requestMove.pieceID = [];
         state.requestMove.pieceID = "";
         state.requestMove.desiredMoves = [];
         state.selectionType = "pieceID"
@@ -96,6 +105,7 @@ class GameBoard extends Component {
         let piece = this.state.pieceLocation;
         let col = piece % 10;
         let row = (piece - col)/10;
+
         if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
@@ -138,12 +148,10 @@ class GameBoard extends Component {
     //generate icon & message to indicate which player's move is expected next
     generateGameStatusMessage(nextPlayer, thisPlayer){
         if (nextPlayer === thisPlayer){
-            if (thisPlayer === this.state.requestMove.playerOneName){
-//                return <p><>&#x1f334;</>{this.state.requestMove.playerOneName}{this.generateMessage()}</p>
-                return <p><>&#127810;</>{this.state.requestMove.playerOneName}{this.generateMessage()}<>&#x1f334;</></p>
+            if (thisPlayer === this.props.player1){
+                return <p><>&#127810;</>{this.props.player1}{this.generateMessage()}<>&#x1f334;</></p>
             }
-//            else return <p><>&#x1f333;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}</p>
-            else return <p><>&#127809;</>{this.state.requestMove.playerTwoName}{this.generateMessage()}<>&#x1f333;</></p>
+            else return <p><>&#127809;</>{this.props.player2}{this.generateMessage()}<>&#x1f333;</></p>
         }
         return;
     }
@@ -187,7 +195,7 @@ class GameBoard extends Component {
         let board =
             <div className="board">
                 <div className="player1">
-                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerOneName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.props.player1)}
                 </div>
                 {this.props.game.map((row, i)=>
                     <div className="board_row">{row.map((piece, j)=>
@@ -196,7 +204,7 @@ class GameBoard extends Component {
                     </div>
                 )}
                 <div className="player2">
-                    {this.generateGameStatusMessage(this.props.playerName, this.state.requestMove.playerTwoName)}
+                    {this.generateGameStatusMessage(this.props.playerName, this.props.player2)}
                 </div>
             </div>
         

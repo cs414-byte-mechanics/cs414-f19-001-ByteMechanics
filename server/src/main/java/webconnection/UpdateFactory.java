@@ -78,10 +78,12 @@ public class UpdateFactory
                     update.matchID = action.matchID;
                     update.playerName = action.playerName ;
                     update.pieceID =  action.pieceID ;
+                    update.playerOneName = action.playerOneName;
+                    update.playerTwoName = action.playerTwoName;
                     update.updatedBoard = gameBoard.getBoardForDatabase();
                     updateTurn(update, action, game);
 
-                    update.winnerName = action.playerName = game.getActivePlayer(); /*this might need to be replace with action.playerName later*/
+                    update.winnerName = (lionExist) ? "" : game.getActivePlayer();
                     if (update.endCondition.compareTo("won") == 0)
                         game.setWinningPlayer(update.winnerName);
 
@@ -288,15 +290,14 @@ public class UpdateFactory
                     index++;
                 }
             }
-            
-            update.communicationType = "singleGameInfo";
+
+            update.communicationType = "updateBoard";
             update.updatedBoard = board;
             update.matchID = action.matchID;
             update.whoseTurn = results.getString("next_turn");
-            
-            String[] players = {results.getString("p1"), results.getString("p2")};
-            
-            update.players = players;
+            update.playerName = results.getString("next_turn");
+            update.playerOneName = results.getString("p1");
+            update.playerTwoName = results.getString("p2");
             
             return update;
         

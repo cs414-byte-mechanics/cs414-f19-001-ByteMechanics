@@ -12,7 +12,6 @@ class MyGames extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
-        this.goToGamePage = this.goToGamePage.bind(this);
         this.abandonGame = this.abandonGame.bind(this);
         this.updateStatus = this.updateStatus.bind(this);
 
@@ -71,12 +70,8 @@ class MyGames extends React.Component {
 
 
 
-    goToGamePage(){
-        window.location.href = "/game";
-    }
-
     playGame(id){
-        this.setState({matchID: id},this.goToGamePage());
+        window.open(`/game/${id}`);
     }
     
     abandonGame(matchID){
@@ -91,7 +86,6 @@ class MyGames extends React.Component {
 
     renderTableData(games){
         if(this.props.gamesResults.length===0) return (<p>No matches found</p>);
-
         return this.props.gamesResults.map((data) => {
         let data_array = data.split(',');
         return (
