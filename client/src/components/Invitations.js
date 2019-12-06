@@ -140,7 +140,7 @@ class Invitations extends React.Component {
           </Card>
         );
       }
-      else if (this.props.showRefreshInvs) {
+      else {
         return (
           <Card className="card_condensed">
               <CardTitle>No sent invitations to show</CardTitle>
