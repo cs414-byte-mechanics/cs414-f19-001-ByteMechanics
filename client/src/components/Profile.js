@@ -1,10 +1,9 @@
 import React from 'react';
 import './styles/MyGames.scss'
 import {Input, Button, UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
-import { FaTrashAlt as Trash, FaPlay as Play} from 'react-icons/fa'
-import Confirm from './Confirm.js'
+import { FaEnvelopeOpenText as Invite} from 'react-icons/fa'
 
-class MyGames extends React.Component {
+class Profile extends React.Component {
 
     constructor(props) {
         super(props);
@@ -12,9 +11,7 @@ class MyGames extends React.Component {
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
-        this.abandonGame = this.abandonGame.bind(this);
         this.updateStatus = this.updateStatus.bind(this);
-
         this.state = {
             searchString: '',
             status: 'In Progress',
@@ -25,7 +22,7 @@ class MyGames extends React.Component {
     getGames(){
         let searchObject = {
             communicationType: "searchGames",
-            userName: this.props.userName,
+            userName: this.props.match.params.username,
             playerTwoName: this.state.searchString,
             status: this.state.status,
         };
@@ -68,21 +65,14 @@ class MyGames extends React.Component {
       });
     }
 
-
-
-    playGame(id){
-        window.open(`/game/${id}`);
-    }
-    
-    abandonGame(matchID){
-        let abandonObject = {
-            communicationType: "quitMatch",
-            matchID: matchID,
-            playerQuitting: this.props.userName
-        }
-        this.props.sendObject(abandonObject)
-        alert("Game sucessfully abandoned")
-        this.getGames();
+    sendGameInvite(userName) {
+        let inviteObject = {
+            communicationType: "sendInvitation",
+            invitationFrom: this.props.userName,
+            invitationTo: userName
+        };
+        this.props.sendObject(inviteObject);
+        this.setState({showInvitePlayer: false});
     }
 
     renderTableData(games){
@@ -94,20 +84,18 @@ class MyGames extends React.Component {
                 <p><b><a href={"/user/"+data_array[1]}>{data_array[1]}</a></b></p>
                 <p><i>{data_array[2]}</i></p>
                 <p>Last updated {data_array[3]}</p>
-                <div className="game_buttons">
-                    <Confirm title="Abandon" className="game_buttons" onClick={e => this.abandonGame(data_array[0])} button=<Trash className="game_buttons"/> reason="Abandon Game"/>
-                    <Play title="Play" className="game_buttons" onClick={e => this.playGame(data_array[0])}/>
-                </div>
             </div>);
         })
     }
 
     render () {
         return (
-            <div id="mygames">
+            <div id="profiles">
                 <div id="wrapper">
                     <div id="games">
-                        <div id="subtitle">My Games</div>
+                        <div id="subtitle"><b>{this.props.match.params.username}</b>'s Game History
+                            <Invite className="invite_button" title="Invite to play!" onClick={()=>{this.sendGameInvite(this.props.match.params.username)}}/>
+                       </div>
                         {this.renderSearchInputs()}
                         <div id="game_data">
                             {this.renderTableData(this.props.gamesResults)}
@@ -118,4 +106,4 @@ class MyGames extends React.Component {
         );
     }
 }
-export default MyGames;
+export default Profile;
