@@ -38,7 +38,7 @@
     .action_button {
       float: right;
       margin:auto 10px auto auto;
-      font-size:18px;
+      font-size:20px;
       transition: .3s;
       cursor: pointer;
       color: darken($backgroundColor, 30%);
@@ -77,13 +77,16 @@
         display: flex;
         justify-content: space-between;
         margin:3px;
-        height: 30px;
+        padding:3px;
+        //height: 30px;
         background-color: darken($foregroundColor, 10%);
         font-size: 15px;
         p {
           margin:auto 10px;
         }
+        #invite_button {
 
+        }
       }
     }
   }

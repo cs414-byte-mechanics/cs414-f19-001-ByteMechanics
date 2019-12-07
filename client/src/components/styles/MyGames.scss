@@ -1,8 +1,24 @@
 @import "./variables";
+#profiles {
+  #wrapper {
+    max-width: 800px;
+  }
+  .invite_button {
+    flex-shrink: 0;
+    //float:right;
+    margin:0px 10px 5px;
+    white-space: nowrap;
+    font-size:24px;
+    transition: .3s;
+    cursor: pointer;
+    color: $buttonColor;
+    &:hover {
+      color: $buttonHoverColor;
+    }
+  }
+}
 
-#mygames {
-
-
+#mygames, #profiles {
   .btn {
     background-color: $buttonColor;
     text-align:center;
@@ -16,14 +32,15 @@
   #wrapper {
     margin:auto;
     max-width: 600px;
-
   }
+
   #games {
     margin:5px 20px;
     #subtitle {
       font-size: 25px;
       margin-bottom: 15px;
       border-bottom: $backgroundColor 3px solid;
+
     }
     #search_input {
       display: flex;
@@ -64,7 +81,7 @@
     #game_data {
       display: flex;
       flex-direction: column;
-      max-height: 200px;
+      max-height: 250px;
       overflow-y:scroll;
       p {
         font-size: 14px;

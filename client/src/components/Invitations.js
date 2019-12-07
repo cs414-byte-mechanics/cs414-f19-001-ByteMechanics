@@ -96,10 +96,10 @@ class Invitations extends React.Component {
         this.props.searchResult.forEach(user => {
             list.push(
                 <div className="result" key={user}>
-                  <p>{user}</p>
-                <div className="invite_button">
-                    <Invite className="action_button" onClick={()=>{this.sendGameInvite(user)}}/>
-                </div>
+                    <a href={"/user/"+user}>{user}</a>
+                    <div className="invite_button">
+                        <Invite className="action_button" onClick={()=>{this.sendGameInvite(user)}}/>
+                    </div>
                 </div>
             )
         });
@@ -155,7 +155,7 @@ class Invitations extends React.Component {
       for (let i = 0; i < namesList.length; i++) {
         rows.push(
           <tr key={namesList[i]+"_"+i}>
-            <td>{namesList[i]}</td>
+            <td><a href={"/user/"+namesList[i]}>{namesList[i]}</a></td>
               <td><i>{this.convertToDate(timesList[i])}</i></td>
           </tr>)
       }
@@ -197,8 +197,10 @@ class Invitations extends React.Component {
     for (let i = 0; i < namesList.length; i++) {
       rows.push(
         <tr>
-          <td key={namesList[i]+"_"+i}>{namesList[i]}</td>
-            <td><i>{this.convertToDate(timesList[i])}</i></td>
+          <td key={namesList[i]+"_"+i}>
+              <a href={"/user/"+namesList[i]}>{namesList[i]}</a>
+          </td>
+          <td><i>{this.convertToDate(timesList[i])}</i></td>
           <td>
             <ButtonGroup>
               <Accept className="action_button" onClick={() => this.handleAcceptInvitationButtonClick(namesList[i])}/>

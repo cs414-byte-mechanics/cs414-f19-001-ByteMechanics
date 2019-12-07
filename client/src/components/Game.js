@@ -6,6 +6,7 @@ import Form from './Form.js'
 import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
+import Profile from "./Profile";
 
 class Game extends Component {
     constructor(props){
@@ -146,7 +147,7 @@ class Game extends Component {
                 function () {
                     if (self.connection.readyState === 1) {
                         if (callback != null){
-                            obj.userName = self.state.logIn.userName;
+                            if(!obj.userName) obj.userName = self.state.logIn.userName;
                             callback();
                         }
                     } else {
@@ -221,6 +222,14 @@ class Game extends Component {
                                                             player1={this.state.player1[0]} player2={this.state.player2[0]}
                                                             match_id={this.state.match_id[0]} status={this.state.status}
                                                             userName={this.state.logIn.userName} send={this.sendObject}/>}
+                        />
+                        <Route
+                            path="/user/:username"
+                            render={(props) => <Profile {...props} game={this.state.games[0]} playerName = {this.state.next_turn[0]}
+                                                          player1={this.state.player1[0]} player2={this.state.player2[0]}
+                                                          match_id={this.state.match_id[0]} status={this.state.status}
+                                                          userName={this.state.logIn.userName} sendObject={this.sendObject}
+                                                        gamesResults={this.state.searchGames}/>}
                         />
                     </Switch>
                 </div>
