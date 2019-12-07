@@ -282,6 +282,9 @@ public class UpdateFactory
         return update;
     }
 
+    /**
+     Returns status of game using the values expected by the client
+     */
     private String convertGameStatus(String databaseStatus){
         String statusForClient = "";
         if (databaseStatus.compareTo("in progress") == 0) {
