@@ -36,6 +36,10 @@ class MyGames extends React.Component {
         this.getGames();
     }
 
+    componentDidUpdate(){
+        this.getGames();
+    }
+
     listenForEnter(event) {
         if (event.keyCode === 13)
             this.getGames();
@@ -68,7 +72,9 @@ class MyGames extends React.Component {
       });
     }
 
-
+    displayUserProfile(user) {
+            window.open(`/user/${user}`);
+        }
 
     playGame(id){
         window.open(`/game/${id}`);
@@ -85,13 +91,16 @@ class MyGames extends React.Component {
         this.getGames();
     }
 
+
+//                <p><b><a href={"/user/"+data_array[1]}>{data_array[1]}</a></b></p>
+
     renderTableData(games){
         if(this.props.gamesResults.length===0) return (<p>No matches found</p>);
         return this.props.gamesResults.map((data) => {
         let data_array = data.split(',');
         return (
             <div className="result" key={data_array[0]}>
-                <p><b><a href={"/user/"+data_array[1]}>{data_array[1]}</a></b></p>
+                <p><b><a  onClick={e => this.displayUserProfile(data_array[1])}>{data_array[1]}</a></b></p>
                 <p><i>{data_array[2]}</i></p>
                 <p>Last updated {data_array[3]}</p>
                 <div className="game_buttons">
