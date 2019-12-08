@@ -45,7 +45,13 @@ public class DatabaseHandler  {
         ResultSet rs = checkCredentials.executeQuery(Query.createCountExistingCredentialsQuery(action));
         if (rs.next() && rs.getInt("total") == 0) {
             Statement registerUser = con.createStatement();
-            if(registerUser.executeUpdate(Query.createRegisterUserQuery(action)) != 1 ) throw new Exception("User not registered.");
+            if(registerUser.executeUpdate(Query.createRegisterUserQuery(action)) != 1 ) {
+                registerUser.close();
+                rs.close();
+                throw new Exception("User not registered.");
+            }
+            registerUser.close();
+            rs.close();
         } else {
             throw new Exception("User already in system.");
         }
@@ -54,7 +60,7 @@ public class DatabaseHandler  {
     public void unregisterUser(Action action) throws Exception {
         Statement unregisterUser = con.createStatement();
         int rowsAffected = unregisterUser.executeUpdate(Query.createUnregisterUser(action));
-
+        unregisterUser.close();
         if (rowsAffected < 1) throw new Exception("No users removed from system.");
     }
 
@@ -64,19 +70,25 @@ public class DatabaseHandler  {
     public String attemptLogin(Action action) throws Exception {
         Statement validateLogin = con.createStatement();
         ResultSet rs = validateLogin.executeQuery(Query.createValidateLoginQuery(action));
-
-        if (!rs.next()) throw new Exception("No user exists with this email and password.");
-        return rs.getString("username");
+        validateLogin.close();
+        if (!rs.next()) {
+            rs.close();
+            throw new Exception("No user exists with this email and password.");
+        }
+        String result = rs.getString("username");
+        rs.close();
+        return result;
     }
 
     public String[] searchUser(Action action) throws Exception {
         Statement search = con.createStatement();
         ResultSet rs = search.executeQuery(Query.createSearchUserQuery(action));
-
+        search.close();
         ArrayList<String> users = new ArrayList<String>();
         while (rs.next()) {
             users.add(rs.getString("username"));
         }
+        rs.close();
         return Arrays.asList(users.toArray()).toArray(new String[0]);
     }
 
@@ -84,6 +96,7 @@ public class DatabaseHandler  {
         String dateString = "";
         Statement search = con.createStatement();
         ResultSet rs = search.executeQuery(Query.createSearchGamesQuery(action));
+        search.close();
 
         ArrayList<String> matches = new ArrayList<String>();
         while (rs.next()) {
@@ -100,6 +113,7 @@ public class DatabaseHandler  {
 
             matches.add(Integer.toString(rs.getInt("match_id")) + "," + opponent + "," + status + "," + dateString);
         }
+        rs.close();
         return Arrays.asList(matches.toArray()).toArray(new String[0]);
     }
 
@@ -109,6 +123,7 @@ public class DatabaseHandler  {
     public int addNewGame(Action action, String[][] board) throws Exception {
         Statement addNewGame = con.createStatement();
         int matchID = addNewGame.executeUpdate(Query.createAddNewGameQuery(action, board), Statement.RETURN_GENERATED_KEYS);
+        addNewGame.close();
         return matchID;
     }
 
@@ -118,10 +133,14 @@ public class DatabaseHandler  {
     public String[][] retrieveGameInfo(Action action) throws Exception {
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
-
-        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        gameInfo.close();
+        if (!results.next()) {
+            results.close();
+            throw new Exception("No game exists with this match ID.");
+        }
 
         String boardAsString = results.getString("board");
+        results.close();
         String[][] board = new String[GameBoard.NUM_ROWS][GameBoard.NUM_COLUMNS];
 
         int index = 0;
@@ -140,10 +159,14 @@ public class DatabaseHandler  {
     public String retrieveActivePlayerInfo(Action action) throws Exception {
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
-
-        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        gameInfo.close();
+        if (!results.next()) {
+            results.close();
+            throw new Exception("No game exists with this match ID.");
+        }
 
         String activePlayer = results.getString("next_turn");
+        results.close();
         return activePlayer;
     }
 
@@ -153,10 +176,14 @@ public class DatabaseHandler  {
     public String retrieveWinnerInfo(Action action) throws Exception {
         Statement gameInfo = con.createStatement();
         ResultSet results = gameInfo.executeQuery(Query.createRetrieveGameQuery(action));
-
-        if (!results.next()) throw new Exception("No game exists with this match ID.");
+        gameInfo.close();
+        if (!results.next()){
+            results.close();
+            throw new Exception("No game exists with this match ID.");
+        }
 
         String winner = results.getString("winner");
+        results.close();
         return winner;
     }
 
@@ -173,6 +200,8 @@ public class DatabaseHandler  {
             rowsAffected = saveGame.executeUpdate(Query.createUpdateGameWinnerQuery(matchID, winner));
             if (rowsAffected < 1) throw new Exception("Winner was not saved in database.");
         }
+
+        saveGame.close();
 
     }
 
@@ -207,12 +236,14 @@ public class DatabaseHandler  {
         try {
             Statement currentInvsOrTimes = con.createStatement();
             ResultSet rs = currentInvsOrTimes.executeQuery(Query.createGetCurrentInvitationsOrTimesQuery(colName, invitationsOf));
-
+            currentInvsOrTimes.close();
             if (!rs.next()) {
+                rs.close();
                 throw new Exception("rs.next() returned false");
             }
             else {
                 current = rs.getString(1);
+                rs.close();
             }
 
         } catch (Exception e) {
@@ -240,7 +271,8 @@ public class DatabaseHandler  {
 
         Statement updateCurrentInvsOrTimes = con.createStatement();
         ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, addToInvitationsListOf));
-
+        updateCurrentInvsOrTimes.close();
+        rs.close();
     }
 
     public boolean duplicateInvitation(String currentInvitations, String newInvitation) {
@@ -300,6 +332,8 @@ public class DatabaseHandler  {
         //Retrieve game info to get the player that didn't abandon
         Statement retrieveGame = con.createStatement();
         ResultSet results = retrieveGame.executeQuery(Query.createRetrieveGameQuery(action));
+        retrieveGame.close();
+        results.close();
 
         if (!results.next()) throw new Exception("No game exists with this match ID.");
 
@@ -316,7 +350,7 @@ public class DatabaseHandler  {
         //Set the player to be the winner and flag the game as abandoned
         Statement abandonGame = con.createStatement();
         abandonGame.executeQuery(Query.createAbandonGameQuery(action.matchID, winner));
-
+        abandonGame.close();
         return winner;
     }
 
@@ -369,20 +403,25 @@ public class DatabaseHandler  {
             String updated = String.join(",", updatedList);
 
             Statement updateCurrentInvsOrTimes = con.createStatement();
+            ResultSet rs;
 
             if (updatedList.size() == 0) {
-                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateNullInvitationsOrTimesQuery(colName, removeFromInvitationsListOf));
+                rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateNullInvitationsOrTimesQuery(colName, removeFromInvitationsListOf));
             }
             else {
-                ResultSet rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, removeFromInvitationsListOf));
+                rs = updateCurrentInvsOrTimes.executeQuery(Query.createUpdateInvitationsOrTimesQuery(colName, updated, removeFromInvitationsListOf));
             }
+            rs.close();
+            updateCurrentInvsOrTimes.close();
         } catch(Exception e) {throw e;}
 
     }
     
     public ResultSet getGameInfo(String matchID) throws Exception {
         Statement gameInfo = con.createStatement();
-        return gameInfo.executeQuery(Query.createGetGameInfoQuery(matchID));
+        ResultSet result = gameInfo.executeQuery(Query.createGetGameInfoQuery(matchID));
+        gameInfo.close();
+        return result;
     }
 
 }
