@@ -384,4 +384,13 @@ public class DatabaseHandler  {
         } catch(Exception e) {throw e;}
 
     }
+    
+    public String retrieveEmailForUser(String userName) throws Exception {
+        Statement retrieveEmail = con.createStatement();
+        ResultSet results = retrieveEmail.executeQuery(Query.createGetEmailQuery(userName));
+                
+        if (!results.next()) throw new Exception("No email is associated with this username.");
+
+        return results.getString("email");
+    }
 }

@@ -124,4 +124,9 @@ public class DatabaseHandlerTest {
         action3.userName = "java";
         dbh.unregisterUser(action3);
     }
+    
+    //@Test
+    public void testGetUserEmail() throws Exception {
+        assertEquals("ajeske11@gmail.com", dbh.retrieveEmailForUser("aislinnJeske"));
+    }
 }
