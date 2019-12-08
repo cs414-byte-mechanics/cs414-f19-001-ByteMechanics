@@ -281,6 +281,23 @@ public class UpdateFactory
         update.statusMessage = "invite rejection complete";
         return update;
     }
+
+    /**
+     Returns status of game using the values expected by the client
+     */
+    private String convertGameStatus(String databaseStatus){
+        String statusForClient = "";
+        if (databaseStatus.compareTo("in progress") == 0) {
+            statusForClient = "active";
+        }
+        else if (databaseStatus.compareTo("abandoned") == 0) {
+            statusForClient = "quit";
+        }
+        else if (databaseStatus.compareTo("finished") == 0) {
+            statusForClient = "won";
+        }
+        return statusForClient;
+    }
     
     private Update retrieveSingleGame(Action action){
         try {
@@ -306,6 +323,7 @@ public class UpdateFactory
             update.playerName = results.getString("next_turn");
             update.playerOneName = results.getString("p1");
             update.playerTwoName = results.getString("p2");
+            update.endCondition = convertGameStatus(results.getString("status"));
 
             if(!(action.userName.equals(update.playerOneName) || action.userName.equals(update.playerTwoName))) throw new Exception();
 

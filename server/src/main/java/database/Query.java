@@ -78,7 +78,7 @@ public class Query {
     }
     
     public static String createGetGameInfoQuery(String matchID){
-        return "SELECT board, p1, p2, next_turn FROM matches WHERE match_id = " + matchID + ";";
+        return "SELECT board, p1, p2, next_turn, status FROM matches WHERE match_id = " + matchID + ";";
     }
    
    public static String boardToString(String[][] board){

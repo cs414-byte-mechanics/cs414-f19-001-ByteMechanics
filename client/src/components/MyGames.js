@@ -42,7 +42,7 @@ class MyGames extends React.Component {
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value})
+        this.setState({status: event.target.value}, () => this.getGames())
     }
     renderSearchInputs() {
         return (
@@ -68,8 +68,6 @@ class MyGames extends React.Component {
       });
     }
 
-
-
     playGame(id){
         window.open(`/game/${id}`);
     }
@@ -84,6 +82,7 @@ class MyGames extends React.Component {
         alert("Game sucessfully abandoned")
         this.getGames();
     }
+
 
     renderTableData(games){
         if(this.props.gamesResults.length===0) return (<p>No matches found</p>);

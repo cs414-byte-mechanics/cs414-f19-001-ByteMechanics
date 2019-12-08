@@ -219,7 +219,7 @@ send the updated board to the clients so that they can display it so the players
   "matchID": "",
   "playerName": "",
   "pieceID": "G",
-  "endCondition": ["active", "won", "quit"],
+  "endCondition": "active"|"won"|"quit",
   "updatedBoard": [][],
   "playerOneName": "",
   "playerTwoName": "",
@@ -428,7 +428,7 @@ This communication type will be sent from the server to the clients. It will be 
   "communicationType": "endMatch",
   "communicationVersion": 1,
   "matchID": "",
-  "endCondition": ["won", "quit"],
+  "endCondition": "won"|"quit",
   "winnerName": "",
   "loserName": "",
   "matchEndTime": ""

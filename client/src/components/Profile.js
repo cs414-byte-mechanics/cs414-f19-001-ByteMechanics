@@ -39,7 +39,7 @@ class Profile extends React.Component {
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value})
+        this.setState({status: event.target.value}, () => this.getGames())
     }
     renderSearchInputs() {
         return (

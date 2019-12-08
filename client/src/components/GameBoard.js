@@ -148,6 +148,7 @@ class GameBoard extends Component {
         switch(this.props.status) {
             case "won": return " won!  Game over!";
             case "quit": return " quit.  Game halted!";
+            case "active": return "'s move";
             default : return "'s move";
         }
     }
