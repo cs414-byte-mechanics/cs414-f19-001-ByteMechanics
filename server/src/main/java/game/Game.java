@@ -92,7 +92,7 @@ public class Game {
         /* which player owns the piece to be moved */
         int pieceOwner;
         try {
-            pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).player;
+            pieceOwner = board.getGamePiece(GameBoard.getRow(location), GameBoard.getCol(location)).getPlayer();
         }
         catch (Exception e){
             /* catch when there is no piece on the board */

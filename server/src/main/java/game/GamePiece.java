@@ -33,9 +33,17 @@ public abstract class GamePiece {
     public int getRow(){
         return row;
     }
+    
+    public void setRow(int r){
+        row = r;
+    }
 
     public int getColumn(){
         return column;
+    }
+    
+    public void setColumn(int c){
+        column = c;
     }
 
     public int getPlayer(){

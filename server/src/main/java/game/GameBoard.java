@@ -156,7 +156,7 @@ public class GameBoard{
 
         for (int i = 0; i < NUM_COLUMNS; i++){
             GamePiece piece = getGamePiece(RIVER_ROW,i);
-            if ((piece != null ) && (piece.player == activePlayer) && !(piece instanceof CrocodilePiece)){
+            if ((piece != null ) && (piece.getPlayer() == activePlayer) && !(piece instanceof CrocodilePiece)){
                 riverDwellers.add(piece);
             }
         }
@@ -197,8 +197,8 @@ public class GameBoard{
         if(inBounds(row, col)){
             int startingRow = piece.getRow();
             int startingCol = piece.getColumn();
-            piece.row = row;
-            piece.column = col;
+            piece.setRow(row);
+            piece.setColumn(col);
             board[row][col] = piece;
             board[startingRow][startingCol] = null;
 
@@ -238,7 +238,7 @@ public class GameBoard{
     }
 
     public void capturePiece(GamePiece pieceToBeCaptured) {
-        board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+        board[pieceToBeCaptured.getRow()][pieceToBeCaptured.getColumn()] = null;
     }
 
     public boolean lionInCastle(String[][] board, int pieceCurrentLocation){

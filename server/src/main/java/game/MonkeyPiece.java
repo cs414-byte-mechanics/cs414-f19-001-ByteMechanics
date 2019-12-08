@@ -12,7 +12,7 @@ public class MonkeyPiece extends GamePiece{
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "m" : "M";
+        return (getPlayer() == 1) ? "m" : "M";
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board){

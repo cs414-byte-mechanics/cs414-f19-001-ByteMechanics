@@ -11,7 +11,7 @@ public class GiraffePiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "g" : "G";
+        return (getPlayer() == 1) ? "g" : "G";
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -24,14 +24,14 @@ public class GiraffePiece extends GamePiece {
         if (GameBoard.inBounds(destRow, destCol)) {
 
             /* check if Giraffe moved/jumped by two steps straight OR diagonal and it MUST capture*/
-            if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2)
-                    || diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 4)
+            if ((orthogonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 2)
+                    || diagonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 4)
 
                 return squareEmptyOrCapturable(destRow, destCol, board);
 
             /* check if Giraffe moved by one step straight OR diagonal in any direction and it CANNOT capture */
-            if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 1)
-                    || diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2) {
+            if ((orthogonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1)
+                    || diagonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 2) {
 
                 return squareEmpty(destRow, destCol, board);
             }else

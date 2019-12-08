@@ -1,6 +1,10 @@
 package Game;
 
 public class LionPiece extends GamePiece {
+    //Store castle bounds
+    private int rowLowerBound;
+    private int rowUpperBound;
+    
     /* initial constructor*/
     public LionPiece() {
     }
@@ -10,11 +14,8 @@ public class LionPiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "l" : "L";
+        return (getPlayer() == 1) ? "l" : "L";
     }
-
-    // variable to store castle bound/border for each player
-    int rowLowerBound , rowUpperBound;
 
     // helper function to check castle's ROW bound/border
     public boolean checkCastleRowBound(int destRow, int rowUpperBound, int rowLowerBound){
@@ -29,7 +30,7 @@ public class LionPiece extends GamePiece {
     // helper function to check if destination is in lion's own castle
     public boolean DestinationIsInOwnCastle(int destRow, int destCol)
     {
-        if (this.player == 1) {
+        if (getPlayer() == 1) {
             rowLowerBound = 0;
             rowUpperBound= 2;
         }
@@ -43,7 +44,7 @@ public class LionPiece extends GamePiece {
 
     // helper function to check if destination is in lion's opponent castle
     public boolean DestinationIsInOpponentCastle(int destRow, int destCol){
-        if (this.player == 1)
+        if (getPlayer() == 1)
         {
             rowLowerBound = 4;
             rowUpperBound = 6;
@@ -68,7 +69,7 @@ public class LionPiece extends GamePiece {
             if (DestinationIsInOwnCastle(destRow, destCol)) {
 
                 /*move one step to an empty square or capture if there is any opponent's piece  */
-                if ((orthogonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 1) || (diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol) == 2))
+                if ((orthogonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1) || (diagonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol) == 2))
 
                     return squareEmptyOrCapturable(destRow, destCol, board);
             }
@@ -78,7 +79,7 @@ public class LionPiece extends GamePiece {
 
                 // if destination is in opponent's castle, it must be the other lion with a clear path between
                 /* The last condition never happens as every player has only one lion, but added to write extra tests */
-                return (board[destRow][destCol] instanceof LionPiece) && (pathClear(destRow, destCol, board)) && this.player != board[destRow][destCol].player;
+                return (board[destRow][destCol] instanceof LionPiece) && (pathClear(destRow, destCol, board)) && getPlayer() != board[destRow][destCol].getPlayer();
                 }else
                     return false;
 

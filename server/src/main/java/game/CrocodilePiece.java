@@ -9,7 +9,7 @@ public class CrocodilePiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "c" : "C";
+        return (getPlayer() == 1) ? "c" : "C";
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -26,8 +26,8 @@ public class CrocodilePiece extends GamePiece {
         /* check for out of bounds moves */
         if (GameBoard.inBounds(destRow, destCol)) {
 
-            int distCol = Math.abs(destCol - this.column);
-            int distRow = Math.abs(destRow - this.row);
+            int distCol = Math.abs(destCol - getColumn());
+            int distRow = Math.abs(destRow - getRow());
             /* Crocodile moves 1 square in any direction.  */
             if ((distCol <= 1) && (distRow <= 1)) {
             /* Crocodile is moving a single square in any direction.
@@ -40,7 +40,7 @@ public class CrocodilePiece extends GamePiece {
             if (inRiver() & inRiver(destRow)) {
                 /* crocodile and destination location are in river */
                 /* are we going upriver (+1) or downriver (-1) */
-                int riverDir = (this.column < destCol) ? 1 : -1;
+                int riverDir = (getColumn() < destCol) ? 1 : -1;
 
                 /* check for blocking pieces along the river */
                 if (!(pathClear(destRow, destCol, board)))
