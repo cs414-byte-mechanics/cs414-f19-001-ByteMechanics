@@ -24,7 +24,7 @@ public class Query {
    public static String createAddNewGameQuery(Action action, String[][] board){
    
         return "INSERT INTO matches (board, p1, p2, start, status, next_turn) VALUES (\"" + boardToString(board) + "\", \""
-                + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\"" + ", \"" + action.playerOneName + "\");";
+                + action.playerOneName + "\", \"" + action.playerTwoName + "\", CURRENT_TIMESTAMP, \"in progress\"" + ", \"" + action.playerTwoName + "\");";
    }
 
     public static String createRetrieveGameQuery(Action action){
@@ -80,6 +80,11 @@ public class Query {
     public static String createGetGameInfoQuery(String matchID){
         return "SELECT board, p1, p2, next_turn, status FROM matches WHERE match_id = " + matchID + ";";
     }
+   
+   public static String createGetEmailQuery(String userName){
+        return "SELECT email FROM users WHERE username = \"" + userName + "\";";
+
+   }
    
    public static String boardToString(String[][] board){
         String boardAsString = "";

@@ -6,6 +6,11 @@ import org.java_websocket.WebSocket;
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.Authenticator;
+import java.util.Properties;
+import javax.mail.PasswordAuthentication;
 
 public class UpdateFactory
 {
@@ -275,6 +280,14 @@ public class UpdateFactory
         update.communicationType = "inviteRejectStatus";
         try {
             db.removeInvitation(action);
+
+            //Get email associated with user that sent invite
+            String invitorEmail = db.retrieveEmailForUser(action.invitationFrom);
+            System.out.println(invitorEmail);
+            
+            //Send notification to user that sent invite
+            sendEmailNotification( action.userName + " rejected your invitation to start a game on CongoOnline. Log in to invite another friend!", invitorEmail, action.userName);
+            
         } catch(Exception e) {
             return new ServerError(-1, "Error in trying to reject invitation.");
         }
@@ -342,6 +355,13 @@ public class UpdateFactory
         createGameAction.playerTwoName = action.invitationFrom;
         try {
             this.createNewMatch(createGameAction);
+            
+            //Get email associated with this user
+            String invitorEmail = db.retrieveEmailForUser(action.invitationFrom);
+            
+            //Send notification to user that sent invite
+            sendEmailNotification( action.userName + " accepted your invitation to start a game on CongoOnline. Log in to make the first move!", invitorEmail, action.userName);
+
         } catch(Exception e) {
             System.err.println("New match cannot be created");
             return new ServerError(-1, "Error in creating new game.");
@@ -356,5 +376,32 @@ public class UpdateFactory
         update.statusMessage = "invitation acceptance completed";
         return update;
    }
+   
+   private boolean sendEmailNotification(String emailBody, String recipientEmail, String opponent){
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
 
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("congoOnlineTeam", "byteMechanics414");
+                    }
+                });
+                
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setContent(emailBody, "text/plain");
+            message.setSubject(opponent + " has responded to your invitation", "text/plain");
+            message.setFrom(new InternetAddress(recipientEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+
+            Transport.send(message);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+   }
 }
