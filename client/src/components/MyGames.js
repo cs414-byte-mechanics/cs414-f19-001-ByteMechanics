@@ -42,7 +42,7 @@ class MyGames extends React.Component {
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value})
+        this.setState({status: event.target.value}, () => this.getGames())
     }
     renderSearchInputs() {
         return (
@@ -67,10 +67,6 @@ class MyGames extends React.Component {
         searchString: event.target.value
       });
     }
-
-    displayUserProfile(user) {
-            window.open(`/user/${user}`);
-        }
 
     playGame(id){
         window.open(`/game/${id}`);
