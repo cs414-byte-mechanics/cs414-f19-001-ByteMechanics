@@ -101,7 +101,6 @@ class Game extends Component {
         state.player1 = [update.playerOneName];
         state.player2 = [update.playerTwoName];
         state.status = update.endCondition;
-        console.log("status "+update.endCondition);
         this.setState(state);
     }
 

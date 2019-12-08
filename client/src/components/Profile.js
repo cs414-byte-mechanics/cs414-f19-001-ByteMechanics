@@ -33,10 +33,6 @@ class Profile extends React.Component {
         this.getGames();
     }
 
-    componentDidUpdate(){
-        this.getGames();
-    }
-
     listenForEnter(event) {
         if (event.keyCode === 13)
             this.getGames();
