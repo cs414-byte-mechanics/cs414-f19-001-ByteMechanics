@@ -54,7 +54,7 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
-        // this.getInvitationsReceived = this.getInvitationsReceived.bind(this);
+
 
     }
 
@@ -91,8 +91,8 @@ class Game extends Component {
             case "searchResult": this.updateSearchResult(update); break;
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
-            case "sendUserInvsLists" : this.setInvitationsLists(update);break
-            case "inviteAcceptStatus": break;
+            case "sendUserInvsLists" : this.setInvitationsLists(update);break;
+            case "inviteAcceptStatus": this.handleInviteAcceptStatus(update); break;
         }
     }
 
@@ -186,16 +186,6 @@ class Game extends Component {
       this.setState({showInvitePlayer: true});
     }
 
-    // getInvitationsReceived() {
-    //     console.log("something");
-    //     this.setState({showRefreshInvs: true})
-    //     let getUserInvsLists = {
-    //         communicationType: "getUserInvsLists",
-    //         userName: this.state.logIn.userName
-    //     };
-    //     this.sendObject(getUserInvsLists);
-    // }
-
     setInvitationsLists(update) {
       let newInvitationLists = {
         sentToNames: update.sentToNames,
@@ -206,8 +196,9 @@ class Game extends Component {
       this.setState({invitationLists: newInvitationLists});
     }
 
+    handleInviteAcceptStatus() {
 
-
+    }
 
     render(){
 

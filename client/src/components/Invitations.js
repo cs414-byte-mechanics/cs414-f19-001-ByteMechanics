@@ -234,6 +234,7 @@ class Invitations extends React.Component {
       };
       this.props.sendObject(acceptInvite);
       this.getInvitationsReceived();
+      this.props.getGames();
   }
 
 }
