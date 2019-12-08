@@ -396,7 +396,7 @@ public class UpdateFactory
             message.setContent(emailBody, "text/plain");
             message.setSubject(opponent + " has responded to your invitation", "text/plain");
             message.setFrom(new InternetAddress(recipientEmail));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("ajeske11@gmail.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
 
             Transport.send(message);
             return true;
