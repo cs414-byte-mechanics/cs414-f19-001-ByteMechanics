@@ -26,8 +26,8 @@ public class GiraffeTest {
     public void testGiraffeP1SimpleMove() throws Exception {
         /*Start with initial board and test is Player 1 giraffe can move from (0,0) to (2,0) */
 
-        GiraffePiece giraffe = (GiraffePiece) congoGame.board[0][0];
-        GamePiece[][] congoBoard = congoGame.board;
+        GiraffePiece giraffe = (GiraffePiece) congoGame.getBoard()[0][0];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         /*move giraffe to wrong place*/
 
@@ -54,8 +54,8 @@ public class GiraffeTest {
 
     @Test /* Added By Fari -- Test for Giraffe piece player2 */
     public void testGiraffeP2SimpleMove() throws Exception {
-        GiraffePiece giraffeP2 = (GiraffePiece) congoGame.board[6][0];
-        GamePiece[][] congoBoard = congoGame.board;
+        GiraffePiece giraffeP2 = (GiraffePiece) congoGame.getBoard()[6][0];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         congoGame.movePiece(5,0,4,0);
         congoGame.movePiece(5,1,4,0);

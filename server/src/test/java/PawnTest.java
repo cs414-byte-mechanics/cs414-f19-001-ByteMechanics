@@ -24,9 +24,9 @@ public class PawnTest {
     @Test
     public void testPawnP1Move() throws Exception {
         /*Start with initial board and test is Player 1 */
-        PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][0];
+        PawnPiece Pawn1P1 = (PawnPiece) congoGame.getBoard()[1][0];
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
          //pawn1 can move from (1,0) to (2,0) ? yes
         assertTrue(Pawn1P1.ValidateMove(2, 0, congoBoard) == true);
@@ -49,8 +49,8 @@ public class PawnTest {
     @Test
     public void pawn1MoveTest() throws Exception {
 
-        PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][5];
-        GamePiece[][] congoBoard = congoGame.board;
+        PawnPiece Pawn1P1 = (PawnPiece) congoGame.getBoard()[1][5];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         // pawn 1 is on (6,3)
         congoGame.movePiece(1,5,6,3); // now he is super pawn
@@ -82,12 +82,12 @@ public class PawnTest {
     @Test
     public void pawnMoveTest() throws Exception {
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
-        PawnPiece Pawn1P1 = (PawnPiece) congoGame.board[1][0];
-        PawnPiece Pawn4P1 = (PawnPiece) congoGame.board[1][3];
-        PawnPiece Pawn6P1 = (PawnPiece) congoGame.board[1][5];
-        PawnPiece Pawn7P1 = (PawnPiece) congoGame.board[1][6];
+        PawnPiece Pawn1P1 = (PawnPiece) congoGame.getBoard()[1][0];
+        PawnPiece Pawn4P1 = (PawnPiece) congoGame.getBoard()[1][3];
+        PawnPiece Pawn6P1 = (PawnPiece) congoGame.getBoard()[1][5];
+        PawnPiece Pawn7P1 = (PawnPiece) congoGame.getBoard()[1][6];
 
         // move pawn1p1 from 1,0 to 4,1
         congoGame.movePiece(1,0,6,3);
@@ -122,10 +122,10 @@ public class PawnTest {
     public void testPawn2SimpleMove() throws Exception {
 
         /*Start with initial board and test is Player2 */
-        PawnPiece Pawn1P2 = (PawnPiece) congoGame.board[5][0];
-        PawnPiece Pawn2P2 = (PawnPiece) congoGame.board[5][1];
+        PawnPiece Pawn1P2 = (PawnPiece) congoGame.getBoard()[5][0];
+        PawnPiece Pawn2P2 = (PawnPiece) congoGame.getBoard()[5][1];
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         // pawn2 can move from (5,0) to (4,0)
         assertTrue(Pawn1P2.ValidateMove(4, 0, congoBoard) == true); // yes, can move forward
@@ -163,9 +163,9 @@ public class PawnTest {
     @Test
     public void pawn2Test() throws Exception {
 
-        PawnPiece Pawn2P2 = (PawnPiece) congoGame.board[5][2];
-        PawnPiece Pawn3P2 = (PawnPiece) congoGame.board[5][3];
-        GamePiece[][] congoBoard = congoGame.board;
+        PawnPiece Pawn2P2 = (PawnPiece) congoGame.getBoard()[5][2];
+        PawnPiece Pawn3P2 = (PawnPiece) congoGame.getBoard()[5][3];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         // move pawn2 from 5,1 to 0,4 to make it super pawn
         congoGame.movePiece(5,2, 0,4);
@@ -267,7 +267,7 @@ public class PawnTest {
     public void moveOneStepStraightForward() throws Exception {
         /* move player 1's pawn one step straight or diagonally forward */
         GamePiece pawn1 = congoGame.getGamePiece(1,6);
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         assertTrue(pawn1.ValidateMove(2, 6, congoBoard) == true); /*move one step straight forward? yes */
         assertTrue(pawn1.ValidateMove(2, 5, congoBoard) == true); /*move one step diagonally forward?yes*/
@@ -287,7 +287,7 @@ public class PawnTest {
 
     @Test
     public void moveOneStepsStraightBackward() throws Exception {
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         /* for player1 - move One step backward*/
         GamePiece pawn1 = congoGame.getGamePiece(1,3);
@@ -307,7 +307,7 @@ public class PawnTest {
 
     @Test
     public void moveOneTwoStepsStraightBackwardP2() throws Exception {
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         /* for player2 - move One step backward*/
         GamePiece pawn2 = congoGame.getGamePiece(5,3);
@@ -322,7 +322,7 @@ public class PawnTest {
 
     @Test
     public void moveTwoStepsStraightBackward() throws Exception {
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         /* for player1 */
         GamePiece pawn1 = congoGame.getGamePiece(1,3);
@@ -347,7 +347,7 @@ public class PawnTest {
     @Test
     public void superPawnMoveSide() throws Exception {
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         GamePiece myPawn = congoGame.getGamePiece(1,5);
         congoGame.movePiece(1,5, 6, 3);
@@ -377,7 +377,7 @@ public class PawnTest {
 
     @Test
     public void testSuperPawnMoveSide() throws Exception{
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
         GamePiece myPawn = congoGame.getGamePiece(1,5);
 
         ArrayList<Integer> movesRow = new ArrayList<Integer>();

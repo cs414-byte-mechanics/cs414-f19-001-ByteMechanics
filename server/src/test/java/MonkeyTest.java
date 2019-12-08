@@ -33,28 +33,28 @@ public class MonkeyTest {
         movesCol.add(0);
 
         /* jump to 1,0 which should be blocked*/
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
         movesCol.set(0,1);  /* try jumping to 1,1 which should also be blocked by a pawn */
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
         movesCol.set(0,2);  /* try jumping to 1,2 which is again blocked by a pawn */
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
         movesRow.set(0,2); /* try jumping to 2,2 which is not a straight line move */
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
 
         /* move the opponent's zebra to 1,2 */
         congoGame.movePiece(6,6,1,2);  /* move zebra from 6,6 to 1,2 so it is capturable with a jump */
         /* make first move in sequence -> 2,3 */
         movesRow.set(0,2);
         movesCol.set(0,3);
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == true);
         congoGame.movePiece(6,0,1,4);  /* move opponent's giraffe to 1,4 */
         /* will not be capturable because crocodile is blocking */
         movesRow.add(0);  /* add jump to 0,5, but this should be blocked */
         movesCol.add(5);  /* Now have 2 moves in our sequence */
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
         /* now move the crocodile and allow the jump */
         congoGame.movePiece(0,5,1,6);  /* move crocodile from 0,5 to 1,6 so monkey can capture opponent's giraffe */
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == true);
     }
 
     @Test
@@ -74,14 +74,14 @@ public class MonkeyTest {
         movesRow.add(4);
         movesCol.add(1);
         MonkeyPiece monkey1 = (MonkeyPiece) congoGame.getGamePiece(2,1);
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == true);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == true);
         /* now try and do an illegal move by jumping the first elephant again to get to the second elephant */
         /* add jumps to (2,3) to (2,5) */
         movesRow.add(2);
         movesCol.add(3);
         movesRow.add(2);
         movesCol.add(5);
-        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey1.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
     }
 
     @Test
@@ -146,14 +146,14 @@ public class MonkeyTest {
 
         /* move to 5,0 which should be blocked by this player's pawn */
         /* Can't capture it's own piece */
-        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
         /* move the opponent's elephant to 5,2 */
         congoGame.movePiece(0,2,5,2);  /* move elephant from 0,2 to 5,2 so it is capturable with a jump but not a 1 step move */
 
         movesRow.set(0,5);
         movesCol.set(0,2);
         /* Can't capture opponent's elephant */
-        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.board) == false);
+        assertTrue(monkey.ValidateMove(movesRow,movesCol,congoGame.getBoard()) == false);
 
         /* now move pawn forward so monkey can move */
         GamePiece pawn = congoGame.getGamePiece(5, 1);
@@ -163,7 +163,7 @@ public class MonkeyTest {
         /* now monkey can move forward to empty space */
         movesRow.set(0,5);
         movesCol.set(0,1);
-        assertTrue(monkey.ValidateMove(movesRow, movesCol, congoGame.board));
+        assertTrue(monkey.ValidateMove(movesRow, movesCol, congoGame.getBoard()));
         monkey.performMove(movesRow, movesCol, congoGame);
         assertTrue(congoGame.getGamePiece(6,1) == null);  /* monkey has moved and left square empty */
         assertTrue(congoGame.getGamePiece(5,1) instanceof MonkeyPiece);  /* monkey is now in square 5,1 */
