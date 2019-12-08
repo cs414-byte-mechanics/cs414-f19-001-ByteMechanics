@@ -3,9 +3,9 @@ package Game;
 import java.util.ArrayList;
 
 public abstract class GamePiece {
-    public int row;
-    public int column;
-    public int player;  /* set to 1 or 2 to indicate which player owns the piece */
+    private int row;
+    private int column;
+    private int player;  /* set to 1 or 2 to indicate which player owns the piece */
     public String pieceID;
 
     public GamePiece(){}
