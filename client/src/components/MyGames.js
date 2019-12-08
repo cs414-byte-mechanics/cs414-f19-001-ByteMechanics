@@ -71,7 +71,7 @@ class MyGames extends React.Component {
 
 
     playGame(id){
-        window.open(`/game/${id}`);
+        window.open(`/game/${id}`, "popUpWindow", "resizable=yes,top=200,left=600,width=700,height=700");
     }
     
     abandonGame(matchID){
