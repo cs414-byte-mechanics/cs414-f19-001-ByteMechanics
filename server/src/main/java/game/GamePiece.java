@@ -202,7 +202,7 @@ public abstract class GamePiece {
         int activePlayer = getPlayer();
         ArrayList<GamePiece> riverDwellers = congoBoard.getRiverDwellers(activePlayer);
 
-        if (ValidateMove(destRow, destCol, congoBoard.board)){
+        if (ValidateMove(destRow, destCol, congoBoard.getBoard())){
             int numMoves = destRow.size();
 
             if (jumpLinear(getRow(), getColumn(), destRow.get(0), destCol.get(0))){
@@ -224,7 +224,7 @@ public abstract class GamePiece {
                     int toCol = destCol.get(moveCounter);
 
                     /* check if we jumped a piece that needs to be captured */
-                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard.board);
+                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard.getBoard());
                     if (jumpedPiece != null) {
                         /* it should never be null for a monkey */
                         congoBoard.capturePiece(jumpedPiece);

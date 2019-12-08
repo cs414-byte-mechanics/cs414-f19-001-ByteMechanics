@@ -3,7 +3,7 @@ package Game;
 public class PawnPiece extends GamePiece {
 
     // every pawn can be promoted as a superPawn / can cross river 
-    public boolean superPawn ;
+    private boolean superPawn ;
 
     /* initial constructor*/
     public PawnPiece(){ }
@@ -18,6 +18,10 @@ public class PawnPiece extends GamePiece {
             return (getPlayer() == 1) ? "s" : "S";}
         else
             return (getPlayer() == 1) ? "p" : "P";
+    }
+    
+    public void setSuperPawn(boolean sp){
+        superPawn = sp;
     }
 
     /*helper routine to check sideAway move*/

@@ -8,8 +8,7 @@ public class GameBoard{
     public static final int NUM_ROWS = 7;
     public static final int NUM_COLUMNS = 7;
     public static final int RIVER_ROW = 3;
-
-    public GamePiece[][] board;
+    private GamePiece[][] board;
 
     public GameBoard(){
         board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
@@ -21,6 +20,10 @@ public class GameBoard{
     public void initialize(){
         placePiecesForPlayer(1);
         placePiecesForPlayer(2);
+    }
+    
+    public GamePiece[][] getBoard(){
+        return board;
     }
     
     public String[][] getBoardForDatabase() throws Exception {
@@ -233,7 +236,7 @@ public class GameBoard{
         //If the pawn reaches the other side of the board, it's a super pawn
         if ( (piece.getPlayer() == 1 && piece.getRow() == 6 ) || (piece.getPlayer() == 2 && piece.getRow() == 0 )) {
             PawnPiece pawn = (PawnPiece) piece;
-            pawn.superPawn = true;
+            pawn.setSuperPawn(true);
         }
     }
 
