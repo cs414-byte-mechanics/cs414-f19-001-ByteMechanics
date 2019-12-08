@@ -6,6 +6,8 @@ import Confirm from './Confirm.js'
 
 class MyGames extends React.Component {
 
+    windowID = 1;
+
     constructor(props) {
         super(props);
         this.getGames = this.getGames.bind(this);
@@ -69,7 +71,9 @@ class MyGames extends React.Component {
     }
 
     playGame(id){
-        window.open(`/game/${id}`);
+
+        window.open(`/game/${id}`, `popUpWindow${this.windowID}`, "resizable=yes,top=200,left=600,width=700,height=700");
+        this.windowID++;
     }
     
     abandonGame(matchID){
