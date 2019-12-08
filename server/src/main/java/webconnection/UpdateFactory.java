@@ -280,6 +280,10 @@ public class UpdateFactory
         update.communicationType = "inviteRejectStatus";
         try {
             db.removeInvitation(action);
+            //Get email from database
+            
+            sendEmailNotification( action.invitationTo + " rejected your invitation to start a game on CongoOnline. Log in to invite another friend!", "ajeske11@gmail.com", action.invitationTo);
+            
         } catch(Exception e) {
             return new ServerError(-1, "Error in trying to reject invitation.");
         }
@@ -347,6 +351,10 @@ public class UpdateFactory
         createGameAction.playerTwoName = action.invitationFrom;
         try {
             this.createNewMatch(createGameAction);
+            
+            //Send notification to sender
+            sendEmailNotification( action.invitationTo + " accepted your invitation to start a game on CongoOnline. Log in to make the first move!", "ajeske11@gmail.com", action.invitationTo);
+
         } catch(Exception e) {
             System.err.println("New match cannot be created");
             return new ServerError(-1, "Error in creating new game.");
@@ -361,7 +369,7 @@ public class UpdateFactory
         update.statusMessage = "invitation acceptance completed";
         return update;
    }
-   
+
    private boolean sendEmailNotification(String emailBody, String recipientEmail, String opponent){
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
