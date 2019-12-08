@@ -8,7 +8,6 @@ class MyGames extends React.Component {
 
     constructor(props) {
         super(props);
-        this.getGames = this.getGames.bind(this);
         this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
@@ -16,33 +15,23 @@ class MyGames extends React.Component {
         this.updateStatus = this.updateStatus.bind(this);
 
         this.state = {
-            searchString: '',
-            status: 'In Progress',
+            searchString: this.props.searchString,
+            status: this.props.statusMyGames,
             matchID: 1
         };
     }
 
-    getGames(){
-        let searchObject = {
-            communicationType: "searchGames",
-            userName: this.props.userName,
-            playerTwoName: this.state.searchString,
-            status: this.state.status,
-        };
-        this.props.sendObject(searchObject);
-    }
-
     componentDidMount(){
-        this.getGames();
+        this.props.getGames();
     }
 
     listenForEnter(event) {
         if (event.keyCode === 13)
-            this.getGames();
+            this.props.getGames();
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value}, () => this.getGames())
+        this.setState({status: event.target.value}, () => this.props.getGames())
     }
     renderSearchInputs() {
         return (
@@ -57,7 +46,7 @@ class MyGames extends React.Component {
                         <DropdownItem value="All" onClick={this.updateStatus}>All</DropdownItem>
                     </DropdownMenu>
                 </UncontrolledButtonDropdown>
-                <Button onClick={this.getGames}>Search</Button>
+                <Button onClick={this.props.getGames}>Search</Button>
             </div>
         );
     }
@@ -80,7 +69,7 @@ class MyGames extends React.Component {
         }
         this.props.sendObject(abandonObject)
         alert("Game sucessfully abandoned")
-        this.getGames();
+        this.props.getGames();
     }
 
 
