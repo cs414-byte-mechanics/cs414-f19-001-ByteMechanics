@@ -404,33 +404,4 @@ public class UpdateFactory
             return false;
         }
    }
-
-   private boolean sendEmailNotification(String emailBody, String recipientEmail, String opponent){
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "465");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.ssl.enable", "true");
-
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("congoOnlineTeam", "byteMechanics414");
-                    }
-                });
-                
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setContent(emailBody, "text/plain");
-            message.setSubject(opponent + " has responded to your invitation", "text/plain");
-            message.setFrom(new InternetAddress(recipientEmail));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("ajeske11@gmail.com"));
-
-            Transport.send(message);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-   }
-
 }
