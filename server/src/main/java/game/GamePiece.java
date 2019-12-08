@@ -3,9 +3,9 @@ package Game;
 import java.util.ArrayList;
 
 public abstract class GamePiece {
-    public int row;
-    public int column;
-    public int player;  /* set to 1 or 2 to indicate which player owns the piece */
+    private int row;
+    private int column;
+    private int player;  /* set to 1 or 2 to indicate which player owns the piece */
     public String pieceID;
 
     public GamePiece(){}
@@ -33,9 +33,17 @@ public abstract class GamePiece {
     public int getRow(){
         return row;
     }
+    
+    public void setRow(int r){
+        row = r;
+    }
 
     public int getColumn(){
         return column;
+    }
+    
+    public void setColumn(int c){
+        column = c;
     }
 
     public int getPlayer(){
@@ -194,7 +202,7 @@ public abstract class GamePiece {
         int activePlayer = getPlayer();
         ArrayList<GamePiece> riverDwellers = congoBoard.getRiverDwellers(activePlayer);
 
-        if (ValidateMove(destRow, destCol, congoBoard.board)){
+        if (ValidateMove(destRow, destCol, congoBoard.getBoard())){
             int numMoves = destRow.size();
 
             if (jumpLinear(getRow(), getColumn(), destRow.get(0), destCol.get(0))){
@@ -216,7 +224,7 @@ public abstract class GamePiece {
                     int toCol = destCol.get(moveCounter);
 
                     /* check if we jumped a piece that needs to be captured */
-                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard.board);
+                    GamePiece jumpedPiece = jumpCapturesPiece(fromRow, fromCol, toRow, toCol, congoBoard.getBoard());
                     if (jumpedPiece != null) {
                         /* it should never be null for a monkey */
                         congoBoard.capturePiece(jumpedPiece);

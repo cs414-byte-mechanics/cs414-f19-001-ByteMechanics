@@ -3,7 +3,7 @@ package Game;
 public class PawnPiece extends GamePiece {
 
     // every pawn can be promoted as a superPawn / can cross river 
-    public boolean superPawn ;
+    private boolean superPawn ;
 
     /* initial constructor*/
     public PawnPiece(){ }
@@ -15,9 +15,13 @@ public class PawnPiece extends GamePiece {
 
     public String pieceIDString(){
         if (this.superPawn){
-            return (player == 1) ? "s" : "S";}
+            return (getPlayer() == 1) ? "s" : "S";}
         else
-            return (player == 1) ? "p" : "P";
+            return (getPlayer() == 1) ? "p" : "P";
+    }
+    
+    public void setSuperPawn(boolean sp){
+        superPawn = sp;
     }
 
     /*helper routine to check sideAway move*/
@@ -29,17 +33,17 @@ public class PawnPiece extends GamePiece {
     public boolean forwardMove(int fromRow, int toRow)
     {
         int dir = toRow - fromRow;
-        if (this.player == 1 && dir > 0)
+        if (getPlayer() == 1 && dir > 0)
             return true;
 
-        return this.player == 2 && dir < 0;
+        return getPlayer() == 2 && dir < 0;
     }
 
     public boolean pastRiver(int currRow){
-        if (this.player == 1 && currRow > GameBoard.RIVER_ROW)
+        if (getPlayer() == 1 && currRow > GameBoard.RIVER_ROW)
             return true;
 
-        return this.player == 2 && currRow < GameBoard.RIVER_ROW;
+        return getPlayer() == 2 && currRow < GameBoard.RIVER_ROW;
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -48,25 +52,25 @@ public class PawnPiece extends GamePiece {
         if (GameBoard.inBounds(destRow, destCol))
         {
             /* pawn can move one step straight/diagonally forward- it can also capture*/
-            if (forwardMove(this.row, destRow) && (manhattanDistance(this.row, this.column, destRow, destCol) == 1 || ( diagonalMove(this.row, this.column, destRow, destCol) && manhattanDistance(this.row, this.column, destRow, destCol)==2 )))
+            if (forwardMove(getRow(), destRow) && (manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1 || ( diagonalMove(getRow(), getColumn(), destRow, destCol) && manhattanDistance(getRow(), getColumn(), destRow, destCol)==2 )))
                 return squareEmptyOrCapturable(destRow, destCol, board);
 
             /* when pawn past the river, it can move (not capture) one or two steps straight backward*/
-            if (pastRiver(this.row) && !forwardMove(this.row, destRow) && orthogonalMove(this.row, this.column, destRow, destCol) && pathClear(destRow, destCol, board) && !sideMove(this.row , destRow))
-                if (manhattanDistance(this.row, this.column, destRow, destCol) == 1 || manhattanDistance(this.row, this.column, destRow, destCol) == 2)
+            if (pastRiver(getRow()) && !forwardMove(getRow(), destRow) && orthogonalMove(getRow(), getColumn(), destRow, destCol) && pathClear(destRow, destCol, board) && !sideMove(getRow() , destRow))
+                if (manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1 || manhattanDistance(getRow(), getColumn(), destRow, destCol) == 2)
 
                     return squareEmpty(destRow, destCol, board);
 
             /* superPawn in addition can move and capture one step straight sideways */
-            if (superPawn == true && orthogonalMove(this.row, this.column, destRow, destCol)) {
-                if (manhattanDistance(this.row, this.column, destRow, destCol) == 1)
+            if (superPawn == true && orthogonalMove(getRow(), getColumn(), destRow, destCol)) {
+                if (manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1)
 
                     return squareEmptyOrCapturable(destRow, destCol, board);
             }
 
             /* superPawn moves (but not capture) one or two steps straight or diagonally backward (without jumping). */
-            if(superPawn ==true && pathClear(destRow, destCol, board) && !forwardMove(this.row, destRow))
-                if(diagonalMove(this.row, this.column, destRow, destCol) && (manhattanDistance(this.row, this.column, destRow, destCol)==2 || manhattanDistance(this.row, this.column, destRow, destCol) == 4 ))
+            if(superPawn ==true && pathClear(destRow, destCol, board) && !forwardMove(getRow(), destRow))
+                if(diagonalMove(getRow(), getColumn(), destRow, destCol) && (manhattanDistance(getRow(), getColumn(), destRow, destCol)==2 || manhattanDistance(getRow(), getColumn(), destRow, destCol) == 4 ))
 
                     return squareEmpty(destRow, destCol, board);
         }

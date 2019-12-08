@@ -11,7 +11,7 @@ public class ElephantPiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "e" : "E";
+        return (getPlayer() == 1) ? "e" : "E";
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -22,8 +22,8 @@ public class ElephantPiece extends GamePiece {
         if (GameBoard.inBounds(destRow, destCol)) {
 
             /* check if elephant moved one OR two steps straight - can moe and can capture*/
-            if (orthogonalMove(this.row, this.column, destRow, destCol) &&
-                    (manhattanDistance(this.row, this.column, destRow, destCol) == 1 || manhattanDistance(this.row, this.column, destRow, destCol) == 2))
+            if (orthogonalMove(getRow(), getColumn(), destRow, destCol) &&
+                    (manhattanDistance(getRow(), getColumn(), destRow, destCol) == 1 || manhattanDistance(getRow(), getColumn(), destRow, destCol) == 2))
 
                 return squareEmptyOrCapturable(destRow, destCol, board);
             else

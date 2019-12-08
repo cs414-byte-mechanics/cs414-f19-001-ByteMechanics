@@ -34,9 +34,9 @@ public class AppTest {
             /* check both rows - 0,6 */
             int playr = r / 6 + 1;
             for (int c = 0; c <= 6; c = c + 1) {
-                assertTrue(congoGame.board[r][c].player == playr);
-                assertTrue(congoGame.board[r][c].row == r);
-                assertTrue(congoGame.board[r][c].column == c);
+                assertTrue(congoGame.getBoard()[r][c].getPlayer() == playr);
+                assertTrue(congoGame.getBoard()[r][c].getRow() == r);
+                assertTrue(congoGame.getBoard()[r][c].getColumn() == c);
             }
         }
 
@@ -45,22 +45,22 @@ public class AppTest {
             //check both rows - 1, 5 including pawns
             int playr = r / 5 + 1;
             for (int c = 0; c <= 6; c = c + 1) {
-                assertTrue(congoGame.board[r][c].player == playr);
-                assertTrue(congoGame.board[r][c].row == r);
-                assertTrue(congoGame.board[r][c].column == c);
+                assertTrue(congoGame.getBoard()[r][c].getPlayer() == playr);
+                assertTrue(congoGame.getBoard()[r][c].getRow() == r);
+                assertTrue(congoGame.getBoard()[r][c].getColumn() == c);
             }
         }
 
         /*check if Giraffe pieces initialized */
         for (int r = 0; r <= 6; r = r + 6) {
             /* check both rows of giraffes - 0,6 */
-            assertTrue((congoGame.board[r][0] instanceof GiraffePiece) == true);
+            assertTrue((congoGame.getBoard()[r][0] instanceof GiraffePiece) == true);
         }
 
         /* check if Monkeys initialized */
         for (int r = 0; r <= 6; r = r + 6) {
             /* check both rows of monkeys - 0,6 */
-            assertTrue((congoGame.board[r][1] instanceof MonkeyPiece) == true);
+            assertTrue((congoGame.getBoard()[r][1] instanceof MonkeyPiece) == true);
         }
 
         /* check if Elephants initialized */
@@ -68,33 +68,33 @@ public class AppTest {
             /* check both rows of elephants - 0,6 */
             for (int c = 2; c <= 4; c = c + 2) {
                 /* check both columns of elephants - 2,4 */
-                assertTrue((congoGame.board[r][c] instanceof ElephantPiece) == true);
+                assertTrue((congoGame.getBoard()[r][c] instanceof ElephantPiece) == true);
             }
         }
 
         /* check if Lions are initialized */
         for (int r = 0; r <= 6; r = r + 6) {
             /* check both rows of lions - 0,6 */
-            assertTrue((congoGame.board[r][3] instanceof LionPiece) == true);
+            assertTrue((congoGame.getBoard()[r][3] instanceof LionPiece) == true);
         }
 
         /* check if Crocodiles initialized */
         for (int r = 0; r <= 6; r = r + 6) {
             /* check both rows of crocodiles - 0,6 */
-            assertTrue((congoGame.board[r][5] instanceof CrocodilePiece) == true);
+            assertTrue((congoGame.getBoard()[r][5] instanceof CrocodilePiece) == true);
         }
 
         /* check if Zebras initialized */
         for (int r = 0; r <= 6; r = r + 6) {
             /* check both rows of crocodiles - 0,6 */
-            assertTrue((congoGame.board[r][6] instanceof ZebraPiece) == true);
+            assertTrue((congoGame.getBoard()[r][6] instanceof ZebraPiece) == true);
         }
 
         /* ADDED BY Fari: Check if all Pawns initialized! */
         for (int r = 1 ; r <= 5; r = r + 4){
 //             check both rows of pawns
             for (int c = 0; c <= 6; c= c + 1 ){
-                assertTrue((congoGame.board[r][c] instanceof PawnPiece ) == true);
+                assertTrue((congoGame.getBoard()[r][c] instanceof PawnPiece ) == true);
             }
         }
     }

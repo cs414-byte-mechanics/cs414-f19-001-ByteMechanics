@@ -23,10 +23,10 @@ public class ElephantTest {
 
     @Test
     public void testElephantSimpleMove() throws Exception {
-        ElephantPiece elephant1P1 = (ElephantPiece) congoGame.board[0][2];
-        ElephantPiece elephant2P1 = (ElephantPiece) congoGame.board[0][4];
+        ElephantPiece elephant1P1 = (ElephantPiece) congoGame.getBoard()[0][2];
+        ElephantPiece elephant2P1 = (ElephantPiece) congoGame.getBoard()[0][4];
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         // test a blocked move - his pawn is blocking elephant
         assertTrue(elephant1P1.ValidateMove(1, 2, congoBoard) == false); /*elephant1 can not move to square occupied by his pawn*/
@@ -59,8 +59,8 @@ public class ElephantTest {
 
     @Test
     public void testElephantBlockedMove() { // only if its teammate pieces occupied a square it get blocked
-        ElephantPiece elephant2P1 = (ElephantPiece) congoGame.board[0][4];
-        GamePiece[][] congoBoard = congoGame.board;
+        ElephantPiece elephant2P1 = (ElephantPiece) congoGame.getBoard()[0][4];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         assertTrue(elephant2P1.ValidateMove(2, 4, congoBoard) == true); /* elephant can move 2 square up*/
         assertTrue(elephant2P1.ValidateMove(1, 4, congoBoard) == false); // it is blocked by pawn
@@ -69,8 +69,8 @@ public class ElephantTest {
 
     @Test
     public void testElephantPerformMoveWithCapture() throws Exception {
-        ElephantPiece elephant1P1 = (ElephantPiece) congoGame.board[0][2];
-        GamePiece[][] congoBoard = congoGame.board;
+        ElephantPiece elephant1P1 = (ElephantPiece) congoGame.getBoard()[0][2];
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         congoGame.movePiece(6,0,3,4); // move an opponent's piece to (3,4) in the river
         congoGame.movePiece(0,2,3,3); // move elephant to 3,3
@@ -91,10 +91,10 @@ public class ElephantTest {
 
         /*Start with initial board for player2 */
 //        System.out.println("run test");
-        ElephantPiece elephant1P2 = (ElephantPiece) congoGame.board[6][2];
-        ElephantPiece elephant2P2 = (ElephantPiece) congoGame.board[6][4];
+        ElephantPiece elephant1P2 = (ElephantPiece) congoGame.getBoard()[6][2];
+        ElephantPiece elephant2P2 = (ElephantPiece) congoGame.getBoard()[6][4];
 
-        GamePiece[][] congoBoard = congoGame.board;
+        GamePiece[][] congoBoard = congoGame.getBoard();
 
         //System.out.println(congoGame.toString());
         assertTrue(elephant1P2.ValidateMove(4, 2, congoBoard) == true); // jump two step down from 6,2 to 4,2

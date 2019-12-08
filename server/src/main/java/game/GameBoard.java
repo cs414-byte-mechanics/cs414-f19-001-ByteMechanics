@@ -8,8 +8,7 @@ public class GameBoard{
     public static final int NUM_ROWS = 7;
     public static final int NUM_COLUMNS = 7;
     public static final int RIVER_ROW = 3;
-
-    public GamePiece[][] board;
+    private GamePiece[][] board;
 
     public GameBoard(){
         board = new GamePiece[NUM_ROWS][NUM_COLUMNS];
@@ -21,6 +20,10 @@ public class GameBoard{
     public void initialize(){
         placePiecesForPlayer(1);
         placePiecesForPlayer(2);
+    }
+    
+    public GamePiece[][] getBoard(){
+        return board;
     }
     
     public String[][] getBoardForDatabase() throws Exception {
@@ -156,7 +159,7 @@ public class GameBoard{
 
         for (int i = 0; i < NUM_COLUMNS; i++){
             GamePiece piece = getGamePiece(RIVER_ROW,i);
-            if ((piece != null ) && (piece.player == activePlayer) && !(piece instanceof CrocodilePiece)){
+            if ((piece != null ) && (piece.getPlayer() == activePlayer) && !(piece instanceof CrocodilePiece)){
                 riverDwellers.add(piece);
             }
         }
@@ -197,8 +200,8 @@ public class GameBoard{
         if(inBounds(row, col)){
             int startingRow = piece.getRow();
             int startingCol = piece.getColumn();
-            piece.row = row;
-            piece.column = col;
+            piece.setRow(row);
+            piece.setColumn(col);
             board[row][col] = piece;
             board[startingRow][startingCol] = null;
 
@@ -233,12 +236,12 @@ public class GameBoard{
         //If the pawn reaches the other side of the board, it's a super pawn
         if ( (piece.getPlayer() == 1 && piece.getRow() == 6 ) || (piece.getPlayer() == 2 && piece.getRow() == 0 )) {
             PawnPiece pawn = (PawnPiece) piece;
-            pawn.superPawn = true;
+            pawn.setSuperPawn(true);
         }
     }
 
     public void capturePiece(GamePiece pieceToBeCaptured) {
-        board[pieceToBeCaptured.row][pieceToBeCaptured.column] = null;
+        board[pieceToBeCaptured.getRow()][pieceToBeCaptured.getColumn()] = null;
     }
 
     public boolean lionInCastle(String[][] board, int pieceCurrentLocation){

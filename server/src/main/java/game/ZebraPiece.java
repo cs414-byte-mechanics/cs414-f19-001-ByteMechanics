@@ -9,7 +9,7 @@ public class ZebraPiece extends GamePiece {
     }
 
     public String pieceIDString(){
-        return (player == 1) ? "z" : "Z";
+        return (getPlayer() == 1) ? "z" : "Z";
     }
 
     public boolean ValidateMove(int destRow, int destCol, GamePiece[][] board) {
@@ -21,8 +21,8 @@ public class ZebraPiece extends GamePiece {
         /* zebra moves 2 squares laterally followed by 1 vertically OR
            1 square vertically followed by 2 laterally.  Total distance moved should be 3 squares in an 'L' shape.
          */
-            int distCol = Math.abs(destCol - this.column);
-            int distRow = Math.abs(destRow - this.row);
+            int distCol = Math.abs(destCol - getColumn());
+            int distRow = Math.abs(destRow - getRow());
             if (!((distCol == 2 && distRow == 1) || (distCol == 1 && distRow == 2))) {
                 return false;
             }

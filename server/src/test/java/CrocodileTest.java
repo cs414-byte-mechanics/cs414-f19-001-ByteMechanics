@@ -29,24 +29,24 @@ public class CrocodileTest {
         CrocodilePiece croc1 = (CrocodilePiece) congoGame.getGamePiece(0,5);
 
         /* test a blocked move - pawn is blocking croc */
-        assertTrue(croc1.ValidateMove(1,4,congoGame.board) == false);
+        assertTrue(croc1.ValidateMove(1,4,congoGame.getBoard()) == false);
         /* test that croc can't move more than 1 square */
-        assertTrue(croc1.ValidateMove(2,3,congoGame.board) == false);
+        assertTrue(croc1.ValidateMove(2,3,congoGame.getBoard()) == false);
 
         /* move pawn out of the way and then move croc */
         congoGame.movePiece(1,4,2,5);  /* move pawn to (2,5)) */
         /* now croc should be able to move 1 square */
-        assertTrue(croc1.ValidateMove(1,4,congoGame.board) == true);
+        assertTrue(croc1.ValidateMove(1,4,congoGame.getBoard()) == true);
         congoGame.movePiece(0,5,1,4);  /* move crocodile to (1,4)) */
-        assertTrue(croc1.ValidateMove(3,4,congoGame.board) == true);  /* move to river? */
+        assertTrue(croc1.ValidateMove(3,4,congoGame.getBoard()) == true);  /* move to river? */
         congoGame.movePiece(1,4,3,4);  /* move crocodile to (3,4)) */
-        assertTrue(croc1.ValidateMove(4,5,congoGame.board) == true);  /* move to other bank of river? */
+        assertTrue(croc1.ValidateMove(4,5,congoGame.getBoard()) == true);  /* move to other bank of river? */
 
         congoGame.movePiece(3,4,4,5);  /* move crocodile diagonally to (4,5)) */
-        assertTrue(croc1.ValidateMove(5,5,congoGame.board) == true);  /* move to other bank of river? */
+        assertTrue(croc1.ValidateMove(5,5,congoGame.getBoard()) == true);  /* move to other bank of river? */
         congoGame.movePiece(4,5,5,5);  /* move crocodile vertical to (5,5)) */
-        assertTrue(croc1.ValidateMove(3,5,congoGame.board) == true);  /* move back to river? */
-        assertTrue(croc1.ValidateMove(3,3,congoGame.board) == false);  /* move diagonally back to river? */
+        assertTrue(croc1.ValidateMove(3,5,congoGame.getBoard()) == true);  /* move back to river? */
+        assertTrue(croc1.ValidateMove(3,3,congoGame.getBoard()) == false);  /* move diagonally back to river? */
     }
 
     @Test(expected = Exception.class)
@@ -80,8 +80,8 @@ public class CrocodileTest {
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(0,5) == null);
         /* check that GamePiece got updated correctly */
-        assertTrue(croc.row == 1);
-        assertTrue(croc.column == 4);
+        assertTrue(croc.getRow() == 1);
+        assertTrue(croc.getColumn() == 4);
     }
 
     @Test
@@ -105,8 +105,8 @@ public class CrocodileTest {
         /* check that source location of crocodile is now empty */
         assertTrue(congoGame.getGamePiece(6,5) == null);
         /* check that GamePiece got updated correctly */
-        assertTrue(croc.row == 3);
-        assertTrue(croc.column == 5);
+        assertTrue(croc.getRow() == 3);
+        assertTrue(croc.getColumn() == 5);
     }
 
     @Test(expected = Exception.class)
