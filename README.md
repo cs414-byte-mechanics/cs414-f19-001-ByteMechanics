@@ -34,22 +34,19 @@ These `npm` scripts are mapped to common actions in one directory for convenienc
  
 # To modify database content
 1. To connect to the database:
-    * mysql -u <your-username> -D bytemechanics -h faure -p
-     
-2. Client is currently setup to run matchID 1.  You can change this by editing the Game.js file and changing the matchID field in state.    
-    * match_id: ["1"],
+    * `mysql -u <your-username> -D bytemechanics -h faure -p`
     
-3. To reset a game to the initial board state use the following command in our database.  You need 21 spaces in this for the middle 3 rows.
-    *  UPDATE matches SET board='gmeleczppppppp                     PPPPPPPGMELECZ' WHERE match_id=1;
+2. To reset a game to the initial board state use the following command in our database.  You need 21 spaces in this for the middle 3 rows.
+    *  `UPDATE matches SET board='gmeleczppppppp                     PPPPPPPGMELECZ' WHERE match_id=<match-id>;`
     
 4. To set the player whose turn it is next use a similar command to this.
-    * UPDATE matches SET next_turn='ajeske' WHERE match_id=1;
+    * `UPDATE matches SET next_turn='<next-turn>' WHERE match_id=<match-id>;`
     
 5. If someone wins the game, the winner field will also be altered.  To reset that use this command -
-    * UPDATE matches SET winner=NULL WHERE match_id=1;
+    * `UPDATE matches SET winner=NULL WHERE match_id=<match-id>;`
 
 6. To view the database contents after you've changed it -
-    * SELECT * from matches;
+    * `SELECT * from matches;`
 
 # Contributors
 This project is for CS414: Introduction to Object Oriented Design at Colorado State University. Group members include Aislinn Jeske, Abigail Rictor, Farzaneh Kadkhodaie, Marylou Nash, and Zach Klausner.
