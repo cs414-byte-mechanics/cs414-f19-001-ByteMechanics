@@ -23,6 +23,8 @@ class Home extends React.Component {
                         searchString={this.props.searchString}
                         statusMyGames={this.props.statusMyGames}
                         getGames={this.props.getGames}
+                        updateStatus={this.props.updateStatus}
+                        updateSearchString={this.props.updateSearchString}
                     />
                     : "Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
                 }

@@ -35,6 +35,8 @@ class Dashboard extends React.Component {
                              searchString={this.props.searchString}
                              statusMyGames={this.props.statusMyGames}
                              getGames={this.props.getGames}
+                             updateStatus={this.props.updateStatus}
+                             updateSearchString={this.props.updateSearchString}
                     />
                     <Invitations isLoggedIn={this.props.isLoggedIn}
                                  userName={this.props.userName}

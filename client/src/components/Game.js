@@ -45,6 +45,8 @@ class Game extends Component {
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
         this.getGames = this.getGames.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
+        this.updateSearchString = this.updateSearchString.bind(this);
     }
 
     componentDidMount() {
@@ -199,6 +201,16 @@ class Game extends Component {
      this.sendObject(searchObject);
   }
 
+  updateStatus(event) {
+    this.setState({statusMyGames: event.target.value}, () => this.getGames())
+    console.log("statusMyGames: " + this.state.statusMyGames);
+  }
+
+  updateSearchString(event) {
+    this.setState({
+      searchString: event.target.value
+    });
+  }
 
   render(){
 
@@ -225,6 +237,8 @@ class Game extends Component {
                                                     searchString={this.state.searchString}
                                                     statusMyGames={this.state.statusMyGames}
                                                     getGames={this.getGames}
+                                                    updateStatus={this.updateStatus}
+                                                    updateSearchString={this.updateSearchString}
                                                 />}
                         />
                         <Route
