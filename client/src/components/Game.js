@@ -7,6 +7,7 @@ import Header from './Header'
 import {attemptLogin, attemptLogout, registerUser} from '../commObjects'
 import './styles/Game.scss'
 import Profile from "./Profile";
+import MyGames from "./MyGames.js"
 
 class Game extends Component {
     constructor(props){
@@ -29,8 +30,10 @@ class Game extends Component {
             sentToTimes: [],
             receivedFromNames: [],
             receivedFromTimes: []
-          }
-        }
+          },
+          searchString: '',
+          statusMyGames: 'In Progress'
+        };
 
         this.connection = null;
         this.sendObject = this.sendObject.bind(this);
@@ -41,6 +44,9 @@ class Game extends Component {
         this.checkCookie = this.checkCookie.bind(this);
         this.updateSearchGamesResult = this.updateSearchGamesResult.bind(this);
         this.setInvitationsLists = this.setInvitationsLists.bind(this);
+        this.getGames = this.getGames.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
+        this.updateSearchString = this.updateSearchString.bind(this);
     }
 
     componentDidMount() {
@@ -76,8 +82,8 @@ class Game extends Component {
             case "searchResult": this.updateSearchResult(update); break;
             case "endMatch" : this.endMatch(update); break;
             case "searchGamesResult": this.updateSearchGamesResult(update); break;
-            case "sendUserInvsLists" : this.setInvitationsLists(update);break
-            case "inviteAcceptStatus": break;
+            case "sendUserInvsLists" : this.setInvitationsLists(update);break;
+            case "inviteAcceptStatus": this.getGames(); break;
             default: break;
         }
     }
@@ -185,7 +191,28 @@ class Game extends Component {
       this.setState({invitationLists: newInvitationLists});
     }
 
-    render(){
+   getGames(){
+     let searchObject = {
+       communicationType: "searchGames",
+       userName: this.state.logIn.userName,
+       playerTwoName: this.state.searchString,
+       status: this.state.statusMyGames,
+     };
+     this.sendObject(searchObject);
+  }
+
+  updateStatus(event) {
+    this.setState({statusMyGames: event.target.value}, () => this.getGames())
+    console.log("statusMyGames: " + this.state.statusMyGames);
+  }
+
+  updateSearchString(event) {
+    this.setState({
+      searchString: event.target.value
+    });
+  }
+
+  render(){
 
         return(
             <div id="Application">
@@ -207,6 +234,11 @@ class Game extends Component {
                                                     invitationLists={this.state.invitationLists}
                                                     gamesResults={this.state.searchGames}
                                                     showRefreshInvs={this.state.showRefreshInvs}
+                                                    searchString={this.state.searchString}
+                                                    statusMyGames={this.state.statusMyGames}
+                                                    getGames={this.getGames}
+                                                    updateStatus={this.updateStatus}
+                                                    updateSearchString={this.updateSearchString}
                                                 />}
                         />
                         <Route

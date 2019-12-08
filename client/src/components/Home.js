@@ -20,6 +20,11 @@ class Home extends React.Component {
                         invitationLists={this.props.invitationLists}
                         getInvitationsReceived={this.props.getInvitationsReceived}
                         showRefreshInvs={this.props.showRefreshInvs}
+                        searchString={this.props.searchString}
+                        statusMyGames={this.props.statusMyGames}
+                        getGames={this.props.getGames}
+                        updateStatus={this.props.updateStatus}
+                        updateSearchString={this.props.updateSearchString}
                     />
                     : "Welcome to CongoOnline! Register an account and invite your friends to play Congo!"
                 }

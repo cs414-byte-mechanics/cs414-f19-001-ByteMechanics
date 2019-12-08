@@ -3,6 +3,7 @@ import Invitations from "./Invitations";
 import "./styles/Dashboard.scss"
 import MyGames from "./MyGames";
 import Confirm from "./Confirm";
+import Home from "./Game";
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -31,6 +32,11 @@ class Dashboard extends React.Component {
                              userName={this.props.userName}
                              gamesResults={this.props.gamesResults}
                              sendObject={this.props.sendObject}
+                             searchString={this.props.searchString}
+                             statusMyGames={this.props.statusMyGames}
+                             getGames={this.props.getGames}
+                             updateStatus={this.props.updateStatus}
+                             updateSearchString={this.props.updateSearchString}
                     />
                     <Invitations isLoggedIn={this.props.isLoggedIn}
                                  userName={this.props.userName}

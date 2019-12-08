@@ -10,65 +10,42 @@ class MyGames extends React.Component {
 
     constructor(props) {
         super(props);
-        this.getGames = this.getGames.bind(this);
-        this.updateSearchString = this.updateSearchString.bind(this);
         this.renderSearchInputs = this.renderSearchInputs.bind(this);
         this.listenForEnter = this.listenForEnter.bind(this);
         this.abandonGame = this.abandonGame.bind(this);
-        this.updateStatus = this.updateStatus.bind(this);
 
         this.state = {
-            searchString: '',
-            status: 'In Progress',
             matchID: 1
         };
     }
 
-    getGames(){
-        let searchObject = {
-            communicationType: "searchGames",
-            userName: this.props.userName,
-            playerTwoName: this.state.searchString,
-            status: this.state.status,
-        };
-        this.props.sendObject(searchObject);
-    }
-
     componentDidMount(){
-        this.getGames();
+        this.props.getGames();
     }
 
     listenForEnter(event) {
         if (event.keyCode === 13)
-            this.getGames();
+            this.props.getGames();
     }
 
-    updateStatus(event) {
-        this.setState({status: event.target.value}, () => this.getGames())
-    }
     renderSearchInputs() {
         return (
             <div id="search_input">
-                <Input type="search" placeholder="Filter on opponent..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
+                <Input type="search" placeholder="Filter on opponent..." onChange={this.props.updateSearchString} onKeyDown={this.listenForEnter}/>
                 <UncontrolledButtonDropdown>
-                    <DropdownToggle caret> {this.state.status === '' ? "Games Status" : this.state.status} </DropdownToggle>
+                    <DropdownToggle caret> {this.props.statusMyGames === '' ? "Games Status" : this.props.statusMyGames} </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem value="In Progress" onClick={this.updateStatus}>In Progress</DropdownItem>
-                        <DropdownItem value="Finished" onClick={this.updateStatus}>Finished</DropdownItem>
-                        <DropdownItem value="Abandoned" onClick={this.updateStatus}>Abandoned</DropdownItem>
-                        <DropdownItem value="All" onClick={this.updateStatus}>All</DropdownItem>
+                        <DropdownItem value="In Progress" onClick={this.props.updateStatus}>In Progress</DropdownItem>
+                        <DropdownItem value="Finished" onClick={this.props.updateStatus}>Finished</DropdownItem>
+                        <DropdownItem value="Abandoned" onClick={this.props.updateStatus}>Abandoned</DropdownItem>
+                        <DropdownItem value="All" onClick={this.props.updateStatus}>All</DropdownItem>
                     </DropdownMenu>
                 </UncontrolledButtonDropdown>
-                <Button onClick={this.getGames}>Search</Button>
+                <Button onClick={this.props.getGames}>Search</Button>
             </div>
         );
     }
 
-    updateSearchString(event) {
-      this.setState({
-        searchString: event.target.value
-      });
-    }
 
     playGame(id){
 
@@ -84,7 +61,7 @@ class MyGames extends React.Component {
         }
         this.props.sendObject(abandonObject)
         alert("Game sucessfully abandoned")
-        this.getGames();
+        this.props.getGames();
     }
 
 
