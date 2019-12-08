@@ -329,7 +329,7 @@ public class PawnTest {
         /* move pawn from 1,3 to 5,5*/
         congoGame.movePiece(  1,3, 6,5);
         assertTrue(congoGame.getGamePiece(6,5) instanceof PawnPiece);
-        assertTrue(congoGame.getGamePiece(6,5).player ==1 );
+        assertTrue(congoGame.getGamePiece(6,5).getPlayer() ==1 );
 
         assertTrue(pawn1.ValidateMove(5, 5, congoBoard) == false);/* one steps straight backward? no it is blocked by other pawn */
 
@@ -359,8 +359,8 @@ public class PawnTest {
         assertTrue(myPawn.ValidateMove(4, 3, congoBoard) == false); // no, can not jumped
 
         // move side away
-        assertTrue(congoGame.getGamePiece(6,3).player == 1); // 6,3 is from player1
-        assertTrue(congoGame.getGamePiece(6,4).player == 2); // 6,4 is from player 2
+        assertTrue(congoGame.getGamePiece(6,3).getPlayer() == 1); // 6,3 is from player1
+        assertTrue(congoGame.getGamePiece(6,4).getPlayer() == 2); // 6,4 is from player 2
 
         assertTrue(myPawn.ValidateMove(6, 4, congoBoard) == true);
         assertTrue(myPawn.ValidateMove(6, 2, congoBoard) == true);

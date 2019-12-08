@@ -64,8 +64,8 @@ public class ZebraTest {
        // assertTrue(congoPlayer2.playerPieces[6] != null);
         //assertTrue(congoPlayer2.playerPieces[6].checkCaptured() == false);
         /* check that GamePiece got updated correctly */
-        assertTrue(zebra.row == 4);
-        assertTrue(zebra.column == 5);
+        assertTrue(zebra.getRow() == 4);
+        assertTrue(zebra.getColumn() == 5);
     }
 
     @Test
@@ -90,8 +90,8 @@ public class ZebraTest {
         /* check that player array of pieces has crocodile marked as captured */
         //assertTrue(congoPlayer1.playerPieces[5].checkCaptured());
         /* check that GamePiece got updated correctly */
-        assertTrue(zebra.row == 4);
-        assertTrue(zebra.column == 5);
+        assertTrue(zebra.getRow() == 4);
+        assertTrue(zebra.getColumn() == 5);
     }
 
     @Test

@@ -34,9 +34,9 @@ public class AppTest {
             /* check both rows - 0,6 */
             int playr = r / 6 + 1;
             for (int c = 0; c <= 6; c = c + 1) {
-                assertTrue(congoGame.board[r][c].player == playr);
-                assertTrue(congoGame.board[r][c].row == r);
-                assertTrue(congoGame.board[r][c].column == c);
+                assertTrue(congoGame.board[r][c].getPlayer() == playr);
+                assertTrue(congoGame.board[r][c].getRow() == r);
+                assertTrue(congoGame.board[r][c].getColumn() == c);
             }
         }
 
@@ -45,9 +45,9 @@ public class AppTest {
             //check both rows - 1, 5 including pawns
             int playr = r / 5 + 1;
             for (int c = 0; c <= 6; c = c + 1) {
-                assertTrue(congoGame.board[r][c].player == playr);
-                assertTrue(congoGame.board[r][c].row == r);
-                assertTrue(congoGame.board[r][c].column == c);
+                assertTrue(congoGame.board[r][c].getPlayer() == playr);
+                assertTrue(congoGame.board[r][c].getRow() == r);
+                assertTrue(congoGame.board[r][c].getColumn() == c);
             }
         }
 

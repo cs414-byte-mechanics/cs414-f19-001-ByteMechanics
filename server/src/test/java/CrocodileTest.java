@@ -80,8 +80,8 @@ public class CrocodileTest {
         /* check that source location is empty */
         assertTrue(congoGame.getGamePiece(0,5) == null);
         /* check that GamePiece got updated correctly */
-        assertTrue(croc.row == 1);
-        assertTrue(croc.column == 4);
+        assertTrue(croc.getRow() == 1);
+        assertTrue(croc.getColumn() == 4);
     }
 
     @Test
@@ -105,8 +105,8 @@ public class CrocodileTest {
         /* check that source location of crocodile is now empty */
         assertTrue(congoGame.getGamePiece(6,5) == null);
         /* check that GamePiece got updated correctly */
-        assertTrue(croc.row == 3);
-        assertTrue(croc.column == 5);
+        assertTrue(croc.getRow() == 3);
+        assertTrue(croc.getColumn() == 5);
     }
 
     @Test(expected = Exception.class)
