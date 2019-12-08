@@ -33,7 +33,7 @@ class Game extends Component {
           },
           searchString: '',
           statusMyGames: 'In Progress'
-        }
+        };
 
         this.connection = null;
         this.sendObject = this.sendObject.bind(this);

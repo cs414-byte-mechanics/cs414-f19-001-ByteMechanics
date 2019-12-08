@@ -15,8 +15,6 @@ class MyGames extends React.Component {
         this.updateStatus = this.updateStatus.bind(this);
 
         this.state = {
-            searchString: this.props.searchString,
-            status: this.props.statusMyGames,
             matchID: 1
         };
     }
@@ -31,14 +29,14 @@ class MyGames extends React.Component {
     }
 
     updateStatus(event) {
-        this.setState({status: event.target.value}, () => this.props.getGames())
+        this.setState({statusMyGames: event.target.value}, () => this.props.getGames())
     }
     renderSearchInputs() {
         return (
             <div id="search_input">
                 <Input type="search" placeholder="Filter on opponent..." onChange={this.updateSearchString} onKeyDown={this.listenForEnter}/>
                 <UncontrolledButtonDropdown>
-                    <DropdownToggle caret> {this.state.status === '' ? "Games Status" : this.state.status} </DropdownToggle>
+                    <DropdownToggle caret> {this.props.statusMyGames === '' ? "Games Status" : this.props.statusMyGames} </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem value="In Progress" onClick={this.updateStatus}>In Progress</DropdownItem>
                         <DropdownItem value="Finished" onClick={this.updateStatus}>Finished</DropdownItem>
