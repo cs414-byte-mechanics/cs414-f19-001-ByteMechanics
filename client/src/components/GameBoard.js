@@ -107,7 +107,7 @@ class GameBoard extends Component {
         let col = piece % 10;
         let row = (piece - col)/10;
 
-        if(this.props.game[row][col]!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
+        if(this.props.game[row][col].toUpperCase()!=='M' && this.state.requestMove['desiredMoves'].length>=2) return;
 
         let state = this.state;
         let encodeLocation = i * 10 + j;
